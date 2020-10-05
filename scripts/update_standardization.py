@@ -7,12 +7,13 @@ import csv
 import os
 import sys
 
-# Variables
+# Assign variables from arguments
 #    report_folder is the directory with the ARCHive format reports to be analyzed.
 #    standardize_csv has the path to the csv document with current standardization rules.
-#    new_formats stores the formats which need to be added to standardize_formats.csv
+# TODO: add error handling for missing/incorrect arguments.
+# TODO: standardize_formats.csv is in the same folder as the script. Any way to reference without a path?
 report_folder = sys.argv[1]
-standard_csv = 'H:/ARCHive-formats/standardize_formats.csv'
+standard_csv = sys.argv[2]
 
 
 # Makes the report folder the current directory.
