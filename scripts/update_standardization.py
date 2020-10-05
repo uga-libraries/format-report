@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar  2 08:42:58 2020
+"""Makes a list of any formats from the ARCHive reports that aren't in standardize_formats.csv. These formats need to
+be added to standardize_formats.csv before merging the reports.
 
-@author: hansona
-"""
-
-# Make a list of any formats from the ARCHive reports that aren't in standardize_formats.csv.
-# These formats need to be added before merging the reports.
-
+Usage: python /path/update_standardization /path/reports"""
 
 import csv
 import os
