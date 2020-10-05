@@ -19,7 +19,7 @@ standard_csv = sys.argv[2]
 # Makes the report folder the current directory.
 os.chdir(report_folder)
 
-
+# TODO: line 23 UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 126: character maps to <undefined>
 def in_standard(standard_csv, format):
     """Search for a format name in the column with format names.
        Return True if there is a match and False if there is not."""
