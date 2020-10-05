@@ -13,7 +13,7 @@ import sys
 #    new_formats stores the formats which need to be added to standardize_formats.csv
 report_folder = sys.argv[1]
 standard_csv = 'H:/ARCHive-formats/standardize_formats.csv'
-new_formats = []
+
 
 # Makes the report folder the current directory.
 os.chdir(report_folder)
@@ -53,7 +53,9 @@ while True:
         sys.maxsize = int(sys.maxsize/10)
         
 
-# Gets each format report in the format folder.
+# Gets each format report in the format folder and saves any new formats (formats that are not in the standardized
+# formats csv) to a list.
+new_formats = []
 for format_report in os.listdir(report_folder):
     
     # Skips if the document is not a format report.
