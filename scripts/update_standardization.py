@@ -84,8 +84,8 @@ for format_report in os.listdir(report_folder):
 # Writes the new format names, if any, to a text file to use for updating standardize_formats.csv.
 # Each format name is on its own line so it can be pasted into the csv, one row per format.
 if len(new_formats) > 0:
-    with open('new_formats.txt', 'w') as newfile:
+    with open('new_formats.txt', 'w') as new_file:
         for format in new_formats:
-            newfile.write(f'{format}\n')
+            new_file.write(f'{format}\n')
 else:
     print('No new formats to add!')
