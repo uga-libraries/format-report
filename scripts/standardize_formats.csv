@@ -1,0 +1,467 @@
+Format_Name,Standard_Format_Name,Format_Type
+# ISO 9660 CD-ROM filesystem data '',ISO 9660 CD-ROM filesystem data,application
+# ISO 9660 CD-ROM filesystem data ''DataDVD'',ISO 9660 CD-ROM filesystem data,application
+# ISO 9660 CD-ROM filesystem data 'DEIS_7_30_99',ISO 9660 CD-ROM filesystem data,application
+# ISO 9660 CD-ROM filesystem data 'NWGABUSHONORSBILLFINCHER',ISO 9660 CD-ROM filesystem data,application
+# ISO 9660 CD-ROM filesystem data 'POG',ISO 9660 CD-ROM filesystem data,application
+# ISO 9660 CD-ROM filesystem data 'UNTITLED',ISO 9660 CD-ROM filesystem data,application
+# UDF filesystem data (version 1.5) '',UDF filesystem data,application
+# UDF filesystem data (version 1.5) '10THANNIVERSARY',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'ABI_PROGRAM_CCTV',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'ALBANY_ARC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'ALIEN_PLANET',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'AT_SHOW',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'BIENNIAL_INSTITUTE_DVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'CLIMATE_OF_HOPE',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DISABILITIES_DAY',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DISABLED_IN_ACTION_INC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DISCOVERY_DAY_2008',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DVD_VIDEO_RECORDER',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DVD_VIDEO_RECORDING',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DVDIRECT_DISC_0010_',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DVDSIN_DIRECT',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'DVR5000',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'EXPRESS',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'FRESHMANNRCC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'FUNAI_DVD_VIDEO',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GCDD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GCDD_2008',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GCDD_2013',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GCDD_DVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GCDD_PROGRAM_092607',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'GIOVANNI_IDVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'H050527_00',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'H060419_00',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'HOUSING_SHOW',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'IDVD_ONESTEP_DVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'JVC_DVD_ROM_PVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'LOIS_AND_ELAINES_STORY',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'MY_GREAT_DVD',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'NATIONALMEMORIALMOVIE',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'NCBC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'NHT_SHOW',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'PLOWSHARE_SMARTWAY_TRUCK',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'RDXS52STU',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'SONATA_VOLUME',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'SONY_DVD_RECORDER_VOLUME',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'STOPCOMMONCORE',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'STORYOFGTRC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'TEASER_ROUGH',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'THE_TWO',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'Untitled',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'UNTITLED_DISC',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'UNTITLED_PROJECT',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'USDA_AFRICA_EDUCATION_INITIATIVE',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'VAN_JONES_2',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'VOICES_BEYOND_THE_MIRROR_CAPTION',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'VOLUME_IDENTIFIER',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'VOTING_RIGHTS',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'WHOLE_DAY',UDF filesystem data,application
+# UDF filesystem data (version 1.5) 'WINDCAPITALGROUPDVD',UDF filesystem data,application
+3D Studio Shapes,3D Studio Shapes,model
+5View capture file,5View capture file,application
+8086 relocatable (Microsoft),8086 relocatable (Microsoft),application
+ACR,ACR,image
+Adobe Flash,Adobe Flash,video
+Adobe Font Metric,Adobe Font Metric,application
+Adobe Illustrator,Adobe Illustrator,design
+Adobe InDesign document,Adobe InDesign Document,design
+Adobe PhotoDeluxe,Adobe PhotoDeluxe,image
+Adobe Photoshop,Adobe Photoshop,image
+Adobe Photoshop Large Document Format,Adobe Photoshop,image
+AFM,Adobe Font Metric,application
+AIFC,Audio Interchange File Format,audio
+AIFF,Audio Interchange File Format,audio
+AIFF AIFF-C,Audio Interchange File Format,audio
+AMI Professional Document,AMI Professional Document,text
+Apple Macintosh QuickDraw/PICT Format,Macintosh PICT Image,image
+Apple QuickTime movie (fast start),Quicktime,video
+"Apple QuickTime movie (fast start, compressed header)",Apple QuickTime,video
+AppleDouble Resource Fork,AppleDouble Resource Fork,multipart
+Applesoft BASIC program data,Applesoft BASIC program data,executable
+"ARC archive data, squeezed",FreeArc Archive Format,archive
+ART image format,ART image format,image
+ASF,Advanced Systems Format,video
+"assembler source, ASCII text",assembler source,executable
+"assembler source, ASCII text, with CRLF line terminators",assembler source,executable
+"assembler source, ASCII text, with very long lines",assembler source,executable
+"assembler source, ASCII text, with very long lines, with CRLF line terminators",assembler source,executable
+"assembler source, Non-ISO extended-ASCII text, with CRLF line terminators",assembler source,executable
+"assembler source, UTF-8 Unicode text, with CRLF line terminators",assembler source,executable
+Asymetrix Toolbook File,Asymetrix Toolbook File,design
+Audio Decision List,Audio Decision List,audio
+Audio Interchange File Format,Audio Interchange File Format,audio
+Audio Interchange File Format (compressed),Audio Interchange File Format,audio
+Audio/Video Interleaved Format,Audio/Video Interleaved Format,video
+AVI,Audio/Video Interleaved Format,video
+BDAV,Blu-ray,video
+Binary File,Binary File,application
+Blu-ray Clip info,Blu-ray,video
+Blu-ray Clip info / Blu-ray Clip info,Blu-ray,video
+Blu-ray Index,Blu-ray,video
+Blu-ray Index / Blu-ray Index,Blu-ray,video
+Blu-ray Movie object,Blu-ray,video
+Blu-ray Playlist,Blu-ray,video
+"C source, ASCII text",C source,executable
+"C source, ASCII text, with CRLF line terminators",C source,executable
+"C source, ASCII text, with very long lines",C source,executable
+"C source, ASCII text, with very long lines, with CRLF line terminators",C source,executable
+"C source, ISO-8859 text, with CRLF line terminators",C source,executable
+"C++ source, ASCII text, with CRLF line terminators",C++ source,executable
+"C++ source, ASCII text, with very long lines, with CRLF line terminators",C++ source,executable
+"C++ source, ISO-8859 text, with CRLF line terminators",C++ source,executable
+"C++ source, ISO-8859 text, with very long lines, with CRLF line terminators",C++ source,executable
+"C++ source, Non-ISO extended-ASCII text, with CRLF line terminators",C++ source,executable
+Cascading Style Sheet,Cascading Style Sheet,structured_text
+CD Audio,CD Audio,audio
+CD-ROM/XA (eXtended Architecture),CD-ROM/XA (eXtended Architecture),application
+CHM,Microsoft Compiled HTML Help,application
+CLIPPER COFF executable (VAX #) not stripped,CLIPPER COFF executable,executable
+"COFF DSP21k static object, stripped",COFF DSP21k static object,application
+Comma-Separated Values (CSV),Comma Separated Values,text
+CorelDraw Drawing,CorelDraw,design
+CorelDraw Pattern,CorelDraw,design
+CR2 EXIF,Canon Raw EXIF,image
+cue,Cue Sheet,application
+Curses screen image,Curses screen image,image
+D64 Image,D64 Image,image
+dat,dat,text
+DBase 3 data file (1392574560 records),dBASE Database,database
+DBase 3 data file (1392574602 records),dBASE Database,database
+DBase 3 data file with memo(s) (120833716 records),dBASE Database,database
+DBase 3 index file,dBASE Database,database
+dBASE Database,dBASE Database,database
+dBASE for Windows database,dBASE Database,database
+DFONT,DFONT,application
+"diff output, ASCII text, with CRLF line terminators",diff output,text
+"diff output, ASCII text, with very long lines, with CRLF line terminators",diff output,text
+"DOS batch file, ASCII text, with CRLF line terminators",DOS batch file,executable
+"DOS floppy 1440k, x86 hard disk boot sector",DOS floppy,application
+DOS/Windows executable,DOS/Windows executable,executable
+DOT,Microsoft Word,text
+DPX,Digital Moving Picture Exchange Bitmap,image
+DV,Digital Video,video
+DVD data file and backup data file,DVD,video
+Dyalog APL component file version 0 .0,Dyalog APL component file,executable
+Embedded OpenType (EOT),Embedded OpenType,application
+empty,empty,application
+Encapsulated PostScript File Format,Encapsulated PostScript File Format,design
+EPS,Encapsulated PostScript File Format,design
+EPS EXIF,Encapsulated PostScript File Format,design
+ESRI Arc/Info Binary Grid,ESRI Arc,geographic_data
+ESRI Arc/View ShapeFile,ESRI Arc,geographic_data
+ESRI Arc/View Shapefile Index,ESRI Arc,geographic_data
+ESRI Shapefile version 0 length 40874 type Null Shape,ESRI Shapefile,geographic_data
+ESRI Shapefile version 0 length 83617808 type Null Shape,ESRI Shapefile,geographic_data
+ESRI Spatial Index File,ESRI Spatial Index File,geographic_data
+Extended Metafile,Extended Metafile,application
+Extensible Hypertext Markup Language,Extensible HyperText Markup Language,structured_text
+Extensible Markup Language,Extensible Markup Language,structured_text
+FileMaker Pro Database,FileMaker Pro Database,database
+First Choice database,PFS: First Choice Database,database
+FLA,Macromedia Flash,image
+Flash Video (FLV),Macromedia Flash,video
+"FORTRAN program, ASCII text, with very long lines, with CRLF line terminators",Fortran,executable
+"FORTRAN program, ISO-8859 text, with CRLF line terminators",Fortran,executable
+FoxPro Compound Index File,FoxPro Compound Index File,database
+FoxPro Database,FoxPro Database,database
+FPX,Kodak FlashPix Image,image
+Geographic Tagged Image File Format (GeoTIFF),Geographic Tagged Image File Format (GeoTIFF),geographic_data
+GLS_BINARY_LSB_FIRST,GLS_BINARY_LSB_FIRST,application
+Graphics Interchange Format,Graphics Interchange Format,image
+GZIP Format,GZIP Format,archive
+header for PowerPC PEF executable,PowerPC PEF executable,executable
+Hewlett Packard AdvanceWrite Text File,Hewlett Packard AdvanceWrite Text File,text
+HTML Frameset,HyperText Markup Language,structured_text
+HTML Strict,HyperText Markup Language,structured_text
+HTML Transitional,HyperText Markup Language,structured_text
+HTTrack Website Copier File,HTTrack Website Copier File,web_archive
+Hypertext Markup Language,HyperText Markup Language,structured_text
+IBM DisplayWrite Revisable Form Text File,IBM DisplayWrite,text
+Icon file format,Icon file format,application
+ICS,Internet Calendar and Scheduling format,text
+INDD,Adobe InDesign Document,design
+InstallShield Uninstall Script,InstallShield,application
+InstallShield Z archive Data,InstallShield,application
+Interleaf Document,Interleaf Document,design
+Internet Explorer cache file version Ver 3.2,Internet Explorer cache file,application
+Internet Explorer cache file version Ver 5.2,Internet Explorer cache file,application
+ISO 9660 CD-ROM filesystem data,ISO 9660 CD-ROM filesystem data,application
+"ISO Media, MPEG v4 system, version 1",ISO Media,video
+Java Archive Format,Java Archive Format,archive
+JavaScript file,JavaScript file,executable
+JPEG,JPEG File Interchange Format,image
+JPEG 2000 JP2,JP2 (JPEG 2000 part 1),image
+JPEG EXIF,JPEG File Interchange Format,image
+JPEG File Interchange Format,JPEG File Interchange Format,image
+JPEG image data,JPEG File Interchange Format,image
+"JPEG image data, baseline, precision 0, 4360x450",JPEG File Interchange Format,image
+"JPEG image data, baseline, precision 0, 4360x480",JPEG File Interchange Format,image
+"JPEG image data, baseline, precision 0, 4360x576",JPEG File Interchange Format,image
+"JVT NAL sequence, H.264 video @ L 2",H264 Video,video
+"LaTeX document, ASCII text, with CRLF, CR line terminators",LaTeX document,text
+"LaTeX document, ASCII text, with very long lines, with CRLF line terminators",LaTeX document,text
+"LaTeX document, Non-ISO extended-ASCII text, with CRLF, CR line terminators",LaTeX document,text
+LOCK File,LOCK File,database
+Log File,Log File,application
+Lotus 1-2-3,Lotus 1-2-3,spreadsheet
+Lotus 1-2-3 fmt document data,Lotus 1-2-3,spreadsheet
+Lotus 1-2-3 wk1 document data,Lotus 1-2-3,spreadsheet
+Lotus 1-2-3 wk4 document data,Lotus 1-2-3,spreadsheet
+Lotus 1-2-3 Worksheet,Lotus 1-2-3,spreadsheet
+Lotus Approach View File,Lotus Approach View File,database
+Lotus Notes Database,Lotus Notes Database,database
+M2T,M2T,video
+M2TS,Blu-ray,video
+Macintosh PICT Image,Macintosh PICT Image,image
+Macromedia Director,Macromedia Director,video
+Macromedia Flash,Macromedia Flash,video
+"Macromedia Flash data (compressed), version 6",Macromedia Flash,video
+"Macromedia Flash data (compressed), version 7",Macromedia Flash,video
+"Macromedia Flash data (compressed), version 8",Macromedia Flash,video
+"Macromedia Flash data, version 3",Macromedia Flash,video
+"Macromedia Flash data, version 4",Macromedia Flash,video
+"Macromedia Flash data, version 5",Macromedia Flash,video
+MARC21 Bibliographic,MARC21 Bibliographic,text
+Matroska,Matroska,video
+MED_Song,MED_Song,audio
+Microsoft Access Database,Microsoft Access Database,database
+Microsoft ASF,Advanced Systems Format,video
+"Microsoft Cabinet archive data, 10533357 bytes, 29 files",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 1720071 bytes, 10 files",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 173037244 bytes, 2572 files",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 21349 bytes, 2 files",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 3282078 bytes, 1 file",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 3310759 bytes, 1 file",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 48 bytes",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 53311658 bytes, 23 files",Microsoft Cabinet archive data,archive
+"Microsoft Cabinet archive data, 822939 bytes, 1 file",Microsoft Cabinet archive data,archive
+Microsoft Compiled HTML Help,Microsoft Compiled HTML Help,application
+Microsoft Excel,Microsoft Excel,spreadsheet
+Microsoft Excel 2007+,Microsoft Excel,spreadsheet
+Microsoft Excel 3 Worksheet,Microsoft Excel,spreadsheet
+Microsoft Excel 4 Worksheet,Microsoft Excel,spreadsheet
+Microsoft Excel 4 Workspace,Microsoft Excel,spreadsheet
+Microsoft Excel 5.0 Worksheet,Microsoft Excel,spreadsheet
+Microsoft Excel Format,Microsoft Excel,spreadsheet
+Microsoft Excel Worksheet,Microsoft Excel,spreadsheet
+Microsoft FoxPro Database,Microsoft FoxPro Database,database
+Microsoft Front Page Binary Tree Index,Microsoft Front Page Binary Tree Index,design
+Microsoft Internet Shortcut,Microsoft Internet Shortcut,text
+Microsoft Office Owner File,Microsoft Office Owner File,application
+Microsoft Outlook email folder (<=2002),Microsoft Outlook,message
+Microsoft Outlook Message,Microsoft Outlook,message
+Microsoft Outlook Personal Folders (ANSI),Microsoft Outlook,message
+Microsoft Outlook Personal Folders (Unicode),Microsoft Outlook,message
+Microsoft PowerPoint 2007+,Microsoft PowerPoint,presentation
+Microsoft Powerpoint Presentation,Microsoft PowerPoint,presentation
+Microsoft Visio Diagram,Microsoft Visio,design
+Microsoft Visual FoxPro Database Table File,Microsoft Visual FoxPro Database,database
+Microsoft Visual FoxPro Table,Microsoft Visual FoxPro Database,database
+Microsoft Windows Autorun file.,Microsoft Windows Autorun File,application
+Microsoft Windows Enhanced Metafile,Microsoft Windows Enhanced Metafile,image
+Microsoft Windows Shortcut,Microsoft Windows Shortcut,application
+Microsoft Word Binary File Format,Microsoft Word,text
+Microsoft Word Document,Microsoft Word,text
+Microsoft Word Document (Password Protected),Microsoft Word,text
+Microsoft Word for MS-DOS Document,Microsoft Word,text
+Microsoft Works Database for DOS,Microsoft Works Database,database
+Microsoft Works Database for Macintosh,Microsoft Works Database,database
+Microsoft Works Database for Windows,Microsoft Works Database,database
+Microsoft Works for Windows,Microsoft Works,text
+Microsoft Works Spreadsheet,Microsoft Works Spreadsheet,spreadsheet
+Microsoft Works Spreadsheet for Macintosh,Microsoft Works Spreadsheet,spreadsheet
+Microsoft Works Word Processor 1-3 for DOS and 2 for Windows,Microsoft Works Word Processor,text
+Microsoft Works Word Processor 3-4 for Windows,Microsoft Works Word Processor,text
+Microsoft Works Word Processor 5-6,Microsoft Works Word Processor,text
+Microsoft Works Word Processor Macintosh,Microsoft Works Word Processor,text
+Midi,MIDI Audio,audio
+MIDI Audio,MIDI Audio,audio
+MIME Email,MIME Email,message
+MIPSEB-LE MIPS-III ECOFF executable not stripped - version 0.0,MIPSEB-LE MIPS-III ECOFF executable,executable
+Motorola Quark Express Document (English),Quark Xpress,design
+MOV,Quicktime,video
+MPEG,MPEG,video
+MPEG 1/2 Audio Layer 3,MPEG,audio
+MPEG 1/2 Audio Layer I,MPEG,audio
+MPEG Audio,MPEG,audio
+MPEG Movie Clip,MPEG,video
+"MPEG sequence, H.264 video @ L 20",MPEG sequence,video
+"MPEG sequence, v1, progressive Y'CbCr 4:2:0 video, 320x240, 4:3, 30 fps, Constrained",MPEG sequence,video
+"MPEG sequence, v1, progressive Y'CbCr 4:2:0 video, CCIR/ITU NTSC 525, 29.97 fps",MPEG sequence,video
+"MPEG sequence, v1, progressive Y'CbCr 4:2:0 video, LD-TV 640P, 4:3, 29.97 fps",MPEG sequence,video
+"MPEG sequence, v1, system multiplex",MPEG sequence,video
+"MPEG sequence, v2, program multiplex",MPEG sequence,video
+MPEG video,MPEG,video
+MPEG-1 Audio layer 3,MPEG-1,audio
+MPEG-1 Audio layer 3.,MPEG-1,audio
+MPEG-1 Program Stream,MPEG-1,video
+MPEG-2 Program Stream,MPEG-2,video
+MPEG-4,MPEG-4,video
+MPEG-4 Audio,MPEG-4,audio
+MPEG-4 Media File,MPEG-4,video
+MPEG-PS,MPEG-PS,video
+MS DOS Compression format (KWAJ variant),MS DOS Compression format (KWAJ variant),archive
+MS Windows 3.x help file,MS Windows 3.x help file,application
+MS Windows icon resource,MS Windows icon resource,application
+MS Windows icon resource - 1 icon,MS Windows icon resource,application
+"MS Windows icon resource - 2 icons, 32x32, 16-colors",MS Windows icon resource,application
+"MS Windows icon resource - 3 icons, 16x16, 256-colors",MS Windows icon resource,application
+"MS Windows icon resource - 4 icons, 16x16, 256-colors",MS Windows icon resource,application
+"MS Windows icon resource - 4 icons, 32x32, 256-colors",MS Windows icon resource,application
+"MS Windows icon resource - 6 icons, 16x16, 16-colors",MS Windows icon resource,application
+MS-DOS executable,MS-DOS executable,executable
+"MS-DOS executable, MZ for MS-DOS",MS-DOS executable,executable
+"MS-DOS executable, MZ for MS-DOS Self-extracting PKZIP archive, ZIP self-extracting archive",MS-DOS executable,executable
+"MS-DOS executable, MZ for MS-DOS, ZIP self-extracting archive",MS-DOS executable,executable
+"MS-DOS executable, NE for MS Windows 3.x",MS-DOS executable,executable
+"MS-DOS executable, NE for MS Windows 3.x (driver)",MS-DOS executable,executable
+ms-windows metafont .wmf,MS Windows metafont,application
+Musical Instrument Digital Interface,Musical Instrument Digital Interface,audio
+MXF,Material Exchange Format,video
+NEF EXIF,NEF EXIF,image
+"news or mail, ASCII text, with CRLF line terminators",news or mail,message
+"news or mail, ASCII text, with no line terminators",news or mail,message
+"news or mail, ASCII text, with very long lines, with CRLF line terminators",news or mail,message
+"news or mail, ISO-8859 text, with CRLF line terminators",news or mail,message
+"news or mail, ISO-8859 text, with very long lines, with CRLF line terminators",news or mail,message
+"news or mail, Non-ISO extended-ASCII text, with very long lines, with CRLF line terminators",news or mail,message
+Office Open XML Document,Microsoft Office Open XML Document,text
+Office Open XML Document (Macros Enabled),Microsoft Office Open XML Document,text
+Office Open XML Presentation,Microsoft Office Open XML Presentation,presentation
+Office Open XML Presentation (macro-enabled),Microsoft Office Open XML Presentation,presentation
+Office Open XML Presentation Slideshow,Microsoft Office Open XML Presentation,presentation
+Office Open XML Workbook,Microsoft Office Open XML Workbook,spreadsheet
+Office Open XML Workbook (macro-enabled),Microsoft Office Open XML Workbook,spreadsheet
+Ogg Vorbis Codec Compressed Multimedia File,Ogg Vorbis Codec,audio
+Ogg Vorbis Codec Compressed WAV File,Ogg Vorbis Codec,audio
+OLE2 Compound Document Format,OLE2 Compound Document Format,text
+OpenDocument Text,OpenDocument Text,text
+OpenType font data,OpenType Font File,application
+OTF,OpenType Font File,application
+Outlook Express Message Database,Outlook Express,message
+PAGES,Apple iWork Pages,text
+PaintShop Pro Browser Cache File,PaintShop Pro Browser Cache File,application
+Paradox Database Memo Field (Binary Large Object),Paradox Database,database
+Paradox Database Table,Paradox Database,database
+Password Protected OOXML File,Microsoft Word,text
+PC formatted floppy with no filesystem,PC formatted floppy,application
+PCX,PCX,image
+PCX ver. 2.5 image data,PCX,image
+PDF,Adobe PDF - Portable Document Format,text
+PDF EXIF,Adobe PDF - Portable Document Format,text
+PDF/A,Adobe PDF/A - Portable Document Format,text
+PDF/X,Adobe PDF/X - Portable Document Format,text
+PDP-11 kernel overlay,PDP-11,executable
+PDP-11 overlaid pure executable not stripped,PDP-11,executable
+PDP-11 overlaid separate executable not stripped,PDP-11,executable
+"PE32 executable (console) Intel 80386, for MS Windows",PE32 executable,executable
+"PE32 executable (DLL) (console) Intel 80386 (stripped to external PDB), for MS Windows",PE32 executable,executable
+"PE32 executable (DLL) (console) Intel 80386, for MS Windows",PE32 executable,executable
+"PE32 executable (DLL) (GUI) Intel 80386 (stripped to external PDB), for MS Windows",PE32 executable,executable
+"PE32 executable (DLL) (GUI) Intel 80386, for MS Windows",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386 (stripped to external PDB), for MS Windows",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386 (stripped to external PDB), for MS Windows, MS CAB-Installer self-extracting archive",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386, for MS Windows",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386, for MS Windows, InstallShield self-extracting archive",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386, for MS Windows, MS CAB-Installer self-extracting archive",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386, for MS Windows, UPX compressed",PE32 executable,executable
+"PE32 executable (GUI) Intel 80386, for MS Windows, WISE installer self-extracting archive",PE32 executable,executable
+PGP encrypted data,PGP encrypted data,message
+PHP,PHP Script Page,executable
+PHP Script Page,PHP Script Page,executable
+"PHP script, ASCII text",PHP Script Page,executable
+"PHP script, ASCII text, with CRLF line terminators",PHP Script Page,executable
+PICT,Macintosh PICT Image,image
+PKCS #7 Crytographic message file,PKCS #7 Crytographic Message File,message
+pkf,PKF,application
+Plain text,Plain Text File,text
+PLIST,PLIST,application
+Portable Document Format,Adobe PDF - Portable Document Format,text
+Portable Network Graphics,Portable Network Graphics,image
+Postscript,PostScript,design
+PostScript document text,PostScript,design
+PPS,Microsoft Powerpoint,presentation
+PSB EXIF,Adobe Photoshop,image
+Quark Xpress Data File,Quark Xpress,design
+Quicken Data File,Quicken,database
+Quicken Data Format,Quicken,database
+QuickTime,Quicktime,video
+Quicktime video,Quicktime,video
+RA,RealAudio,audio
+RAM,RealAudio,audio
+"raw G3 data, byte-padded",raw G3 data,text
+"RCS/CVS diff output, ASCII text, with CRLF line terminators",RCS/CVS diff output,text
+RDF/XML,RDF/XML,structured_text
+RealMedia,RealMedia,audio
+Revit Family Template,Revit Family Template,model
+"RFC 822 mail, ASCII text, with CRLF line terminators",RFC 822 mail,message
+Rich Text Format (RTF),Rich Text Format,text
+"RIFF (little-endian) data, WAVE audio 544501094 Hz",RIFF,audio
+RSRC,RSRC,application
+"saved news, ASCII text, with very long lines, with CRLF line terminators",saved news,text
+Scalable Vector Graphics (SVG),Scalable Vector Graphics,image
+Sibelius,Sibelius,design
+"SMTP mail, ASCII text",SMTP mail,message
+"SMTP mail, ASCII text, with CRLF line terminators",SMTP mail,message
+"SMTP mail, ASCII text, with very long lines, with CRLF line terminators",SMTP mail,message
+SoundBlaster instrument data,SoundBlaster instrument data,audio
+Standard MIDI data (format 1) using 3 tracks at 1/256,Standard MIDI data,audio
+Stationery for Mac OS X,Stationery for Mac OS X,message
+StuffIt Archive,StuffIt Archive File,archive
+SWF,Macromedia Flash,image
+Tagged Image File Format,Tagged Image File Format,image
+Tagged Image File Format for Electronic Photography (TIFF/EP),Tagged Image File Format for Electronic Photography (TIFF/EP),image
+Text Configuration file,Text Configuration file,application
+Thumbs DB file,Thumbs DB file,application
+tid,AVCHD Thumbnail Index File,video
+TIFF,Tagged Image File Format,image
+TIFF Baseline bilevel (Class B),Tagged Image File Format,image
+TIFF Baseline palette-color (Class P),Tagged Image File Format,image
+TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color,Tagged Image File Format,image
+TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: grayscale and white,Tagged Image File Format,image
+TIFF EXIF,Tagged Image File Format,image
+TIFF Exif 2.2 (JEITA CP-3451),Tagged Image File Format,image
+TIFF TIFF/IT-BP (ISO 12639:1998),Tagged Image File Format for Image Technology (TIFF/IT),image
+TIFF TIFF/IT-CT (ISO 12639:1998),Tagged Image File Format for Image Technology (TIFF/IT),image
+TIFF TIFF/IT-MP (ISO 12639:1998),Tagged Image File Format for Image Technology (TIFF/IT),image
+TIFF TIFF-FX (Profile F),Tagged Image File Format for Internet Fax (TIFF-FX),image
+Transport Neutral Encapsulation Format,Transport Neutral Encapsulation Format,message
+"troff or preprocessor input, ASCII text, with CRLF line terminators",troff or preprocessor input,text
+TrueType Font,TrueType Font,application
+TrueType font data,TrueType Font,application
+TTF,TrueType Font,application
+Unknown Binary,Unknown Binary,application
+Verity Collection Index Descriptor File,Verity Collection,application
+VISX image file,VisX Image Format,image
+VOB,Video Object File,video
+WARC,WARC,web_archive
+Wave,WAVE,audio
+Waveform Audio,Waveform Audio,audio
+Web Open Font Format,Web Open Font Format,application
+Win32 DLL,Win32 DLL,application
+Windows Bitmap,Windows Bitmap,image
+Windows Help File,Windows Help File,application
+Windows Media Audio,Windows Media Audio,audio
+Windows Media Video,Windows Media Video,video
+Windows Metafile,Windows Media Metafile,image
+Windows Metafile Image,Windows Media Metafile,image
+"Windows Program Information File for A:\PET\BASYS.BAT, directory=A:\PET, TrueTypeFont=Courier New",Windows Program Information File,application
+"Windows Program Information File for COMMAND.COM, TrueTypeFont=Courier New",Windows Program Information File,application
+WMA,Windows Media Audio,audio
+WMF,Windows Media Metafile,image
+WMV,Windows Media Video,video
+WordPerfect,WordPerfect,text
+WordPerfect Document,WordPerfect,text
+WordPerfect Document Backup,WordPerfect,text
+Wordperfect Secondary File,WordPerfect,text
+"X11 SNF font data, LSB first",X11 SNF font data,application
+"X11 SNF font data, MSB first",X11 SNF font data,application
+x86 boot sector,x86 boot sector,application
+XHTML,Extensible HyperText Markup Language,structured_text
+XLSM,Microsoft Excel,spreadsheet
+XLT,Microsoft Excel,spreadsheet
+xml,Extensible Markup Language,structured_text
+xmp,Extensible Metadata Platform Format,application
+XSL Transformations,Extensible Stylesheet Language,structured_text
+ZIP Format,ZIP Format,archive
