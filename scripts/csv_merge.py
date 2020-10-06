@@ -213,7 +213,7 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
             continue
 
         # Get ARCHive group from the filename.
-        regex = re.match('file_formats_\d{8}_(.*).txt', report)
+        regex = re.match('file_formats_(.*).txt', report)
         archive_group = regex.group(1)
 
         # Get data from the report.
