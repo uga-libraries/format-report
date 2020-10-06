@@ -1,7 +1,8 @@
-# Combine format reports (tab delimited) for all groups with any files into a single csv.
-# Add a column for group name and otherwise copy as is.
+"""Combines the format reports (tab delimited text files) for all groups from the UGA Libraries' digital preservation
+system (ARCHive) into a single csv for analysis. All data is copied from the format reports except the AIP list,
+which is converted into a collection list. A column is also added for the group name.
 
-# Usage: python /path/csv_merge.py /path/report_folder /path/standard_csv
+Usage: python /path/csv_merge.py /path/report_folder /path/standard_csv"""
 
 import csv
 import datetime
