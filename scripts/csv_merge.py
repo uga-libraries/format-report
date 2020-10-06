@@ -32,8 +32,8 @@ def collection_from_aip(aip, group):
 
         # The next three address errors with how aip id was made.
         elif aip.startswith('har-ms'):
-            regex = re.match('(^har-ms\d+)_', aip)
-            return regex.group(1)
+            coll_regex = re.match('(^har-ms\d+)_', aip)
+            return coll_regex.group(1)
 
         elif aip.startswith('bmac_bmac_wsbn'):
             return 'wsbn'
@@ -42,8 +42,8 @@ def collection_from_aip(aip, group):
             return 'wrdw-video'
 
         else:
-            regex = re.match('^bmac_([a-z0-9-]+)_', aip)
-            return regex.group(1)
+            coll_regex = re.match('^bmac_([a-z0-9-]+)_', aip)
+            return coll_regex.group(1)
 
     elif group == 'dlg':
 
@@ -55,24 +55,24 @@ def collection_from_aip(aip, group):
                 return 'geh_ahc-mss820f'
 
             elif aip.startswith('dlg_turningpoint_ahc'):
-                regex = re.match('dlg_turningpoint_ahc(\d{4})([a-z]?)-', aip)
-                number = int(regex.group(1))
-                if regex.group(2) == 'v':
+                coll_regex = re.match('dlg_turningpoint_ahc(\d{4})([a-z]?)-', aip)
+                number = int(coll_regex.group(1))
+                if coll_regex.group(2) == 'v':
                     return f'geh_ahc-vis{number}'
                 else:
-                    return f'geh_ahc-mss{number}{regex.group(2)}'
+                    return f'geh_ahc-mss{number}{coll_regex.group(2)}'
 
             elif aip.startswith('dlg_turningpoint_ghs'):
-                regex = re.match('dlg_turningpoint_ghs(\d{4})([a-z]*)', aip)
-                if regex.group(2) == 'bs':
-                    return f'g-hi_ms{regex.group(1)}-bs'
+                coll_regex = re.match('dlg_turningpoint_ghs(\d{4})([a-z]*)', aip)
+                if coll_regex.group(2) == 'bs':
+                    return f'g-hi_ms{coll_regex.group(1)}-bs'
                 else:
-                    return f'g-hi_ms{regex.group(1)}'
+                    return f'g-hi_ms{coll_regex.group(1)}'
 
             elif aip.startswith('dlg_turningpoint_harg'):
-                regex = re.match('dlg_turningpoint_harg(\d{4})([a-z]?)', aip)
-                number = int(regex.group(1))
-                return f'guan_ms{number}{regex.group(2)}'
+                coll_regex = re.match('dlg_turningpoint_harg(\d{4})([a-z]?)', aip)
+                number = int(coll_regex.group(1))
+                return f'guan_ms{number}{coll_regex.group(2)}'
 
             else:
                 return 'turningpoint no match'
@@ -81,20 +81,20 @@ def collection_from_aip(aip, group):
             return 'dlg_ghn'
 
         else:
-            regex = re.match('^([a-z0-9-]*_[a-z0-9-]*)_', aip)
-            return regex.group(1)
+            coll_regex = re.match('^([a-z0-9-]*_[a-z0-9-]*)_', aip)
+            return coll_regex.group(1)
 
     elif group == 'dlg-hargrett':
-        regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip)
-        return regex.group(1)
+        coll_regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip)
+        return coll_regex.group(1)
 
     elif group == 'hargrett':
-        regex = re.match('^(.*)er', aip)
-        return regex.group(1)
+        coll_regex = re.match('^(.*)er', aip)
+        return coll_regex.group(1)
 
     elif group == 'russell':
-        regex = re.match('^rbrl-?\d{3}', aip)
-        return regex.group()
+        coll_regex = re.match('^rbrl-?\d{3}', aip)
+        return coll_regex.group()
 
     else:
         return 'new group'
@@ -111,28 +111,28 @@ def update_row(row, group):
         # Split aip_list (a string) into a list. Items are divided by a pipe.
         aips = aip_list.split('|')
 
-        colls = []
+        collections_list = []
 
         # Extract collection id from aip id.
         # Put in error message if the pattern is new so it can be fixed.
         for aip in aips:
             try:
-                coll = collection_from_aip(aip, group)
+                collection = collection_from_aip(aip, group)
             except AttributeError:
                 print('Check for collection errors in merged csv')
-                coll = f"Collection not calculated for {aip}"
+                collection = f"Collection not calculated for {aip}"
 
             # Make a unique list of collections.
-            if coll not in colls:
-                colls.append(coll)
+            if collection not in collections_list:
+                collections_list.append(collection)
 
         # Convert the list of collections to a string with each collection separated by a comma.
-        collections = ', '.join(map(str, colls))
+        collections_string = ', '.join(map(str, collections_list))
 
         # Return both the string with the collections and a count of the number of collections.
-        return collections, len(colls)
+        return collections_string, len(collections_list)
 
-    def standardize_formats(format, standard):
+    def standardize_formats(format_name, standard):
         """Find the format name within the standardized formats csv and return the standard (simplified) format name and
         format type. Using a standardized name and assigning a format type reduces some of the data variability so
         summaries are more useful. Can rely on there being a match because update_normalized.py is run first.
@@ -156,9 +156,9 @@ def update_row(row, group):
             # start of the name for fewer results for formats that include file size or other details in the name,
             # but this caused too many errors and false positives from different formats that start with the same
             # string.
-            for row in read_standard_list:
-                if format.lower() == row[0].lower():
-                    return row[1], row[2]
+            for standard_row in read_standard_list:
+                if format_name.lower() == standard_row[0].lower():
+                    return standard_row[1], standard_row[2]
 
     # Gets standard name for format and format type.
     format_standard, format_type = standardize_formats(row[2], standard_csv)
@@ -199,10 +199,10 @@ today = datetime.datetime.now().strftime("%Y-%m")
 # Make a file for results named archive_formats_date.csv.
 # Get each row from each report, update it, and save to the results file.
 with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
-    resultcsv = csv.writer(result)
+    result_csv = csv.writer(result)
 
     # Add a header to the results file.
-    resultcsv.writerow(
+    result_csv.writerow(
         ['Group', 'Collection_Count', 'AIP_Count', 'File_Count', 'Format_Type', 'Format_Standard_Name', 'Format_Name',
          'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List'])
 
@@ -223,8 +223,8 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
         next(report_info)
 
         # Get data from each row in the report.
-        for row in report_info:
+        for data in report_info:
             # Update the row to add additional information and fill in blank cells.
             # Save to the results csv.
-            newrow = update_row(row, archive_group)
-            resultcsv.writerow(newrow)
+            new_row = update_row(data, archive_group)
+            result_csv.writerow(new_row)
