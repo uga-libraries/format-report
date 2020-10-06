@@ -1,20 +1,21 @@
 # Combine format reports (tab delimited) for all groups with any files into a single csv.
 # Add a column for group name and otherwise copy as is.
 
+# Usage: python /path/csv_merge.py /path/report_folder /path/standard_csv
+
 import csv
 import datetime
 import os
 import re
 import sys
 
-# Variables
+# Makes variables from script arguments
 #    report_folder is the directory with the ARCHive format reports to be analyzed.
 #    standardize_csv has the path to the csv document with current standardization rules.
-#    today is the current date, formatted YYYYMM, for use in naming the result file.
-# report_folder = sys.argv[1]
-report_folder = 'H:/ARCHive-formats/2020-02-25'
-standard_csv = 'H:/ARCHive-formats/standardize_formats.csv'
-today = datetime.datetime.now().strftime("%Y-%m")
+# TODO: add error handling
+# TODO: standard_csv is in the same folder as the script. Can it reference the csv without a path?
+report_folder = sys.argv[1]
+standard_csv = sys.argv[2]
 
 # Make current directory the report folder.
 os.chdir(report_folder)
@@ -189,6 +190,10 @@ while True:
         break
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
+
+# Gets the current date, formatted YYYYMM, to use in naming the result file.
+# TODO: is this necessary? Is this meaningful? Not necessarily doing the merge the month of the download.
+today = datetime.datetime.now().strftime("%Y-%m")
 
 # Make a file for results named archive_formats_date.csv.
 # Get each row from each report, update it, and save to the results file.
