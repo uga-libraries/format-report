@@ -45,7 +45,7 @@ def in_standard(standard_csv, format):
 
 
 # Increases the size of csv fields to handle long AIP lists.
-# Gets the smallest maximum size that doesn't give an overflow error.
+# Gets the maximum size that doesn't give an overflow error.
 while True:
     try:
         csv.field_size_limit(sys.maxsize)
