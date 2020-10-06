@@ -32,7 +32,7 @@ def collection_from_aip(aip, group):
 
         # The next three address errors with how aip id was made.
         elif aip.startswith('har-ms'):
-            coll_regex = re.match('(^har-ms\d+)_', aip)
+            coll_regex = re.match('(^har-ms[0-9]+)_', aip)
             return coll_regex.group(1)
 
         elif aip.startswith('bmac_bmac_wsbn'):
@@ -55,7 +55,7 @@ def collection_from_aip(aip, group):
                 return 'geh_ahc-mss820f'
 
             elif aip.startswith('dlg_turningpoint_ahc'):
-                coll_regex = re.match('dlg_turningpoint_ahc(\d{4})([a-z]?)-', aip)
+                coll_regex = re.match('dlg_turningpoint_ahc([0-9]{4})([a-z]?)-', aip)
                 number = int(coll_regex.group(1))
                 if coll_regex.group(2) == 'v':
                     return f'geh_ahc-vis{number}'
@@ -63,14 +63,14 @@ def collection_from_aip(aip, group):
                     return f'geh_ahc-mss{number}{coll_regex.group(2)}'
 
             elif aip.startswith('dlg_turningpoint_ghs'):
-                coll_regex = re.match('dlg_turningpoint_ghs(\d{4})([a-z]*)', aip)
+                coll_regex = re.match('dlg_turningpoint_ghs([0-9]{4})([a-z]*)', aip)
                 if coll_regex.group(2) == 'bs':
                     return f'g-hi_ms{coll_regex.group(1)}-bs'
                 else:
                     return f'g-hi_ms{coll_regex.group(1)}'
 
             elif aip.startswith('dlg_turningpoint_harg'):
-                coll_regex = re.match('dlg_turningpoint_harg(\d{4})([a-z]?)', aip)
+                coll_regex = re.match('dlg_turningpoint_harg([0-9]{4})([a-z]?)', aip)
                 number = int(coll_regex.group(1))
                 return f'guan_ms{number}{coll_regex.group(2)}'
 
@@ -93,7 +93,7 @@ def collection_from_aip(aip, group):
         return coll_regex.group(1)
 
     elif group == 'russell':
-        coll_regex = re.match('^rbrl-?\d{3}', aip)
+        coll_regex = re.match('^rbrl-?[0-9]{3}', aip)
         return coll_regex.group()
 
     else:
