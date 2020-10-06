@@ -117,6 +117,7 @@ aip_list = list(set(aip_list))
 aip_list.sort()
 
 # Save to a new file in the format needed for an ARCHive batch copy request.
+# TODO: consider adding request information to CSV name to help track its purpose.
 with open(f'aip_request.csv', 'w', newline='') as result:
     write_result = csv.writer(result)
     for aip in aip_list:
