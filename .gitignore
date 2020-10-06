@@ -123,5 +123,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Temporary folders for testing
 scripts/.idea/
-*.docx
+report_samples
+script_outputs
