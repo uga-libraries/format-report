@@ -24,7 +24,6 @@ standard_csv = sys.argv[2]
 os.chdir(report_folder)
 
 
-# line 23 UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 126: character maps to <undefined>
 def in_standard(standard_csv, format):
     """Searches for a format name within the standardize formats CSV.
        Returns True if it is present and False if it is there not."""
@@ -33,7 +32,7 @@ def in_standard(standard_csv, format):
     format_match = False
 
     # Reads the csv file with the standardization rules.
-    with open(standard_csv) as standard:
+    with open(standard_csv, encoding='utf-8') as standard:
         read_standard = csv.reader(standard)
 
         # Checks each row in the standardize formats CSV. row[0] is the format name in the CSV.
