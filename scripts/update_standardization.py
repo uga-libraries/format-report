@@ -24,7 +24,7 @@ standard_csv = sys.argv[2]
 os.chdir(report_folder)
 
 
-def in_standard(standard_csv, format):
+def in_standard(standard, format_to_check):
     """Searches for a format name within the standardize formats CSV.
        Returns True if it is present and False if it is there not."""
 
@@ -32,15 +32,15 @@ def in_standard(standard_csv, format):
     format_match = False
 
     # Reads the csv file with the standardization rules.
-    with open(standard_csv, encoding='utf-8') as standard:
-        read_standard = csv.reader(standard)
+    with open(standard, encoding='utf-8') as open_standard:
+        read_standard = csv.reader(open_standard)
 
         # Checks each row in the standardize formats CSV. row[0] is the format name in the CSV.
-        for row in read_standard:
+        for standardize_row in read_standard:
 
             # If the format name is in the CSV, updates the format_match variable and stops searching the CSV.
             # Matching lowercase versions of the format names to account for variations in capitalization. 
-            if format.lower() == row[0].lower():
+            if format_to_check.lower() == standardize_row[0].lower():
                 format_match = True
                 break
 
@@ -77,21 +77,21 @@ for format_report in os.listdir(report_folder):
         for row in read_formats:
 
             # Gets the format name from the 3rd column.
-            format = row[2]
+            format_name = row[2]
 
             # Makes a unique list of formats that are not already in standardize_formats.csv.
             # TODO: test for if format is in new_formats before bothering to check for standard_csv?
             # TODO: keep a list of already tested (memoization!) so only looking for a unique list of formats?
             #  Or have one dictionary with the results so don't have to test if it is in two lists.
-            present = in_standard(standard_csv, format)
-            if present == False and format not in new_formats:
-                new_formats.append(format)
+            present = in_standard(standard_csv, format_name)
+            if present == False and format_name not in new_formats:
+                new_formats.append(format_name)
 
 # Saves the new format names, if any, to a text file to use for updating the standardize formats CSV.
 # Each format name is on its own line in the text file so it can be pasted into the CSV, one row per format.
 if len(new_formats) > 0:
     with open('new_formats.txt', 'w') as new_file:
-        for format in new_formats:
-            new_file.write(f'{format}\n')
+        for new_format_name in new_formats:
+            new_file.write(f'{new_format_name}\n')
 else:
     print('No new formats to add!')
