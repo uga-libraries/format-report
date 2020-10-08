@@ -177,20 +177,21 @@ def standardize_formats(format_name, standard):
             if format_name.lower() == standard_row[0].lower():
                 return standard_row[1], standard_row[2]
 
+        # If there was no match (the previous code block did not return a result, which exits this function and keeps
+        # this code block from running), prints an error message and quits the script. Run update_standardization.py to
+        # make sure that standardize_formats.csv will have a match for all formats.
+        print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
+        print('Update that CSV and run this script again.')
+        print('Note that the archive_formats CSV produced by the script only has formats up until this point.')
+        exit()
+
 
 def update_row(row, group):
     """Calculates and adds new data, replaces the AIP list with a collection list, and fills in empty cells.
        New data is group name, collection count, standardized version of the format name, and format type."""
 
-    # Gets the standard name for the format and the format type. If there is no match, prints an error message and
-    # quits the script. Use update_standardization.py to make sure that standardize_formats.csv will have a match for
-    # all formats.
-    # TODO: make this part of standardize_formats instead?
-    try:
-        format_standard, format_type = standardize_formats(row[2], standard_csv)
-    except TypeError:
-        print(f'Could not match {row[2]} in standardize_formats.csv. Update CSV and run this script again.')
-        exit()
+    # Gets the standard name for the format and the format type.
+    format_standard, format_type = standardize_formats(row[2], standard_csv)
 
     # Gets a list of collection ids from the AIP ids and the number of collections.
     collections, number_collections = collection_list(row[7], group)
