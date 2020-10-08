@@ -102,7 +102,8 @@ def collection_from_aip(aip, group):
         return coll_regex.group(1)
 
     # NOTE: At the time of writing this script, there were no AIPs in dlg-magil. This will need to be updated.
-    # TODO: add a no match return to remind me to update
+    elif group == 'dlg-magil':
+        return 'FIRST DLG-MAGIL FORMAT: COLLECTION FROM AIP RULES NOT DEFINED YET'
 
     # Hargrett Rare Book and Manuscript Library
     elif group == 'hargrett':
@@ -128,7 +129,6 @@ def update_row(row, group):
            Returns a string with comma-separated collection ids and a count of the number of collections."""
 
         # Splits the aip_list (a string) into a list. Items are divided by a pipe.
-        # TODO: clarify this. Don't use list as part of the name if it isn't type list. Is aips a Python list?
         aip_list = aips.split('|')
         collections_list = []
 
