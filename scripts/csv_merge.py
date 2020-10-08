@@ -31,7 +31,7 @@ except IndexError:
 
 def collection_from_aip(aip, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each group
-    has for constructing AIP ids for different collections. """
+    has for constructing AIP ids for different collections. This function is imported into archive_capacity.py too."""
 
     # Brown Media Archives and Peabody Awards Collection
     if group == 'bmac':
@@ -120,70 +120,72 @@ def collection_from_aip(aip, group):
         return 'new group'
 
 
+def collection_list(aips, group):
+    """Changes AIP list to a unique list of collections.
+       Returns a string with comma-separated collection ids and a count of the number of collections."""
+
+    # Splits the aip_list (a string) into a list. Items are divided by a pipe.
+    aip_list = aips.split('|')
+    collections_list = []
+
+    # Extracts the collection id from the AIP ID using another function.
+    # Prints an error message and includes the error message in the collections list if the pattern is new.
+    for aip in aip_list:
+        try:
+            collection = collection_from_aip(aip, group)
+        except AttributeError:
+            print('Check for collection errors in merged csv')
+            collection = f"Collection not calculated for {aip}"
+
+        # Makes a unique list of collection ids.
+        if collection not in collections_list:
+            collections_list.append(collection)
+
+    # Converts the list of collection ids to a string with each collection id separated by a comma.
+    collections_string = ', '.join(map(str, collections_list))
+
+    # Returns both the string with the collection ids and a count of the number of collections.
+    return collections_string, len(collections_list)
+
+
+def standardize_formats(format_name, standard):
+    """Finds the format name within the standardized formats csv and returns the standard (simplified) format
+    name and the format type. Using a standardized name and assigning a format type reduces some of the data
+    variability so summaries are more useful. Can rely on there being a match because update_normalized.py is run
+    first.
+
+    Standard format name is based on PRONOM, although sometimes the name truncated to group more names together. For
+    formats not in PRONOM, we either truncated the name or left it as it was. Occasionally researched the most
+    common form of the name.
+
+    Format type is based on mimetypes, with additional local categories used where more nuance was needed for
+    meaningful results, e.g. application and text. """
+
+    # Reads the standardized formats csv.
+    with open(standard) as standard_list:
+        read_standard_list = csv.reader(standard_list)
+
+        # Skips the header.
+        next(read_standard_list)
+
+        # Checks each row for the format. When there is a match, returns the standardized name and format type.
+        # Matching lowercase versions of the format names to ignore variations in capitalization.
+        # Note: considered just matching the start of the name for fewer results for formats that include file
+        # size or other details in the name, but this caused too many errors from different formats that start with
+        # the same string.
+        for standard_row in read_standard_list:
+            if format_name.lower() == standard_row[0].lower():
+                return standard_row[1], standard_row[2]
+
+
 def update_row(row, group):
     """Calculates and adds new data, replaces the AIP list with a collection list, and fills in empty cells.
        New data is group name, collection count, standardized version of the format name, and format type."""
 
-    def collection_list(aips):
-        """Changes AIP list to a unique list of collections.
-           Returns a string with comma-separated collection ids and a count of the number of collections."""
-
-        # Splits the aip_list (a string) into a list. Items are divided by a pipe.
-        aip_list = aips.split('|')
-        collections_list = []
-
-        # Extracts the collection id from the AIP ID using another function.
-        # Prints an error message and includes the error message in the collections list if the pattern is new.
-        # TODO: why is collection_from_aip() its own function with collection_list() and standardize_formats() are within update_row()?
-        for aip in aip_list:
-            try:
-                collection = collection_from_aip(aip, group)
-            except AttributeError:
-                print('Check for collection errors in merged csv')
-                collection = f"Collection not calculated for {aip}"
-
-            # Makes a unique list of collection ids.
-            if collection not in collections_list:
-                collections_list.append(collection)
-
-        # Converts the list of collection ids to a string with each collection id separated by a comma.
-        collections_string = ', '.join(map(str, collections_list))
-
-        # Returns both the string with the collection ids and a count of the number of collections.
-        return collections_string, len(collections_list)
-
-    def standardize_formats(format_name, standard):
-        """Finds the format name within the standardized formats csv and returns the standard (simplified) format
-        name and the format type. Using a standardized name and assigning a format type reduces some of the data
-        variability so summaries are more useful. Can rely on there being a match because update_normalized.py is run
-        first.
-
-        Standard format name is based on PRONOM, although sometimes the name truncated to group more names together. For
-        formats not in PRONOM, we either truncated the name or left it as it was. Occasionally researched the most
-        common form of the name.
-
-        Format type is based on mimetypes, with additional local categories used where more nuance was needed for
-        meaningful results, e.g. application and text. """
-
-        # Reads the standardized formats csv.
-        with open(standard) as standard_list:
-            read_standard_list = csv.reader(standard_list)
-
-            # Skips the header.
-            next(read_standard_list)
-
-            # Checks each row for the format. When there is a match, returns the standardized name and format type.
-            # Matching lowercase versions of the format names to ignore variations in capitalization.
-            # Note: considered just matching the start of the name for fewer results for formats that include file
-            # size or other details in the name, but this caused too many errors from different formats that start with
-            # the same string.
-            for standard_row in read_standard_list:
-                if format_name.lower() == standard_row[0].lower():
-                    return standard_row[1], standard_row[2]
-
     # Gets the standard name for the format and the format type. If there is no match, prints an error message and
     # quits the script. Use update_standardization.py to make sure that standardize_formats.csv will have a match for
     # all formats.
+    # TODO: make this part of standardize_formats instead?
     try:
         format_standard, format_type = standardize_formats(row[2], standard_csv)
     except TypeError:
@@ -191,7 +193,7 @@ def update_row(row, group):
         exit()
 
     # Gets a list of collection ids from the AIP ids and the number of collections.
-    collections, number_collections = collection_list(row[7])
+    collections, number_collections = collection_list(row[7], group)
 
     # Replaces the AIP list with the collection list.
     row[7] = collections
