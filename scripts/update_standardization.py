@@ -12,13 +12,15 @@ import csv
 import os
 import sys
 
-# Assign variables from arguments.
-#    report_folder is the directory with the ARCHive format reports to be analyzed.
-# TODO: add error handling for missing/incorrect arguments.
-report_folder = sys.argv[1]
-
-# Makes the report folder the current directory.
-os.chdir(report_folder)
+# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
+# the argument is missing or not a valid directory.
+try:
+    report_folder = sys.argv[1]
+    os.chdir(report_folder)
+except (IndexError, FileNotFoundError):
+    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
+    print("Script usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]")
+    exit()
 
 # Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
 # or else uses the folder with this script as the default location.
