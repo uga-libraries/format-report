@@ -123,20 +123,19 @@ def update_row(row, group):
     """Calculates and adds new data, replaces the AIP list with a collection list, and fills in empty cells.
        New data is group name, collection count, standardized version of the format name, and format type."""
 
-    def collection_list(aip_list):
+    def collection_list(aips):
         """Changes AIP list to a unique list of collections.
            Returns a string with comma-separated collection ids and a count of the number of collections."""
 
         # Splits the aip_list (a string) into a list. Items are divided by a pipe.
         # TODO: clarify this. Don't use list as part of the name if it isn't type list. Is aips a Python list?
-        aips = aip_list.split('|')
-
+        aip_list = aips.split('|')
         collections_list = []
 
         # Extracts the collection id from the AIP ID using another function.
         # Prints an error message and includes the error message in the collections list if the pattern is new.
         # TODO: why is collection_from_aip() its own function with collection_list() and standardize_formats() are within update_row()?
-        for aip in aips:
+        for aip in aip_list:
             try:
                 collection = collection_from_aip(aip, group)
             except AttributeError:
