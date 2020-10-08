@@ -6,7 +6,7 @@ standardize_formats.csv before merging and analyzing the format reports.
 Prior to running the script, download all the ARCHive format reports (one tab-delimited text file per group) from the
 ARCHive interface and save them to a single folder.
 
-Usage: python /path/update_standardization /path/reports"""
+Usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]"""
 
 import csv
 import os
@@ -14,14 +14,18 @@ import sys
 
 # Assign variables from arguments.
 #    report_folder is the directory with the ARCHive format reports to be analyzed.
-#    standard_csv has the path to the csv document with current standardization rules.
 # TODO: add error handling for missing/incorrect arguments.
-# TODO: standardize_formats.csv is in the same folder as the script. Any way to reference without a path?
 report_folder = sys.argv[1]
-standard_csv = sys.argv[2]
 
 # Makes the report folder the current directory.
 os.chdir(report_folder)
+
+# Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
+# or else uses the folder with this script as the default location.
+try:
+    standard_csv = sys.argv[2]
+except IndexError:
+    standard_csv = os.path.join(sys.path[0], 'standardize_formats.csv')
 
 
 def in_standard(standard, format_to_check):
