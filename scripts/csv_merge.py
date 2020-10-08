@@ -30,8 +30,10 @@ except IndexError:
 
 
 def collection_from_aip(aip, group):
-    """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each group
-    has for constructing AIP ids for different collections. This function is imported into archive_capacity.py too."""
+    """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
+    group has for constructing AIP ids for different collections. If the pattern does not match any known rules,
+    the function returns None and the error is caught where the function is called. This function is imported into
+    archive_capacity.py too."""
 
     # Brown Media Archives and Peabody Awards Collection
     if group == 'bmac':
@@ -84,10 +86,6 @@ def collection_from_aip(aip, group):
 
                 return f'guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}'
 
-            # Warning in output that pattern-matching of this function needs to be updated.
-            else:
-                return 'turningpoint no match'
-
         elif aip.startswith('batch_gua_'):
             return 'dlg_ghn'
 
@@ -102,7 +100,7 @@ def collection_from_aip(aip, group):
 
     # NOTE: At the time of writing this script, there were no AIPs in dlg-magil. This will need to be updated.
     elif group == 'dlg-magil':
-        return 'FIRST DLG-MAGIL FORMAT: COLLECTION FROM AIP RULES NOT DEFINED YET'
+        return None
 
     # Hargrett Rare Book and Manuscript Library
     elif group == 'hargrett':
@@ -114,10 +112,6 @@ def collection_from_aip(aip, group):
         coll_regex = re.match('^rbrl-?[0-9]{3}', aip)
         return coll_regex.group()
 
-    # Warning in output that pattern-matching of this function needs to be updated.
-    else:
-        return 'new group'
-
 
 def collection_list(aips, group):
     """Changes AIP list to a unique list of collections.
@@ -127,12 +121,18 @@ def collection_list(aips, group):
     aip_list = aips.split('|')
     collections_list = []
 
-    # Extracts the collection id from the AIP ID using another function.
-    # Prints an error message and includes the error message in the collections list if the pattern is new.
+    # Extracts the collection id from the AIP ID using another function. Prints an error message and includes the
+    # error message in the collections list if the pattern is new, resulting in an error from the regular expression.
     for aip in aip_list:
         try:
             collection = collection_from_aip(aip, group)
         except AttributeError:
+            print('Check for collection errors in merged csv')
+            collection = f"Collection not calculated for {aip}"
+
+        # If the AIP didn't match any known conditions, it returns None when collection_from_aip() is calculated.
+        # Prints an error message and includes the error message in the collections list.
+        if collection is None:
             print('Check for collection errors in merged csv')
             collection = f"Collection not calculated for {aip}"
 
