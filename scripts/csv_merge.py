@@ -176,8 +176,14 @@ def update_row(row, group):
                 if format_name.lower() == standard_row[0].lower():
                     return standard_row[1], standard_row[2]
 
-    # Gets the standard name for the format and the format type.
-    format_standard, format_type = standardize_formats(row[2], standard_csv)
+    # Gets the standard name for the format and the format type. If there is no match, prints an error message and
+    # quits the script. Use update_standardization.py to make sure that standardize_formats.csv will have a match for
+    # all formats.
+    try:
+        format_standard, format_type = standardize_formats(row[2], standard_csv)
+    except TypeError:
+        print(f'Could not match {row[2]} in standardize_formats.csv. Update CSV and run this script again.')
+        exit()
 
     # Gets a list of collection ids from the AIP ids and the number of collections.
     collections, number_collections = collection_list(row[7])
@@ -209,7 +215,6 @@ while True:
         sys.maxsize = int(sys.maxsize / 10)
 
 # Gets the current date, formatted YYYYMM, to use in naming the merged file.
-# TODO: is this necessary? Is this meaningful? Not necessarily doing the merge the month of the download.
 today = datetime.datetime.now().strftime("%Y-%m")
 
 # Makes a CSV file for the merged reports named archive_formats_date.csv in the same folder as the ARCHive reports.
