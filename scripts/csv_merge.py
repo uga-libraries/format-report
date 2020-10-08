@@ -11,16 +11,22 @@ import os
 import re
 import sys
 
-# Makes variables from script arguments:
-#    - report_folder is the directory with the ARCHive format reports to be merged.
-#    - standardize_csv is the path to the csv document with current standardization rules.
-# TODO: add error handling
-# TODO: standard_csv is in the same folder as the script. Can it reference the csv without a path?
-report_folder = sys.argv[1]
-standard_csv = sys.argv[2]
+# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
+# the argument is missing or not a valid directory.
+try:
+    report_folder = sys.argv[1]
+    os.chdir(report_folder)
+except (IndexError, FileNotFoundError):
+    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
+    print("Script usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]")
+    exit()
 
-# Makes the report folder the current directory.
-os.chdir(report_folder)
+# Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
+# or else uses the folder with this script as the default location.
+try:
+    standard_csv = sys.argv[2]
+except IndexError:
+    standard_csv = os.path.join(sys.path[0], 'standardize_formats.csv')
 
 
 def collection_from_aip(aip, group):
