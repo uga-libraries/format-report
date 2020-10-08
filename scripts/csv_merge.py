@@ -3,7 +3,7 @@ system (ARCHive) into a single csv for analysis. All data is copied from the for
 which is converted into a collection list. Columns are also added for the group name, collection count, format type,
 and standardized format name.
 
-Usage: python /path/csv_merge.py /path/report_folder /path/standard_csv"""
+Usage: python /path/csv_merge.py /path/reports [/path/standard_csv]"""
 
 import csv
 import datetime
@@ -18,7 +18,7 @@ try:
     os.chdir(report_folder)
 except (IndexError, FileNotFoundError):
     print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]")
+    print("Script usage: python /path/csv_merge.py /path/reports [/path/standardize_formats.csv]")
     exit()
 
 # Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
