@@ -55,10 +55,10 @@ def collection_from_aip(aip, group):
             return coll_regex.group(1)
 
     # Digital Library of Georgia
-    # TODO: verify if need the number = int() step, and if so does it need to be a separate variable?
     elif group == 'dlg':
 
         # Everything in turningpoint is also in another collection, which is the one we want.
+        # The collection number is made into an integer to remove leading zeros.
         if aip.startswith('dlg_turningpoint'):
 
             # This one is from an error in the AIP ID.
@@ -67,11 +67,10 @@ def collection_from_aip(aip, group):
 
             elif aip.startswith('dlg_turningpoint_ahc'):
                 coll_regex = re.match('dlg_turningpoint_ahc([0-9]{4})([a-z]?)-', aip)
-                number = int(coll_regex.group(1))
                 if coll_regex.group(2) == 'v':
-                    return f'geh_ahc-vis{number}'
+                    return f'geh_ahc-vis{int(coll_regex.group(1))}'
                 else:
-                    return f'geh_ahc-mss{number}{coll_regex.group(2)}'
+                    return f'geh_ahc-mss{int(coll_regex.group(1))}{coll_regex.group(2)}'
 
             elif aip.startswith('dlg_turningpoint_ghs'):
                 coll_regex = re.match('dlg_turningpoint_ghs([0-9]{4})([a-z]*)', aip)
@@ -82,8 +81,8 @@ def collection_from_aip(aip, group):
 
             elif aip.startswith('dlg_turningpoint_harg'):
                 coll_regex = re.match('dlg_turningpoint_harg([0-9]{4})([a-z]?)', aip)
-                number = int(coll_regex.group(1))
-                return f'guan_ms{number}{coll_regex.group(2)}'
+
+                return f'guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}'
 
             # Warning in output that pattern-matching of this function needs to be updated.
             else:
