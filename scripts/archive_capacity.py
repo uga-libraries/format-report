@@ -64,37 +64,53 @@ with open(f'archive_summary.csv', 'w', newline='') as summary:
                 # Changes the set back to a list and updates the dictionary with that list.
                 collections_by_group[group] = list(collections_without_duplicates)
 
-        # Gets the final count of unique collections per group and saves to the summary report.
-        for group in collections_by_group:
-            summary_csv.writerow([group, len(collections_by_group[group])])
+    # Gets the final count of unique collections per group and saves to the summary report.
+    # TODO can everything be saved at the end so not trying to match up coll/usage data in summary_csv?
+    for group in collections_by_group:
+        summary_csv.writerow([group, len(collections_by_group[group])])
+
+    # Gets the AIP count and size in TB from the usage report.
+    with open(usage_report, 'r') as usage:
+        usage_read = csv.reader(usage, delimiter="\t")
+
+        # Skip header
+        next(usage_read)
+
+        # A row can have the group data, a staff person's data, or be blank.
+        # For group rows, row[0] is the group, row[1] is the AIP count, and row[2] is the size.
+        # Groups are written out rather than the code, e.g. Brown Media Archives instead of bmac.
+        # AIP count is a string.
+        # Size is # unit and the unit can can be MB, GB, TB, or 0 Bytes if none.
+
+        # Group Names (used to find the rows to use in the report and convert to group codes used by format report)
+        group_names = {'Brown Media Archives': 'bmac', 'Digital Library of Georgia': 'dlg',
+                       'DLG & Hargrett': 'dlg-hargrett', 'DLG & Map and Government Information Library' :'dlg-magil',
+                       'Hargrett': 'hargrett', 'Russell': 'russell'}
+
+        # Get and transform data from each group row.
+        for row in usage_read:
+
+            # Skip empty rows. Have to do this before test for row[0] or get an IndexError.
+            if not row:
+                continue
+
+            # Only want data from group rows, not individual staff rows.
+            if row[0] in group_names:
+                group = group_names[row[0]]
+                aip_count = int(row[1])
+
+                # Remove unit and convert sizes to TB
+                # TODO: catch if there are any units I didn't anticipate and round the results to 3 decimal places.
+                size, unit = row[2].split()
+                if size == '0' and unit == 'Bytes':
+                    unit = 'TB'
+                if unit == 'MB':
+                    size = float(size) / 1000000
+                    unit = 'TB'
+                if unit == 'GB':
+                    size = float(size) / 1000
+                    unit = 'TB'
+
+                # TODO: how do I get these values in the correct rows in the summary spreadsheet?
 
 
-
-
-    # # Gets each format report.
-    # for report in os.listdir(report_folder):
-    #     if report.startswith('file_formats'):
-    #
-    #         # Gets the ARCHive group from the filename.
-    #         regex = re.match('file_formats_\d{8}_(.*).txt', report)
-    #         archive_group = regex.group(1)
-    #
-    #         # Gets the data from the report, which is a tab-delimited text file.
-    #         report_open = open(report, 'r')
-    #         report_info = csv.reader(report_open, delimiter='\t')
-    #
-    #         # Gets a list of unique AIP IDs.
-    #         aips = aip_list(report_info)
-    #
-    #         # Calculates the collection number for each AIP ID and saves the group, collection id, and AIP id to the
-    #         # teporary file.
-    #         for aip in aips:
-    #             collection = collection_from_aip(aip, archive_group)
-    #             aiplistcsv.writerow([archive_group, collection, aip])
-    #
-    #         report_open.close()
-    #
-    #     # Ignore anything else in this folder.
-    #     # TODO: I don't think this is necessary.
-    #     else:
-    #         continue
