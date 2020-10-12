@@ -92,6 +92,11 @@ def collections_count():
             group = row[0]
             collection_list = row[11].split(', ')
 
+            # For Russell, remove the dash from identifiers, since there can be two id formats for the same
+            # collection, rbrl-### and rbrl###. If both variations are present, just want it to count once.
+            if group == 'russell':
+                collection_list = [collection.replace('-', '') for collection in collection_list]
+
             # If this is the first time the group is encountered, add it to the dictionary.
             # Otherwise, add new collections to the list of collections for that group already in the dictionary.
             if group not in group_collections:
@@ -105,9 +110,18 @@ def collections_count():
                 # Changes the set back to a list and updates the dictionary with that list.
                 group_collections[group] = list(collections_without_duplicates)
 
-        # Gets the final count of unique collections per group
+        # Count the number of collection in dlg that should be in dlg-hargrett [caused by error in ARCHive data.
+        wrong_group_count = 0
+        for collection in group_collections['dlg']:
+            if collection.startswith('guan_'):
+                wrong_group_count += 1
+
+        # Gets the final count of unique collections per group by getting the length of each collection list,
+        # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
         for group in group_collections:
             group_collections[group] = len(group_collections[group])
+        group_collections['dlg-hargrett'] += wrong_group_count
+        group_collections['dlg'] -= wrong_group_count
 
         # Calculates the total number of collections across all groups and adds to the dictionary.
         total_collections = 0
