@@ -88,6 +88,10 @@ def collections_count():
                 # Changes the set back to a list and updates the dictionary with that list.
                 group_collections[group] = list(collections_without_duplicates)
 
+        # Gets the final count of unique collections per group
+        for group in group_collections:
+            group_collections[group] = len(group_collections[group])
+
         return group_collections
 
 
@@ -124,15 +128,9 @@ with open(f'archive_summary.csv', 'w', newline='') as summary:
     for group_info in group_usage:
         summary_csv.writerow(group_info)
 
-    # Gets a collection count for each group from the archive formats CSV. First stores a unique list of collections
-    # by group in a dictionary and then counts the results.
+    # Gets collection count for each group from the archive formats CSV and adds to that group's row in the summary CSV.
     collections_by_group = collections_count()
-    print(collections_by_group)
 
-    # # Gets the final count of unique collections per group and saves to the summary report.
-    # # TODO can everything be saved at the end so not trying to match up coll/usage data in summary_csv?
-    # for group in collections_by_group:
-    #     summary_csv.writerow([group, len(collections_by_group[group])])
 
 
 
