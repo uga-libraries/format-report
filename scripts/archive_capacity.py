@@ -82,9 +82,9 @@ def read_usage():
         # Calculates the total size and total number of AIPs across all groups and adds to the dictionary.
         total_size = 0
         total_aips = 0
-        for group in group_data:
-            total_size += group_data[group][1]
-            total_aips += group_data[group][2]
+        for group_code in group_data:
+            total_size += group_data[group_code][1]
+            total_aips += group_data[group_code][2]
         group_data['total'] = ['total', total_size, total_aips]
 
         # Returns the dictionary. The keys are group_code and the values are [group_code, size, aip_count].
@@ -110,12 +110,12 @@ def collections_count():
         # A collection will only be in a single row once, but may be in multiple rows.
         # row[0] is group, row[11] is collection ids (a comma separated string).
         for row in formats_read:
-            group = row[0]
+            group_code = row[0]
             collection_list = row[11].split(', ')
 
             # For Russell, remove the dash from collection identifiers, since there can be two id formats for the same
             # collection, rbrl-### and rbrl###. If both variations are present, just want to count it once.
-            if group == 'russell':
+            if group_code == 'russell':
                 collection_list = [collection.replace('-', '') for collection in collection_list]
                 # Transforms the list to a set to remove duplicates and back to a list since that is the type the
                 # script expects. May have introduced duplicates by normalizing the collection id formatting.
@@ -124,14 +124,14 @@ def collections_count():
 
             # If this is the first time the group is encountered, adds it to the dictionary.
             # Otherwise, adds any new collections to the list of collections for that group already in the dictionary.
-            if group not in group_collections:
-                group_collections[group] = collection_list
+            if group_code not in group_collections:
+                group_collections[group_code] = collection_list
             else:
                 # Combines the list of collections already in the dictionary with the list of collections from this
                 # row. Transforms the combined list to a set to remove duplicates and then back to a list since that
                 # is the type the script expects.
-                combined_collections = group_collections[group] + collection_list
-                group_collections[group] = list(set(combined_collections))
+                combined_collections = group_collections[group_code] + collection_list
+                group_collections[group_code] = list(set(combined_collections))
 
         # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
         # "guan_", which is caused by an error in ARCHive data. Used to correct the counts in the next step.
@@ -142,15 +142,15 @@ def collections_count():
 
         # Calculates the final count of unique collections per group by getting the length of each collection list
         # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
-        for group in group_collections:
-            group_collections[group] = len(group_collections[group])
+        for group_code in group_collections:
+            group_collections[group_code] = len(group_collections[group_code])
         group_collections['dlg-hargrett'] += wrong_group_count
         group_collections['dlg'] -= wrong_group_count
 
         # Calculates the total number of collections across all groups and adds to the dictionary.
         total_collections = 0
-        for group in group_collections:
-            total_collections += group_collections[group]
+        for group_code in group_collections:
+            total_collections += group_collections[group_code]
         group_collections['total'] = total_collections
 
         # Returns the dictionary. Keys are group codes and values are collection counts.
@@ -186,10 +186,3 @@ with open(f'archive_summary_{today}.csv', 'w', newline='') as summary:
     # The information for each group is saved as a list in the group_usage dictionary with the group code as the key.
     for group in group_usage:
         summary_csv.writerow(group_usage[group])
-
-
-
-
-
-
-
