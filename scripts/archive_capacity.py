@@ -3,6 +3,7 @@ using information from the ARCHive format reports and the usage report. """
 # TODO: use the AIP count from the usage report and the collection list from the merged report instead.
 
 import csv
+import datetime
 import os
 import re
 import sys
@@ -132,7 +133,6 @@ def collections_count():
         return group_collections
 
 
-# TODO: argument error handling; maybe give option of formats and usage report using relative path from report folder?
 # Makes variables for the input of the script.
 formats_report = sys.argv[1]
 usage_report = sys.argv[2]
@@ -150,9 +150,9 @@ for group, count in collections_by_group.items():
     group_usage[group].append(count)
 
 # Makes a CSV for the summary named archive_summary.csv.
-# TODO: reconsider having the date in the report. Means have to run soon after download to be accurate, but if want to
-#  save these for a record over time need to know when they are from.
-with open(f'archive_summary.csv', 'w', newline='') as summary:
+# Gets the current date, formatted YYYYMM, to use in naming the summary file.
+today = datetime.datetime.now().strftime("%Y-%m")
+with open(f'archive_summary_{today}.csv', 'w', newline='') as summary:
     summary_csv = csv.writer(summary)
 
     # Adds a header to the summary report.
