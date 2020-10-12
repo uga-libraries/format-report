@@ -14,7 +14,7 @@ import os
 import sys
 
 
-def read_usage():
+def size_and_aips_count():
     """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and AIP
     count for all groups combined. Returns a dictionary with the group code as the keys and lists with the group
     code, size, and number of AIPs as the values. """
@@ -166,12 +166,12 @@ report_folder = sys.argv[3]
 os.chdir(report_folder)
 
 # Gets the size (TB) and number of AIPs per group from the usage report.
-group_usage = read_usage()
+group_information = size_and_aips_count()
 
 # Gets the number of collections per group from the merged ARCHive formats CSV and adds to the group_usage dictionary.
 collections_by_group = collections_count()
 for group, count in collections_by_group.items():
-    group_usage[group].append(count)
+    group_information[group].append(count)
 
 # Makes a CSV in the output folder for the summary data named archive_summary_date.csv.
 # Gets the current date, formatted YYYY-MM, to use in naming the summary file.
@@ -184,5 +184,5 @@ with open(f'archive_summary_{today}.csv', 'w', newline='') as summary:
 
     # Saves the information for each group, and the ARCHive total, to the summary report.
     # The information for each group is saved as a list in the group_usage dictionary with the group code as the key.
-    for group in group_usage:
-        summary_csv.writerow(group_usage[group])
+    for group in group_information:
+        summary_csv.writerow(group_information[group])
