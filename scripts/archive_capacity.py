@@ -7,6 +7,38 @@ import os
 import re
 import sys
 
+
+def collections_count():
+    group_collections = {}
+
+    with open(formats_report, 'r') as formats:
+        formats_read = csv.reader(formats)
+
+        # Skip header
+        next(formats_read)
+
+        # Each row is a single format for that group. Each collection may show up in multiple rows.
+        # row[0] is the group, row[11] is the collections, which is a comma separated string.
+        for row in formats_read:
+            group = row[0]
+            collection_list = row[11].split(', ')
+
+            # If this is the first time the group is encountered, add it to the dictionary.
+            # Otherwise, add new collections to the list of collections for that group already in the dictionary.
+            if group not in group_collections:
+                group_collections[group] = collection_list
+            else:
+                # TODO: could wait to do set() until have the final dictionary and are about to count.
+                # Combines the list of collections in the dictionary with the list of collections from this row.
+                combined_collections = group_collections[group] + collection_list
+                # Changing the list to a set automatically removes duplicates.
+                collections_without_duplicates = set(combined_collections)
+                # Changes the set back to a list and updates the dictionary with that list.
+                group_collections[group] = list(collections_without_duplicates)
+
+        return group_collections
+
+
 # TODO: argument error handling; maybe give option of formats and usage report using relative path from report folder?
 # Makes variables for the input of the script.
 formats_report = sys.argv[1]
@@ -37,32 +69,7 @@ with open(f'archive_summary.csv', 'w', newline='') as summary:
 
     # Gets a collection count for each group from the archive formats CSV. First stores a unique list of collections
     # by group in a dictionary and then counts the results.
-    # TODO: this is probably long enough to be better as a function.
-    collections_by_group = {}
-    with open(formats_report, 'r') as formats:
-        formats_read = csv.reader(formats)
-
-        # Skip header
-        next(formats_read)
-
-        # Each row is a single format for that group. Each collection may show up in multiple rows.
-        # row[0] is the group, row[11] is the collections, which is a comma separated string.
-        for row in formats_read:
-            group = row[0]
-            collection_list = row[11].split(', ')
-
-            # If this is the first time the group is encountered, add it to the dictionary.
-            # Otherwise, add new collections to the list of collections for that group already in the dictionary.
-            if group not in collections_by_group:
-                collections_by_group[group] = collection_list
-            else:
-                # TODO: could wait to do set() until have the final dictionary and are about to count.
-                # Combines the list of collections in the dictionary with the list of collections from this row.
-                combined_collections = collections_by_group[group] + collection_list
-                # Changing the list to a set automatically removes duplicates.
-                collections_without_duplicates = set(combined_collections)
-                # Changes the set back to a list and updates the dictionary with that list.
-                collections_by_group[group] = list(collections_without_duplicates)
+    collections_by_group = collections_count()
 
     # Gets the final count of unique collections per group and saves to the summary report.
     # TODO can everything be saved at the end so not trying to match up coll/usage data in summary_csv?
