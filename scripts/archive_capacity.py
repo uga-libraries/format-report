@@ -160,10 +160,10 @@ def collections_count():
 # Makes variables for the input of the script.
 formats_report = sys.argv[1]
 usage_report = sys.argv[2]
-report_folder = sys.argv[3]
+output_folder = sys.argv[3]
 
 # Makes the report folder the current directory.
-os.chdir(report_folder)
+os.chdir(output_folder)
 
 # Gets the size (TB) and number of AIPs per group from the usage report.
 group_information = size_and_aips_count()
