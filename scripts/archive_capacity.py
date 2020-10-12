@@ -109,6 +109,12 @@ def collections_count():
         for group in group_collections:
             group_collections[group] = len(group_collections[group])
 
+        # Calculates the total number of collections across all groups and adds to the dictionary.
+        total_collections = 0
+        for group in group_collections:
+            total_collections += group_collections[group]
+        group_collections['Total'] = total_collections
+
         return group_collections
 
 
