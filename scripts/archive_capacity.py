@@ -27,8 +27,8 @@ def read_usage():
                        'DLG & Hargrett': 'dlg-hargrett', 'DLG & Map and Government Information Library': 'dlg-magil',
                        'Hargrett': 'hargrett', 'Russell': 'russell'}
 
-        # Makes a list for storing data for each group, one list per group, that will be saved to the csv.
-        group_data = []
+        # Makes a dictionary for storing data for each group, one list per group, that will be saved to the csv.
+        group_data = {}
 
         # Get and transform data from each group row.
         for row in usage_read:
@@ -55,7 +55,7 @@ def read_usage():
                     size = float(size) / 1000
                     unit = 'TB'
 
-                group_data.append([group, size, aip_count])
+                group_data[group] = ([size, aip_count])
 
         return group_data
 
@@ -114,6 +114,14 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
+# Gets the size (TB) and number of AIPs per group.
+group_usage = read_usage()
+
+# Gets collection count for each group from the archive formats CSV and adds to group_usage.
+collections_by_group = collections_count()
+for group, count in collections_by_group.items():
+    group_usage[group].append(count)
+
 # Makes a CSV for the summary named archive_summary.csv.
 # TODO: reconsider having the date in the report. Means have to run soon after download to be accurate, but if want to
 #  save these for a record over time need to know when they are from.
@@ -123,13 +131,10 @@ with open(f'archive_summary.csv', 'w', newline='') as summary:
     # Adds a header to the summary report.
     summary_csv.writerow(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
 
-    # Gets the size (TB) and number of AIPs per group and saves to the summary CSV.
-    group_usage = read_usage()
-    for group_info in group_usage:
-        summary_csv.writerow(group_info)
+    for group in group_usage:
+        summary_csv.writerow(group_usage[group])
 
-    # Gets collection count for each group from the archive formats CSV and adds to that group's row in the summary CSV.
-    collections_by_group = collections_count()
+
 
 
 
