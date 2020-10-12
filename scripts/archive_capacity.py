@@ -54,9 +54,10 @@ def read_usage():
                     size = float(size) / 1000000
                 elif unit == 'GB':
                     size = float(size) / 1000
+                elif unit == 'TB':
+                    size = float(size)
                 else:
-                    if not unit == 'TB':
-                        print("WARNING! Unexpected unit type:", unit)
+                    print("WARNING! Unexpected unit type:", unit)
 
                 # Rounds the size in TB to three decimal places.
                 size = round(size, 3)
@@ -64,7 +65,13 @@ def read_usage():
                 # Adds the results for this group to the dictionary.
                 group_data[group_code] = ([size, aip_count])
 
-        # TODO: add a row for the total size, total AIPs.
+        # Calculate the total size and total number of AIPs across all groups and add to the dictionary.
+        total_size = 0
+        total_aips = 0
+        for group in group_data:
+            total_size += group_data[group][0]
+            total_aips += group_data[group][1]
+        group_data['Total'] = [total_size, total_aips]
 
         # Returns the dictionary with key of group and value of [size, aip_count]
         return group_data
