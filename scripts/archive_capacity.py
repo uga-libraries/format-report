@@ -141,16 +141,6 @@ usage_report = sys.argv[2]
 report_folder = sys.argv[3]
 os.chdir(report_folder)
 
-# TODO: this may not be necessary since switched to reading collection list.
-# Increases the size of csv fields to handle long AIP lists.
-# Gets the maximum size that doesn't give an overflow error.
-while True:
-    try:
-        csv.field_size_limit(sys.maxsize)
-        break
-    except OverflowError:
-        sys.maxsize = int(sys.maxsize / 10)
-
 # Gets the size (TB) and number of AIPs per group.
 group_usage = read_usage()
 
