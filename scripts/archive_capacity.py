@@ -63,15 +63,15 @@ def read_usage():
                 size = round(size, 3)
 
                 # Adds the results for this group to the dictionary.
-                group_data[group_code] = ([size, aip_count])
+                group_data[group_code] = ([group_code, size, aip_count])
 
         # Calculate the total size and total number of AIPs across all groups and add to the dictionary.
         total_size = 0
         total_aips = 0
         for group in group_data:
-            total_size += group_data[group][0]
-            total_aips += group_data[group][1]
-        group_data['Total'] = [total_size, total_aips]
+            total_size += group_data[group][1]
+            total_aips += group_data[group][2]
+        group_data['total'] = ['total', total_size, total_aips]
 
         # Returns the dictionary with key of group and value of [size, aip_count]
         return group_data
@@ -113,7 +113,7 @@ def collections_count():
         total_collections = 0
         for group in group_collections:
             total_collections += group_collections[group]
-        group_collections['Total'] = total_collections
+        group_collections['total'] = total_collections
 
         return group_collections
 
