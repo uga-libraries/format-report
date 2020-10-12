@@ -38,25 +38,35 @@ def read_usage():
                 continue
 
             # Only want data from group rows, not individual staff rows.
+            # There is only one row per group in the report.
             if row[0] in group_names:
-                group = group_names[row[0]]
+                group_code = group_names[row[0]]
                 aip_count = int(row[1])
 
-                # Remove unit and convert sizes to TB
-                # TODO: catch if there are any units I didn't anticipate and round the results to 3 decimal places.
-                # TODO: don't have to update unit, just need size from this.
+                # Separates the size from the unit and converts the size to TB, e.g. 100 GB becomes 0.1.
+                # If it encounters a unit of measurement that wasn't anticipated, prints a warning message.
                 size, unit = row[2].split()
-                if size == '0' and unit == 'Bytes':
-                    unit = 'TB'
-                if unit == 'MB':
+                if unit == 'Bytes':
+                    size = float(size) / 1000000000000
+                elif unit == 'KB':
+                    size = float(size) / 1000000000
+                elif unit == 'MB':
                     size = float(size) / 1000000
-                    unit = 'TB'
-                if unit == 'GB':
+                elif unit == 'GB':
                     size = float(size) / 1000
-                    unit = 'TB'
+                else:
+                    if not unit == 'TB':
+                        print("WARNING! Unexpected unit type:", unit)
 
-                group_data[group] = ([size, aip_count])
+                # Rounds the size in TB to three decimal places.
+                size = round(size, 3)
 
+                # Adds the results for this group to the dictionary.
+                group_data[group_code] = ([size, aip_count])
+
+        # TODO: add a row for the total size, total AIPs.
+
+        # Returns the dictionary with key of group and value of [size, aip_count]
         return group_data
 
 
