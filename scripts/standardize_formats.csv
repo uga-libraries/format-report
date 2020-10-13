@@ -1,4 +1,4 @@
-Format_Name,Standard_Format_Name,Format_Type
+Format_Name,Standardized_Format_Name,Format_Type
 # ISO 9660 CD-ROM filesystem data '',ISO 9660 CD-ROM filesystem data,application
 # ISO 9660 CD-ROM filesystem data ''DataDVD'',ISO 9660 CD-ROM filesystem data,application
 # ISO 9660 CD-ROM filesystem data 'DEIS_7_30_99',ISO 9660 CD-ROM filesystem data,application
@@ -82,12 +82,12 @@ Applesoft BASIC program data,Applesoft BASIC program data,executable
 "ARC archive data, squeezed",FreeArc Archive Format,archive
 ART image format,ART image format,image
 ASF,Advanced Systems Format,video
-"assembler source, ASCII text",assembler source,executable
-"assembler source, ASCII text, with CRLF line terminators",assembler source,executable
-"assembler source, ASCII text, with very long lines",assembler source,executable
-"assembler source, ASCII text, with very long lines, with CRLF line terminators",assembler source,executable
-"assembler source, Non-ISO extended-ASCII text, with CRLF line terminators",assembler source,executable
-"assembler source, UTF-8 Unicode text, with CRLF line terminators",assembler source,executable
+"assembler source, ASCII text",Assembler Source,executable
+"assembler source, ASCII text, with CRLF line terminators",Assembler Source,executable
+"assembler source, ASCII text, with very long lines",Assembler Source,executable
+"assembler source, ASCII text, with very long lines, with CRLF line terminators",Assembler Source,executable
+"assembler source, Non-ISO extended-ASCII text, with CRLF line terminators",Assembler Source,executable
+"assembler source, UTF-8 Unicode text, with CRLF line terminators",Assembler Source,executable
 Asymetrix Toolbook File,Asymetrix Toolbook File,design
 Audio Decision List,Audio Decision List,audio
 Audio Interchange File Format,Audio Interchange File Format,audio
@@ -125,16 +125,16 @@ CR2 EXIF,Canon Raw EXIF,image
 cue,Cue Sheet,application
 Curses screen image,Curses screen image,image
 D64 Image,D64 Image,image
-dat,dat,text
-DBase 3 data file (1392574560 records),dBASE Database,database
-DBase 3 data file (1392574602 records),dBASE Database,database
-DBase 3 data file with memo(s) (120833716 records),dBASE Database,database
-DBase 3 index file,dBASE Database,database
-dBASE Database,dBASE Database,database
-dBASE for Windows database,dBASE Database,database
+dat,Dat,text
+DBase 3 data file (1392574560 records),DBase Database,database
+DBase 3 data file (1392574602 records),DBase Database,database
+DBase 3 data file with memo(s) (120833716 records),DBase Database,database
+DBase 3 index file,DBase Database,database
+dBASE Database,DBase Database,database
+dBASE for Windows database,DBase Database,database
 DFONT,DFONT,application
-"diff output, ASCII text, with CRLF line terminators",diff output,text
-"diff output, ASCII text, with very long lines, with CRLF line terminators",diff output,text
+"diff output, ASCII text, with CRLF line terminators",Diff Output,text
+"diff output, ASCII text, with very long lines, with CRLF line terminators",Diff Output,text
 "DOS batch file, ASCII text, with CRLF line terminators",DOS batch file,executable
 "DOS floppy 1440k, x86 hard disk boot sector",DOS floppy,application
 DOS/Windows executable,DOS/Windows executable,executable
@@ -144,7 +144,7 @@ DV,Digital Video,video
 DVD data file and backup data file,DVD,video
 Dyalog APL component file version 0 .0,Dyalog APL component file,executable
 Embedded OpenType (EOT),Embedded OpenType,application
-empty,empty,application
+empty,Empty,application
 Encapsulated PostScript File Format,Encapsulated PostScript File Format,design
 EPS,Encapsulated PostScript File Format,design
 EPS EXIF,Encapsulated PostScript File Format,design
@@ -320,12 +320,12 @@ ms-windows metafont .wmf,MS Windows metafont,application
 Musical Instrument Digital Interface,Musical Instrument Digital Interface,audio
 MXF,Material Exchange Format,video
 NEF EXIF,NEF EXIF,image
-"news or mail, ASCII text, with CRLF line terminators",news or mail,message
-"news or mail, ASCII text, with no line terminators",news or mail,message
-"news or mail, ASCII text, with very long lines, with CRLF line terminators",news or mail,message
-"news or mail, ISO-8859 text, with CRLF line terminators",news or mail,message
-"news or mail, ISO-8859 text, with very long lines, with CRLF line terminators",news or mail,message
-"news or mail, Non-ISO extended-ASCII text, with very long lines, with CRLF line terminators",news or mail,message
+"news or mail, ASCII text, with CRLF line terminators",News or mail,message
+"news or mail, ASCII text, with no line terminators",News or mail,message
+"news or mail, ASCII text, with very long lines, with CRLF line terminators",News or mail,message
+"news or mail, ISO-8859 text, with CRLF line terminators",News or mail,message
+"news or mail, ISO-8859 text, with very long lines, with CRLF line terminators",News or mail,message
+"news or mail, Non-ISO extended-ASCII text, with very long lines, with CRLF line terminators",News or mail,message
 Office Open XML Document,Microsoft Office Open XML Document,text
 Office Open XML Document (Macros Enabled),Microsoft Office Open XML Document,text
 Office Open XML Presentation,Microsoft Office Open XML Presentation,presentation
@@ -390,7 +390,7 @@ QuickTime,Quicktime,video
 Quicktime video,Quicktime,video
 RA,RealAudio,audio
 RAM,RealAudio,audio
-"raw G3 data, byte-padded",raw G3 data,text
+"raw G3 data, byte-padded",Raw G3 data,text
 "RCS/CVS diff output, ASCII text, with CRLF line terminators",RCS/CVS diff output,text
 RDF/XML,RDF/XML,structured_text
 RealMedia,RealMedia,audio
@@ -399,7 +399,7 @@ Revit Family Template,Revit Family Template,model
 Rich Text Format (RTF),Rich Text Format,text
 "RIFF (little-endian) data, WAVE audio 544501094 Hz",RIFF,audio
 RSRC,RSRC,application
-"saved news, ASCII text, with very long lines, with CRLF line terminators",saved news,text
+"saved news, ASCII text, with very long lines, with CRLF line terminators",Saved news,text
 Scalable Vector Graphics (SVG),Scalable Vector Graphics,image
 Sibelius,Sibelius,design
 "SMTP mail, ASCII text",SMTP mail,message
@@ -427,7 +427,7 @@ TIFF TIFF/IT-CT (ISO 12639:1998),Tagged Image File Format for Image Technology (
 TIFF TIFF/IT-MP (ISO 12639:1998),Tagged Image File Format for Image Technology (TIFF/IT),image
 TIFF TIFF-FX (Profile F),Tagged Image File Format for Internet Fax (TIFF-FX),image
 Transport Neutral Encapsulation Format,Transport Neutral Encapsulation Format,message
-"troff or preprocessor input, ASCII text, with CRLF line terminators",troff or preprocessor input,text
+"troff or preprocessor input, ASCII text, with CRLF line terminators",Troff or preprocessor input,text
 TrueType Font,TrueType Font,application
 TrueType font data,TrueType Font,application
 TTF,TrueType Font,application
@@ -457,7 +457,7 @@ WordPerfect Document Backup,WordPerfect,text
 Wordperfect Secondary File,WordPerfect,text
 "X11 SNF font data, LSB first",X11 SNF font data,application
 "X11 SNF font data, MSB first",X11 SNF font data,application
-x86 boot sector,x86 boot sector,application
+x86 boot sector,X86 boot sector,application
 XHTML,Extensible HyperText Markup Language,structured_text
 XLSM,Microsoft Excel,spreadsheet
 XLT,Microsoft Excel,spreadsheet
