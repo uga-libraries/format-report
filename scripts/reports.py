@@ -29,18 +29,18 @@ df = pd.read_csv(formats)
 # folder. A separate CSV is made for each report.
 
 # Format type, for example audio, image, and text.
-type_totals = df.groupby('Format_Type').sum()
-type_totals.to_csv(f'{results}/type_{today}.csv')
+type = df.groupby('Format_Type').sum()
+type.to_csv(f'{results}/type_{today}.csv')
 
 # Format standardized name, which is a simplified version of the name to group related formats (e.g. different
 # versions or subcategories of the same format) together.
-name_totals = df.groupby('Format_Standard_Name').sum()
-name_totals.to_csv(f'{results}/name_{today}.csv')
+name = df.groupby('Format_Standard_Name').sum()
+name.to_csv(f'{results}/name_{today}.csv')
 
 # ARCHive group, which is the department or departments responsible for the content.
 # If a group is in ARCHive but does not have any AIPs yet, it will not be included in this report.
-group_totals = df.groupby('Group').sum()
-group_totals.to_csv(f'{results}/group_{today}.csv')
+group = df.groupby('Group').sum()
+group.to_csv(f'{results}/group_{today}.csv')
 
 # Format type subdivided by group.
 type_group = df.groupby(['Format_Type', 'Group']).sum()
@@ -53,3 +53,8 @@ type_name.to_csv(f'{results}/type_name_{today}.csv')
 # Format standardized name subdivided by group.
 name_group = df.groupby(['Format_Standard_Name', 'Group']).sum()
 name_group.to_csv(f'{results}/name_group_{today}.csv')
+
+# # Save each of the subtotals to a tab in the same Excel spreadsheet.
+# with pd.ExcelWriter(f'{results}/format_analysis.xlsx') as writer:
+#     type_totals.to_excel(writer, sheet_name='format type')
+#     name_totals.to_excel(writer, sheet_name='format name')
