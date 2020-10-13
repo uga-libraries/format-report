@@ -37,11 +37,11 @@ except FileNotFoundError:
 #       Group: ARCHive group name, which is the department or departments responsible for the content.
 
 type = df.groupby('Format_Type').sum()
-name = df.groupby('Format_Standard_Name').sum()
+name = df.groupby('Format_Standardized_Name').sum()
 group = df.groupby('Group').sum()
 type_group = df.groupby(['Format_Type', 'Group']).sum()
-type_name = df.groupby(['Format_Type', 'Format_Standard_Name']).sum()
-name_group = df.groupby(['Format_Standard_Name', 'Group']).sum()
+type_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
+name_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
 
 # Gets the current date, formatted YYYY-MM, to use in naming the results spreadsheet.
 today = datetime.datetime.now().strftime("%Y-%m")
