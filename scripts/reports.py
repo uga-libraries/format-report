@@ -1,12 +1,6 @@
 """Calculate various subtotal reports of the collection, aip, and file counts for format types, format standard
 names, and groups. The reports are saved as csv files. """
 
-# TODO: Sorts A-Z and then a-z. Can we sort case insensitive, or is sorting unnecessary since can sort in Excel?
-# TODO: could save each report as a tab in an Excel file instead of individual CSVs.
-# TODO: could combine totals and subtotals into the same report.
-# TODO: could generate a text document with summary information.
-# TODO: may have better analysis of "frequent" if include size as well. Shawn would need to add to the format report.
-
 import datetime
 import pandas as pd
 import sys
