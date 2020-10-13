@@ -231,8 +231,8 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
 
     # Adds a header to the results file.
     result_csv.writerow(
-        ['Group', 'Collection_Count', 'AIP_Count', 'File_Count', 'Format_Type', 'Format_Standard_Name', 'Format_Name',
-         'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List'])
+        ['Group', 'Collection_Count', 'AIP_Count', 'File_Count', 'Format_Type', 'Format_Standardized_Name',
+         'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List'])
 
     for report in os.listdir():
 
