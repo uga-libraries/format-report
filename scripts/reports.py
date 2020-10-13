@@ -20,15 +20,21 @@ results = sys.argv[2]
 # Read the data from the csv.
 df = pd.read_csv(formats)
 
-# Format type.
+# For each report, Calculates the collection count, AIP count, and file count for each instance of the
+# type of information in the report, for example each format category. Then saves the result to a CSV in the results
+# folder. A separate CSV is made for each report.
+
+# Format type, for example audio, image, and text.
 type_totals = df.groupby('Format_Type').sum()
 type_totals.to_csv(f'{results}/type_totals.csv')
 
-# Format standard name.
+# Format standardized name, which is a simplified version of the name to group related formats (e.g. different
+# versions or subcategories of the same format) together.
 name_totals = df.groupby('Format_Standard_Name').sum()
 name_totals.to_csv(f'{results}/name_totals.csv')
 
-# Group.
+# ARCHive group, which is the department or departments responsible for the content.
+# If a group is in ARCHive but does not have any AIPs yet, it will not be included in this report.
 group_totals = df.groupby('Group').sum()
 group_totals.to_csv(f'{results}/group_totals.csv')
 
