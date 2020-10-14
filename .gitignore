@@ -124,8 +124,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# PyCharm Folders and temporary folders for testing
+# Local folders for PyCharm and testing
 .idea/
-scripts/.idea/
-report_samples
-script_outputs
+testing
