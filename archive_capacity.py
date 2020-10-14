@@ -21,9 +21,9 @@ def size_and_aips_count():
 
     # Group Names is used to map the human-friendly version of group names from the usage report to the ARCHive group
     # code which is used in the format report and in ARCHive metadata generally.
-    group_names = {'Brown Media Archives': 'bmac', 'Digital Library of Georgia': 'dlg',
+    group_names = {'Brown Media Archives': 'bmac', 'DLG': 'dlg',
                    'DLG & Hargrett': 'dlg-hargrett', 'DLG & Map and Government Information Library': 'dlg-magil',
-                   'Hargrett': 'hargrett', 'Russell': 'russell'}
+                   'Hargrett': 'hargrett', 'Russell Library': 'russell'}
 
     # Makes a dictionary for storing data for each group that will later be saved to the summary CSV.
     group_data = {}
@@ -31,14 +31,14 @@ def size_and_aips_count():
     # Gets the data from the usage report. It is a tab-delimited text file that has rows with the group information,
     # individual user information, and blank rows used for formatting.
     with open(usage_report, 'r') as usage:
-        usage_read = csv.reader(usage, delimiter="\t")
+        usage_read = csv.reader(usage)
 
         # Skips the header row.
         next(usage_read)
 
         # Gets data from each row. A row can have data on a group, an individual user, or be blank.
         for row in usage_read:
-
+            print(row)
             # Skips empty rows. Blank rows are used for formatting the usage report to be easier to read.
             # Have to do this before the next step or get an IndexError when checking the group name.
             if not row:
@@ -133,19 +133,19 @@ def collections_count():
                 combined_collections = group_collections[group_code] + collection_list
                 group_collections[group_code] = list(set(combined_collections))
 
-        # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
-        # "guan_", which is caused by an error in ARCHive data. Used to correct the counts in the next step.
-        wrong_group_count = 0
-        for collection in group_collections['dlg']:
-            if collection.startswith('guan_'):
-                wrong_group_count += 1
-
+        # # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
+        # # "guan_", which is caused by an error in ARCHive data. Used to correct the counts in the next step.
+        # wrong_group_count = 0
+        # for collection in group_collections['dlg']:
+        #     if collection.startswith('guan_'):
+        #         wrong_group_count += 1
+        #
         # Calculates the final count of unique collections per group by getting the length of each collection list
         # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
         for group_code in group_collections:
             group_collections[group_code] = len(group_collections[group_code])
-        group_collections['dlg-hargrett'] += wrong_group_count
-        group_collections['dlg'] -= wrong_group_count
+        # group_collections['dlg-hargrett'] += wrong_group_count
+        # group_collections['dlg'] -= wrong_group_count
 
         # Calculates the total number of collections across all groups and adds to the dictionary.
         total_collections = 0
@@ -158,6 +158,7 @@ def collections_count():
 
 
 # Makes variables for the input of the script.
+# TODO: Add error handling for arguments.
 formats_report = sys.argv[1]
 usage_report = sys.argv[2]
 output_folder = sys.argv[3]
