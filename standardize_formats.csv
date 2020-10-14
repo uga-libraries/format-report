@@ -245,6 +245,7 @@ Microsoft Excel 4 Workspace,Microsoft Excel,spreadsheet
 Microsoft Excel 5.0 Worksheet,Microsoft Excel,spreadsheet
 Microsoft Excel Format,Microsoft Excel,spreadsheet
 Microsoft Excel Worksheet,Microsoft Excel,spreadsheet
+XLSX,Microsoft Excel,spreadsheet
 Microsoft FoxPro Database,Microsoft FoxPro Database,database
 Microsoft Front Page Binary Tree Index,Microsoft Front Page Binary Tree Index,design
 Microsoft Internet Shortcut,Microsoft Internet Shortcut,text
@@ -265,6 +266,7 @@ Microsoft Word Binary File Format,Microsoft Word,text
 Microsoft Word Document,Microsoft Word,text
 Microsoft Word Document (Password Protected),Microsoft Word,text
 Microsoft Word for MS-DOS Document,Microsoft Word,text
+DOCX,Microsoft Word,text
 Microsoft Works Database for DOS,Microsoft Works Database,database
 Microsoft Works Database for Macintosh,Microsoft Works Database,database
 Microsoft Works Database for Windows,Microsoft Works Database,database
