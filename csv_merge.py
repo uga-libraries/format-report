@@ -245,14 +245,15 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
         archive_group = regex.group(1)
 
         # Gets the data from the report.
-        report_info = csv.reader(open(report, 'r'))
+        with open(report, 'r') as open_report:
+            report_info = csv.reader(open_report)
 
-        # Skips the header.
-        next(report_info)
+            # Skips the header.
+            next(report_info)
 
-        # Gets the data from each row in the report.
-        for data in report_info:
-            # Updates the row to add additional information and fill in blank cells using another function and saves
-            # the updated row to the CSV.
-            new_row = update_row(data, archive_group)
-            result_csv.writerow(new_row)
+            # Gets the data from each row in the report.
+            for data in report_info:
+                # Updates the row to add additional information and fill in blank cells using another function and saves
+                # the updated row to the CSV.
+                new_row = update_row(data, archive_group)
+                result_csv.writerow(new_row)
