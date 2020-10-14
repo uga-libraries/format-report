@@ -241,11 +241,11 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
             continue
 
         # Gets the ARCHive group from the format report filename.
-        regex = re.match('file_formats_(.*).txt', report)
+        regex = re.match('file_formats_(.*).csv', report)
         archive_group = regex.group(1)
 
         # Gets the data from the report.
-        report_info = csv.reader(open(report, 'r'), delimiter='\t')
+        report_info = csv.reader(open(report, 'r'))
 
         # Skips the header.
         next(report_info)
