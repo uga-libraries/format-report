@@ -4,7 +4,7 @@
  # Workflow
  1. Download the format reports for all groups and the usage report (start of ARCHive - present) from the digital preservation system (ARCHive) and save everything into a single folder.
  
- 2. Run the update_standardization.py script to identify any formats that are not in the standardize_formats.csv. If any are found, add them to the CSV.
+ 2. Run the update_standardization.py script to identify any formats that are not in the standardize_formats.csv. If any are found, the script produces a file called new_formats.txt Add them to the CSV. If there were a lot to add, run update_standardization.py again to verify that none were missed.
  
  3. Run the csv_merge.py script to make a CSV that combines format information from all the group format reports and adds standardized information.
  
