@@ -36,12 +36,12 @@ except FileNotFoundError:
 #       Format standardized name: a simplified version of the name, for example removing version information.
 #       Group: ARCHive group name, which is the department or departments responsible for the content.
 
-type = df.groupby('Format_Type').sum()
+format_type = df.groupby('Format_Type').sum()
 name = df.groupby('Format_Standardized_Name').sum()
 group = df.groupby('Group').sum()
-type_group = df.groupby(['Format_Type', 'Group']).sum()
-type_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
-name_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
+format_type_then_group = df.groupby(['Format_Type', 'Group']).sum()
+format_type_then_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
+name_then_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
 
 # Gets the current date, formatted YYYY-MM, to use in naming the results spreadsheet.
 today = datetime.datetime.now().strftime("%Y-%m")
@@ -51,9 +51,9 @@ output_directory = os.path.dirname(formats)
 
 # Saves the counts for each field or field combination to a separate tab in the same Excel spreadsheet.
 with pd.ExcelWriter(f'{output_directory}/format_analysis_{today}.xlsx') as writer:
-    type.to_excel(writer, sheet_name='format type')
+    format_type.to_excel(writer, sheet_name='format type')
     name.to_excel(writer, sheet_name='format name')
     group.to_excel(writer, sheet_name='group')
-    type_group.to_excel(writer, sheet_name='format type then group')
-    type_name.to_excel(writer, sheet_name='format type then name')
-    name_group.to_excel(writer, sheet_name='format name then group')
+    format_type_then_group.to_excel(writer, sheet_name='format type then group')
+    format_type_then_name.to_excel(writer, sheet_name='format type then name')
+    name_then_group.to_excel(writer, sheet_name='format name then group')
