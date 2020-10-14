@@ -74,7 +74,7 @@ for format_report in os.listdir(report_folder):
 
     # Reads the data from the format report, which is a tab delimited file.
     with open(format_report) as formats:
-        read_formats = csv.reader(formats, delimiter='\t')
+        read_formats = csv.reader(formats)
 
         # Skips the header row.
         next(read_formats)
