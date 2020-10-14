@@ -236,8 +236,8 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
 
     for report in os.listdir():
 
-        # Skips the file if it is the results file. Should not process itself.
-        if report == f'archive_formats_{today}.csv':
+        # Skips the file if it is not a format report. The usage report and some script outputs are also in this folder.
+        if not report.startswith('file_formats'):
             continue
 
         # Gets the ARCHive group from the format report filename.
