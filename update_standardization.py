@@ -83,7 +83,11 @@ for format_report in os.listdir(report_folder):
         for row in read_formats:
 
             # Gets the format name from the 3rd column.
-            format_name = row[2]
+            # Skips if no value in the 3rd column. Reports may download with a blank row at the end.
+            try:
+                format_name = row[2]
+            except IndexError:
+                continue
 
             # Checks if the script has already searched for this format in the standardize formats CSV. If it hasn't,
             # searches for the format and records the result in the formats_checked dictionary.
