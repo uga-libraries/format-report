@@ -107,7 +107,7 @@ def collection_from_aip(aip, group):
 
     # Hargrett Rare Book and Manuscript Library
     elif group == 'hargrett':
-        coll_regex = re.match('^(.*)(er|web)', aip)
+        coll_regex = re.match('^(.*)(er|-web)', aip)
         return coll_regex.group(1)
 
     # Richard B. Russell Library for Research and Studies.
