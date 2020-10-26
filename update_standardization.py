@@ -1,12 +1,12 @@
-"""Makes a list of any formats from the ARCHive reports that are new since the last format analysis and therefore are
-not yet in standardize_formats.csv, the spreadsheet which has the standard format name and format type for every
-format variant within the UGA Libraries' digital preservation system (ARCHive). These new formats need to be added to
-standardize_formats.csv before merging and analyzing the format reports.
+"""Makes a list of any formats from the ARCHive format reports that are new since the last format analysis and
+therefore are not yet in standardize_formats.csv, the spreadsheet which has the standard format name and format type
+for every format variant within the UGA Libraries' digital preservation system (ARCHive). These new formats need to
+be added to standardize_formats.csv before merging and analyzing the format reports.
 
-Prior to running the script, download all the ARCHive format reports (one tab-delimited text file per group) from the
-ARCHive interface and save them to a single folder.
+Prior to running the script, download all the ARCHive format reports (one CSV file per group) from the
+ARCHive interface and save them to a single folder."""
 
-Usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]"""
+# Usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]
 
 import csv
 import os
@@ -45,7 +45,7 @@ def in_standard(standard, format_to_check):
         for standardize_row in read_standard:
 
             # If the format name is in the CSV, updates the format_match variable and stops searching the CSV.
-            # Matching lowercase versions of the format names to account for variations in capitalization. 
+            # Matching lowercase versions of the format names to ignore variations in capitalization.
             if format_to_check.lower() == standardize_row[0].lower():
                 format_match = "Present"
                 break
