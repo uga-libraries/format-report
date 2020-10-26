@@ -137,13 +137,6 @@ def collections_count():
                 combined_collections = group_collections[group_code] + collection_list
                 group_collections[group_code] = list(set(combined_collections))
 
-        # To test why report doesn't match ARCHive - want to see what it got as the collections
-        with open('collection_lists.csv', 'w', newline='') as collections:
-            coll_csv = csv.writer(collections)
-
-            for group, colls in group_collections.items():
-                coll_csv.writerow([group, colls])
-
         # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
         # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
         # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
