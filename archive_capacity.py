@@ -21,9 +21,9 @@ def size_and_aips_count():
 
     # Group Names is used to map the human-friendly version of group names from the usage report to the ARCHive group
     # code which is used in the format report and in ARCHive metadata generally.
-    group_names = {'Brown Media Archives': 'bmac', 'DLG': 'dlg',
+    group_names = {'Brown Media Archives': 'bmac', 'Digital Library of Georgia': 'dlg',
                    'DLG & Hargrett': 'dlg-hargrett', 'DLG & Map and Government Information Library': 'dlg-magil',
-                   'Hargrett': 'hargrett', 'Russell Library': 'russell'}
+                   'Hargrett': 'hargrett', 'Russell': 'russell'}
 
     # Makes a dictionary for storing data for each group that will later be saved to the summary CSV.
     group_data = {}
@@ -38,7 +38,7 @@ def size_and_aips_count():
 
         # Gets data from each row. A row can have data on a group, an individual user, or be blank.
         for row in usage_read:
-            print(row)
+
             # Skips empty rows. Blank rows are used for formatting the usage report to be easier to read.
             # Have to do this before the next step or get an IndexError when checking the group name.
             if not row:
