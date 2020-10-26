@@ -1,9 +1,12 @@
-"""Combines the format reports (tab delimited text files) for all groups from the UGA Libraries' digital preservation
+"""Combines the format reports (csv files) for all groups from the UGA Libraries' digital preservation
 system (ARCHive) into a single csv for analysis. All data is copied from the format reports except the AIP list,
 which is converted into a collection list. Columns are also added for the group name, collection count, format type,
 and standardized format name.
 
-Usage: python /path/csv_merge.py /path/reports [/path/standard_csv]"""
+Future development ideas: restructure the functions (they pass a lot of information to each other); add a test to
+compare the original format reports to the merged one to verify script accuracy."""
+
+# Usage: python /path/csv_merge.py /path/reports [/path/standard_csv]
 
 import csv
 import datetime
@@ -104,7 +107,7 @@ def collection_from_aip(aip, group):
 
     # Hargrett Rare Book and Manuscript Library
     elif group == 'hargrett':
-        coll_regex = re.match('^(.*)er', aip)
+        coll_regex = re.match('^(.*)(er|web)', aip)
         return coll_regex.group(1)
 
     # Richard B. Russell Library for Research and Studies.
