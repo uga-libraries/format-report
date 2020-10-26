@@ -175,7 +175,7 @@ except IndexError:
     exit()
 
 # Makes the report folder the current directory.
-# If it is not a valid directlyr, prints and error and quits the script.
+# If it is not a valid directory, prints and error and quits the script.
 try:
     os.chdir(output_folder)
 except FileNotFoundError:
