@@ -186,10 +186,16 @@ except FileNotFoundError:
 # Gets the size (TB) and number of AIPs per group from the usage report.
 group_information = size_and_aips_count()
 
-# Gets the number of collections per group from the merged ARCHive formats CSV and adds to the group_usage dictionary.
+# Gets the number of collections per group from the merged ARCHive formats CSV.
 collections_by_group = collections_count()
-for group, count in collections_by_group.items():
-    group_information[group].append(count)
+
+# Adds the collection counts to the lists in the group_information dictionary for each group.
+# If the group does not have a collection count, supplies a value of zero.
+for group in group_information:
+    try:
+        group_information[group].append(collections_by_group[group])
+    except KeyError:
+        group_information[group].append(0)
 
 # Makes a CSV in the output folder for the summary data named archive_summary_date.csv.
 # Gets the current date, formatted YYYY-MM, to use in naming the summary file.
