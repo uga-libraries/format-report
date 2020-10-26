@@ -1,26 +1,26 @@
-# Subtotal for collections may be counting the same collection many times.
+# Subtotal for collections counts the same collection many times.
 # What do the numbers look like for format types if calculated by collection?
 
 """
 Duplication makes a big difference. Counts below are before and after deduplication with 10/26 data:
 
-application: 266, 53
-archive: 65, 27
-audio: 154, 69
-database: 65, 14
-design: 70, 17
-executable: 155, 21
-geographic_data: 7, 1
-image: 1174, 538
-message: 50, 14
-model: 2, 2
-multipart: 2, 2
-presentation: 48, 24
-spreadsheet: 124, 27
-structured_text: 131, 26
-text: 557, 63
-video: 476, 160
-web_archive: 18, 17
+video [476, 160]
+image [1174, 538]
+audio [154, 69]
+application [266, 53]
+structured_text [131, 26]
+text [557, 63]
+spreadsheet [124, 27]
+archive [65, 27]
+presentation [48, 24]
+executable [155, 21]
+web_archive [18, 17]
+database [65, 14]
+message [50, 14]
+design [70, 17]
+model [2, 2]
+multipart [2, 2]
+geographic_data [7, 1]
 
 """
 
@@ -45,7 +45,7 @@ with open(formats_report, 'r') as formats:
     for row in formats_read:
 
         # Format the collections as a list.
-        collection_list = set(row[11].split(', '))
+        collection_list = row[11].split(', ')
 
         # For Russell, remove the dash from collection identifiers, since there can be two id formats for the same
         # collection, rbrl-### and rbrl###. If both variations are present, just want to count it once.
