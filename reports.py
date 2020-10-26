@@ -1,11 +1,17 @@
 """Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
-names, groups, and combinations of those categories. The results are saved to an Excel file.
+names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
 
 This script uses the merged ARCHive formats CSV, which is created with the csv_merge.py script. This CSV is organized
 by group and then by format name. Relevant columns for this analysis are Group, Collection_Count, AIP_Count,
 File_Count, Format_Type, Format_Standardized_Name, and Format_Name.
 
-Usage: python /path/reports.py /path/formats_csv"""
+Ideas for future development:
+    * A report that lists the most common formats, however that is defined.
+    * A report that compares the current report to a previous one to show change over time.
+    * Have size as well as count included in the file formats reports so can summarize by size.
+"""
+
+# Usage: python /path/reports.py /path/formats_csv
 
 import datetime
 import os
