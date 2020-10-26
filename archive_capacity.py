@@ -4,9 +4,9 @@ information from the merged ARCHive format report and the ARCHive usage report.
 
 To make the merged format report, download each group's format report from ARCHive and run the csv_merge.py script.
 To make the usage report, generate and download the usage report in ARCHive from ARCHive start date to the date the
-format reports were downloaded.
+format reports were downloaded."""
 
-Usage: python /path/archive_capacity.py /path/merged_format_report /path/usage_report /path/output_folder"""
+# Usage: python /path/archive_capacity.py /path/merged_format_report /path/usage_report /path/output_folder
 
 import csv
 import datetime
@@ -94,7 +94,11 @@ def size_and_aips_count():
 def collections_count():
     """Calculates the number of unique collections for each group using the merged ARCHive summary report and the
     total number of collections in ARCHive using the group totals. Returns a dictionary with the group codes as the
-    keys and collection counts as the values. """
+    keys and collection counts as the values.
+
+    NOTE: if there are any AIPs where the collection was not calculated, each one of those AIPs will count as a
+    separate collection, inflating the numbers. However, these errors generally will have been addressed prior to
+    running this script. """
 
     # Makes a dictionary for storing the collection totals.
     group_collections = {}
@@ -133,19 +137,21 @@ def collections_count():
                 combined_collections = group_collections[group_code] + collection_list
                 group_collections[group_code] = list(set(combined_collections))
 
-        # # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
-        # # "guan_", which is caused by an error in ARCHive data. Used to correct the counts in the next step.
-        # wrong_group_count = 0
-        # for collection in group_collections['dlg']:
-        #     if collection.startswith('guan_'):
-        #         wrong_group_count += 1
-        #
+        # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
+        # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
+        # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
+        # counts in the next step.
+        wrong_group_count = 0
+        for collection in group_collections['dlg']:
+            if collection.startswith('guan_'):
+                wrong_group_count += 1
+
         # Calculates the final count of unique collections per group by getting the length of each collection list
         # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
         for group_code in group_collections:
             group_collections[group_code] = len(group_collections[group_code])
-        # group_collections['dlg-hargrett'] += wrong_group_count
-        # group_collections['dlg'] -= wrong_group_count
+        group_collections['dlg-hargrett'] += wrong_group_count
+        group_collections['dlg'] -= wrong_group_count
 
         # Calculates the total number of collections across all groups and adds to the dictionary.
         total_collections = 0
@@ -157,14 +163,25 @@ def collections_count():
         return group_collections
 
 
-# Makes variables for the input of the script.
-# TODO: Add error handling for arguments.
-formats_report = sys.argv[1]
-usage_report = sys.argv[2]
-output_folder = sys.argv[3]
+# Makes variables for the input of the script. If any are missing, prints an error and quits the script.
+# TODO: Add error handling for if report paths exist or generate the paths with the script - are in the output folder.
+try:
+    formats_report = sys.argv[1]
+    usage_report = sys.argv[2]
+    output_folder = sys.argv[3]
+except IndexError:
+    print("At least one of the required script arguments is missing.")
+    print("Usage: python /path/archive_capacity.py /path/merged_format_report /path/usage_report /path/output_folder")
+    exit()
 
 # Makes the report folder the current directory.
-os.chdir(output_folder)
+# If it is not a valid directlyr, prints and error and quits the script.
+try:
+    os.chdir(output_folder)
+except FileNotFoundError:
+    print("The output folder is not a valid directory.")
+    print("Usage: python /path/archive_capacity.py /path/merged_format_report /path/usage_report /path/output_folder")
+    exit()
 
 # Gets the size (TB) and number of AIPs per group from the usage report.
 group_information = size_and_aips_count()
