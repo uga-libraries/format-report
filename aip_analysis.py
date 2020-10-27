@@ -8,10 +8,28 @@ import csv
 import os
 import sys
 
-standard_csv = "C:/users/amhan/Documents/GitHub/format-report/standardize_formats.csv"
-formats_report_folder = "C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod"
+# Gets the file paths for the report folder and the csv with the standardization rules from the script arguments.
+# If either are missing, prints an error and quits the script.
+try:
+    standard_csv = sys.argv[1]
+    formats_report_folder = sys.argv[2]
+except IndexError:
+    print("One or both of the required script arguments is missing: standardized csv and formats report folder.")
+    exit()
 
-os.chdir(formats_report_folder)
+# standard_csv = "C:/users/amhan/Documents/GitHub/format-report/standardize_formats.csv"
+# formats_report_folder = "C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod"
+# If the provided path to the standardized csv does not exist, prints an error and quits the script.
+if not os.path.exists(standard_csv):
+    print("The provided standardized csv is not a valid path.")
+    exit()
+
+# Changes the current directory to the reports folder. If it does not exist, prints an error and quits the script.
+try:
+    os.chdir(formats_report_folder)
+except FileNotFoundError:
+    print("The provided formats report folder is not a valid path.")
+    exit()
 
 type_aip_id = {}
 type_aip_count = {}
