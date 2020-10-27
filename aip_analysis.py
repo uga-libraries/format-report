@@ -1,28 +1,8 @@
-# Subtotal for AIPs is counting the same AIP many times.
-# What do the numbers look like for format types if calculated by aip?
+# Calculate the number of unique AIPs per format type and format standardized name. Because of how the data is
+# normalized, the same AIP is counted multiple times if the counts in the archive formats csv are used, resulting in
+# very inflated numbers. Numbers can be 2x bigger or more, with differences of 10,000+ at times.
 
-# Individual reports don't have type, so look up on the fly.
-
-"""
-Counts below are before and after deduplication with 10/26 data:
-video [29193, 27648]
-image [24239, 22111]
-audio [2047, 1964]
-application [735, 458]
-structured_text [675, 400]
-text [4297, 1798]
-spreadsheet [1025, 460]
-archive [168, 109]
-presentation [144, 121]
-executable [366, 117]
-web_archive [44, 44]
-database [137, 69]
-message [85, 65]
-design [127, 53]
-model [2, 2]
-multipart [2, 2]
-geographic_data [10, 3]
-"""
+# Usage: python /path/aip_analysis.py /path/archive_formats_csv
 
 import csv
 import os
