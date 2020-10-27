@@ -1,12 +1,15 @@
-"""Combines the format reports (csv files) for all groups from the UGA Libraries' digital preservation
-system (ARCHive) into a single csv for analysis. All data is copied from the format reports except the AIP list,
-which is converted into a collection list. Columns are also added for the group name, collection count, format type,
-and standardized format name.
+"""Combines the format reports (csv files) for all groups from the UGA Libraries' digital preservation system
+(ARCHive) into a single csv for analysis. All data is copied from the format reports. Columns are also added for the
+group name, collection count, format type, standardized format name, and collection list.
+
+Prior to running this script, all format reports should be downloaded from ARCHive and saved to a folder.
 
 Future development ideas: restructure the functions (they pass a lot of information to each other); add a test to
 compare the original format reports to the merged one to verify script accuracy."""
 
 # Usage: python /path/csv_merge.py /path/reports [/path/standard_csv]
+#       /path/reports is the folder with the ARCHive format reports
+#       /path/standard_csv is optional. Default is to use the csv in the same folder as this script.
 
 import csv
 import datetime
@@ -189,24 +192,23 @@ def standardize_formats(format_name, standard):
 
 
 def update_row(row, group):
-    """Calculates and adds new data, replaces the AIP list with a collection list, and fills in empty cells.
-       New data is group name, collection count, standardized version of the format name, and format type."""
+    """Calculates and adds new data: group name, collection count, standardized version of the format name,
+    format type, and collection list. Fills in empty cells with 'NO VALUE'. """
 
     # Gets the standard name for the format and the format type.
     format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-    # Gets a list of collection ids from the AIP ids and the number of collections.
+    # Gets a list of collection ids (calculated from the AIP ids) and the number of collections.
     collections, number_collections = collection_list(row[7], group)
-
-    # Replaces the AIP list with the collection list.
-    row[7] = collections
 
     # Adds the group and number of collections at the beginning of the row.
     # Adds the format type and standardized format name before the format name.
+    # Adds the collection list before the aip list.
     row.insert(0, group)
     row.insert(1, number_collections)
     row.insert(4, format_type)
     row.insert(5, format_standard)
+    row.insert(11, collections)
 
     # Fills all empty cells with 'NO VALUE' so it is easier to see where there is no data.
     row = ['NO VALUE' if x == '' else x for x in row]
@@ -235,7 +237,7 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
     # Adds a header to the results file.
     result_csv.writerow(
         ['Group', 'Collection_Count', 'AIP_Count', 'File_Count', 'Format_Type', 'Format_Standardized_Name',
-         'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List'])
+         'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List', 'AIP_List'])
 
     for report in os.listdir():
 
