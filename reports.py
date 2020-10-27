@@ -184,7 +184,7 @@ def collection_subtotals():
     type_count = {}
     name_count = {}
 
-    # Gets the data from the merged ARCHive formats report.
+    # Gets the data from the formats report.
     with open(formats_report, 'r') as formats:
         formats_read = csv.reader(formats)
 
@@ -229,6 +229,55 @@ def collection_subtotals():
 
         # Returns both dictionaries
         return type_count, name_count
+
+
+def aip_subtotals():
+    """Returns a dictionaries with counts of unique AIPs by format type and normalized format name."""
+
+    # Starts dictionaries for storing the results.
+    type_count = {}
+    name_count = {}
+
+    # Gets the data from the formats report.
+    with open(formats_report, 'r') as formats:
+        formats_read = csv.reader(formats)
+
+        # Skips the header row.
+        next(formats_read)
+
+        # Gets the data from each row in the report, which has information about a single format for that group.
+        # row[4] is format type.
+        # row[5] is format standardized name.
+        # row[12] is AIP ids (a pipe separated string).
+        for row in formats_read:
+
+            # Format the aips as a list.
+            aip_list = row[12].split('|')
+
+            # Adds each aip to a dictionary with format type as the key and a list of aip ids as the value.
+            for aip in aip_list:
+                try:
+                    type_count[row[4]].append(aip)
+                except KeyError:
+                    type_count[row[4]] = [aip]
+
+            # Adds each aip to a dictionary with format name as the key and a list of aip ids as the value.
+            for aip in aip_list:
+                try:
+                    name_count[row[5]].append(aip)
+                except KeyError:
+                    name_count[row[5]] = [aip]
+
+    # Convert the list of collections in each dictionary to the count of unique collections.
+    # Making a set removes duplicates.
+    for key, value in type_count.items():
+        type_count[key] = len(set(value))
+
+    for key, value in name_count.items():
+        name_count[key] = len(set(value))
+
+    # Returns both dictionaries
+    return type_count, name_count
 
 
 # START OF SCRIPT BODY
@@ -287,11 +336,9 @@ overview = archive_overview()
 for key in overview:
     ws1.append(overview[key])
 
-# Saves the report spreadsheet.
-wb.save("ARCHive Format Report.xlsx")
-
 # Gets counts of collections and AIPs by format type and standardized format name and saves to the report spreadsheet.
 # TODO: really want one sheet for type and one for name which combines collection, aip, and file.
+# TODO: can I sort? Bold the first row? Add a chart?
 collection_type, collection_name = collection_subtotals()
 
 ws2 = wb.create_sheet(title="collections_type")
@@ -299,9 +346,24 @@ ws2.append(['Format Type', 'Collection Count'])
 for key, value in collection_type.items():
     ws2.append([key, value])
 
+# TODO: Lots of results. More useful to limit to the top x or anything above y?
 ws3 = wb.create_sheet(title="collections_name")
 ws3.append(['Format Name', 'Collection Count'])
 for key, value in collection_name.items():
     ws3.append([key, value])
 
+aip_type, aip_name = aip_subtotals()
+
+ws4 = wb.create_sheet(title="aips_type")
+ws4.append(['Format Type', 'AIP Count'])
+for key, value in aip_type.items():
+    ws4.append([key, value])
+
+# TODO: Lots of results. More useful to limit to the top x or anything above y?
+ws5 = wb.create_sheet(title="aips_name")
+ws5.append(['Format Name', 'AIP Count'])
+for key, value in collection_name.items():
+    ws5.append([key, value])
+
+# Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
 wb.save("ARCHive Format Report.xlsx")
