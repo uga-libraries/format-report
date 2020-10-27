@@ -6,8 +6,7 @@ import csv
 
 formats_report = "C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod/archive_formats_2020-10.csv"
 
-type_coll_id = {}
-type_coll_count = {}
+type_coll = {}
 
 # Gets the data from the merged ARCHive formats report.
 with open(formats_report, 'r') as formats:
@@ -33,14 +32,14 @@ with open(formats_report, 'r') as formats:
         # Adds each collection to a dictionary with format type as the key and a list of collection ids as the value.
         for collection in collection_list:
             try:
-                type_coll_id[row[4]].append(collection)
+                type_coll[row[4]].append(collection)
             except KeyError:
-                type_coll_id[row[4]] = [collection]
+                type_coll[row[4]] = [collection]
 
     # Add the number of unique collections to count dictionary. Make a set first to remove duplicates.
-    for key, value in type_coll_id.items():
-        type_coll_count[key] = len(set(value))
+    for key, value in type_coll.items():
+        type_coll[key] = len(set(value))
 
     # Prints the results.
-    for key, value in type_coll_count.items():
+    for key, value in type_coll.items():
         print(key, value)
