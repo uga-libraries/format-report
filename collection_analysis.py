@@ -1,5 +1,5 @@
-# Calculate the number of unique collections and AIPs per format type and format standardized name. Because of how
-# the data is normalized, the same collection or AIP is counted multiple times if the counts in the archive formats
+# Calculate the number of unique collections per format type and format standardized name. Because of how
+# the data is normalized, the same collection is counted multiple times if the counts in the archive formats
 # csv are used, resulting in very inflated numbers. Numbers can be 2x-10x bigger.
 
 # Usage: python /path/collection_analysis.py /path/archive_formats_csv
