@@ -34,7 +34,6 @@ while True:
 
 # Gets the data from each format report.
 for file in os.listdir(formats_report_folder):
-    # TODO: change back to looking at all the files and not just the test file
     # if file.startswith('file_formats'):
     if file == "file_formats_test.csv":
         with open(file, 'r') as formats:
@@ -58,31 +57,27 @@ for file in os.listdir(formats_report_folder):
                     standard_read = csv.reader(standard)
                     for standard_row in standard_read:
                         if row[2].lower() == standard_row[0].lower():
-                            #print("Match", standard_row)
                             format_type = standard_row[2]
-                            #print(format_type)
 
-                print(row[2], format_type)
+                # Adds each aip to a dictionary with format type as the key and a list of aip ids as the value.
+                for aip in aip_list:
+                    try:
+                        type_aip_id[format_type].append(aip)
+                    except KeyError:
+                        type_aip_id[format_type] = [aip]
 
-            #     # Adds each aip to a dictionary with format type as the key and a list of aip ids as the value.
-            #     for aip in aip_list:
-            #         try:
-            #             type_aip_id[row[4]].append(aip)
-            #         except KeyError:
-            #             type_aip_id[row[4]] = [aip]
-            #
-            # # Add pre-deduplication count to count dictionary.
-            # for key, value in type_aip_id.items():
-            #     type_aip_count[key] = [len(value)]
-            #
-            # # Changes each list in the dictionary to a set to remove duplicates.
-            # for key, value in type_aip_id.items():
-            #     type_aip_id[key] = set(value)
-            #
-            # # Add the post-deduplication count to count dictionary
-            # for key, value in type_aip_id.items():
-            #     type_aip_count[key].append(len(value))
-            #
-            # # Prints the results:
-            # for key, value in type_aip_count.items():
-            #     print(key, value)
+# Add pre-deduplication count to count dictionary.
+for key, value in type_aip_id.items():
+    type_aip_count[key] = [len(value)]
+
+# Changes each list in the dictionary to a set to remove duplicates.
+for key, value in type_aip_id.items():
+    type_aip_id[key] = set(value)
+
+# Add the post-deduplication count to count dictionary
+for key, value in type_aip_id.items():
+    type_aip_count[key].append(len(value))
+
+# Prints the results:
+for key, value in type_aip_count.items():
+    print(key, value)
