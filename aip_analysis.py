@@ -1,13 +1,27 @@
 # Subtotal for AIPs is counting the same AIP many times.
 # What do the numbers look like for format types if calculated by aip?
 
-# Individual reports don't have type, so need to look up on the fly?
+# Individual reports don't have type, so look up on the fly.
 
 """
 Counts below are before and after deduplication with 10/26 data:
-
-
-
+video [29193, 27648]
+image [24239, 22111]
+audio [2047, 1964]
+application [735, 458]
+structured_text [675, 400]
+text [4297, 1798]
+spreadsheet [1025, 460]
+archive [168, 109]
+presentation [144, 121]
+executable [366, 117]
+web_archive [44, 44]
+database [137, 69]
+message [85, 65]
+design [127, 53]
+model [2, 2]
+multipart [2, 2]
+geographic_data [10, 3]
 """
 
 import csv
@@ -34,8 +48,8 @@ while True:
 
 # Gets the data from each format report.
 for file in os.listdir(formats_report_folder):
-    # if file.startswith('file_formats'):
-    if file == "file_formats_test.csv":
+    if file.startswith('file_formats'):
+        print(file)
         with open(file, 'r') as formats:
             formats_read = csv.reader(formats)
 
