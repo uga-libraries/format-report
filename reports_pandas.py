@@ -11,7 +11,7 @@ Ideas for future development:
     * Have size as well as count included in the file formats reports so can summarize by size.
 """
 
-# Usage: python /path/reports.py /path/formats_csv
+# Usage: python /path/reports_pandas.py /path/formats_csv
 
 import datetime
 import os
@@ -24,7 +24,7 @@ try:
     formats = sys.argv[1]
 except IndexError:
     print("Need to provide the path to the CSV with format information to be analyzed.")
-    print("Script usage: python /path/reports.py /path/formats_csv")
+    print("Script usage: python /path/reports_pandas.py /path/formats_csv")
     exit()
 
 # Reads the data from the CSV into a pandas dataframe.
@@ -33,7 +33,7 @@ try:
     df = pd.read_csv(formats)
 except FileNotFoundError:
     print("The path for the format CSV is not valid.")
-    print("Script usage: python /path/reports.py /path/formats_csv")
+    print("Script usage: python /path/reports_pandas.py /path/formats_csv")
     exit()
 
 # For each field or field combination to analyze, uses pandas to calculate the collection count, AIP count, and file
