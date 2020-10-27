@@ -2,9 +2,24 @@
 # the data is normalized, the same collection or AIP is counted multiple times if the counts in the archive formats
 # csv are used, resulting in very inflated numbers. Numbers can be 2x-10x bigger.
 
-import csv
+# Usage: python /path/collection_analysis.py /path/archive_formats_csv
 
-formats_report = "C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod/archive_formats_2020-10.csv"
+import csv
+import os
+import sys
+
+# Get file path for the csv with the combined format information from the script argument.
+# If it is missing or not a valid file path, prints an error and quits the script.
+
+try:
+    formats_report = sys.argv[1]
+except IndexError:
+    print("Need to provide the path to the archive formats csv as a script argument.")
+    exit()
+
+if not os.path.exists(formats_report):
+    print("The path to the archive formats csv is not correct.")
+    exit()
 
 type_count = {}
 name_count = {}
