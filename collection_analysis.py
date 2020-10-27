@@ -31,13 +31,17 @@ with open(formats_report, 'r') as formats:
             collection_list = [collection.replace('-', '') for collection in collection_list]
 
         # Adds each collection to a dictionary with format type as the key and a list of collection ids as the value.
-        # Adds each collection to a dictionary with format name as the key and a list of collection ids as the value.
         for collection in collection_list:
             try:
                 type_count[row[4]].append(collection)
-                name_count[row[5]].append(collection)
             except KeyError:
                 type_count[row[4]] = [collection]
+
+        # Adds each collection to a dictionary with format name as the key and a list of collection ids as the value.
+        for collection in collection_list:
+            try:
+                name_count[row[5]].append(collection)
+            except KeyError:
                 name_count[row[5]] = [collection]
 
     # Convert the list of collections in each dictionary to the count of unique collections.
@@ -48,7 +52,7 @@ with open(formats_report, 'r') as formats:
     for key, value in name_count.items():
         name_count[key] = len(set(value))
 
-    # Prints the results.
+    # Prints the results. TODO: save to a report instead.
     print("\nAll Format Types")
     for key, value in type_count.items():
         print(key, value)
