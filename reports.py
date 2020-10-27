@@ -179,6 +179,58 @@ def archive_overview():
     return group_information
 
 
+def collection_subtotals():
+    """Returns a dictionaries with counts of unique collections by format type and normalized format name."""
+    type_count = {}
+    name_count = {}
+
+    # Gets the data from the merged ARCHive formats report.
+    with open(formats_report, 'r') as formats:
+        formats_read = csv.reader(formats)
+
+        # Skips the header row.
+        next(formats_read)
+
+        # Gets the data from each row in the report, which has information about a single format for that group.
+        # row[0] is group.
+        # row[4] is format type.
+        # row[11] is collection ids (a comma separated string).
+        for row in formats_read:
+
+            # Format the collections as a list.
+            collection_list = row[11].split(', ')
+
+            # For Russell, remove the dash from collection identifiers, since there can be two id formats for the same
+            # collection, rbrl-### and rbrl###. If both variations are present, just want to count it once.
+            if row[0] == 'russell':
+                collection_list = [collection.replace('-', '') for collection in collection_list]
+
+            # Adds each collection to a dictionary. Key is format type and value is a list of collection ids.
+            for collection in collection_list:
+                try:
+                    type_count[row[4]].append(collection)
+                except KeyError:
+                    type_count[row[4]] = [collection]
+
+            # Adds each collection to a dictionary. Key is standardized format name and value is a list of collection ids.
+            for collection in collection_list:
+                try:
+                    name_count[row[5]].append(collection)
+                except KeyError:
+                    name_count[row[5]] = [collection]
+
+        # Convert the list of collections in each dictionary to the count of unique collections.
+        # Making a set removes duplicates.
+        for key, value in type_count.items():
+            type_count[key] = len(set(value))
+
+        for key, value in name_count.items():
+            name_count[key] = len(set(value))
+
+        # Returns both dictionaries
+        return type_count, name_count
+
+
 # START OF SCRIPT BODY
 
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
@@ -218,17 +270,38 @@ while True:
         sys.maxsize = int(sys.maxsize / 10)
 
 # Makes a spreadsheet to save results to.
+# TODO: Making a tab, adding a header, and saving all the results of calling a function is repeating. Own function?
 wb = openpyxl.Workbook()
 
 # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-overview = archive_overview()
 
+# Renames the sheet made when starting a workbook to ARCHive Overview.
 ws1 = wb.active
 ws1.title = "ARCHive Overview"
+
+# Adds a header row to the sheet.
 ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
 
+# Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
+overview = archive_overview()
 for key in overview:
     ws1.append(overview[key])
 
-# Saves the report spreadsheet. It overwrites existing tabs. Does it overwrite the full file?
+# Saves the report spreadsheet.
+wb.save("ARCHive Format Report.xlsx")
+
+# Gets counts of collections and AIPs by format type and standardized format name and saves to the report spreadsheet.
+# TODO: really want one sheet for type and one for name which combines collection, aip, and file.
+collection_type, collection_name = collection_subtotals()
+
+ws2 = wb.create_sheet(title="collections_type")
+ws2.append(['Format Type', 'Collection Count'])
+for key, value in collection_type.items():
+    ws2.append([key, value])
+
+ws3 = wb.create_sheet(title="collections_name")
+ws3.append(['Format Name', 'Collection Count'])
+for key, value in collection_name.items():
+    ws3.append([key, value])
+
 wb.save("ARCHive Format Report.xlsx")
