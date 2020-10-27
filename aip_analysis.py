@@ -31,8 +31,9 @@ except FileNotFoundError:
     print("The provided formats report folder is not a valid path.")
     exit()
 
-# Starts dictionary for storing the results.
+# Starts dictionaries for storing the results.
 type_count = {}
+name_count = {}
 
 # Increases the size of csv fields to handle long aip lists.
 # Gets the maximum size that doesn't give an overflow error.
@@ -46,7 +47,6 @@ while True:
 # Gets the data from each format report.
 for file in os.listdir(formats_report_folder):
     if file.startswith('file_formats'):
-        print(file)
         with open(file, 'r') as formats:
             formats_read = csv.reader(formats)
 
@@ -68,6 +68,7 @@ for file in os.listdir(formats_report_folder):
                     standard_read = csv.reader(standard)
                     for standard_row in standard_read:
                         if row[2].lower() == standard_row[0].lower():
+                            standard_name = standard_row[1]
                             format_type = standard_row[2]
 
                 # Adds each aip to a dictionary with format type as the key and a list of aip ids as the value.
@@ -77,13 +78,29 @@ for file in os.listdir(formats_report_folder):
                     except KeyError:
                         type_count[format_type] = [aip]
 
+                # Adds each aip to a dictionary with format name as the key and a list of aip ids as the value.
+                for aip in aip_list:
+                    try:
+                        name_count[standard_name].append(aip)
+                    except KeyError:
+                        name_count[standard_name] = [aip]
+
 # Convert the list of collections in each dictionary to the count of unique collections.
 # Making a set removes duplicates.
 for key, value in type_count.items():
     type_count[key] = len(set(value))
 
+for key, value in name_count.items():
+    name_count[key] = len(set(value))
+
 # TODO: save to a report instead
 # Prints the results.
+
 print("\nAll Format Types")
 for key, value in type_count.items():
     print(key, value)
+
+print("\nStandardized Format Names if over 500 AIPs")
+for key, value in name_count.items():
+    if value > 500:
+        print(key, value)
