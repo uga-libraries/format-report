@@ -31,6 +31,7 @@ except FileNotFoundError:
     print("The provided formats report folder is not a valid path.")
     exit()
 
+# Starts dictionary for storing the results.
 type_count = {}
 
 # Increases the size of csv fields to handle long aip lists.
@@ -41,7 +42,6 @@ while True:
         break
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
-
 
 # Gets the data from each format report.
 for file in os.listdir(formats_report_folder):
@@ -77,18 +77,13 @@ for file in os.listdir(formats_report_folder):
                     except KeyError:
                         type_count[format_type] = [aip]
 
-# Add pre-deduplication count to count dictionary.
+# Convert the list of collections in each dictionary to the count of unique collections.
+# Making a set removes duplicates.
 for key, value in type_count.items():
-    type_count[key] = [len(value)]
+    type_count[key] = len(set(value))
 
-# Changes each list in the dictionary to a set to remove duplicates.
-for key, value in type_count.items():
-    type_count[key] = set(value)
-
-# Add the post-deduplication count to count dictionary
-for key, value in type_count.items():
-    type_count[key].append(len(value))
-
-# Prints the results:
+# TODO: save to a report instead
+# Prints the results.
+print("\nAll Format Types")
 for key, value in type_count.items():
     print(key, value)
