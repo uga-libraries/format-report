@@ -283,11 +283,20 @@ def aip_subtotals():
 
 
 def file_subtotals():
-    """File subtotals are inflated by formats with multiple possible identifications.
-    Just does type right now. Not sure if I can get this merged into the dictionary correctly"""
+    """Returns dataframes with file counts by format type and normalized format name. The counts are inflated by
+    formats with multiple possible identifications. """
+
+    # Gets information from the formats report.
     df = pd.read_csv(formats_report)
+
+    # Creates dataframes of format type and format standardized name.
+    # #ach has subtotals of collection, AIP, and file counts.
+    # Will only use the file count. Calculating the collection and AIP differently to remove duplicates.
     format_type = df.groupby('Format_Type').sum()
-    return format_type[['File_Count']]
+    format_name = df.groupby('Format_Standardized_Name').sum()
+
+    # Returns data frames with just the file counts.
+    return format_type[['File_Count']], format_name[['File_Count']]
 
 
 # START OF SCRIPT BODY
@@ -370,13 +379,19 @@ for key, value in name_counts.items():
     name_counts[key] = [value, aip_name[key]]
 
 # Gets the file counts.
-file_type = file_subtotals()
+file_type, file_name = file_subtotals()
 
 # Adds the file type counts to the type_counts dictionary.
 # index = type
 # row has the count, name, and data type.
 for index, row in file_type.iterrows():
     type_counts[index].append(row['File_Count'])
+
+# Adds the file type counts to the type_counts dictionary.
+# index = type
+# row has the count, name, and data type.
+for index, row in file_name.iterrows():
+    name_counts[index].append(row['File_Count'])
 
 # # Saves the data from each dictionary to its own sheet in the report.
 # # Adds the key to the first position in the list with the counts first.
