@@ -127,33 +127,34 @@ def archive_overview():
 
                 # If this is the first time the group is encountered, adds it to the dictionary.
                 # Otherwise, adds the collection id to the list of collections for that group if it is not there yet.
+                # If it is, nothing will happen.
                 if group_code not in group_collections:
                     group_collections[group_code] = [collection_id]
                 else:
                     if collection_id not in group_collections[group_code]:
                         group_collections[group_code].append(collection_id)
 
-            # # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
-            # # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
-            # # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
-            # # counts in the next step.
-            # wrong_group_count = 0
-            # for collection in group_collections['dlg']:
-            #     if collection.startswith('guan_'):
-            #         wrong_group_count += 1
-            #
-            # # Calculates the final count of unique collections per group by getting the length of each collection list
-            # # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
-            # for group_code in group_collections:
-            #     group_collections[group_code] = len(group_collections[group_code])
-            # group_collections['dlg-hargrett'] += wrong_group_count
-            # group_collections['dlg'] -= wrong_group_count
-            #
-            # # Calculates the total number of collections across all groups and adds to the dictionary.
-            # total_collections = 0
-            # for group_code in group_collections:
-            #     total_collections += group_collections[group_code]
-            # group_collections['total'] = total_collections
+            # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
+            # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
+            # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
+            # counts in the next step.
+            wrong_group_count = 0
+            for collection in group_collections['dlg']:
+                if collection.startswith('guan_'):
+                    wrong_group_count += 1
+
+            # Calculates the final count of unique collections per group by getting the length of each collection list
+            # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
+            for group_code in group_collections:
+                group_collections[group_code] = len(group_collections[group_code])
+            group_collections['dlg-hargrett'] += wrong_group_count
+            group_collections['dlg'] -= wrong_group_count
+
+            # Calculates the total number of collections across all groups and adds to the dictionary.
+            total_collections = 0
+            for group_code in group_collections:
+                total_collections += group_collections[group_code]
+            group_collections['total'] = total_collections
 
             # Returns the dictionary. Keys are group codes and values are collection counts.
             print("Group_Collections Dictionary")
