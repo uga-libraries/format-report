@@ -393,23 +393,23 @@ for index, row in file_type.iterrows():
 for index, row in file_name.iterrows():
     name_counts[index].append(row['File_Count'])
 
-# # Saves the data from each dictionary to its own sheet in the report.
-# # Adds the key to the first position in the list with the counts first.
-# ws2 = wb.create_sheet(title="type_counts")
-# ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
-# for key, value in type_counts.items():
-#     value.insert(0, key)
-#     ws2.append(value)
-#
-# ws3 = wb.create_sheet(title="name_counts")
-# ws3.append(['Format Standardized Name', 'Collection Count', 'AIP Count', 'File Count'])
-# for key, value in name_counts.items():
-#     value.insert(0, key)
-#     ws3.append(value)
-#
-#
-# # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
-# wb.save("ARCHive Format Report.xlsx")
+# Saves the data from each dictionary to its own sheet in the report.
+# Adds the key to the first position in the list with the counts first.
+ws2 = wb.create_sheet(title="type_counts")
+ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
+for key, value in type_counts.items():
+    value.insert(0, key)
+    ws2.append(value)
+
+ws3 = wb.create_sheet(title="name_counts")
+ws3.append(['Format Standardized Name', 'Collection Count', 'AIP Count', 'File Count'])
+for key, value in name_counts.items():
+    value.insert(0, key)
+    ws3.append(value)
+
+
+# Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
+wb.save("ARCHive Format Report.xlsx")
 
 # TODO: Reports I was making with pandas. Has collection aip, and file count (not deduplicated)
 # Are these helpful or would we just go back to the main spreadsheet?
