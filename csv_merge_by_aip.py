@@ -101,6 +101,9 @@ with open('archive_formats_by_aip.csv', 'w', newline='') as result:
         if not report.startswith('file_formats'):
             continue
 
+        # Prints progress since this script can be slow to run.
+        print("Starting next report:", report)
+
         # Gets the ARCHive group from the format report filename.
         regex = re.match('file_formats_(.*).csv', report)
         archive_group = regex.group(1)
