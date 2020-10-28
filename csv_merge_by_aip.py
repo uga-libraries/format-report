@@ -168,19 +168,13 @@ with open('archive_formats_by_aip.csv', 'w', newline='') as result:
 
     for report in os.listdir():
 
-        # # Skips the file if it is not a format report. The usage report and some script outputs are also in this folder.
-        # if not report.startswith('file_formats'):
-        #     continue
-
-        # TODO: This is for testing. Switch back to combining reports.
-        if not report == 'test_format.csv':
+        # Skips the file if it is not a format report. The usage report and some script outputs are also in this folder.
+        if not report.startswith('file_formats'):
             continue
 
-        # TODO: put back once done with testing
-        archive_group = 'hargrett'
-        # # Gets the ARCHive group from the format report filename.
-        # regex = re.match('file_formats_(.*).csv', report)
-        # archive_group = regex.group(1)
+        # Gets the ARCHive group from the format report filename.
+        regex = re.match('file_formats_(.*).csv', report)
+        archive_group = regex.group(1)
 
         # Gets the data from the report.
         with open(report, 'r') as open_report:
