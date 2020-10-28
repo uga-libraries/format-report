@@ -96,10 +96,12 @@ def collection_from_aip(aip, group):
 
 
 def update_row(row, group):
-    """Return a list of lists with all the new rows, reorganized by AIP"""
-    # Goal: ['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note']
+    """Return a list of lists with all the new rows, reorganized to one row by AIP. Adds collection ID, format type,
+    and format standardized name. Replaces empty cells with 'NO VALUE'. Final order is: group, collection id, AIP id,
+    format type, format standardized name, format name, format version, registry name, registry key, and format note.
+    """
 
-    # Will ultimately be the list of rows.
+    # Starts a list to hold the list of AIP rows.
     rows = []
 
     # For each AIP:
@@ -131,6 +133,9 @@ def update_row(row, group):
 
         # Make the row
         aip_row = [group, collection_id, aip, format_type, format_name, row[2], row[3], row[4], row[5], row[6]]
+
+        # Fills all empty cells with 'NO VALUE' so it is easier to see where there is no data.
+        aip_row = ['NO VALUE' if x == '' else x for x in aip_row]
 
         # Add the row to the rows list
         rows.append(aip_row)
