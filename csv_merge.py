@@ -17,23 +17,6 @@ import os
 import re
 import sys
 
-# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
-# the argument is missing or not a valid directory.
-try:
-    report_folder = sys.argv[1]
-    os.chdir(report_folder)
-except (IndexError, FileNotFoundError):
-    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage: python /path/csv_merge.py /path/reports [/path/standardize_formats.csv]")
-    exit()
-
-# Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
-# or else uses the folder with this script as the default location.
-try:
-    standard_csv = sys.argv[2]
-except IndexError:
-    standard_csv = os.path.join(sys.path[0], 'standardize_formats.csv')
-
 
 def collection_from_aip(aip, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
@@ -216,6 +199,23 @@ def update_row(row, group):
     # Returns the updated version of the row.
     return row
 
+
+# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
+# the argument is missing or not a valid directory.
+try:
+    report_folder = sys.argv[1]
+    os.chdir(report_folder)
+except (IndexError, FileNotFoundError):
+    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
+    print("Script usage: python /path/csv_merge.py /path/reports [/path/standardize_formats.csv]")
+    exit()
+
+# Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
+# or else uses the folder with this script as the default location.
+try:
+    standard_csv = sys.argv[2]
+except IndexError:
+    standard_csv = os.path.join(sys.path[0], 'standardize_formats.csv')
 
 # Increases the size of csv fields to handle long aip lists.
 # Gets the maximum size that doesn't give an overflow error.
