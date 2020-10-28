@@ -6,6 +6,19 @@ import csv
 import os
 import sys
 
+
+def update_row(row, group):
+    """Return a list of lists with all the new rows, reorganized by AIP"""
+    # Goal: ['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note']
+
+    # Will ultimately be the list of rows.
+    rows = []
+
+    # For each AIP:
+    aip_list = row[7].split('|')
+    for aip in aip_list:
+        print(aip)
+
 standard_csv = 'C:/users/amhan/Documents/GitHub/format-report/standardize_formats.csv'
 report_folder = 'C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod'
 os.chdir(report_folder)
@@ -53,8 +66,8 @@ with open('archive_formats_by_aip.csv', 'w', newline='') as result:
 
             # Gets the data from each row in the report.
             for data in report_info:
-                print(data)
                 # Updates the row to add additional information and fill in blank cells using another function and saves
                 # the updated row to the CSV.
-                # new_row = update_row(data, archive_group)
-                # result_csv.writerow(new_row)
+                new_rows = update_row(data, archive_group)
+                # for row in new_rows:
+                #     result_csv.writerow(row)
