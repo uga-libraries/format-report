@@ -157,8 +157,6 @@ def archive_overview():
             group_collections['total'] = total_collections
 
             # Returns the dictionary. Keys are group codes and values are collection counts.
-            print("Group_Collections Dictionary")
-            print(group_collections)
             return group_collections
 
     # Gets the size (TB) and number of AIPs per group from the usage report.
@@ -193,35 +191,32 @@ def collection_subtotals():
         next(formats_read)
 
         # Gets the data from each row in the report, which has information about a single format for that group.
-        # row[0] is group.
-        # row[4] is format type.
-        # row[11] is collection ids (a comma separated string).
+        # row[0] is group, row[1] is collection id, row[3] is format type, row[4] is format standardized name.
         for row in formats_read:
 
-            # Format the collections as a list.
-            collection_list = row[11].split(', ')
+            # Get the collection id.
+            collection_id = row[1]
 
             # For Russell, remove the dash from collection identifiers, since there can be two id formats for the same
             # collection, rbrl-### and rbrl###. If both variations are present, just want to count it once.
             if row[0] == 'russell':
-                collection_list = [collection.replace('-', '') for collection in collection_list]
+                collection_id = collection_id.replace('-', '')
 
-            # Adds each collection to a dictionary. Key is format type and value is a list of collection ids.
-            for collection in collection_list:
-                try:
-                    type_count[row[4]].append(collection)
-                except KeyError:
-                    type_count[row[4]] = [collection]
+            # Adds the collection to a dictionary. Key is format type and value is a list of collection ids.
+            try:
+                type_count[row[3]].append(collection_id)
+            except KeyError:
+                type_count[row[3]] = [collection_id]
 
             # Adds each collection to a dictionary. Key is standardized format name and value is a list of collection ids.
-            for collection in collection_list:
-                try:
-                    name_count[row[5]].append(collection)
-                except KeyError:
-                    name_count[row[5]] = [collection]
+            try:
+                name_count[row[4]].append(collection_id)
+            except KeyError:
+                name_count[row[4]] = [collection_id]
 
         # Convert the list of collections in each dictionary to the count of unique collections.
         # Makes a set to remove duplicates before converting to a count with len().
+        # TODO: can test if the id is in the dictionary before add it if want to skip set.
         for key, value in type_count.items():
             type_count[key] = len(set(value))
 
@@ -405,10 +400,10 @@ for key in overview:
 # for key, value in name_counts.items():
 #     value.insert(0, key)
 #     ws3.append(value)
-#
-#
-# # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
-# wb.save("ARCHive Format Report.xlsx")
+
+
+# Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
+wb.save("ARCHive Format Report.xlsx")
 
 # TODO: Reports I was making with pandas. Has collection aip, and file count (not deduplicated)
 # Are these helpful or would we just go back to the main spreadsheet?
