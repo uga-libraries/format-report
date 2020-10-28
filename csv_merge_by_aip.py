@@ -21,7 +21,7 @@ import sys
 from csv_merge import collection_from_aip
 
 
-def update_row(row, group):
+def update_row(row_data, group):
     """Returns a list of lists with all the new rows, reorganized to one row per AIP and format. For each row,
     adds collection ID, format type and format standardized name, and replaces empty cells with 'NO VALUE'. The final
     order is: group, collection id, AIP id, format type, format standardized name, format name, format version,
@@ -31,7 +31,7 @@ def update_row(row, group):
     aip_rows = []
 
     # Gets all the AIPs, which are in a pipe separated string in row[7], and makes the new row for each one.
-    aip_list = row[7].split('|')
+    aip_list = row_data[7].split('|')
     for aip in aip_list:
 
         # Calculates the collection id from the AIP id.
@@ -49,12 +49,13 @@ def update_row(row, group):
             # Checks each row for the format name. When there is a match, returns the standardized name and format type.
             # Matching the lowercase versions of the format names to ignore variations in capitalization.
             for standard_row in read_standard_list:
-                if row[2].lower() == standard_row[0].lower():
+                if row_data[2].lower() == standard_row[0].lower():
                     format_name = standard_row[1]
                     format_type = standard_row[2]
 
         # Makes the list with the row data for this AIP.
-        aip_row = [group, collection_id, aip, format_type, format_name, row[2], row[3], row[4], row[5], row[6]]
+        aip_row = [group, collection_id, aip, format_type, format_name, row_data[2], row_data[3], row_data[4],
+                   row_data[5], row_data[6]]
 
         # Fills all empty cells with 'NO VALUE' so it is easier to see where there is no data.
         aip_row = ['NO VALUE' if x == '' else x for x in aip_row]
