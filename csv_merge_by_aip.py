@@ -17,7 +17,22 @@ def update_row(row, group):
     # For each AIP:
     aip_list = row[7].split('|')
     for aip in aip_list:
-        print(aip)
+
+        # Get collection id
+
+        # Get format type
+
+        # Get format standardized name
+
+        # Make the row
+        aip_row = [group, 'collection placeholder', aip, 'type placeholder', 'name placeholder', row[2], row[3], row[4], row[5], row[6]]
+
+        # Add the row to the rows list
+        rows.append(aip_row)
+
+    # Return the list of rows to add to the csv.
+    return rows
+
 
 standard_csv = 'C:/users/amhan/Documents/GitHub/format-report/standardize_formats.csv'
 report_folder = 'C:/users/amhan/Documents/GitHub/format-report/testing/2020-10-26_prod'
@@ -69,5 +84,5 @@ with open('archive_formats_by_aip.csv', 'w', newline='') as result:
                 # Updates the row to add additional information and fill in blank cells using another function and saves
                 # the updated row to the CSV.
                 new_rows = update_row(data, archive_group)
-                # for row in new_rows:
-                #     result_csv.writerow(row)
+                for row in new_rows:
+                    result_csv.writerow(row)
