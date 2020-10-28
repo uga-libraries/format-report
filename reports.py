@@ -114,55 +114,50 @@ def archive_overview():
             # Skips the header row.
             next(formats_read)
 
-            # Gets the data from each row in the report, which has information about a single format for that group.
-            # A collection will only be in a single row once, but may be in multiple rows.
-            # row[0] is group, row[11] is collection ids (a comma separated string).
+            # Gets the data from each row in the report.
+            # row[0] is group, row[1] is collection id.
             for row in formats_read:
                 group_code = row[0]
-                collection_list = row[11].split(', ')
+                collection_id = row[1]
 
-                # For Russell, remove the dash from collection identifiers, since there can be two id formats_report
+                # For Russell, remove the dash from collection identifiers, since there can be two id formats
                 # for the same collection, rbrl-### and rbrl###. If both variations are present, just count it once.
                 if group_code == 'russell':
-                    collection_list = [collection.replace('-', '') for collection in collection_list]
-                    # Transforms the list to a set to remove duplicates and back to a list since that is the type the
-                    # script expects. May have introduced duplicates by normalizing the collection id formatting.
-                    collection_list = list(set(collection_list))
+                    collection_id = collection_id.replace('-', '')
 
                 # If this is the first time the group is encountered, adds it to the dictionary.
-                # Otherwise, adds new collections to the list of collections for that group already in the dictionary.
+                # Otherwise, adds the collection id to the list of collections for that group if it is not there yet.
                 if group_code not in group_collections:
-                    group_collections[group_code] = collection_list
+                    group_collections[group_code] = [collection_id]
                 else:
-                    # Combines the list of collections already in the dictionary with the list of collections from this
-                    # row. Transforms the combined list to a set to remove duplicates and then back to a list since that
-                    # is the type the script expects.
-                    combined_collections = group_collections[group_code] + collection_list
-                    group_collections[group_code] = list(set(combined_collections))
+                    if collection_id not in group_collections[group_code]:
+                        group_collections[group_code].append(collection_id)
 
-            # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
-            # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
-            # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
-            # counts in the next step.
-            wrong_group_count = 0
-            for collection in group_collections['dlg']:
-                if collection.startswith('guan_'):
-                    wrong_group_count += 1
-
-            # Calculates the final count of unique collections per group by getting the length of each collection list
-            # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
-            for group_code in group_collections:
-                group_collections[group_code] = len(group_collections[group_code])
-            group_collections['dlg-hargrett'] += wrong_group_count
-            group_collections['dlg'] -= wrong_group_count
-
-            # Calculates the total number of collections across all groups and adds to the dictionary.
-            total_collections = 0
-            for group_code in group_collections:
-                total_collections += group_collections[group_code]
-            group_collections['total'] = total_collections
+            # # Counts the number of collections in dlg that should be in dlg-hargrett (any collection starting with
+            # # "guan_"), which is caused by an error in ARCHive data. Although the collection has a primary group of
+            # # hargrett-dlg, the AIP has a primary group of dlg so it is incorrectly counted as dlg. Used to correct the
+            # # counts in the next step.
+            # wrong_group_count = 0
+            # for collection in group_collections['dlg']:
+            #     if collection.startswith('guan_'):
+            #         wrong_group_count += 1
+            #
+            # # Calculates the final count of unique collections per group by getting the length of each collection list
+            # # and then making adjustments for collections that are in dlg instead of dlg-hargrett.
+            # for group_code in group_collections:
+            #     group_collections[group_code] = len(group_collections[group_code])
+            # group_collections['dlg-hargrett'] += wrong_group_count
+            # group_collections['dlg'] -= wrong_group_count
+            #
+            # # Calculates the total number of collections across all groups and adds to the dictionary.
+            # total_collections = 0
+            # for group_code in group_collections:
+            #     total_collections += group_collections[group_code]
+            # group_collections['total'] = total_collections
 
             # Returns the dictionary. Keys are group codes and values are collection counts.
+            print("Group_Collections Dictionary")
+            print(group_collections)
             return group_collections
 
     # Gets the size (TB) and number of AIPs per group from the usage report.
@@ -331,9 +326,6 @@ if not formats_report:
         print("Could not find usage_report report csv in the report folder.")
     exit()
 
-print(formats_report)
-print(usage_report)
-
 # Increases the size of csv fields to handle long aip lists.
 # Gets the maximum size that doesn't give an overflow error.
 while True:
@@ -343,25 +335,25 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
-# # Makes a spreadsheet to save results to.
-# # TODO: Making a tab, adding a header, and saving all the results of calling a function is repeating. Own function?
-# # TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
-# wb = openpyxl.Workbook()
-#
-# # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-# # TODO Add estimated file count from format report.
-# # Renames the sheet made when starting a workbook to ARCHive Overview.
-# ws1 = wb.active
-# ws1.title = "ARCHive Overview"
-#
-# # Adds a header row to the sheet.
-# ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
-#
-# # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
-# overview = archive_overview()
-# for key in overview:
-#     ws1.append(overview[key])
-#
+# Makes a spreadsheet to save results to.
+# TODO: Making a tab, adding a header, and saving all the results of calling a function is repeating. Own function?
+# TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
+wb = openpyxl.Workbook()
+
+# Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
+# TODO Add estimated file count from format report.
+# Renames the sheet made when starting a workbook to ARCHive Overview.
+ws1 = wb.active
+ws1.title = "ARCHive Overview"
+
+# Adds a header row to the sheet.
+ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
+
+# Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
+overview = archive_overview()
+for key in overview:
+    ws1.append(overview[key])
+
 # """Creates two dictionaries, one for format type and one for format standardized name.
 # Key is the type or name, value is a list with the collection, aip, and file counts.
 # Collection and AIP counts are generated by this script and remove duplicates.
