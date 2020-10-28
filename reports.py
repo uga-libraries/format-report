@@ -317,7 +317,7 @@ formats_report = False
 usage_report = False
 
 for file in os.listdir('.'):
-    if file.startswith('archive_formats_') and file.endswith('.csv'):
+    if file.startswith('archive_formats_') and not file.endswith('_by_aip.csv'):
         formats_report = file
     elif file.startswith('usage_report_') and file.endswith('.csv'):
         usage_report = file
