@@ -282,6 +282,14 @@ def aip_subtotals():
     return type_count, name_count
 
 
+def file_subtotals():
+    """File subtotals are inflated by formats with multiple possible identifications.
+    Just does type right now. Not sure if I can get this merged into the dictionary correctly"""
+    df = pd.read_csv(formats_report)
+    format_type = df.groupby('Format_Type').sum()
+    return format_type[['File_Count']]
+
+
 # START OF SCRIPT BODY
 
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
@@ -360,6 +368,11 @@ for key, value in type_counts.items():
 # Changes the value from a single integer to a list of integers.
 for key, value in name_counts.items():
     name_counts[key] = [value, aip_name[key]]
+
+# Gets the file counts.
+file_type = file_subtotals()
+
+
 
 # Saves the data from each dictionary to its own sheet in the report.
 # Adds the key to the first position in the list with the counts first.
