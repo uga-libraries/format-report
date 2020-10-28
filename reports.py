@@ -1,6 +1,8 @@
 """EXPLANATION and prior to running instructions. Explain what the format and usage reports are."""
 
 # Usage: python /path/reports.py ????
+# TODO: before delete any previous scripts, read through one more time for ideas for future work.
+# TODO: consider making a by-AIP CSV as merge. Would eliminate huge cells so might make easier to aggregate.
 
 import csv
 import datetime
@@ -323,7 +325,7 @@ while True:
 wb = openpyxl.Workbook()
 
 # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-
+# TODO Add estimated file count from format report.
 # Renames the sheet made when starting a workbook to ARCHive Overview.
 ws1 = wb.active
 ws1.title = "ARCHive Overview"
@@ -337,7 +339,7 @@ for key in overview:
     ws1.append(overview[key])
 
 # Gets counts of collections and AIPs by format type and standardized format name and saves to the report spreadsheet.
-# TODO: really want one sheet for type and one for name which combines collection, aip, and file.
+# TODO: really want one sheet for type and one for name which combines collection, aip, and file counts plus has %
 # TODO: can I sort? Bold the first row? Add a chart?
 collection_type, collection_name = collection_subtotals()
 
@@ -367,3 +369,15 @@ for key, value in collection_name.items():
 
 # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
 wb.save("ARCHive Format Report.xlsx")
+
+# TODO: Reports I was making with pandas. Has collection aip, and file count (not deduplicated)
+# Are these helpful or would we just go back to the main spreadsheet?
+# Format type then by group
+# Format type then by name
+# Format name then by group
+
+# TODO: ideas for future development
+# A tab with the most common formats, however that is defined.
+# A way to compare one spreadsheet to another to show change since the last report.
+# Adding in size, if Shawn can update the format report.
+# Calculate the number of individual formats in a name or type grouping?
