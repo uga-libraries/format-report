@@ -157,6 +157,13 @@ def archive_overview():
             # Returns the dictionary. Keys are group codes and values are collection counts.
             return group_collections
 
+    def files_count():
+        """EXPERIMENT: get files per group TODO: better note."""
+        # TODO get the report to read in better way.
+        df = pd.read_csv("archive_formats_2020-10.csv")
+        group = df.groupby('Group').sum()
+        return group[['File_Count']]
+
     # Gets the size (TB) and number of AIPs per group from the usage report.
     group_information = size_and_aips_count()
 
@@ -171,6 +178,30 @@ def archive_overview():
             group_information[group].append(collections_by_group[group])
         except KeyError:
             group_information[group].append(0)
+
+    # Gets the number of files per group from the other formats report.
+    # These numbers are inflated by files with more than one format.
+    files_by_group = files_count()
+
+    # Adds the file counts to the lists in the group_information dictionary for each group.
+    # index = type
+    # row has the count, name, and data type.
+    for index, row in files_by_group.iterrows():
+        group_information[index].append(row['File_Count'])
+
+    # Adds zero for file count if no value there.
+    # TODO might be a way to do this with data frames.
+    for value in group_information.values():
+        if len(value) == 3:
+            value.append(0)
+
+    # Gets total for file count of all groups.
+    # TODO might be a way to do this with data frames.
+    total_files = 0
+    for key in group_information:
+        if not key == 'total':
+            total_files += group_information[key][3]
+    group_information['total'][3] = total_files
 
     # Return the information
     return group_information
@@ -335,13 +366,13 @@ wb = openpyxl.Workbook()
 print("Making ARCHive overview")
 
 # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-# TODO Add estimated file count from format report.
+# TODO use openpyxl to add the totals row instead of calculating by iterating on dictionaries?
 # Renames the sheet made when starting a workbook to ARCHive Overview.
 ws1 = wb.active
 ws1.title = "ARCHive Overview"
 
 # Adds a header row to the sheet.
-ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
+ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
 
 # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
 overview = archive_overview()
