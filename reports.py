@@ -79,17 +79,15 @@ def archive_overview():
                     size = round(size, 3)
 
                     # Adds the results for this group to the dictionary.
-                    # TODO: rework so the group code doesn't need to be in both places. It isn't hard to use get keys.
-                    # group_code is repeated in the value list to make it easy to include the group in the output.
-                    group_data[group_code] = ([group_code, size, aip_count])
+                    group_data[group_code] = ([size, aip_count])
 
             # Calculates the total size and total number of AIPs across all groups and adds to the dictionary.
             total_size = 0
             total_aips = 0
             for group_code in group_data:
-                total_size += group_data[group_code][1]
-                total_aips += group_data[group_code][2]
-            group_data['total'] = ['total', total_size, total_aips]
+                total_size += group_data[group_code][0]
+                total_aips += group_data[group_code][1]
+            group_data['total'] = [total_size, total_aips]
 
             # Returns the dictionary. The keys are group_code and the values are [group_code, size, aip_count].
             return group_data
@@ -347,8 +345,9 @@ ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections'])
 
 # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
 overview = archive_overview()
-for key in overview:
-    ws1.append(overview[key])
+for key, value in overview.items():
+    value.insert(0, key)
+    ws1.append(value)
 
 """Creates two dictionaries, one for format type and one for format standardized name.
 Key is the type or name, value is a list with the collection, aip, and file counts.
