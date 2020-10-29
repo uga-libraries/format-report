@@ -303,6 +303,25 @@ def aip_subtotals():
     return type_count, name_count
 
 
+def aip_df_subtotals():
+    """EXPERIMENT: now that AIP is its own row, can I df instead?"""
+
+    # Gets information from the formats report.
+    df = pd.read_csv(formats_report)
+
+    # Creates dataframes of format type and format standardized name.
+    format_type = df.groupby('Format_Type').sum()
+    format_name = df.groupby('Format_Standardized_Name').sum()
+
+    print("Format Type")
+    print(format_type)
+
+    print("Format Name")
+    print(format_name)
+
+    # Returns data frames with just the file counts.
+    return 'Done!'
+
 def file_subtotals():
     """Returns dataframes with file counts by format type and normalized format name. The counts are inflated by
     formats with multiple possible identifications. """
