@@ -231,26 +231,28 @@ def collection_subtotals():
             if row[0] == 'russell':
                 collection_id = collection_id.replace('-', '')
 
-            # Adds the collection to a dictionary. Key is format type and value is a list of collection ids.
+            # Adds the collection to a dictionary unless already there.
+            # Key is format type and value is a list of collection ids.
             try:
-                type_count[row[3]].append(collection_id)
+                if collection_id not in type_count[row[3]]:
+                    type_count[row[3]].append(collection_id)
             except KeyError:
                 type_count[row[3]] = [collection_id]
 
-            # Adds each collection to a dictionary. Key is standardized format name and value is a list of collection ids.
+            # Adds each collection to a dictionary unless already there.
+            # Key is standardized format name and value is a list of collection ids.
             try:
-                name_count[row[4]].append(collection_id)
+                if collection_id not in name_count[row[4]]:
+                    name_count[row[4]].append(collection_id)
             except KeyError:
                 name_count[row[4]] = [collection_id]
 
         # Convert the list of collections in each dictionary to the count of unique collections.
-        # Makes a set to remove duplicates before converting to a count with len().
-        # TODO: can test if the id is in the dictionary before add it if want to skip set.
         for key, value in type_count.items():
-            type_count[key] = len(set(value))
+            type_count[key] = len(value)
 
         for key, value in name_count.items():
-            name_count[key] = len(set(value))
+            name_count[key] = len(value)
 
         # Returns both dictionaries
         return type_count, name_count
