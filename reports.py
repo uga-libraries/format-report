@@ -310,7 +310,7 @@ def aip_df_subtotals():
     df = pd.read_csv(formats_report)
 
     # Creates dataframes of format type and format standardized name.
-    format_type = df.groupby('Format_Type').count()
+    format_type = df.groupby('Format_Type')['AIP'].nunique()
 
     # Returns data frames with just the file counts.
     return format_type
@@ -387,14 +387,14 @@ print("Making ARCHive overview")
 ws1 = wb.active
 ws1.title = "ARCHive Overview"
 
-# Adds a header row to the sheet.
-ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
-
-# Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
-overview = archive_overview()
-for key, value in overview.items():
-    value.insert(0, key)
-    ws1.append(value)
+# # Adds a header row to the sheet.
+# ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
+#
+# # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
+# overview = archive_overview()
+# for key, value in overview.items():
+#     value.insert(0, key)
+#     ws1.append(value)
 
 """Creates two dictionaries, one for format type and one for format standardized name.
 Key is the type or name, value is a list with the collection, aip, and file counts.
@@ -451,20 +451,20 @@ File count comes from the format report and includes duplicates for formats with
 #     value.insert(0, key)
 #     ws3.append(value)
 
-# TODO: this is just for testing the two ways of working with aips
-print("Getting aip subtotals manually")
+# This is just for testing the two ways of working with aips
 manual_type, manual_name = aip_subtotals()
+df_type = aip_df_subtotals()
+
+# Use this for testing by printing entire results to the spreadsheet
 ws2 = wb.create_sheet(title="aip_type_manual")
 ws2.append(['Format Type', 'AIP Count'])
 for key, value in manual_type.items():
     ws2.append([key, value])
 
-print("Getting aip subtotals with data frame")
-df_type = aip_df_subtotals()
 ws3 = wb.create_sheet(title="aip_type_df")
 ws3.append(['Format Type', 'AIP Count'])
-for index, row in df_type.iterrows():
-    ws3.append([index, row['AIP']])
+for index, value in df_type.iteritems():
+    ws3.append([index, value])
 
 # Gets the current date, formatted YYYYMM, to use in naming the merged file.
 # TODO datetime wasn't working on work machine. Not sure if datetime wasn't import or if Python 3.7 (work) vs 3.8 (home).
