@@ -277,7 +277,8 @@ def file_subtotals():
     formats with multiple possible identifications. """
 
     # Gets information from the formats report.
-    df = pd.read_csv(formats_report)
+    # TODO: file count isn't in the csv by AIP and doesn't make sense to - would inflate those numbers further.
+    df = pd.read_csv("archive_formats_2020-10.csv")
 
     # Creates dataframes of format type and format standardized name.
     # #ach has subtotals of collection, AIP, and file counts.
@@ -332,6 +333,9 @@ while True:
 # TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
 wb = openpyxl.Workbook()
 
+# Printing progress for each report made since this can be a little slow.
+print("Making ARCHive overview")
+
 # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
 # TODO Add estimated file count from format report.
 # Renames the sheet made when starting a workbook to ARCHive Overview.
@@ -353,9 +357,11 @@ File count comes from the format report and includes duplicates for formats with
 # TODO: add percentages? If know total at this point, could add to the list in the dictionaries.
 
 # Starts with the collection counts.
+print("Calculating collection counts.")
 type_counts, name_counts = collection_subtotals()
 
 # Gets the AIP counts.
+print("Calculating AIP counts.")
 aip_type, aip_name = aip_subtotals()
 
 # Adds the AIP type counts to the type_counts dictionary.
@@ -368,23 +374,25 @@ for key, value in type_counts.items():
 for key, value in name_counts.items():
     name_counts[key] = [value, aip_name[key]]
 
-# # Gets the file counts.
-# file_type, file_name = file_subtotals()
-#
-# # Adds the file type counts to the type_counts dictionary.
-# # index = type
-# # row has the count, name, and data type.
-# for index, row in file_type.iterrows():
-#     type_counts[index].append(row['File_Count'])
-#
-# # Adds the file type counts to the type_counts dictionary.
-# # index = type
-# # row has the count, name, and data type.
-# for index, row in file_name.iterrows():
-#     name_counts[index].append(row['File_Count'])
-#
+# Gets the file counts.
+print("Calculating file counts")
+file_type, file_name = file_subtotals()
+
+# Adds the file type counts to the type_counts dictionary.
+# index = type
+# row has the count, name, and data type.
+for index, row in file_type.iterrows():
+    type_counts[index].append(row['File_Count'])
+
+# Adds the file type counts to the type_counts dictionary.
+# index = type
+# row has the count, name, and data type.
+for index, row in file_name.iterrows():
+    name_counts[index].append(row['File_Count'])
+
 # Saves the data from each dictionary to its own sheet in the report.
 # Adds the key to the first position in the list with the counts first.
+print("Making Format Type and Format Standardized Name reports.")
 ws2 = wb.create_sheet(title="type_counts")
 ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
 for key, value in type_counts.items():
