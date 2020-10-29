@@ -405,9 +405,11 @@ for key, value in name_counts.items():
     value.insert(0, key)
     ws3.append(value)
 
+# Gets the current date, formatted YYYYMM, to use in naming the merged file.
+today = datetime.datetime.now().strftime("%Y-%m")
 
 # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
-wb.save("ARCHive Format Report.xlsx")
+wb.save(f"ARCHive Format Report_{today}.xlsx")
 
 # TODO: Reports I was making with pandas. Has collection aip, and file count (not deduplicated)
 # Are these helpful or would we just go back to the main spreadsheet?
