@@ -454,16 +454,22 @@ File count comes from the format report and includes duplicates for formats with
 # TODO: this is just for testing the two ways of working with aips
 print("Getting aip subtotals manually")
 manual_type, manual_name = aip_subtotals()
+ws2 = wb.create_sheet(title="aip_type_manual")
+ws2.append(['Format Type', 'AIP Count'])
+for key, value in manual_type.items():
+    ws2.append([key, value])
+
 print("Getting aip subtotals with data frame")
 df_type = aip_df_subtotals()
-
-print("Manual Type")
-print(manual_type)
-print("\nData Frame Type")
-print(df_type['AIP'])
+ws3 = wb.create_sheet(title="aip_type_df")
+ws3.append(['Format Type', 'AIP Count'])
+for index, row in df_type.iterrows():
+    ws3.append([index, row['AIP']])
 
 # Gets the current date, formatted YYYYMM, to use in naming the merged file.
-today = datetime.datetime.now().strftime("%Y-%m")
+# TODO datetime wasn't working on work machine. Not sure if datetime wasn't import or if Python 3.7 (work) vs 3.8 (home).
+# today = datetime.datetime.now().strftime("%Y-%m")
+today = "2020-10"
 
 # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
 wb.save(f"ARCHive Format Report_{today}.xlsx")
