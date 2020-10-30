@@ -382,6 +382,18 @@ collection_type, collection_name = collection_subtotals()
 aip_type, aip_name = aip_subtotals()
 file_type, file_name = file_subtotals()
 
+# Makes a single dataframe with all three counts.
+type_frames = [collection_type, aip_type, file_type]
+types_combined = pd.concat(type_frames, axis=1)
+
+# Adds the column total to the dataframe. TODO: for reasons I don't understand yet, collection_type and aip_type
+#  don't have column header so can just do sum, while file_type has a column header so have to specify what to sum.
+total_collections = collection_type.sum()
+total_aips = aip_type.sum()
+total_files = file_type['File_Count'].sum()
+types_combined.loc['total'] = [total_collections, total_aips, total_files]
+
+print(types_combined)
 
 # This is a template for iterating on a dataframe
 # for index, row in file_type.iterrows():
