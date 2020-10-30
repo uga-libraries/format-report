@@ -403,9 +403,7 @@ file_type, file_name = file_subtotals()
 #     ws3.append(value)
 
 # Gets the current date, formatted YYYYMM, to use in naming the merged file.
-# TODO datetime wasn't working on work machine. Not sure if datetime wasn't import or if Python 3.7 (work) vs 3.8 (home).
-# today = datetime.datetime.now().strftime("%Y-%m")
-today = "2020-10"
+today = datetime.datetime.now().strftime("%Y-%m")
 
 # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
 wb.save(f"ARCHive Format Report_{today}.xlsx")
