@@ -393,20 +393,16 @@ total_aips = aip_type.sum()
 total_files = file_type['File_Count'].sum()
 types_combined.loc['total'] = [total_collections, total_aips, total_files]
 
-print(types_combined)
+# Converts the dataframe to a list of lists, one list per row.
+# reset_index() includes the index value (the type) and values.tolist() adds the counts.
+type_rows = types_combined.reset_index().values.tolist()
 
-# This is a template for iterating on a dataframe
-# for index, row in file_type.iterrows():
-#     type_counts[index].append(row['File_Count'])
+# Adds the format type data to a tab in the results spreadsheet, with a header row.
+ws2 = wb.create_sheet(title="type_counts")
+ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
+for type_row in type_rows:
+    ws2.append(type_row)
 
-# # Saves the data from each dictionary to its own sheet in the report.
-# # Adds the key to the first position in the list with the counts first.
-# print("Making Format Type and Format Standardized Name reports.")
-# ws2 = wb.create_sheet(title="type_counts")
-# ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
-# for key, value in type_counts.items():
-#     value.insert(0, key)
-#     ws2.append(value)
 #
 # ws3 = wb.create_sheet(title="name_counts")
 # ws3.append(['Format Standardized Name', 'Collection Count', 'AIP Count', 'File Count'])
