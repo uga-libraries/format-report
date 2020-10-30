@@ -105,7 +105,7 @@ def archive_overview():
         group_collections = {}
 
         # Gets the data from the formats report.
-        with open(formats_report, 'r') as formats:
+        with open(formats_by_aip_report, 'r') as formats:
             formats_read = csv.reader(formats)
 
             # Skips the header row.
@@ -157,9 +157,8 @@ def archive_overview():
             return group_collections
 
     def files_count():
-        """EXPERIMENT: get files per group TODO: better note."""
-        # TODO get the report to read in better way.
-        df = pd.read_csv("archive_formats_2020-10.csv")
+        """EXPERIMENT: get files per group."""
+        df = pd.read_csv(formats_report)
         group = df.groupby('Group').sum()
         return group[['File_Count']]
 
@@ -213,7 +212,7 @@ def collection_subtotals_by_hand():
     name_count = {}
 
     # Gets the data from the formats report.
-    with open(formats_report, 'r') as formats:
+    with open(formats_by_aip_report, 'r') as formats:
         formats_read = csv.reader(formats)
 
         # Skips the header row.
@@ -263,7 +262,7 @@ def collection_subtotals():
     # TODO: not addressing that rbrl-### and rbrl### are the same thing.
 
     # Gets information from the formats report.
-    df = pd.read_csv(formats_report)
+    df = pd.read_csv(formats_by_aip_report)
 
     # Creates dataframes of format type and format standardized name.
     type_count = df.groupby('Format_Type')['Collection'].nunique()
@@ -277,7 +276,7 @@ def aip_subtotals():
     """Returns dataframes with the counts of unique AIPs by format type and standardized format name."""
 
     # Gets information from the formats report.
-    df = pd.read_csv(formats_report)
+    df = pd.read_csv(formats_by_aip_report)
 
     # Creates dataframes of format type and format standardized name.
     type_count = df.groupby('Format_Type')['AIP'].nunique()
@@ -292,8 +291,7 @@ def file_subtotals():
     formats with multiple possible identifications. """
 
     # Gets information from the formats report.
-    # TODO: file count isn't in the csv by AIP and doesn't make sense to - would inflate those numbers further.
-    df = pd.read_csv("archive_formats_2020-10.csv")
+    df = pd.read_csv(formats_report)
 
     # Creates dataframes of format type and format standardized name.
     # #ach has subtotals of collection, AIP, and file counts.
@@ -317,20 +315,26 @@ except (IndexError, FileNotFoundError):
     print("Script usage_report: python /path/csv_merge.py /path/reports [/path/standardize_formats.csv]")
     exit()
 
-# Gets paths for the archive formats_report csv (combines all the group format information) and usage_report report.
-# Both should be in the report folder. If either is not found, prints an error and quits the script.
+# Gets paths for the data files used in this script, which should be in the report folder.
+# If any are not found, prints an error and quits the script.
+formats_by_aip_report = False
 formats_report = False
 usage_report = False
 
-# TODO find the other archive formats csv at this stage too if stick with by_aip strategy.
 for file in os.listdir('.'):
+    # This CSV has one line per AIP and unique format. AIPs have multiple rows. Allows aggregating collection and AIP
+    # format inforamtion without unpacking lists of ids.
     if file.startswith('archive_formats_by_aip') and file.endswith('.csv'):
+        formats_by_aip_report = file
+    # This CSV has one line per unique format. Allows aggregating file count information.
+    elif file.startswith('archive_formats_') and file.endswith('.csv'):
         formats_report = file
+    # This CSV has user and group ingest information.
     elif file.startswith('usage_report_') and file.endswith('.csv'):
         usage_report = file
 
-if not formats_report:
-    print("Could not find archive formats_report csv in the report folder.")
+if not formats_by_aip_report:
+    print("Could not find archive formats_by_aip_report csv in the report folder.")
     if not usage_report:
         print("Could not find usage_report report csv in the report folder.")
     exit()
