@@ -152,12 +152,6 @@ def archive_overview():
             # Returns the dictionary. Keys are group codes and values are collection counts.
             return group_collections
 
-    def files_count():
-        """EXPERIMENT: get files per group."""
-        df = pd.read_csv(formats_report)
-        group = df.groupby('Group').sum()
-        return group[['File_Count']]
-
     # Gets the size (TB) and number of AIPs per group from the usage report.
     group_information = size_and_aips_count()
 
@@ -175,13 +169,13 @@ def archive_overview():
 
     # Gets the number of files per group from the other formats report.
     # These numbers are inflated by files with more than one format.
-    files_by_group = files_count()
+    files_by_group = df.groupby('Group')['File_Count'].sum()
 
     # Adds the file counts to the lists in the group_information dictionary for each group.
     # index = type
     # row has the count, name, and data type.
-    for index, row in files_by_group.iterrows():
-        group_information[index].append(row['File_Count'])
+    for index, row in files_by_group.iteritems():
+        group_information[index].append(row)
 
     # Adds zero for file count if no value there.
     # TODO might be a way to do this with data frames.
