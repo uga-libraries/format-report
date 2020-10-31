@@ -6,6 +6,9 @@
 # TESTING: does this get simpler if using the merged csv organized by aip-format instead of by format? Can I do any
 # additional types of analysis?
 
+# TODO: if can get everything to dataframes, I don't think we need all the functions.
+# Dataframes just takes a few lines.
+
 import csv
 import datetime
 import openpyxl
@@ -205,64 +208,19 @@ def archive_overview():
     return group_information
 
 
-def collection_subtotals_by_hand():
-    """Returns a dictionaries with counts of unique collections by format type and normalized format name. Keeping
-    this for now because of the Russell variation issue but hopefully can solve that with dataframes. """
-    type_count = {}
-    name_count = {}
-
-    # Gets the data from the formats report.
-    with open(formats_by_aip_report, 'r') as formats:
-        formats_read = csv.reader(formats)
-
-        # Skips the header row.
-        next(formats_read)
-
-        # Gets the data from each row in the report, which has information about a single format for that group.
-        # row[0] is group, row[1] is collection id, row[3] is format type, row[4] is format standardized name.
-        for row in formats_read:
-
-            # Get the collection id.
-            collection_id = row[1]
-
-            # For Russell, remove the dash from collection identifiers, since there can be two id formats for the same
-            # collection, rbrl-### and rbrl###. If both variations are present, just want to count it once.
-            if row[0] == 'russell':
-                collection_id = collection_id.replace('-', '')
-
-            # Adds the collection to a dictionary unless already there.
-            # Key is format type and value is a list of collection ids.
-            try:
-                if collection_id not in type_count[row[3]]:
-                    type_count[row[3]].append(collection_id)
-            except KeyError:
-                type_count[row[3]] = [collection_id]
-
-            # Adds each collection to a dictionary unless already there.
-            # Key is standardized format name and value is a list of collection ids.
-            try:
-                if collection_id not in name_count[row[4]]:
-                    name_count[row[4]].append(collection_id)
-            except KeyError:
-                name_count[row[4]] = [collection_id]
-
-        # Convert the list of collections in each dictionary to the count of unique collections.
-        for key, value in type_count.items():
-            type_count[key] = len(value)
-
-        for key, value in name_count.items():
-            name_count[key] = len(value)
-
-        # Returns both dictionaries
-        return type_count, name_count
-
-
 def collection_subtotals():
     """Returns dataframes with the counts of unique collections by format type and standardized format name."""
     # TODO: not addressing that rbrl-### and rbrl### are the same thing.
 
     # Gets information from the formats report.
     df = pd.read_csv(formats_by_aip_report)
+
+    # TODO: this replaces dash in all collection ids. Probably ok (not creating duplicates) but more than want to do.
+    # Updates collection ids to remove dash, since rbrl-### and rbrl### should be treated as one collection. This
+    # filters for russell collections: df.loc[df['Group'] == 'russell']['Collection'], but gives error if put it on
+    # left of = and if put on right for df['Collection'] all other collection ids become NaN. russell_collections =
+    # russell_collections.str.replace('-', '')
+    df['Collection'] = df['Collection'].str.replace('-', '')
 
     # Creates dataframes of format type and format standardized name.
     type_count = df.groupby('Format_Type')['Collection'].nunique()
