@@ -153,46 +153,52 @@ def archive_overview():
             return group_collections
 
     # Gets the size (TB) and number of AIPs per group from the usage report.
-    group_information = size_and_aips_count()
+    # group_information = size_and_aips_count()
 
-    # Gets the number of collections per group from the formats report.
+    # Gets the number of collections per group from the formats by AIP report.
     # Only counts collections with AIPs, which may result in a difference between this count and ARCHive's count.
-    collections_by_group = collections_count()
+    collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
-    # Adds the collection counts to the lists in the group_information dictionary for each group.
-    # If the group does not have a collection count, supplies a value of zero.
-    for group in group_information:
-        try:
-            group_information[group].append(collections_by_group[group])
-        except KeyError:
-            group_information[group].append(0)
+    # Calculates the number of collections starting 'guan_'. Those should be dlg-hargrett but are dlg.
+    # Updates the values in the dataframe to correct for the error.
+    # TODO: this isn't working right
+    dlg = df_aip[df_aip.Group.eq('dlg')]
+    print(dlg.Collection.str.count("guan_")).sum()
 
     # Gets the number of files per group from the other formats report.
     # These numbers are inflated by files with more than one format.
     files_by_group = df.groupby('Group')['File_Count'].sum()
 
-    # Adds the file counts to the lists in the group_information dictionary for each group.
-    # index = type
-    # row has the count, name, and data type.
-    for index, row in files_by_group.iteritems():
-        group_information[index].append(row)
+    # Adds the collection counts to the lists in the group_information dictionary for each group.
+    # If the group does not have a collection count, supplies a value of zero.
+    # for group in group_information:
+    #     try:
+    #         group_information[group].append(collections_by_group[group])
+    #     except KeyError:
+    #         group_information[group].append(0)
 
-    # Adds zero for file count if no value there.
-    # TODO might be a way to do this with data frames.
-    for value in group_information.values():
-        if len(value) == 3:
-            value.append(0)
+    # # Adds the file counts to the lists in the group_information dictionary for each group.
+    # # index = type
+    # # row has the count, name, and data type.
+    # for index, row in files_by_group.iteritems():
+    #     group_information[index].append(row)
+    #
+    # # Adds zero for file count if no value there.
+    # # TODO might be a way to do this with data frames.
+    # for value in group_information.values():
+    #     if len(value) == 3:
+    #         value.append(0)
 
-    # Gets total for file count of all groups.
-    # TODO might be a way to do this with data frames. Should be total = df_aip['MyColumn'].sum()
-    total_files = 0
-    for key in group_information:
-        if not key == 'total':
-            total_files += group_information[key][3]
-    group_information['total'][3] = total_files
-
-    # Return the information
-    return group_information
+    # # Gets total for file count of all groups.
+    # # TODO might be a way to do this with data frames. Should be total = df_aip['MyColumn'].sum()
+    # total_files = 0
+    # for key in group_information:
+    #     if not key == 'total':
+    #         total_files += group_information[key][3]
+    # group_information['total'][3] = total_files
+    #
+    # # Return the information
+    # return group_information
 
 
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
@@ -254,19 +260,19 @@ df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 # TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
 wb = openpyxl.Workbook()
 
-# Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-# Renames the sheet made when starting a workbook to ARCHive Overview.
-ws1 = wb.active
-ws1.title = "ARCHive Overview"
-
-# Adds a header row to the sheet.
-ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
-
-# Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
+# # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
+# # Renames the sheet made when starting a workbook to ARCHive Overview.
+# ws1 = wb.active
+# ws1.title = "ARCHive Overview"
+#
+# # Adds a header row to the sheet.
+# ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
+#
+# # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
 overview = archive_overview()
-for key, value in overview.items():
-    value.insert(0, key)
-    ws1.append(value)
+# for key, value in overview.items():
+#     value.insert(0, key)
+#     ws1.append(value)
 
 
 # Makes the format types report and saves to the spreadsheet.
