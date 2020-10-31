@@ -6,9 +6,6 @@
 # TESTING: does this get simpler if using the merged csv organized by aip-format instead of by format? Can I do any
 # additional types of analysis?
 
-# TODO: if can get everything to dataframes, I don't think we need all the functions.
-# Dataframes just takes a few lines.
-
 import csv
 import datetime
 import openpyxl
@@ -97,11 +94,7 @@ def archive_overview():
     def collections_count():
         """Calculates the number of unique collections for each group using the formats report, and then calculates
         the total number of unique collections in ARCHive from the group totals. Returns a dictionary with the group
-        codes as the keys and collection counts as the values.
-
-        NOTE: if there are any AIPs where the collection was not calculated, each one of those AIPs will count as a
-        separate collection, inflating the numbers. However, these errors generally will have been addressed prior to
-        running this script. """
+        codes as the keys and collection counts as the values."""
         # TODO: add error handling in case AIPs without collections calculated remain in the formats report?
 
         # Makes a dictionary for storing the collection totals.
@@ -251,6 +244,17 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
+# Makes dataframes from both format reports.
+df = pd.read_csv(formats_report)
+df_aip = pd.read_csv(formats_by_aip_report)
+
+# TODO: this replaces dash in all collection ids. Probably ok (not creating duplicates) but more than want to do.
+# Updates collection ids to remove dash, since rbrl-### and rbrl### should be treated as one collection. This
+# filters for russell collections: df_aip.loc[df_aip['Group'] == 'russell']['Collection'], but gives error if put it on
+# left of = and if put on right for df_aip['Collection'] all other collection ids become NaN. russell_collections =
+# russell_collections.str.replace('-', '')
+df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
+
 # Makes a spreadsheet to save results to.
 # TODO: Making a tab, adding a header, and saving all the results of calling a function is repeating. Own function?
 # TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
@@ -270,16 +274,6 @@ for key, value in overview.items():
     value.insert(0, key)
     ws1.append(value)
 
-# Makes dataframes from both format reports.
-df = pd.read_csv(formats_report)
-df_aip = pd.read_csv(formats_by_aip_report)
-
-# TODO: this replaces dash in all collection ids. Probably ok (not creating duplicates) but more than want to do.
-# Updates collection ids to remove dash, since rbrl-### and rbrl### should be treated as one collection. This
-# filters for russell collections: df_aip.loc[df_aip['Group'] == 'russell']['Collection'], but gives error if put it on
-# left of = and if put on right for df_aip['Collection'] all other collection ids become NaN. russell_collections =
-# russell_collections.str.replace('-', '')
-df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 
 # Makes the format types report and saves to the spreadsheet.
 # Count of unique collections, unique AIPs, and (some inflation) files for each format type.
