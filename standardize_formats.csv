@@ -441,7 +441,7 @@ Wave,WAVE,audio
 Waveform Audio,Waveform Audio,audio
 Web Open Font Format,Web Open Font Format,application
 Win32 DLL,Win32 DLL,application
-Windows Bitmap,Windows Bitmap,image
+Windows Bitmap,BMP,image
 Windows Help File,Windows Help File,application
 Windows Media Audio,Windows Media,audio
 Windows Media Video,Windows Media,video
