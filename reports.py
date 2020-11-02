@@ -32,7 +32,8 @@ def archive_overview():
         # Makes a dictionary for storing data for each group that will later be saved to the summary CSV.
         group_data = {}
 
-        # Gets the data from the usage report.
+        # Gets the data from the usage report. Reading this csv instead of making it a dataframe immediately because
+        # of all the value updates and the inconsistent values for the different rows.
         with open(usage_report, 'r') as usage:
             usage_read = csv.reader(usage)
 
@@ -73,6 +74,7 @@ def archive_overview():
                     elif unit == 'TB':
                         size = float(size)
                     else:
+                        size = 0
                         print("WARNING! Unexpected unit type:", unit)
 
                     # Rounds the size in TB to three decimal places so the number is easier to read.
@@ -81,19 +83,14 @@ def archive_overview():
                     # Adds the results for this group to the dictionary.
                     group_data[group_code] = ([size, aip_count])
 
-            # Calculates the total size and total number of AIPs across all groups and adds to the dictionary.
-            total_size = 0
-            total_aips = 0
-            for group_code in group_data:
-                total_size += group_data[group_code][0]
-                total_aips += group_data[group_code][1]
-            group_data['total'] = [total_size, total_aips]
+        # Makes the dictionary into a dataframe so it can be combined with the collection and file counts.
+        group_dataframe = pd.DataFrame.from_dict(group_data, orient='index', columns=['Size', 'AIPs'])
 
-            # Returns the dictionary. The keys are group_code and the values are [group_code, size, aip_count].
-            return group_data
+        # Returns the dataframe. Row index is the group_code and columns are the size in TBs and AIPs count.
+        return group_dataframe
 
     # Gets the size (TB) and number of AIPs per group from the usage report.
-    # group_information = size_and_aips_count()
+    size_and_aips_by_group = size_and_aips_count()
 
     # Gets the number of collections per group from the formats by AIP report.
     # Only counts collections with AIPs, which may result in a difference between this count and ARCHive's count.
@@ -111,20 +108,16 @@ def archive_overview():
     # These numbers are inflated by files with more than one format.
     files_by_group = df.groupby('Group')['File_Count'].sum()
 
-    # Adds the collection counts to the lists in the group_information dictionary for each group.
-    # If the group does not have a collection count, supplies a value of zero.
-    # for group in group_information:
-    #     try:
-    #         group_information[group].append(collections_by_group[group])
-    #     except KeyError:
-    #         group_information[group].append(0)
+    # Combines the dataframes into a single dataframe.
+    # TODO: update column names. Size (TB), AIPs, Collections, Files (inflated).
+    # TODO: Collections and Files should be integer, not float.
+    group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
+    group_combined = pd.concat(group_frames, axis=1)
+    print(group_combined)
 
-    # # Adds the file counts to the lists in the group_information dictionary for each group.
-    # # index = type
-    # # row has the count, name, and data type.
-    # for index, row in files_by_group.iteritems():
-    #     group_information[index].append(row)
-    #
+    # Adds the column totals to the format type dataframes.
+    #group_combined.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
+
     # # Adds zero for file count if no value there.
     # # TODO might be a way to do this with data frames.
     # for value in group_information.values():
