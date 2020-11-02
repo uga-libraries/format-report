@@ -192,24 +192,20 @@ df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 overview = archive_overview()
 
 
-# Makes the format types report and saves to the spreadsheet.
-# Count of unique collections, unique AIPs, and (some inflation) files for each format type.
-
-# Creates the subtotals by format type using dataframes and combines them into a single dataframe.
+# Makes the format types report (Collections, AIPs, and Files by format type).
+# Creates the subtotals by format type, combines them into a single dataframe, and adds a row for column totals.
+# TODO: add percentages?
+# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 file_type = df.groupby('Format_Type')['File_Count'].sum()
-types_combined = pd.concat([collection_type, aip_type, file_type], axis=1)
-
-# TODO: add percentages?
-# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
-# Adds the column totals to the format type dataframes.
-types_combined.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
+format_types = pd.concat([collection_type, aip_type, file_type], axis=1)
+format_types.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
 
 # Saves each report as a tab in an Excel spreadsheet
 with pd.ExcelWriter('ARCHive Format Report_Test.xlsx') as writer:
     overview.to_excel(writer, sheet_name='Archive Overview')
-
+    format_types.to_excel(writer, sheet_name='Format Types')
 
 #
 # # To do ExcelWriter more than once and not overwrite, need append mode. Or can wait and save it all at once at the end.
