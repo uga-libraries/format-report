@@ -207,6 +207,11 @@ file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
 format_names = pd.concat([collection_name, aip_name, file_name], axis=1)
 format_names.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.sum()]
 
+# Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
+# Removes the total row since that is only accurate for the complete list.
+common_formats = format_names[format_names.File_Count > 500]
+common_formats = common_formats.drop(['total'])
+
 # Saves each report as a tab in an Excel spreadsheet.
 # The spreadsheet includes today's date, formatted YYYYMM, in the name, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
@@ -214,6 +219,7 @@ with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name='Archive Overview')
     format_types.to_excel(results, sheet_name='Format Types')
     format_names.to_excel(results, sheet_name='Format Names')
+    common_formats.to_excel(results, sheet_name='Risk Analysis')
 
 
 # # TODO: Reports I was making with pandas that are not included here
