@@ -192,19 +192,26 @@ df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 # TODO: can I sort? Bold the first row? Add a chart? What else can I do besides save to a tab?
 wb = openpyxl.Workbook()
 
-# # Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
-# # Renames the sheet made when starting a workbook to ARCHive Overview.
-# ws1 = wb.active
-# ws1.title = "ARCHive Overview"
-#
-# # Adds a header row to the sheet.
-# ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
-#
-# # Gets the data and adds every entry in the dictionary as its own row in the spreadsheet.
+# Makes the ARCHive overview report (TBS, AIPs, and Collections by group) and saves to the report spreadsheet.
+
+# Gets the data for the overview as a dataframe.
 overview = archive_overview()
-# for key, value in overview.items():
-#     value.insert(0, key)
-#     ws1.append(value)
+
+# Renames the sheet made when starting a workbook to ARCHive Overview.
+ws1 = wb.active
+ws1.title = "ARCHive Overview"
+
+# Adds a header row to the sheet.
+ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
+
+# Converts the overview dataframe to a list of lists, one list per row.
+# reset_index() includes the index value (the type) and values.tolist() adds the counts.
+# TODO: save directly to Excel from dataframe? See reports_pandas.py
+overview_rows = overview.reset_index().values.tolist()
+
+# Adds the overview data to the ARCHive Overview tab in the results spreadsheet.
+for overview_row in overview_rows:
+    ws1.append(overview_row)
 
 
 # Makes the format types report and saves to the spreadsheet.
