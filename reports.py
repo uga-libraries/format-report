@@ -113,16 +113,13 @@ def archive_overview():
     # TODO: Collections and Files should be integer, not float.
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
+
+    # Replace cells without values (groups that have no collection) with 0.
+    group_combined = group_combined.fillna(0)
     print(group_combined)
 
     # Adds the column totals to the format type dataframes.
     #group_combined.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
-
-    # # Adds zero for file count if no value there.
-    # # TODO might be a way to do this with data frames.
-    # for value in group_information.values():
-    #     if len(value) == 3:
-    #         value.append(0)
 
     # # Gets total for file count of all groups.
     # # TODO might be a way to do this with data frames. Should be total = df_aip['MyColumn'].sum()
