@@ -3,12 +3,8 @@
 # Usage: python /path/reports.py ????
 # TODO: before delete any previous scripts, read through one more time for ideas for future work.
 
-# TESTING: does this get simpler if using the merged csv organized by aip-format instead of by format? Can I do any
-# additional types of analysis?
-
 import csv
 import datetime
-import openpyxl
 import os
 import pandas as pd
 import sys
@@ -211,17 +207,14 @@ file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
 format_names = pd.concat([collection_name, aip_name, file_name], axis=1)
 format_names.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.sum()]
 
-# Saves each report as a tab in an Excel spreadsheet
-with pd.ExcelWriter('ARCHive Format Report_Test.xlsx') as writer:
-    overview.to_excel(writer, sheet_name='Archive Overview')
-    format_types.to_excel(writer, sheet_name='Format Types')
-    format_names.to_excel(writer, sheet_name='Format Names')
+# Saves each report as a tab in an Excel spreadsheet.
+# The spreadsheet includes today's date, formatted YYYYMM, in the name, and is saved in the report folder.
+today = datetime.datetime.now().strftime("%Y-%m")
+with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
+    overview.to_excel(results, sheet_name='Archive Overview')
+    format_types.to_excel(results, sheet_name='Format Types')
+    format_names.to_excel(results, sheet_name='Format Names')
 
-# # Gets the current date, formatted YYYYMM, to use in naming the merged file.
-# today = datetime.datetime.now().strftime("%Y-%m")
-#
-# # Can save after each tab if want. Do not save, change the tab, and re-save or it will overwrite.
-# wb.save(f"ARCHive Format Report_{today}.xlsx")
 
 # # TODO: Reports I was making with pandas that are not included here
 # # Are these helpful or would we just go back to the main spreadsheet?
@@ -235,4 +228,4 @@ with pd.ExcelWriter('ARCHive Format Report_Test.xlsx') as writer:
 # # Adding in size, if Shawn can update the format report.
 # # Calculate the number of individual formats in a name or type grouping?
 # # Calculate the average amount of format variety in a collection or AIP?
-# # Compare to the NARA risk framework?
+# # Compare to the NARA risk framework (already a spreadsheet) or LOC (PDF)?
