@@ -319,7 +319,7 @@ MS-DOS executable,MS-DOS executable,executable
 "MS-DOS executable, NE for MS Windows 3.x (driver)",MS-DOS executable,executable
 ms-windows metafont .wmf,MS Windows metafont,application
 Musical Instrument Digital Interface,Musical Instrument Digital Interface,audio
-MXF,Material Exchange Format,video
+MXF,MXF,video
 NEF EXIF,NEF EXIF,image
 "news or mail, ASCII text, with CRLF line terminators",News or mail,message
 "news or mail, ASCII text, with no line terminators",News or mail,message
