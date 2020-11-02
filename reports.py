@@ -207,6 +207,7 @@ ws1.append(['Group', 'Size (TBs)', 'AIPs', 'Collections', 'Files (inflated)'])
 # Converts the overview dataframe to a list of lists, one list per row.
 # reset_index() includes the index value (the type) and values.tolist() adds the counts.
 # TODO: save directly to Excel from dataframe? See reports_pandas.py
+# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
 overview_rows = overview.reset_index().values.tolist()
 
 # Adds the overview data to the ARCHive Overview tab in the results spreadsheet.
@@ -283,3 +284,4 @@ wb.save(f"ARCHive Format Report_{today}.xlsx")
 # # Adding in size, if Shawn can update the format report.
 # # Calculate the number of individual formats in a name or type grouping?
 # # Calculate the average amount of format variety in a collection or AIP?
+# # Compare to the NARA risk framework?
