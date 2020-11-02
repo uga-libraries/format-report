@@ -15,8 +15,8 @@ import sys
 
 
 def archive_overview():
-    """Makes a report with the TBs, AIPs, and Collections per group and total for ARCHive."""
-    # TODO: make this dataframes. And add back in any group with nothing (dlg-magil).
+    """Gets TBs, AIPs, Collections, and Files per group and total for ARCHive using the usage and formats reports.
+    Returns the information in a dataframe. """
 
     def size_and_aips_count():
         """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and AIP
@@ -109,24 +109,28 @@ def archive_overview():
     files_by_group = df.groupby('Group')['File_Count'].sum()
 
     # Combines the dataframes into a single dataframe.
-    # TODO: update column names. Size (TB), AIPs, Collections, Files (inflated).
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
+    # Renames the columns. Only AIPs stays the same.
+    group_combined = group_combined.rename(columns={"Size": "Size (TB)", "Collection": "Collections",
+                                                    "File_Count": "Files (inflated)"})
+
     # For Collections and File_Count, replace cells without values (groups that have no collection or files) with 0
     # and returns them to being integers. These counts are initially floats (decimal numbers) because of the blank
-    group_combined['Collection'] = group_combined['Collection'].fillna(0).astype(int)
-    group_combined['File_Count'] = group_combined['File_Count'].fillna(0).astype(int)
+    group_combined = group_combined.fillna(0)
 
     # Adds the column totals to the format type dataframes.
-    # TODO: This gives column totals correctly but returns all columns to being floats.
-    # Tried casting sum as int() or doing .astype(int) after sum and does not change it.
-    group_combined.loc['total'] = [group_combined['Size'].sum(), group_combined['AIPs'].sum(),
-                                   group_combined['Collection'].sum(), group_combined['File_Count'].sum()]
-    print(group_combined)
+    group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['AIPs'].sum(),
+                                   group_combined['Collections'].sum(), group_combined['Files (inflated)'].sum()]
 
-    # # Return the information
-    # return group_information
+    # Makes all rows except size integers, since counts must be whole numbers.
+    group_combined['AIPs'] = group_combined['AIPs'].astype(int)
+    group_combined['Collections'] = group_combined['Collections'].astype(int)
+    group_combined['Files (inflated)'] = group_combined['Files (inflated)'].astype(int)
+
+    # Returns the information in a dataframe
+    return group_combined
 
 
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
