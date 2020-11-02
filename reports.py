@@ -110,7 +110,6 @@ def archive_overview():
 
     # Combines the dataframes into a single dataframe.
     # TODO: update column names. Size (TB), AIPs, Collections, Files (inflated).
-    # TODO: Collections and Files should be integer, not float.
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
@@ -118,19 +117,14 @@ def archive_overview():
     # and returns them to being integers. These counts are initially floats (decimal numbers) because of the blank
     group_combined['Collection'] = group_combined['Collection'].fillna(0).astype(int)
     group_combined['File_Count'] = group_combined['File_Count'].fillna(0).astype(int)
-    print(group_combined)
 
     # Adds the column totals to the format type dataframes.
-    #group_combined.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
+    # TODO: This gives column totals correctly but returns all columns to being floats.
+    # Tried casting sum as int() or doing .astype(int) after sum and does not change it.
+    group_combined.loc['total'] = [group_combined['Size'].sum(), group_combined['AIPs'].sum(),
+                                   group_combined['Collection'].sum(), group_combined['File_Count'].sum()]
+    print(group_combined)
 
-    # # Gets total for file count of all groups.
-    # # TODO might be a way to do this with data frames. Should be total = df_aip['MyColumn'].sum()
-    # total_files = 0
-    # for key in group_information:
-    #     if not key == 'total':
-    #         total_files += group_information[key][3]
-    # group_information['total'][3] = total_files
-    #
     # # Return the information
     # return group_information
 
