@@ -191,9 +191,8 @@ df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 # Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
-
-# Makes the format types report (Collections, AIPs, and Files by format type).
-# Creates the subtotals by format type, combines them into a single dataframe, and adds a row for column totals.
+# Makes the format types report (collection, AIP, and file counts).
+# Creates the subtotals for each count type, combines them into a single dataframe, and adds a row for column totals.
 # TODO: add percentages?
 # TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
@@ -202,53 +201,22 @@ file_type = df.groupby('Format_Type')['File_Count'].sum()
 format_types = pd.concat([collection_type, aip_type, file_type], axis=1)
 format_types.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
 
+# Makes the format standardized name report (collection, AIP, and file counts).
+# Creates the subtotals for each count type, combines them into a single dataframe, and adds a row for column totals.
+# TODO: add percentages?
+# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
+collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
+aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
+file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
+format_names = pd.concat([collection_name, aip_name, file_name], axis=1)
+format_names.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.sum()]
+
 # Saves each report as a tab in an Excel spreadsheet
 with pd.ExcelWriter('ARCHive Format Report_Test.xlsx') as writer:
     overview.to_excel(writer, sheet_name='Archive Overview')
     format_types.to_excel(writer, sheet_name='Format Types')
+    format_names.to_excel(writer, sheet_name='Format Names')
 
-#
-# # To do ExcelWriter more than once and not overwrite, need append mode. Or can wait and save it all at once at the end.
-# with pd.ExcelWriter('test.xlsx', mode='a') as writer:
-#     types_combined.to_excel(writer, sheet_name='Format Type')
-#
-# # Converts the format standardized name dataframe to a list of lists, one list per row.
-# # reset_index() includes the index value (the type) and values.tolist() adds the counts.
-# # TODO: save directly to Excel from dataframe? See reports_pandas.py
-# type_rows = types_combined.reset_index().values.tolist()
-#
-# # Adds the format type data to a tab in the results spreadsheet, with a header row.
-# ws2 = wb.create_sheet(title="type_counts")
-# ws2.append(['Format Type', 'Collection Count', 'AIP Count', 'File Count'])
-# for type_row in type_rows:
-#     ws2.append(type_row)
-#
-#
-# # Makes the format standardized name report and saves to the spreadsheet.
-# # Count of unique collections, unique AIPs, and (some inflation) files for each format standardized name.
-#
-# # Creates the subtotals by format standardized name using dataframes and combines them into a single dataframe.
-# collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
-# aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
-# file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
-# name_frames = [collection_name, aip_name, file_name]
-# names_combined = pd.concat(name_frames, axis=1)
-#
-# # TODO: add percentages?
-# # Adds the column totals to the format standardized name dataframe.
-# names_combined.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.sum()]
-#
-# # Converts the format standardized name dataframe to a list of lists, one list per row.
-# # reset_index() includes the index value (the type) and values.tolist() adds the counts.
-# name_rows = names_combined.reset_index().values.tolist()
-#
-# # Adds the format standardized name data to a tab in the results spreadsheet, with a header row.
-# ws3 = wb.create_sheet(title="name_counts")
-# ws3.append(['Format Standardized Name', 'Collection Count', 'AIP Count', 'File Count'])
-# for name_row in name_rows:
-#     ws3.append(name_row)
-#
-#
 # # Gets the current date, formatted YYYYMM, to use in naming the merged file.
 # today = datetime.datetime.now().strftime("%Y-%m")
 #
