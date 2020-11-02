@@ -114,8 +114,10 @@ def archive_overview():
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
-    # Replace cells without values (groups that have no collection) with 0.
-    group_combined = group_combined.fillna(0)
+    # For Collections and File_Count, replace cells without values (groups that have no collection or files) with 0
+    # and returns them to being integers. These counts are initially floats (decimal numbers) because of the blank
+    group_combined['Collection'] = group_combined['Collection'].fillna(0).astype(int)
+    group_combined['File_Count'] = group_combined['File_Count'].fillna(0).astype(int)
     print(group_combined)
 
     # Adds the column totals to the format type dataframes.
