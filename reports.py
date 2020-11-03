@@ -12,6 +12,7 @@ Ideas for future development:
     * Have size as well as count included in the file formats reports so can summarize by size.
     * Calculate the number of individual formats in a name or type grouping?
     * Calculate the range of format variety in a collection or AIP?
+    * Shared formats across groups? By standard name, original name, or original name + version + puid?
 """
 
 # Usage: python /path/reports.py report_folder
@@ -213,7 +214,6 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # russell_collections.str.replace('-', '')
 df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 
-
 # The rest of this script uses pandas to calculate the collection count, AIP count, and file count for different
 # combinations of data categories. These categories are:
 #   * Group: ARCHive group name, which is the department or departments responsible for the content.
@@ -240,7 +240,8 @@ aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_Count'].sum()
 file_type_percent = percentage(file_type, file_total, "File Percentage")
-format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
+format_types = pd.concat(
+    [collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
 format_types.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
 # Makes the format standardized name report (collection, AIP, and file counts and percentages).
@@ -254,7 +255,8 @@ aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
 aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
 file_name_percent = percentage(file_name, file_total, "File Percentage")
-format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
+format_names = pd.concat(
+    [collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
 format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
@@ -263,17 +265,19 @@ common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
 # Makes reports with subtotals by two criteria.
-# TODO: address duplication of collections and aips and ave to the spreadsheet.
-format_type_then_group = df.groupby(['Format_Type', 'Group']).sum()
-format_type_then_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
-name_then_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
+# TODO: address duplication of collections and aips.
+# Using nunique() on df_aip does give unique collections and aips - but file count not included and rest of columns are.
+# Also reintroduces the dlg-hargrett vs. dlg issue. Clean up in the dataframe!!!!!
+type_by_group = df_aip.groupby(['Format_Type', 'Group']).nunique()
 
-# Saves each report as a tab in an Excel spreadsheet.
-# The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# type_by_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
+# name_by_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
+
+# # Saves each report as a tab in an Excel spreadsheet.
+# # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
-    overview.to_excel(results, sheet_name='Archive Overview')
-    format_types.to_excel(results, sheet_name='Format Types')
-    format_names.to_excel(results, sheet_name='Format Names')
-    common_formats.to_excel(results, sheet_name='Risk Analysis')
-
+    #     format_types.to_excel(results, sheet_name="Format Types")
+    #     format_names.to_excel(results, sheet_name="Format Names")
+    #     common_formats.to_excel(results, sheet_name="Risk Analysis")
+    type_by_group.to_excel(results, sheet_name="Type by Group")
