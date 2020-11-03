@@ -145,6 +145,20 @@ def archive_overview():
     return group_combined
 
 
+def percentage(dataframe, total, new_name):
+    """Makes a new dataframe that is the percent of each value in an existing dataframe.
+    This is a short function but repeats in the code many times."""
+
+    # Calculates the percentage, which is rounded to two decimal places. It remains a number and does not have % sign.
+    new_df = round((dataframe / total) * 100, 2)
+
+    # Renames the column to the specified name. Otherwise, it will the same as the original dataframe.
+    # Column names matter since they become the column header in the results Excel spreadsheet.
+    new_df = new_df.rename(new_name)
+
+    return new_df
+
+
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
 # the argument is missing or not a valid directory.
 try:
@@ -215,16 +229,22 @@ collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['Files (inflated)']['total']
 
-# Makes the format types report (collection, AIP, and file counts).
-# Creates the subtotals for each count type and combines them into a single dataframe.
-# Gets collection, AIP, and file totals from the overview dataframe and includes in this dataframe.
+
+# Makes the format types report (collection, AIP, and file counts and percentages).
+# Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
+# Combines all six dataframes into a single dataframe.
+# Gets collection, AIP, and file totals from the overview dataframe and adds to this dataframe.
 # Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
-# TODO: add percentages?
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
+collection_percent = percentage(collection_type, collection_total, "Collection Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
+aip_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_Count'].sum()
-format_types = pd.concat([collection_type, aip_type, file_type], axis=1)
-format_types.loc['total'] = [collection_total, aip_total, file_total]
+file_percent = percentage(file_type, file_total, "File Percentage")
+format_types = pd.concat([collection_type, collection_percent, aip_type, aip_percent, file_type, file_percent], axis=1)
+format_types.loc['total'] = [collection_total, 'n/a', aip_total, 'n/a', file_total, 'n/a']
+
+
 
 # Makes the format standardized name report (collection, AIP, and file counts).
 # Creates the subtotals for each count type and combines them into a single dataframe.
