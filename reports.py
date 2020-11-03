@@ -229,33 +229,33 @@ collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['Files (inflated)']['total']
 
-
 # Makes the format types report (collection, AIP, and file counts and percentages).
 # Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
 # Combines all six dataframes into a single dataframe.
 # Gets collection, AIP, and file totals from the overview dataframe and adds to this dataframe.
 # Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
-collection_percent = percentage(collection_type, collection_total, "Collection Percentage")
+collection_type_percent = percentage(collection_type, collection_total, "Collection Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
-aip_percent = percentage(aip_type, aip_total, "AIP Percentage")
+aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_Count'].sum()
-file_percent = percentage(file_type, file_total, "File Percentage")
-format_types = pd.concat([collection_type, collection_percent, aip_type, aip_percent, file_type, file_percent], axis=1)
-format_types.loc['total'] = [collection_total, 'n/a', aip_total, 'n/a', file_total, 'n/a']
+file_type_percent = percentage(file_type, file_total, "File Percentage")
+format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
+format_types.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
-
-
-# Makes the format standardized name report (collection, AIP, and file counts).
-# Creates the subtotals for each count type and combines them into a single dataframe.
-# Gets collection, AIP, and file totals from the overview dataframe and includes in this dataframe.
+# Makes the format standardized name report (collection, AIP, and file counts and percentages).
+# Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
+# Combines all six dataframes into a single dataframe.
+# Gets collection, AIP, and file totals from the overview dataframe and adds to this dataframe.
 # Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
-# TODO: add percentages?
 collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
+collection_name_percent = percentage(collection_name, collection_total, "Collection Percentage")
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
+aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
-format_names = pd.concat([collection_name, aip_name, file_name], axis=1)
-format_names.loc['total'] = [collection_total, aip_total, file_total]
+file_name_percent = percentage(file_name, file_total, "File Percentage")
+format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
+format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 # Removes the total row since that is only accurate for the complete list.
