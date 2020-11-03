@@ -1,6 +1,22 @@
-"""EXPLANATION and prior to running instructions. Explain what the format and usage reports are."""
+"""Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
+names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
 
-# Usage: python /path/reports.py ????
+# TODO: explain the two different format csvs and the usage report
+This script uses the merged ARCHive formats CSV, which is created with the csv_merge.py script. This CSV is organized
+by group and then by format name. Relevant columns for this analysis are Group, Collection_Count, AIP_Count,
+File_Count, Format_Type, Format_Standardized_Name, and Format_Name.
+
+Ideas for future development:
+    * Map NARA and LOC risk assessments to the most common formats.
+    * A report that compares the current report to a previous one to show change over time.
+    * Have size as well as count included in the file formats reports so can summarize by size.
+    * Calculate the number of individual formats in a name or type grouping?
+    * Calculate the range of format variety in a collection or AIP?
+"""
+
+# Usage: python /path/reports.py report_folder
+# Report folder should contain the format CSVs and usage report. Script output is saved to this folder as well.
+
 # TODO: before delete any previous scripts, read through one more time for ideas for future work.
 
 import csv
@@ -147,7 +163,7 @@ usage_report = False
 
 for file in os.listdir('.'):
     # This CSV has one line per AIP and unique format. AIPs have multiple rows. Allows aggregating collection and AIP
-    # format inforamtion without unpacking lists of ids.
+    # format information without unpacking lists of ids.
     if file.startswith('archive_formats_by_aip') and file.endswith('.csv'):
         formats_by_aip_report = file
     # This CSV has one line per unique format. Allows aggregating file count information.
@@ -184,6 +200,13 @@ df_aip = pd.read_csv(formats_by_aip_report)
 df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 
 
+# The rest of this script uses pandas to calculate the collection count, AIP count, and file count for different
+# combinations of data categories. These categories are:
+#   * Group: ARCHive group name, which is the department or departments responsible for the content.
+#   * Format type: category of the format, for example audio, image, or text.
+#   * Format standardized name: a simplified version of the name, for example removing version information.
+
+
 # Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
@@ -212,8 +235,14 @@ format_names.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.su
 common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
+# Makes reports with subtotals by two criteria.
+# TODO: address duplication of collections and aips.
+format_type_then_group = df.groupby(['Format_Type', 'Group']).sum()
+format_type_then_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
+name_then_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
+
 # Saves each report as a tab in an Excel spreadsheet.
-# The spreadsheet includes today's date, formatted YYYYMM, in the name, and is saved in the report folder.
+# The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name='Archive Overview')
@@ -221,17 +250,3 @@ with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     format_names.to_excel(results, sheet_name='Format Names')
     common_formats.to_excel(results, sheet_name='Risk Analysis')
 
-
-# # TODO: Reports I was making with pandas that are not included here
-# # Are these helpful or would we just go back to the main spreadsheet?
-# # Format type then by group
-# # Format type then by name
-# # Format name then by group
-#
-# # TODO: ideas for future development
-# # A tab with the most common formats, however that is defined.
-# # A way to compare one spreadsheet to another to show change since the last report.
-# # Adding in size, if Shawn can update the format report.
-# # Calculate the number of individual formats in a name or type grouping?
-# # Calculate the average amount of format variety in a collection or AIP?
-# # Compare to the NARA risk framework (already a spreadsheet) or LOC (PDF)?
