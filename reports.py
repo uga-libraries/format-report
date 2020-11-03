@@ -153,6 +153,26 @@ def percentage(dataframe, total, new_name):
     return new_df
 
 
+def two_categories(cat1, cat2):
+    """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on two criteria. Not
+    that long, but use this three times and makes it easy to add additional comparisons when needed."""
+
+    # The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
+    result = df_aip[[cat1, cat2, 'Collection', 'AIP']].groupby([cat1, cat2]).nunique()
+
+    # The file subtotal comes from df and is inflated by files with multiple format identifications.
+    files_result = df.groupby([cat1, cat2])['File_Count'].sum()
+
+    # Adds the file subtotal to the dataframe with the collection and AIP subtotals.
+    result = pd.concat([result, files_result], axis=1)
+
+    # Fills in any blank cells with 0.
+    # TODO: does it make sense that these are having blank file counts? How did it have a collection or aip and no file?
+    result = result.fillna(0)
+
+    return result
+
+
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
 # the argument is missing or not a valid directory.
 try:
@@ -256,28 +276,14 @@ format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_tot
 common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
-# The next three make reports with collection, AIP, and file subtotals by two criteria.
-# The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
-# The file subtotal comes from df and is inflated by files with multiple format identifications.
-# After those two dataframes are made, they are combined into one dataframe and any blank cells are filled with 0.
-
 # Makes a report with subtotals first by format type and then subdivided by group.
-type_by_group = df_aip[['Group', 'Format_Type', 'Collection', 'AIP']].groupby(['Format_Type', 'Group']).nunique()
-files_type_group = df.groupby(['Format_Type', 'Group'])['File_Count'].sum()
-type_by_group = pd.concat([type_by_group, files_type_group], axis=1)
-type_by_group = type_by_group.fillna(0)
+type_by_group = two_categories("Format_Type", "Group")
 
 # Makes a report with subtotals first by format type and then subdivided by format standardized name.
-type_by_name = df_aip[['Format_Type', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Type', 'Format_Standardized_Name']).nunique()
-files_type_name = df.groupby(['Format_Type', 'Format_Standardized_Name'])['File_Count'].sum()
-type_by_name = pd.concat([type_by_name, files_type_name], axis=1)
-type_by_name = type_by_name.fillna(0)
+type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 
 # Makes a report with subtotals first by format standardized name and then by group.
-name_by_group = df_aip[['Group', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Standardized_Name', 'Group']).nunique()
-files_name_group = df.groupby(['Format_Standardized_Name', 'Group'])['File_Count'].sum()
-name_by_group = pd.concat([name_by_group, files_name_group], axis=1)
-name_by_group = name_by_group.fillna(0)
+name_by_group = two_categories("Format_Standardized_Name", "Group")
 
 # Saves each report as a tab in an Excel spreadsheet.
 # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
