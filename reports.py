@@ -202,15 +202,6 @@ if len(missing) > 0:
     print("Please add the missing report(s) to the reports folder and run this script again.")
     exit()
 
-# Increases the size of csv fields to handle long aip lists.
-# Gets the maximum size that doesn't give an overflow error.
-while True:
-    try:
-        csv.field_size_limit(sys.maxsize)
-        break
-    except OverflowError:
-        sys.maxsize = int(sys.maxsize / 10)
-
 # Makes dataframes from both format reports.
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
