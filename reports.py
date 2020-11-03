@@ -12,7 +12,7 @@ Ideas for future development:
     * Have size as well as count included in the file formats reports so can summarize by size.
     * Calculate the number of individual formats in a name or type grouping?
     * Calculate the range of format variety in a collection or AIP?
-    * Shared formats across groups? By standard name, original name, or original name + version + puid?
+    * Shared formats across groups? Name by group does that. Counts of overlap for summary? Match more detailed names?
 """
 
 # Usage: python /path/reports.py report_folder
@@ -256,14 +256,31 @@ format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_tot
 common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
-# Makes reports with subtotals by two criteria.
-# TODO: add file count. This is just unique collections and unique aips.
-type_by_group = df_aip[['Group', 'Format_Type', 'Collection', 'AIP']].groupby(['Format_Type', 'Group']).nunique()
-type_by_name = df_aip[['Format_Type', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Type', 'Format_Standardized_Name']).nunique()
-name_by_group = df_aip[['Group', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Standardized_Name', 'Group']).nunique()
+# The next three make reports with collection, AIP, and file subtotals by two criteria.
+# The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
+# The file subtotal comes from df and is inflated by files with multiple format identifications.
+# After those two dataframes are made, they are combined into one dataframe and any blank cells are filled with 0.
 
-# # Saves each report as a tab in an Excel spreadsheet.
-# # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# Makes a report with subtotals first by format type and then subdivided by group.
+type_by_group = df_aip[['Group', 'Format_Type', 'Collection', 'AIP']].groupby(['Format_Type', 'Group']).nunique()
+files_type_group = df.groupby(['Format_Type', 'Group'])['File_Count'].sum()
+type_by_group = pd.concat([type_by_group, files_type_group], axis=1)
+type_by_group = type_by_group.fillna(0)
+
+# Makes a report with subtotals first by format type and then subdivided by format standardized name.
+type_by_name = df_aip[['Format_Type', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Type', 'Format_Standardized_Name']).nunique()
+files_type_name = df.groupby(['Format_Type', 'Format_Standardized_Name'])['File_Count'].sum()
+type_by_name = pd.concat([type_by_name, files_type_name], axis=1)
+type_by_name = type_by_name.fillna(0)
+
+# Makes a report with subtotals first by format standardized name and then by group.
+name_by_group = df_aip[['Group', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Standardized_Name', 'Group']).nunique()
+files_name_group = df.groupby(['Format_Standardized_Name', 'Group'])['File_Count'].sum()
+name_by_group = pd.concat([name_by_group, files_name_group], axis=1)
+name_by_group = name_by_group.fillna(0)
+
+# Saves each report as a tab in an Excel spreadsheet.
+# The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name="Group Overview")
