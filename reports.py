@@ -20,6 +20,9 @@ Ideas for future development:
 
 # TODO: before delete any previous scripts, read through one more time for ideas for future work.
 
+# TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
+#  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
+
 import csv
 import datetime
 import os
@@ -167,7 +170,9 @@ def two_categories(cat1, cat2):
     result = pd.concat([result, files_result], axis=1)
 
     # Fills in any blank cells with 0.
-    # TODO: does it make sense that these are having blank file counts? How did it have a collection or aip and no file?
+    # TODO: should not have blank file counts. Since dlg-hargrett, probably from group rename in df_aip but not df.
+    #   Type by Group: application, dlg-hargrett
+    #   Name by Group: unknown binary, dlg-hargrett
     result = result.fillna(0)
 
     return result
