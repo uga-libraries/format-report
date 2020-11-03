@@ -110,13 +110,6 @@ def archive_overview():
     # TODO: add error handling in case AIPs without collections calculated remain in the formats report?
     collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
-    # Calculates the number of dlg collections starting 'guan_'. Those should be dlg-hargrett instead.
-    # Updates the values in the dataframe to correct for the error.
-    dlg = df_aip[df_aip.Group.eq('dlg')]
-    guan = pd.Series(dlg['Collection'].unique()).str.startswith('guan_').sum()
-    collections_by_group['dlg'] -= guan
-    collections_by_group['dlg-hargrett'] += guan
-
     # Gets the number of files per group from the other formats report.
     # These numbers are inflated by files with more than one format.
     files_by_group = df.groupby('Group')['File_Count'].sum()
@@ -148,7 +141,7 @@ def archive_overview():
 
 def percentage(dataframe, total, new_name):
     """Makes a new dataframe that is the percent of each value in an existing dataframe.
-    This is a short function but repeats in the code many times."""
+    This is a short function but repeats in the code several times."""
 
     # Calculates the percentage, which is rounded to two decimal places. It remains a number and does not have % sign.
     new_df = round((dataframe / total) * 100, 2)
@@ -214,6 +207,9 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # russell_collections.str.replace('-', '')
 df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 
+# Updates group to dlg-hargrett if group is dlg and collection starts with guan_ to correct an error in the data.
+df_aip.loc[(df_aip['Group'] == 'dlg') & df_aip['Collection'].str.startswith('guan_'), 'Group'] = 'dlg-hargrett'
+
 # The rest of this script uses pandas to calculate the collection count, AIP count, and file count for different
 # combinations of data categories. These categories are:
 #   * Group: ARCHive group name, which is the department or departments responsible for the content.
@@ -267,7 +263,6 @@ common_formats = common_formats.drop(['total'])
 # Makes reports with subtotals by two criteria.
 # TODO: address duplication of collections and aips.
 # Using nunique() on df_aip does give unique collections and aips - but file count not included and rest of columns are.
-# Also reintroduces the dlg-hargrett vs. dlg issue. Clean up in the dataframe!!!!!
 type_by_group = df_aip.groupby(['Format_Type', 'Group']).nunique()
 
 # type_by_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
@@ -277,7 +272,8 @@ type_by_group = df_aip.groupby(['Format_Type', 'Group']).nunique()
 # # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
-    #     format_types.to_excel(results, sheet_name="Format Types")
-    #     format_names.to_excel(results, sheet_name="Format Names")
-    #     common_formats.to_excel(results, sheet_name="Risk Analysis")
+    overview.to_excel(results, sheet_name="Group Overview")
+    format_types.to_excel(results, sheet_name="Format Types")
+    format_names.to_excel(results, sheet_name="Format Names")
+    common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
