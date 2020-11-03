@@ -257,12 +257,10 @@ common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
 # Makes reports with subtotals by two criteria.
-# TODO: address duplication of collections and aips.
-# Using nunique() on df_aip does give unique collections and aips - but file count not included and rest of columns are.
-type_by_group = df_aip.groupby(['Format_Type', 'Group']).nunique()
-
-# type_by_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
-# name_by_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
+# TODO: add file count. This is just unique collections and unique aips.
+type_by_group = df_aip[['Group', 'Format_Type', 'Collection', 'AIP']].groupby(['Format_Type', 'Group']).nunique()
+type_by_name = df_aip[['Format_Type', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Type', 'Format_Standardized_Name']).nunique()
+name_by_group = df_aip[['Group', 'Format_Standardized_Name', 'Collection', 'AIP']].groupby(['Format_Standardized_Name', 'Group']).nunique()
 
 # # Saves each report as a tab in an Excel spreadsheet.
 # # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -273,3 +271,5 @@ with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     format_names.to_excel(results, sheet_name="Format Names")
     common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
+    type_by_name.to_excel(results, sheet_name="Type by Name")
+    name_by_group.to_excel(results, sheet_name="Name by Group")
