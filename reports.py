@@ -200,12 +200,8 @@ if len(missing) > 0:
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
-# TODO: this replaces dash in all collection ids. Probably ok (not creating duplicates) but more than want to do.
-# Updates collection ids to remove dash, since rbrl-### and rbrl### should be treated as one collection. This
-# filters for russell collections: df_aip.loc[df_aip['Group'] == 'russell']['Collection'], but gives error if put it on
-# left of = and if put on right for df_aip['Collection'] all other collection ids become NaN. russell_collections =
-# russell_collections.str.replace('-', '')
-df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
+# Updates russell collection ids to remove dash, since rbrl-### and rbrl### should be treated as the same collection.
+df_aip.loc[df_aip['Group'] == 'russell', 'Collection'] = df_aip['Collection'].str.replace('-', '')
 
 # Updates group to dlg-hargrett if group is dlg and collection starts with guan_ to correct an error in the data.
 df_aip.loc[(df_aip['Group'] == 'dlg') & df_aip['Collection'].str.startswith('guan_'), 'Group'] = 'dlg-hargrett'
