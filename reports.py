@@ -187,10 +187,19 @@ for file in os.listdir('.'):
     elif file.startswith('usage_report_') and file.endswith('.csv'):
         usage_report = file
 
+# Tests for if all reports were found, and if not prints an error and quits the script.
+missing = []
 if not formats_by_aip_report:
-    print("Could not find archive formats_by_aip_report csv in the report folder.")
-    if not usage_report:
-        print("Could not find usage_report report csv in the report folder.")
+    missing.append("Could not find archive formats_by_aip_report csv in the report folder.")
+if not formats_report:
+    missing.append("Could not find archive formats_report csv in the report folder.")
+if not usage_report:
+    missing.append("Could not find usage_report report csv in the report folder.")
+
+if len(missing) > 0:
+    for message in missing:
+        print(message)
+    print("Please add the missing report(s) to the reports folder and run this script again.")
     exit()
 
 # Increases the size of csv fields to handle long aip lists.
@@ -263,7 +272,7 @@ common_formats = format_names[format_names.File_Count > 500]
 common_formats = common_formats.drop(['total'])
 
 # Makes reports with subtotals by two criteria.
-# TODO: address duplication of collections and aips.
+# TODO: address duplication of collections and aips and ave to the spreadsheet.
 format_type_then_group = df.groupby(['Format_Type', 'Group']).sum()
 format_type_then_name = df.groupby(['Format_Type', 'Format_Standardized_Name']).sum()
 name_then_group = df.groupby(['Format_Standardized_Name', 'Group']).sum()
