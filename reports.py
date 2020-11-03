@@ -210,25 +210,32 @@ df_aip['Collection'] = df_aip['Collection'].str.replace('-', '')
 # Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
+# Saves the collection, AIP, and file totals to use in other dataframes.
+collection_total = overview['Collections']['total']
+aip_total = overview['AIPs']['total']
+file_total = overview['Files (inflated)']['total']
+
 # Makes the format types report (collection, AIP, and file counts).
-# Creates the subtotals for each count type, combines them into a single dataframe, and adds a row for column totals.
+# Creates the subtotals for each count type and combines them into a single dataframe.
+# Gets collection, AIP, and file totals from the overview dataframe and includes in this dataframe.
+# Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
 # TODO: add percentages?
-# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 file_type = df.groupby('Format_Type')['File_Count'].sum()
 format_types = pd.concat([collection_type, aip_type, file_type], axis=1)
-format_types.loc['total'] = [collection_type.sum(), aip_type.sum(), file_type.sum()]
+format_types.loc['total'] = [collection_total, aip_total, file_total]
 
 # Makes the format standardized name report (collection, AIP, and file counts).
-# Creates the subtotals for each count type, combines them into a single dataframe, and adds a row for column totals.
+# Creates the subtotals for each count type and combines them into a single dataframe.
+# Gets collection, AIP, and file totals from the overview dataframe and includes in this dataframe.
+# Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
 # TODO: add percentages?
-# TODO: are these totals really what I want? Or are they duplicating collections and AIPs in more than one category?
 collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
 file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
 format_names = pd.concat([collection_name, aip_name, file_name], axis=1)
-format_names.loc['total'] = [collection_name.sum(), aip_name.sum(), file_name.sum()]
+format_names.loc['total'] = [collection_total, aip_total, file_total]
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 # Removes the total row since that is only accurate for the complete list.
