@@ -1,3 +1,5 @@
+# CONFIRMED EVERYTHING NEEDED FROM THIS REPORT IS IN REPORTS.PY
+
 """Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
 names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
 
