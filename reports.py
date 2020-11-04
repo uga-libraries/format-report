@@ -93,8 +93,8 @@ def archive_overview():
                         size = 0
                         print("WARNING! Unexpected unit type:", unit)
 
-                    # Rounds the size in TB to three decimal places so the number is easier to read.
-                    size = round(size, 3)
+                    # Rounds the size in TB to one decimal place so the number is easier to read.
+                    size = round(size, 1)
 
                     # Adds the results for this group to the dictionary.
                     group_data[group_code] = ([size, aip_count])
