@@ -118,6 +118,7 @@ def archive_overview():
     files_by_group = df.groupby('Group')['File_Count'].sum()
 
     # Combines the dataframes into a single dataframe.
+    # TODO: is it possible to change order so the counts are collection, aip, file?
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
@@ -146,8 +147,8 @@ def percentage(dataframe, total, new_name):
     """Makes a new dataframe that is the percent of each value in an existing dataframe.
     This is a short function but repeats in the code several times."""
 
-    # Calculates the percentage, which is rounded to two decimal places. It remains a number and does not have % sign.
-    new_df = round((dataframe / total) * 100, 2)
+    # Calculates the percentage, which is rounded to one decimal place. It remains a number and does not have % sign.
+    new_df = round((dataframe / total) * 100, 1)
 
     # Renames the column to the specified name. Otherwise, it will the same as the original dataframe.
     # Column names matter since they become the column header in the results Excel spreadsheet.
