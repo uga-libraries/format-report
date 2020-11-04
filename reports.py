@@ -23,6 +23,9 @@ Ideas for future development:
 # TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
 #  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
 
+# TODO: Use File IDs instead of Files (Inflated) as a reminder that these are not unqiue.
+# TODO: Use sheets instead of tabs and other Excel lingo.
+
 import csv
 import datetime
 import os
