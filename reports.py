@@ -33,6 +33,7 @@ import sys
 def archive_overview():
     """Gets TBs, AIPs, Collections, and Files per group and total for ARCHive using the usage and formats reports.
     Returns the information in a dataframe. """
+    # TODO: add number of types, standard formats, and/or actual formats by group as a variation measure?
 
     def size_and_aips_count():
         """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and AIP

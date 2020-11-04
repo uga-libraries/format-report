@@ -128,6 +128,7 @@ def collection_list(aips, group):
             collection = f"Collection not calculated for {aip}"
 
         # Makes a unique list of collection ids.
+        # TODO: it hasn't happened yet, but this will double count if both rbrl id formats are present.
         if collection not in collections_list:
             collections_list.append(collection)
 
@@ -184,11 +185,13 @@ def update_row(row, group):
     format_standard, format_type = standardize_formats(row[2], standard_csv)
 
     # Gets a list of collection ids (calculated from the AIP ids) and the number of collections.
+    # TODO: should we still do this or just have collection id in the merged by aip csv?
     collections, number_collections = collection_list(row[7], group)
 
     # Adds the group and number of collections at the beginning of the row.
     # Adds the format type and standardized format name before the format name.
     # Adds the collection list before the aip list.
+    # TODO: consider dropping the AIP list. Causes problems opening in Excel b/c of length.
     row.insert(0, group)
     row.insert(1, number_collections)
     row.insert(4, format_type)
