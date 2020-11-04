@@ -11,6 +11,8 @@ compare the original format reports to the merged one to verify script accuracy.
 #       /path/reports is the folder with the ARCHive format reports
 #       /path/standard_csv is optional. Default is to use the csv in the same folder as this script.
 
+# TODO: should the two versions of the csvs be made with the same script? Depends on how much overlap there is in code.
+
 import csv
 import datetime
 import os
@@ -235,6 +237,7 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
     result_csv = csv.writer(result)
 
     # Adds a header to the results file.
+    # TODO: Adjust these column headers to the name I want for the dataframes and eventual results spreadsheet.
     result_csv.writerow(
         ['Group', 'Collection_Count', 'AIP_Count', 'File_Count', 'Format_Type', 'Format_Standardized_Name',
          'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List', 'AIP_List'])
