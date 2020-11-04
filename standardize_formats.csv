@@ -349,10 +349,10 @@ Password Protected OOXML File,Microsoft Word,text
 PC formatted floppy with no filesystem,PC formatted floppy,application
 PCX,PCX,image
 PCX ver. 2.5 image data,PCX,image
-PDF,Adobe PDF,text
-PDF EXIF,Adobe PDF,text
-PDF/A,Adobe PDF,text
-PDF/X,Adobe PDF,text
+PDF,PDF,text
+PDF EXIF,PDF,text
+PDF/A,PDF,text
+PDF/X,PDF,text
 PDP-11 kernel overlay,PDP-11,executable
 PDP-11 overlaid pure executable not stripped,PDP-11,executable
 PDP-11 overlaid separate executable not stripped,PDP-11,executable
@@ -378,7 +378,7 @@ PKCS #7 Crytographic message file,PKCS #7 Crytographic Message File,message
 pkf,PKF,application
 Plain text,Plain Text File,text
 PLIST,PLIST,application
-Portable Document Format,Adobe PDF,text
+Portable Document Format,PDF,text
 Portable Network Graphics,PNG,image
 Postscript,PostScript,design
 PostScript document text,PostScript,design
