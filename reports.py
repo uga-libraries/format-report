@@ -36,7 +36,7 @@ import sys
 def archive_overview():
     """Gets TBs, AIPs, Collections, and Files per group and total for ARCHive using the usage and formats reports.
     Returns the information in a dataframe. """
-    # TODO: add number of types, standard formats, and/or actual formats by group as a variation measure?
+    # TODO: add number of types, standard formats, and/or actual formats by group as a variation measure.
 
     def size_and_aips_count():
         """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and AIP
@@ -281,6 +281,8 @@ format_names = pd.concat(
     [collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
 format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
+# TODO Make a report that is a count of the number of standardized names with 1-9, 10-999, 100-999, etc. files.
+
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 # Removes the total row since that is only accurate for the complete list.
 common_formats = format_names[format_names.File_Count > 500]
@@ -294,6 +296,10 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 
 # Makes a report with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
+
+# TODO: add a report that analyzes the original file format identifications. Can use df_aip for this. Original =
+#  format_name + format_version + registry_key. Get any with 500+ files (need to strip out NO VALUE) and also do
+#  subtotals of how many unique formats have 1-9, 10-99, etc. instances.
 
 # Saves each report as a tab in an Excel spreadsheet.
 # The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
