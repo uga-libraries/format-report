@@ -1,10 +1,10 @@
 """Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
 names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
 
-# TODO: explain the two different format csvs and the usage report This script uses the merged ARCHive formats CSVs,
-which are created with the merge_format_reports.py script. This CSV is organized by group and then by format name.
-Relevant columns for this analysis are Group, Collection_Count, AIP_Count, File_Count, Format_Type,
-Format_Standardized_Name, and Format_Name.
+# The script uses information from three sources, all CSVs:
+    * usage report: downloaded from ARCHive. Has amount ingested (by file and size) for each group.
+    * archive formats: Organized by unique format. Has group, file count, format type, and format standard name.
+    * archive formats by aip: For each AIP, has group, collection, aip id, and format information.
 
 Ideas for future development:
     * Map NARA and LOC risk assessments to the most common formats.
@@ -14,6 +14,7 @@ Ideas for future development:
     * Calculate the range of format variety in a collection or AIP?
     * Shared formats across groups? Name by group does that. Counts of overlap for summary? Match more detailed names?
 """
+# Before running this script, run update_standardization.py and merge_format_reports.py
 
 # Usage: python /path/reports.py report_folder
 # Report folder should contain the format CSVs and usage report. Script output is saved to this folder as well.
