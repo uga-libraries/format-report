@@ -1,5 +1,22 @@
-# This is an experiment to create the "by format" and "by aip then format" versions fo the csv.
-# Need "by format" to do file counts but everything else is easier with "by aip then format".
+"""
+Combines the ARCHive format reports, which are one CSV per group, into single CSVs for analysis.
+
+One CSV (archive_formats_YYYYMM.csv) has the information organized by group and then by unique format. It includes
+the ARCHive group, number of file identifications, format type, and format standardized name. It is used for
+aggregating the number of file identifications. The numbers are inflated by files that have more than one possible
+format identification.
+
+The other CSV (archive_formats_by_aip_YYYYMM.csv) has the information organized by AIP and then by unique format. It
+includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
+format standardized name, format name, format version, registry name, registry key, and format note). It is used for
+aggregating the number of collections and AIPs.
+
+Before running this script, run update_standardization.py
+"""
+
+# Usage: python /path/merge_format_reports.py /path/report_folder [/path/standardize_formats.csv]
+# Report folder should contain the ARCHive format reports. Script output is saved to this folder as well.
+# A default value for the path to the standardize formats csv is used if one is not provided as an argument.
 
 import csv
 import datetime
@@ -11,15 +28,7 @@ import sys
 def standardize_formats(format_name, standard):
     """Finds the format name within the standardized formats csv and returns the standard (simplified) format
     name and the format type. Using a standardized name and assigning a format type reduces some of the data
-    variability so summaries are more useful. Can rely on there being a match because update_normalized.py is run
-    first.
-
-    Standard format name is based on PRONOM, although sometimes the name truncated to group more names together. For
-    formats not in PRONOM, we either truncated the name or left it as it was. Occasionally researched the most
-    common form of the name.
-
-    Format type is based on mimetypes, with additional local categories used where more nuance was needed for
-    meaningful results, e.g. application and text. """
+    variability so summaries are more useful."""
 
     # Reads the standardized formats csv.
     with open(standard) as standard_list:
@@ -29,26 +38,21 @@ def standardize_formats(format_name, standard):
         next(read_standard_list)
 
         # Checks each row for the format. When there is a match, returns the standardized name and format type.
-        # Matching lowercase versions of the format names to ignore variations in capitalization.
-        # Note: considered just matching the start of the name for fewer results for formats that include file
-        # size or other details in the name, but this caused too many errors from different formats that start with
-        # the same string.
+        # Matches lowercase versions of the format names to ignore variations in capitalization.
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
                 return standard_row[1], standard_row[2]
 
-        # If there was no match (the previous code block did not return a result, which exits this function and keeps
-        # this code block from running), prints an error message and quits the script. Run update_standardization.py to
-        # make sure that standardize_formats.csv will have a match for all formats.
+        # If there was no match (meaning the previous code block did not return a result so the function keeps
+        # running), prints an error message and quits the script.
         print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
-        print('Update that CSV and run this script again.')
-        print('Note that the archive_formats CSV produced by the script only has formats up until this point.')
+        print('Update that CSV using update_standardization.py and run this script again.')
         exit()
 
 
 def collection_from_aip(aip_id, group):
-    """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
-    group has for constructing AIP ids for different collections. If the pattern does not match any known rules,
+    """Returns the collection id. The collection id is extracted from the AIP id based on each group's rules for
+    constructing AIP ids, all of which include the collection id. If the pattern does not match any known rules,
     the function returns None and the error is caught where the function is called."""
 
     # Brown Media Archives and Peabody Awards Collection
@@ -57,7 +61,7 @@ def collection_from_aip(aip_id, group):
         if aip_id[5].isdigit():
             return 'peabody'
 
-        # The next three address errors with how AIP ID was made.
+        # The next three address errors with how the AIP ID was made.
         elif aip_id.startswith('har-ms'):
             coll_regex = re.match('(^har-ms[0-9]+)_', aip_id)
             return coll_regex.group(1)
@@ -76,7 +80,7 @@ def collection_from_aip(aip_id, group):
     elif group == 'dlg':
 
         # Everything in turningpoint is also in another collection, which is the one we want.
-        # The collection number is made into an integer to remove leading zeros.
+        # The collection number is changed to an integer to remove leading zeros.
         if aip_id.startswith('dlg_turningpoint'):
 
             # This one is from an error in the AIP ID.
@@ -114,7 +118,7 @@ def collection_from_aip(aip_id, group):
         coll_regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip_id)
         return coll_regex.group(1)
 
-    # NOTE: At the time of writing this script, there were no AIPs in dlg-magil. This will need to be updated.
+    # At the time of writing this script, there were no AIPs in dlg-magil.
     elif group == 'dlg-magil':
         return None
 
@@ -130,12 +134,13 @@ def collection_from_aip(aip_id, group):
         coll_id = f'rbrl{coll_regex.group(1)}'
         return coll_id
 
+    # This would catch a new group.
+    else:
+        return None
 
-# THE FOLLOWING IS EVERYTHING BUT THE FUNCTIONS FROM THE TWO SEPARATE SCRIPTS.
-# MOVE OVERLAPPING CONTENT, E.G. READING GROUP FORMAT REPORTS, TO FUNCTIONS BOTH CAN CALL.
 
-# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
-# the argument is missing or not a valid directory.
+# Makes the report folder (a script argument) the current directory. If the argument is missing or not a valid
+# directory, displays an error message and quits the script.
 try:
     report_folder = sys.argv[1]
     os.chdir(report_folder)
@@ -144,7 +149,7 @@ except (IndexError, FileNotFoundError):
     print("Script usage: python /path/merge_format_reports.py /path/format_reports [/path/standardize_formats.csv]")
     exit()
 
-# Makes a variable with the file path for the standardized formats CSV. Uses the optional script argument if provided,
+# Makes a variable with the file path for the standardized formats csv. Uses the optional script argument if provided,
 # or else uses the folder with this script as the default location for that csv.
 try:
     standard_csv = sys.argv[2]
@@ -160,10 +165,10 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
-# Gets the current date, formatted YYYYMM, to use in naming the results files.
+# Gets the current date, formatted YYYYMM, to use in naming the script outputs.
 today = datetime.datetime.now().strftime("%Y-%m")
 
-# Makes two csv files for saving the combined format information in the same folder as the ARCHive format reports.
+# Makes two CSV files for saving the combined format information in the same folder as the ARCHive format reports.
 # archive_formats_YYYYMM.csv is organized by format name and then by group, and is used for analyzing file counts.
 # archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format name, and is used for collection and aip counts.
 with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'archive_formats_by_aip_{today}.csv',
@@ -171,23 +176,20 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
     by_format_csv = csv.writer(by_format)
     by_aip_csv = csv.writer(by_aip)
 
-    # Adds a header to each csv file.
+    # Adds a header to each CSV.
     by_format_csv.writerow(['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name'])
     by_aip_csv.writerow(['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name',
                          'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note'])
 
-    # Gets data from each group's format reports and calculates additional information based on that data.
-    # The information is saved to both CSV files, organized in a different way.
+    # Gets data from each group's format report and calculates additional information based on that data.
+    # The information is saved to one or both CSV files.
     for report in os.listdir():
 
         # Skips the file if it is not a format report. The usage report and potentially other files are in this folder.
         if not report.startswith('file_formats'):
             continue
 
-        # Prints the script progress since this script can be slow to run.
-        print("Starting next report:", report)
-
-        # Gets the ARCHive group from the format report filename.
+        # Gets the ARCHive group from the format report filename. Will be saved to both CSVs.
         regex = re.match('file_formats_(.*).csv', report)
         archive_group = regex.group(1)
 
@@ -201,19 +203,19 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
             # Gets the data from each row in the report.
             for row in report_info:
 
-                # Gets the standard name and format type for the format. Used in both CSVs.
+                # Gets the standard name and format type for the format. Will be saved to both CSVs.
                 format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-                # Writes group, file id count, format type, and format standardized name to by format CSV.
+                # Writes the group, file id count, format type, and format standardized name to the by format csv.
                 by_format_csv.writerow([archive_group, row[1], format_type, format_standard])
 
-                # Gets a list of AIPs in this row, calculates their collection, and saves each AIP to its own row in
-                # the by aip CSV, with additional format information copied from the reports
+                # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
+                # rows to the by aip csv. The values are saved to a variable (aip_row) before writing them to the CSV
+                # so that empty values can be replaced with 'NO VALUE' and make it more clear where there is no data.
                 aip_list = row[7].split('|')
                 for aip in aip_list:
                     collection_id = collection_from_aip(aip, archive_group)
                     aip_row = [archive_group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4],
                                row[5], row[6]]
-                    # Fills all empty cells with 'NO VALUE' so it is easier to see where there is no data.
                     aip_row = ['NO VALUE' if x == '' else x for x in aip_row]
                     by_aip_csv.writerow(aip_row)
