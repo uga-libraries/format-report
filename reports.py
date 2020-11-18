@@ -18,8 +18,6 @@ Ideas for future development:
 # Usage: python /path/reports.py report_folder
 # Report folder should contain the format CSVs and usage report. Script output is saved to this folder as well.
 
-# TODO: before delete any previous scripts, read through one more time for ideas for future work.
-
 # TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
 #  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
 
