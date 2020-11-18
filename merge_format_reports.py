@@ -38,62 +38,47 @@ while True:
         sys.maxsize = int(sys.maxsize / 10)
 
 
-# Gets data from each group's format reports and calculates additional information based on that data.
-# The information is saved to ??? to be latter written to two CSVs, each organized in a different way.
-for report in os.listdir():
-
-    # Skips the file if it is not a format report. The usage report and potentially other files are also in this folder.
-    if not report.startswith('file_formats'):
-        continue
-
-    # Prints the script progress since this script can be slow to run.
-    print("\nStarting next report:", report)
-
-    # Gets the ARCHive group from the format report filename.
-    regex = re.match('file_formats_(.*).csv', report)
-    archive_group = regex.group(1)
-
-    # Gets the data from the report.
-    with open(report, 'r') as open_report:
-        report_info = csv.reader(open_report)
-
-        # Skips the header.
-        next(report_info)
-
-        # Gets the data from each row in the report.
-        for data in report_info:
-            print(data[2])
-
-
-# Gets the current date, formatted YYYYMM, to use in naming the merged files.
+# Gets the current date, formatted YYYYMM, to use in naming the results files.
 today = datetime.datetime.now().strftime("%Y-%m")
 
-# Makes a CSV file with all format information organized by format name and then by group.
-# This file is used for analyzing file counts.
-# The file is named archive_formats_YYYYMM.csv and saved in the same folder as the ARCHive format reports.
-with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
-    result_csv = csv.writer(result)
+# Makes two csv files for saving the combined format information in the same folder as the ARCHive format reports.
+# archive_formats_YYYYMM.csv is organized by format name and then by group, and is used for analyzing file counts.
+# archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format name, and is used for collection and aip counts.
+with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'archive_formats_by_aip_{today}.csv', 'w', newline='') as by_aip:
+    by_format_csv = csv.writer(by_format)
+    by_aip_csv = csv.writer(by_aip)
 
-    # Adds a header to the results file.
-    result_csv.writerow(
-        ['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name'])
+    # Adds a header to each csv file.
+    by_format_csv.writerow(['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name'])
+    by_aip_csv.writerow(['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name',
+                         'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note'])
 
-    # TODO: get the information from the reports and save to the csv.
-    # new_row = "TODO"
-    # result_csv.writerow(new_row)
+    # Gets data from each group's format reports and calculates additional information based on that data.
+    # The information is saved to both CSV files, organized in a different way.
+    for report in os.listdir():
 
-# Makes a CSV file with all format information organized by AIP and then by format name.
-# This file is used for analyzing collection and AIP counts. This structure makes it easier to remove duplicates.
-# The file is named archive_formats_by_aip_YYYYMM.csv and saved in the same folder as the ARCHive format reports.
-with open(f'archive_formats_by_aip_{today}.csv', 'w', newline='') as result:
-    result_csv = csv.writer(result)
+        # Skips the file if it is not a format report. The usage report and potentially other files are in this folder.
+        if not report.startswith('file_formats'):
+            continue
 
-    # Adds a header to the results file.
-    result_csv.writerow(
-        ['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name', 'Format_Version',
-         'Registry_Name', 'Registry_Key', 'Format_Note'])
+        # Prints the script progress since this script can be slow to run.
+        print("\nStarting next report:", report)
 
-    # TODO: get the information from the reports and save to the csv.
-    # new_rows = "TODO"
-    # for row in new_rows:
-    #     result_csv.writerow(row)
+        # Gets the ARCHive group from the format report filename.
+        regex = re.match('file_formats_(.*).csv', report)
+        archive_group = regex.group(1)
+
+        # Gets the data from the report.
+        with open(report, 'r') as open_report:
+            report_info = csv.reader(open_report)
+
+            # Skips the header.
+            next(report_info)
+
+            # Gets the data from each row in the report.
+            for data in report_info:
+                by_format_csv.writerow([archive_group, data[1], 'type', 'name'])
+                by_aip_csv.writerow([archive_group, data[2]])
+
+
+
