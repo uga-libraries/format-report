@@ -231,9 +231,6 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # TODO: could remove the dash when forming the ids in the merged csv instead.
 df_aip.loc[df_aip['Group'] == 'russell', 'Collection'] = df_aip['Collection'].str.replace('-', '')
 
-# Updates group to dlg-hargrett if group is dlg and collection starts with guan_ to correct an error in the data.
-df_aip.loc[(df_aip['Group'] == 'dlg') & df_aip['Collection'].str.startswith('guan_'), 'Group'] = 'dlg-hargrett'
-
 # The rest of this script uses pandas to calculate the collection count, AIP count, and file count for different
 # combinations of data categories. These categories are:
 #   * Group: ARCHive group name, which is the department or departments responsible for the content.
