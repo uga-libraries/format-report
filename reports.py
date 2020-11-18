@@ -1,10 +1,10 @@
 """Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
 names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
 
-# TODO: explain the two different format csvs and the usage report
-This script uses the merged ARCHive formats CSV, which is created with the csv_merge.py script. This CSV is organized
-by group and then by format name. Relevant columns for this analysis are Group, Collection_Count, AIP_Count,
-File_Count, Format_Type, Format_Standardized_Name, and Format_Name.
+# TODO: explain the two different format csvs and the usage report This script uses the merged ARCHive formats CSVs,
+which are created with the merge_format_reports.py script. This CSV is organized by group and then by format name.
+Relevant columns for this analysis are Group, Collection_Count, AIP_Count, File_Count, Format_Type,
+Format_Standardized_Name, and Format_Name.
 
 Ideas for future development:
     * Map NARA and LOC risk assessments to the most common formats.
@@ -188,7 +188,7 @@ try:
     os.chdir(report_folder)
 except (IndexError, FileNotFoundError):
     print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage_report: python /path/csv_merge.py /path/reports [/path/standardize_formats.csv]")
+    print("Script usage_report: python /path/reports.py /path/reports [/path/standardize_formats.csv]")
     exit()
 
 # Gets paths for the data files used in this script, which should be in the report folder.
