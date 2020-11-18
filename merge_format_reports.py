@@ -39,7 +39,7 @@ while True:
 
 
 # Gets data from each group's format reports and calculates additional information based on that data.
-# The information is saved to ???? to be latter written to two CSVs, each organized in a different way.
+# The information is saved to ??? to be latter written to two CSVs, each organized in a different way.
 for report in os.listdir():
 
     # Skips the file if it is not a format report. The usage report and potentially other files are also in this folder.
@@ -76,9 +76,7 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
 
     # Adds a header to the results file.
     result_csv.writerow(
-        ['Group', 'Collection_Count', 'AIP_Count', 'File_IDs', 'Format_Type', 'Format_Standardized_Name',
-         'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List',
-         'AIP_List'])
+        ['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name'])
 
     # TODO: get the information from the reports and save to the csv.
     # new_row = "TODO"
