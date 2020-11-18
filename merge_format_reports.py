@@ -215,6 +215,9 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
                 aip_list = row[7].split('|')
                 for aip in aip_list:
                     collection_id = collection_from_aip(aip, archive_group)
+                    # Prints a warning if the script was unable to calculate a collection id.
+                    if collection_id is None:
+                        print("Could not calculate collection id for", aip)
                     aip_row = [archive_group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4],
                                row[5], row[6]]
                     aip_row = ['NO VALUE' if x == '' else x for x in aip_row]
