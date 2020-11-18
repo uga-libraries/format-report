@@ -123,12 +123,12 @@ def archive_overview():
     group_combined = group_combined.fillna(0)
 
     # Adds the column totals.
-    group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['AIPs'].sum(),
-                                   group_combined['Collections'].sum(), group_combined['File_IDs'].sum()]
+    group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['Collections'].sum(),
+                                   group_combined['AIPs'].sum(), group_combined['File_IDs'].sum()]
 
     # Makes all rows except size integers, since they are counts and must be whole numbers.
-    group_combined['AIPs'] = group_combined['AIPs'].astype(int)
     group_combined['Collections'] = group_combined['Collections'].astype(int)
+    group_combined['AIPs'] = group_combined['AIPs'].astype(int)
     group_combined['File_IDs'] = group_combined['File_IDs'].astype(int)
 
     # Returns the information in a dataframe.
