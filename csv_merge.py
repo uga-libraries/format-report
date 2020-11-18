@@ -23,8 +23,7 @@ import sys
 def collection_from_aip(aip, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
     group has for constructing AIP ids for different collections. If the pattern does not match any known rules,
-    the function returns None and the error is caught where the function is called. This function is imported into
-    archive_capacity.py too."""
+    the function returns None and the error is caught where the function is called."""
 
     # Brown Media Archives and Peabody Awards Collection
     if group == 'bmac':
