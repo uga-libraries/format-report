@@ -158,14 +158,14 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
-
 # Gets the current date, formatted YYYYMM, to use in naming the results files.
 today = datetime.datetime.now().strftime("%Y-%m")
 
 # Makes two csv files for saving the combined format information in the same folder as the ARCHive format reports.
 # archive_formats_YYYYMM.csv is organized by format name and then by group, and is used for analyzing file counts.
 # archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format name, and is used for collection and aip counts.
-with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'archive_formats_by_aip_{today}.csv', 'w', newline='') as by_aip:
+with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'archive_formats_by_aip_{today}.csv',
+                                                                              'w', newline='') as by_aip:
     by_format_csv = csv.writer(by_format)
     by_aip_csv = csv.writer(by_aip)
 
@@ -202,5 +202,16 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
                 # Gets the standard name and format type for the format. Used in both CSVs.
                 format_standard, format_type = standardize_formats(row[2], standard_csv)
 
+                # Writes group, file id count, format type, and format standardized name to by format CSV.
                 by_format_csv.writerow([archive_group, row[1], format_type, format_standard])
-                #by_aip_csv.writerow([archive_group, data[2]])
+
+                # Gets a list of AIPs in this row, calculates their collection, and saves each AIP to its own row in
+                # the by aip CSV, with additional format information copied from the reports
+                aip_list = row[7].split('|')
+                for aip in aip_list:
+                    collection_id = collection_from_aip(aip, archive_group)
+                    aip_row = [archive_group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4],
+                               row[5], row[6]]
+                    # Fills all empty cells with 'NO VALUE' so it is easier to see where there is no data.
+                    aip_row = ['NO VALUE' if x == '' else x for x in aip_row]
+                    by_aip_csv.writerow(aip_row)
