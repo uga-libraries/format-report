@@ -46,7 +46,7 @@ def standardize_formats(format_name, standard):
         exit()
 
 
-def collection_from_aip(aip, group):
+def collection_from_aip(aip_id, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
     group has for constructing AIP ids for different collections. If the pattern does not match any known rules,
     the function returns None and the error is caught where the function is called."""
@@ -54,22 +54,22 @@ def collection_from_aip(aip, group):
     # Brown Media Archives and Peabody Awards Collection
     if group == 'bmac':
 
-        if aip[5].isdigit():
+        if aip_id[5].isdigit():
             return 'peabody'
 
         # The next three address errors with how AIP ID was made.
-        elif aip.startswith('har-ms'):
-            coll_regex = re.match('(^har-ms[0-9]+)_', aip)
+        elif aip_id.startswith('har-ms'):
+            coll_regex = re.match('(^har-ms[0-9]+)_', aip_id)
             return coll_regex.group(1)
 
-        elif aip.startswith('bmac_bmac_wsbn'):
+        elif aip_id.startswith('bmac_bmac_wsbn'):
             return 'wsbn'
 
-        elif aip.startswith('bmac_wrdw_'):
+        elif aip_id.startswith('bmac_wrdw_'):
             return 'wrdw-video'
 
         else:
-            coll_regex = re.match('^bmac_([a-z0-9-]+)_', aip)
+            coll_regex = re.match('^bmac_([a-z0-9-]+)_', aip_id)
             return coll_regex.group(1)
 
     # Digital Library of Georgia
@@ -77,41 +77,41 @@ def collection_from_aip(aip, group):
 
         # Everything in turningpoint is also in another collection, which is the one we want.
         # The collection number is made into an integer to remove leading zeros.
-        if aip.startswith('dlg_turningpoint'):
+        if aip_id.startswith('dlg_turningpoint'):
 
             # This one is from an error in the AIP ID.
-            if aip == 'dlg_turningpoint_ahc0062f-001':
+            if aip_id == 'dlg_turningpoint_ahc0062f-001':
                 return 'geh_ahc-mss820f'
 
-            elif aip.startswith('dlg_turningpoint_ahc'):
-                coll_regex = re.match('dlg_turningpoint_ahc([0-9]{4})([a-z]?)-', aip)
+            elif aip_id.startswith('dlg_turningpoint_ahc'):
+                coll_regex = re.match('dlg_turningpoint_ahc([0-9]{4})([a-z]?)-', aip_id)
                 if coll_regex.group(2) == 'v':
                     return f'geh_ahc-vis{int(coll_regex.group(1))}'
                 else:
                     return f'geh_ahc-mss{int(coll_regex.group(1))}{coll_regex.group(2)}'
 
-            elif aip.startswith('dlg_turningpoint_ghs'):
-                coll_regex = re.match('dlg_turningpoint_ghs([0-9]{4})([a-z]*)', aip)
+            elif aip_id.startswith('dlg_turningpoint_ghs'):
+                coll_regex = re.match('dlg_turningpoint_ghs([0-9]{4})([a-z]*)', aip_id)
                 if coll_regex.group(2) == 'bs':
                     return f'g-hi_ms{coll_regex.group(1)}-bs'
                 else:
                     return f'g-hi_ms{coll_regex.group(1)}'
 
-            elif aip.startswith('dlg_turningpoint_harg'):
-                coll_regex = re.match('dlg_turningpoint_harg([0-9]{4})([a-z]?)', aip)
+            elif aip_id.startswith('dlg_turningpoint_harg'):
+                coll_regex = re.match('dlg_turningpoint_harg([0-9]{4})([a-z]?)', aip_id)
 
                 return f'guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}'
 
-        elif aip.startswith('batch_gua_'):
+        elif aip_id.startswith('batch_gua_'):
             return 'dlg_ghn'
 
         else:
-            coll_regex = re.match('^([a-z0-9-]*_[a-z0-9-]*)_', aip)
+            coll_regex = re.match('^([a-z0-9-]*_[a-z0-9-]*)_', aip_id)
             return coll_regex.group(1)
 
     # Digital Library of Georgia: Hargrett Rare Book and Manuscript Library
     elif group == 'dlg-hargrett':
-        coll_regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip)
+        coll_regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip_id)
         return coll_regex.group(1)
 
     # NOTE: At the time of writing this script, there were no AIPs in dlg-magil. This will need to be updated.
@@ -120,12 +120,12 @@ def collection_from_aip(aip, group):
 
     # Hargrett Rare Book and Manuscript Library
     elif group == 'hargrett':
-        coll_regex = re.match('^(.*)(er|-web)', aip)
+        coll_regex = re.match('^(.*)(er|-web)', aip_id)
         return coll_regex.group(1)
 
     # Richard B. Russell Library for Research and Studies.
     elif group == 'russell':
-        coll_regex = re.match('^rbrl-?[0-9]{3}', aip)
+        coll_regex = re.match('^rbrl-?[0-9]{3}', aip_id)
         return coll_regex.group()
 
 
