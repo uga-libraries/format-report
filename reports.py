@@ -1,27 +1,27 @@
-"""Calculates subtotals of collection, AIP, and file counts for different categories: format types,
-format standardized names, groups, and combinations of those categories. The results are saved to an Excel workbook,
-one spreadsheet per subtotal.
+"""Calculates subtotals of collection, AIP, and file identification counts for different categories: format types,
+format standardized names, groups, and combinations of those. Once file size is added to the ARCHive format reports,
+size subtotals will be added. The results are saved to an Excel workbook, with one spreadsheet per subtotal,
+to use for analyzing formats in ARCHive.
 
 # The script uses information from three sources, all CSVs:
-    * usage report: downloaded from ARCHive. Has amount ingested (by file and size) for each group.
+    * usage report: downloaded from ARCHive. Has the amount ingested (by file and size) for each group.
     * archive formats: Organized by unique format. Has group, file count, format type, and format standard name.
     * archive formats by aip: For each AIP, has group, collection, aip id, and format information.
 
-Ideas for future development:
-    * Map NARA and LOC risk assessments to the most common formats.
-    * A report that compares the current report to a previous one to show change over time.
-    * Have size as well as count included in the file formats reports so can summarize by size.
-    * Calculate the number of individual formats in a name or type grouping?
-    * Calculate the range of format variety in a collection or AIP?
-    * Shared formats across groups? Name by group does that. Counts of overlap for summary? Match more detailed names?
+Ideas for additional reports:
+    * Map NARA and/or LOC risk assessments to the most common formats.
+    * Compares the current report to a previous one to show change over time.
+    * The number of unique formats for each standardized name, type, or group.
+    * The average amount of format variety per collection or AIP.
+    * Summarizing information about shared formats across groups from "name by group".
+    * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
+    * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
+    * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
 # Usage: python /path/reports.py report_folder
-# Report folder should contain the format CSVs and usage report. Script output is saved to this folder as well.
-
-# TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
-#  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
+# Report folder should contain the merged format CSVs and usage report. Script output is saved to this folder as well.
 
 import csv
 import datetime
@@ -31,26 +31,24 @@ import sys
 
 
 def archive_overview():
-    """Gets TBs, AIPs, Collections, and Files per group and total for ARCHive using the usage and formats reports.
-    Returns the information in a dataframe. """
-    # TODO: add number of types, standard formats, and/or actual formats by group as a variation measure.
+    """Gets TBs, AIPs, collections, and file ids per group and the total for ARCHive using the usage and format reports.
+    Returns the information in a dataframe."""
 
     def size_and_aips_count():
-        """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and AIP
-        count for all groups combined. Returns a dictionary with the group code plus total as the keys and lists with
-        the group code, size, and number of AIPs as the values. """
+        """Gets the size in TB and AIP count for each group from the usage report and calculates the total size and
+        AIP count for all groups combined. Returns a dictionary with the group code as the keys and lists with the
+        size and number of AIPs as the values."""
 
-        # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group
-        # code which is used in the formats report and in ARCHive metadata generally.
+        # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
+        # which is used in the formats reports and in ARCHive metadata generally.
         group_names = {'Brown Media Archives': 'bmac', 'Digital Library of Georgia': 'dlg',
                        'DLG & Hargrett': 'dlg-hargrett', 'DLG & Map and Government Information Library': 'dlg-magil',
                        'Hargrett': 'hargrett', 'Russell': 'russell'}
 
-        # Makes a dictionary for storing data for each group that will later be saved to the summary CSV.
+        # Makes a dictionary for storing data for each group.
         group_data = {}
 
-        # Gets the data from the usage report. Reading this csv instead of making it a dataframe immediately because
-        # of all the value updates and the inconsistent values for the different rows.
+        # Gets the data from the usage report.
         with open(usage_report, 'r') as usage:
             usage_read = csv.reader(usage)
 
@@ -60,14 +58,10 @@ def archive_overview():
             # Gets data from each row. A row can have data on a group, an individual user, or be blank.
             for row in usage_read:
 
-                # Skips empty rows. Blank rows are used for formatting the usage_report report to be easier to read.
-                # Have to do this before the next step or get an IndexError when checking the group name.
-                if not row:
-                    continue
-
                 # Processes data from each group. There is only one row per group in the report.
+                # Skips any rows that are blank or are individuals rather than groups.
                 # row[0] is group, row[1] is AIP count, and row[2] is size with the unit of measurement.
-                if row[0] in group_names:
+                if row and row[0] in group_names:
 
                     # Group code is fine as is.
                     group_code = group_names[row[0]]
@@ -111,35 +105,33 @@ def archive_overview():
 
     # Gets the number of collections per group from the formats by AIP report.
     # Only counts collections with AIPs, which may result in a difference between this count and ARCHive's count.
-    # TODO: add error handling in case AIPs without collections calculated remain in the formats report?
+    # Additionally, dlg-hargrett collections in ARCHive that are part of Turningpoint are counted as dlg.
     collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
     # Gets the number of files per group from the other formats report.
-    # These numbers are inflated by files with more than one format.
+    # These numbers are inflated by files with more than one format identification.
     files_by_group = df.groupby('Group')['File_IDs'].sum()
 
     # Combines the dataframes into a single dataframe.
-    # TODO: is it possible to change order so the counts are collection, aip, file?
-    group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
+    group_frames = [size_and_aips_by_group["Size"], collections_by_group, size_and_aips_by_group["AIPs"], files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
     # Renames the Size and Collection columns.
     group_combined = group_combined.rename(columns={"Size": "Size (TB)", "Collection": "Collections"})
 
-    # For Collections and File_IDs, replace cells without values (groups that have no collection or files) with 0
-    # and returns them to being integers. These counts are initially floats (decimal numbers) because of the blank
+    # Replace cells without values (one group has no files yet) with 0.
     group_combined = group_combined.fillna(0)
 
-    # Adds the column totals to the format type dataframes.
+    # Adds the column totals.
     group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['AIPs'].sum(),
                                    group_combined['Collections'].sum(), group_combined['File_IDs'].sum()]
 
-    # Makes all rows except size integers, since counts must be whole numbers.
+    # Makes all rows except size integers, since they are counts and must be whole numbers.
     group_combined['AIPs'] = group_combined['AIPs'].astype(int)
     group_combined['Collections'] = group_combined['Collections'].astype(int)
     group_combined['File_IDs'] = group_combined['File_IDs'].astype(int)
 
-    # Returns the information in a dataframe
+    # Returns the information in a dataframe.
     return group_combined
 
 
@@ -147,8 +139,11 @@ def percentage(dataframe, total, new_name):
     """Makes a new dataframe that is the percent of each value in an existing dataframe.
     This is a short function but repeats in the code several times."""
 
-    # Calculates the percentage, which is rounded to two decimal places. It remains a number and does not have % sign.
-    new_df = round((dataframe / total) * 100, 2)
+    # Calculates the percentage. It is stored as a number and does not have % sign.
+    new_df = (dataframe / total) * 100
+
+    # Rounds the  percentage to two decimal places.
+    new_df = round(new_df, 2)
 
     # Renames the column to the specified name. Otherwise, it will the same as the original dataframe.
     # Column names matter since they become the column header in the results Excel workbook.
@@ -171,9 +166,6 @@ def two_categories(cat1, cat2):
     result = pd.concat([result, files_result], axis=1)
 
     # Fills in any blank cells with 0.
-    # TODO: should not have blank file counts. Since dlg-hargrett, probably from group rename in df_aip but not df.
-    #   Type by Group: application, dlg-hargrett
-    #   Name by Group: unknown binary, dlg-hargrett
     result = result.fillna(0)
 
     return result
@@ -196,11 +188,10 @@ formats_report = False
 usage_report = False
 
 for file in os.listdir('.'):
-    # This CSV has one line per AIP and unique format. AIPs have multiple rows. Allows aggregating collection and AIP
-    # format information without unpacking lists of ids.
+    # This CSV has one line per AIP and unique format.
     if file.startswith('archive_formats_by_aip') and file.endswith('.csv'):
         formats_by_aip_report = file
-    # This CSV has one line per unique format and group. Allows aggregating file count information.
+    # This CSV has one line per group and unique format.
     elif file.startswith('archive_formats_') and file.endswith('.csv'):
         formats_report = file
     # This CSV has user and group ingest information.
@@ -237,42 +228,35 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
-# Saves the collection, AIP, and file totals to use in other dataframes.
+# Saves the ARCHive collection, AIP, and file totals to use in other dataframes.
+# Cannot just get the total of columns in those dataframes because that will over count anything with multiple formats.
 collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['File_IDs']['total']
 
 # Makes the format types report (collection, AIP, and file counts and percentages).
 # Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
-# Combines all six dataframes into a single dataframe.
-# Gets collection, AIP, and file totals from the overview dataframe and adds to this dataframe.
-# Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
+# Combines all six dataframes and the ARCHive totals into a single dataframe.
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
 collection_type_percent = percentage(collection_type, collection_total, "Collection Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_IDs'].sum()
 file_type_percent = percentage(file_type, file_total, "File Percentage")
-format_types = pd.concat(
-    [collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
+format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
 format_types.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
 # Makes the format standardized name report (collection, AIP, and file counts and percentages).
 # Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
-# Combines all six dataframes into a single dataframe.
-# Gets collection, AIP, and file totals from the overview dataframe and adds to this dataframe.
-# Cannot just get the total of columns in this dataframe because that over counts when something has multiple formats.
+# Combines all six dataframes and the ARCHive totals into a single dataframe.
 collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
 collection_name_percent = percentage(collection_name, collection_total, "Collection Percentage")
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
 aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
 file_name_percent = percentage(file_name, file_total, "File Percentage")
-format_names = pd.concat(
-    [collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
+format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
 format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
-
-# TODO Make a report that is a count of the number of standardized names with 1-9, 10-999, 100-999, etc. files.
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 # Removes the total row since that is only accurate for the complete list.
@@ -288,9 +272,6 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 # Makes a report with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
-# TODO: add a report that analyzes the original file format identifications. Can use df_aip for this. Original =
-#  format_name + format_version + registry_key. Get any with 500+ files (need to strip out NO VALUE) and also do
-#  subtotals of how many unique formats have 1-9, 10-99, etc. instances.
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
