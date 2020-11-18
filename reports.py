@@ -1,5 +1,6 @@
-"""Calculates subtotals of collection, AIP, and file counts for different categories: format types, format standardized
-names, groups, and combinations of those categories. The results are saved to an Excel file, one tab per subtotal.
+"""Calculates subtotals of collection, AIP, and file counts for different categories: format types,
+format standardized names, groups, and combinations of those categories. The results are saved to an Excel workbook,
+one spreadsheet per subtotal.
 
 # The script uses information from three sources, all CSVs:
     * usage report: downloaded from ARCHive. Has amount ingested (by file and size) for each group.
@@ -21,8 +22,6 @@ Ideas for future development:
 
 # TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
 #  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
-
-# TODO: Use sheets instead of tabs and other Excel lingo.
 
 import csv
 import datetime
@@ -152,7 +151,7 @@ def percentage(dataframe, total, new_name):
     new_df = round((dataframe / total) * 100, 2)
 
     # Renames the column to the specified name. Otherwise, it will the same as the original dataframe.
-    # Column names matter since they become the column header in the results Excel spreadsheet.
+    # Column names matter since they become the column header in the results Excel workbook.
     new_df = new_df.rename(new_name)
 
     return new_df
@@ -201,7 +200,7 @@ for file in os.listdir('.'):
     # format information without unpacking lists of ids.
     if file.startswith('archive_formats_by_aip') and file.endswith('.csv'):
         formats_by_aip_report = file
-    # This CSV has one line per unique format. Allows aggregating file count information.
+    # This CSV has one line per unique format and group. Allows aggregating file count information.
     elif file.startswith('archive_formats_') and file.endswith('.csv'):
         formats_report = file
     # This CSV has user and group ingest information.
@@ -296,8 +295,8 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 #  format_name + format_version + registry_key. Get any with 500+ files (need to strip out NO VALUE) and also do
 #  subtotals of how many unique formats have 1-9, 10-99, etc. instances.
 
-# Saves each report as a tab in an Excel spreadsheet.
-# The spreadsheet filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# Saves each report as a spreadsheet in an Excel workbook.
+# The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name="Group Overview")
