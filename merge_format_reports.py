@@ -37,6 +37,34 @@ while True:
     except OverflowError:
         sys.maxsize = int(sys.maxsize / 10)
 
+
+# Gets data from each group's format reports and calculates additional information based on that data.
+# The information is saved to ???? to be latter written to two CSVs, each organized in a different way.
+for report in os.listdir():
+
+    # Skips the file if it is not a format report. The usage report and potentially other files are also in this folder.
+    if not report.startswith('file_formats'):
+        continue
+
+    # Prints the script progress since this script can be slow to run.
+    print("\nStarting next report:", report)
+
+    # Gets the ARCHive group from the format report filename.
+    regex = re.match('file_formats_(.*).csv', report)
+    archive_group = regex.group(1)
+
+    # Gets the data from the report.
+    with open(report, 'r') as open_report:
+        report_info = csv.reader(open_report)
+
+        # Skips the header.
+        next(report_info)
+
+        # Gets the data from each row in the report.
+        for data in report_info:
+            print(data[2])
+
+
 # Gets the current date, formatted YYYYMM, to use in naming the merged files.
 today = datetime.datetime.now().strftime("%Y-%m")
 
@@ -52,29 +80,9 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as result:
          'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note', 'Collection_List',
          'AIP_List'])
 
-    # for report in os.listdir():
-    #
-    #     # Skips the file if it is not a format report. The usage report and some script outputs are also in this folder.
-    #     if not report.startswith('file_formats'):
-    #         continue
-    #
-    #     # Gets the ARCHive group from the format report filename.
-    #     regex = re.match('file_formats_(.*).csv', report)
-    #     archive_group = regex.group(1)
-    #
-    #     # Gets the data from the report.
-    #     with open(report, 'r') as open_report:
-    #         report_info = csv.reader(open_report)
-    #
-    #         # Skips the header.
-    #         next(report_info)
-    #
-    #         # Gets the data from each row in the report.
-    #         for data in report_info:
-    #             # Updates the row to add additional information and fill in blank cells using another function and saves
-    #             # the updated row to the CSV.
-    #             new_row = update_row(data, archive_group)
-    #             result_csv.writerow(new_row)
+    # TODO: get the information from the reports and save to the csv.
+    # new_row = "TODO"
+    # result_csv.writerow(new_row)
 
 # Makes a CSV file with all format information organized by AIP and then by format name.
 # This file is used for analyzing collection and AIP counts. This structure makes it easier to remove duplicates.
@@ -87,30 +95,7 @@ with open(f'archive_formats_by_aip_{today}.csv', 'w', newline='') as result:
         ['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name', 'Format_Version',
          'Registry_Name', 'Registry_Key', 'Format_Note'])
 
-    # # Finds the format reports in the report folder.
-    # for report in os.listdir():
-    #
-    #     # Skips the file if it is not a format report. Other files, including the usage report, may be in this folder.
-    #     if not report.startswith('file_formats'):
-    #         continue
-    #
-    #     # Prints the script progress since this script can be slow to run.
-    #     print("Starting next report:", report)
-    #
-    #     # Gets the ARCHive group from the format report filename.
-    #     regex = re.match('file_formats_(.*).csv', report)
-    #     archive_group = regex.group(1)
-    #
-    #     # Gets the data from the report.
-    #     with open(report, 'r') as open_report:
-    #         report_info = csv.reader(open_report)
-    #
-    #         # Skips the header.
-    #         next(report_info)
-    #
-    #         # Gets each row from the format report. Updates the row to split it to one row per AIP (if more than
-    #         # one), add additional information, and fill in blank cells. Saves each updated row to the results CSV.
-    #         for data in report_info:
-    #             new_rows = update_row(data, archive_group)
-    #             for row in new_rows:
-    #                 result_csv.writerow(row)
+    # TODO: get the information from the reports and save to the csv.
+    # new_rows = "TODO"
+    # for row in new_rows:
+    #     result_csv.writerow(row)
