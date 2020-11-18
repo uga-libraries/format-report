@@ -22,7 +22,6 @@ Ideas for future development:
 # TODO: I've been checking the code against small test data and make sure it keeps seeming reasonable and not
 #  changing. But before finalizing this, do an in-depth check against what Excel generates for the same process.
 
-# TODO: Use File IDs instead of Files (Inflated) as a reminder that these are not unqiue.
 # TODO: Use sheets instead of tabs and other Excel lingo.
 
 import csv
@@ -118,29 +117,28 @@ def archive_overview():
 
     # Gets the number of files per group from the other formats report.
     # These numbers are inflated by files with more than one format.
-    files_by_group = df.groupby('Group')['File_Count'].sum()
+    files_by_group = df.groupby('Group')['File_IDs'].sum()
 
     # Combines the dataframes into a single dataframe.
     # TODO: is it possible to change order so the counts are collection, aip, file?
     group_frames = [size_and_aips_by_group, collections_by_group, files_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
-    # Renames the columns. Only AIPs stays the same.
-    group_combined = group_combined.rename(columns={"Size": "Size (TB)", "Collection": "Collections",
-                                                    "File_Count": "Files (inflated)"})
+    # Renames the Size and Collection columns.
+    group_combined = group_combined.rename(columns={"Size": "Size (TB)", "Collection": "Collections"})
 
-    # For Collections and File_Count, replace cells without values (groups that have no collection or files) with 0
+    # For Collections and File_IDs, replace cells without values (groups that have no collection or files) with 0
     # and returns them to being integers. These counts are initially floats (decimal numbers) because of the blank
     group_combined = group_combined.fillna(0)
 
     # Adds the column totals to the format type dataframes.
     group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['AIPs'].sum(),
-                                   group_combined['Collections'].sum(), group_combined['Files (inflated)'].sum()]
+                                   group_combined['Collections'].sum(), group_combined['File_IDs'].sum()]
 
     # Makes all rows except size integers, since counts must be whole numbers.
     group_combined['AIPs'] = group_combined['AIPs'].astype(int)
     group_combined['Collections'] = group_combined['Collections'].astype(int)
-    group_combined['Files (inflated)'] = group_combined['Files (inflated)'].astype(int)
+    group_combined['File_IDs'] = group_combined['File_IDs'].astype(int)
 
     # Returns the information in a dataframe
     return group_combined
@@ -168,7 +166,7 @@ def two_categories(cat1, cat2):
     result = df_aip[[cat1, cat2, 'Collection', 'AIP']].groupby([cat1, cat2]).nunique()
 
     # The file subtotal comes from df and is inflated by files with multiple format identifications.
-    files_result = df.groupby([cat1, cat2])['File_Count'].sum()
+    files_result = df.groupby([cat1, cat2])['File_IDs'].sum()
 
     # Adds the file subtotal to the dataframe with the collection and AIP subtotals.
     result = pd.concat([result, files_result], axis=1)
@@ -230,6 +228,7 @@ df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
 # Updates russell collection ids to remove dash, since rbrl-### and rbrl### should be treated as the same collection.
+# TODO: could remove the dash when forming the ids in the merged csv instead.
 df_aip.loc[df_aip['Group'] == 'russell', 'Collection'] = df_aip['Collection'].str.replace('-', '')
 
 # Updates group to dlg-hargrett if group is dlg and collection starts with guan_ to correct an error in the data.
@@ -248,7 +247,7 @@ overview = archive_overview()
 # Saves the collection, AIP, and file totals to use in other dataframes.
 collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
-file_total = overview['Files (inflated)']['total']
+file_total = overview['File_IDs']['total']
 
 # Makes the format types report (collection, AIP, and file counts and percentages).
 # Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
@@ -259,7 +258,7 @@ collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
 collection_type_percent = percentage(collection_type, collection_total, "Collection Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
-file_type = df.groupby('Format_Type')['File_Count'].sum()
+file_type = df.groupby('Format_Type')['File_IDs'].sum()
 file_type_percent = percentage(file_type, file_total, "File Percentage")
 format_types = pd.concat(
     [collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
@@ -274,7 +273,7 @@ collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nuniq
 collection_name_percent = percentage(collection_name, collection_total, "Collection Percentage")
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
 aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
-file_name = df.groupby('Format_Standardized_Name')['File_Count'].sum()
+file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
 file_name_percent = percentage(file_name, file_total, "File Percentage")
 format_names = pd.concat(
     [collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
@@ -284,7 +283,7 @@ format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_tot
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 # Removes the total row since that is only accurate for the complete list.
-common_formats = format_names[format_names.File_Count > 500]
+common_formats = format_names[format_names.File_IDs > 500]
 common_formats = common_formats.drop(['total'])
 
 # Makes a report with subtotals first by format type and then subdivided by group.
