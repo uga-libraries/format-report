@@ -8,6 +8,127 @@ import re
 import sys
 
 
+def standardize_formats(format_name, standard):
+    """Finds the format name within the standardized formats csv and returns the standard (simplified) format
+    name and the format type. Using a standardized name and assigning a format type reduces some of the data
+    variability so summaries are more useful. Can rely on there being a match because update_normalized.py is run
+    first.
+
+    Standard format name is based on PRONOM, although sometimes the name truncated to group more names together. For
+    formats not in PRONOM, we either truncated the name or left it as it was. Occasionally researched the most
+    common form of the name.
+
+    Format type is based on mimetypes, with additional local categories used where more nuance was needed for
+    meaningful results, e.g. application and text. """
+
+    # Reads the standardized formats csv.
+    with open(standard) as standard_list:
+        read_standard_list = csv.reader(standard_list)
+
+        # Skips the header.
+        next(read_standard_list)
+
+        # Checks each row for the format. When there is a match, returns the standardized name and format type.
+        # Matching lowercase versions of the format names to ignore variations in capitalization.
+        # Note: considered just matching the start of the name for fewer results for formats that include file
+        # size or other details in the name, but this caused too many errors from different formats that start with
+        # the same string.
+        for standard_row in read_standard_list:
+            if format_name.lower() == standard_row[0].lower():
+                return standard_row[1], standard_row[2]
+
+        # If there was no match (the previous code block did not return a result, which exits this function and keeps
+        # this code block from running), prints an error message and quits the script. Run update_standardization.py to
+        # make sure that standardize_formats.csv will have a match for all formats.
+        print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
+        print('Update that CSV and run this script again.')
+        print('Note that the archive_formats CSV produced by the script only has formats up until this point.')
+        exit()
+
+
+def collection_from_aip(aip, group):
+    """Returns the collection id. The collection id is extracted from the AIP id based on the various rules each
+    group has for constructing AIP ids for different collections. If the pattern does not match any known rules,
+    the function returns None and the error is caught where the function is called."""
+
+    # Brown Media Archives and Peabody Awards Collection
+    if group == 'bmac':
+
+        if aip[5].isdigit():
+            return 'peabody'
+
+        # The next three address errors with how AIP ID was made.
+        elif aip.startswith('har-ms'):
+            coll_regex = re.match('(^har-ms[0-9]+)_', aip)
+            return coll_regex.group(1)
+
+        elif aip.startswith('bmac_bmac_wsbn'):
+            return 'wsbn'
+
+        elif aip.startswith('bmac_wrdw_'):
+            return 'wrdw-video'
+
+        else:
+            coll_regex = re.match('^bmac_([a-z0-9-]+)_', aip)
+            return coll_regex.group(1)
+
+    # Digital Library of Georgia
+    elif group == 'dlg':
+
+        # Everything in turningpoint is also in another collection, which is the one we want.
+        # The collection number is made into an integer to remove leading zeros.
+        if aip.startswith('dlg_turningpoint'):
+
+            # This one is from an error in the AIP ID.
+            if aip == 'dlg_turningpoint_ahc0062f-001':
+                return 'geh_ahc-mss820f'
+
+            elif aip.startswith('dlg_turningpoint_ahc'):
+                coll_regex = re.match('dlg_turningpoint_ahc([0-9]{4})([a-z]?)-', aip)
+                if coll_regex.group(2) == 'v':
+                    return f'geh_ahc-vis{int(coll_regex.group(1))}'
+                else:
+                    return f'geh_ahc-mss{int(coll_regex.group(1))}{coll_regex.group(2)}'
+
+            elif aip.startswith('dlg_turningpoint_ghs'):
+                coll_regex = re.match('dlg_turningpoint_ghs([0-9]{4})([a-z]*)', aip)
+                if coll_regex.group(2) == 'bs':
+                    return f'g-hi_ms{coll_regex.group(1)}-bs'
+                else:
+                    return f'g-hi_ms{coll_regex.group(1)}'
+
+            elif aip.startswith('dlg_turningpoint_harg'):
+                coll_regex = re.match('dlg_turningpoint_harg([0-9]{4})([a-z]?)', aip)
+
+                return f'guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}'
+
+        elif aip.startswith('batch_gua_'):
+            return 'dlg_ghn'
+
+        else:
+            coll_regex = re.match('^([a-z0-9-]*_[a-z0-9-]*)_', aip)
+            return coll_regex.group(1)
+
+    # Digital Library of Georgia: Hargrett Rare Book and Manuscript Library
+    elif group == 'dlg-hargrett':
+        coll_regex = re.match('^([a-z]{3,4}_[a-z0-9]{4})_', aip)
+        return coll_regex.group(1)
+
+    # NOTE: At the time of writing this script, there were no AIPs in dlg-magil. This will need to be updated.
+    elif group == 'dlg-magil':
+        return None
+
+    # Hargrett Rare Book and Manuscript Library
+    elif group == 'hargrett':
+        coll_regex = re.match('^(.*)(er|-web)', aip)
+        return coll_regex.group(1)
+
+    # Richard B. Russell Library for Research and Studies.
+    elif group == 'russell':
+        coll_regex = re.match('^rbrl-?[0-9]{3}', aip)
+        return coll_regex.group()
+
+
 # THE FOLLOWING IS EVERYTHING BUT THE FUNCTIONS FROM THE TWO SEPARATE SCRIPTS.
 # MOVE OVERLAPPING CONTENT, E.G. READING GROUP FORMAT REPORTS, TO FUNCTIONS BOTH CAN CALL.
 
@@ -62,7 +183,7 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
             continue
 
         # Prints the script progress since this script can be slow to run.
-        print("\nStarting next report:", report)
+        print("Starting next report:", report)
 
         # Gets the ARCHive group from the format report filename.
         regex = re.match('file_formats_(.*).csv', report)
@@ -76,9 +197,10 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
             next(report_info)
 
             # Gets the data from each row in the report.
-            for data in report_info:
-                by_format_csv.writerow([archive_group, data[1], 'type', 'name'])
-                by_aip_csv.writerow([archive_group, data[2]])
+            for row in report_info:
 
+                # Gets the standard name and format type for the format. Used in both CSVs.
+                format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-
+                by_format_csv.writerow([archive_group, row[1], format_type, format_standard])
+                #by_aip_csv.writerow([archive_group, data[2]])
