@@ -150,13 +150,13 @@ except (IndexError, FileNotFoundError):
     exit()
 
 # Makes a variable with the file path for the standardized formats csv. Uses the optional script argument if provided,
-# or else uses the folder with this script as the default location for that csv.
+# or else uses the folder with this script as the default location for that CSV.
 try:
     standard_csv = sys.argv[2]
 except IndexError:
     standard_csv = os.path.join(sys.path[0], 'standardize_formats.csv')
 
-# Increases the size of csv fields to handle long AIP lists.
+# Increases the size of CSV fields to handle long AIP lists.
 # Gets the maximum size that doesn't give an overflow error.
 while True:
     try:
