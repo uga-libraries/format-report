@@ -124,9 +124,11 @@ def collection_from_aip(aip_id, group):
         return coll_regex.group(1)
 
     # Richard B. Russell Library for Research and Studies.
+    # The same collection can be formatted rbrl-### or rbrl###, so normalizing all IDs to rbrl### to avoid duplicates.
     elif group == 'russell':
-        coll_regex = re.match('^rbrl-?[0-9]{3}', aip_id)
-        return coll_regex.group()
+        coll_regex = re.match('^rbrl-?([0-9]{3})', aip_id)
+        coll_id = f'rbrl{coll_regex.group(1)}'
+        return coll_id
 
 
 # THE FOLLOWING IS EVERYTHING BUT THE FUNCTIONS FROM THE TWO SEPARATE SCRIPTS.
