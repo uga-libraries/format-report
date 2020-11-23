@@ -15,6 +15,7 @@ Ideas for additional reports:
     * The average amount of format variety per collection or AIP.
     * Summarizing information about shared formats across groups from "name by group".
     * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
+    * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
     * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
 """
@@ -165,9 +166,6 @@ def two_categories(cat1, cat2):
     # Adds the file subtotal to the dataframe with the collection and AIP subtotals.
     result = pd.concat([result, files_result], axis=1)
 
-    # Fills in any blank cells with 0.
-    result = result.fillna(0)
-
     return result
 
 
@@ -242,7 +240,7 @@ collection_type_percent = percentage(collection_type, collection_total, "Collect
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
 aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_IDs'].sum()
-file_type_percent = percentage(file_type, file_total, "File Percentage")
+file_type_percent = percentage(file_type, file_total, "File_IDs Percentage")
 format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
 format_types.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
@@ -254,7 +252,7 @@ collection_name_percent = percentage(collection_name, collection_total, "Collect
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
 aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
-file_name_percent = percentage(file_name, file_total, "File Percentage")
+file_name_percent = percentage(file_name, file_total, "File_IDs Percentage")
 format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
 format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
@@ -276,7 +274,7 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
-with pd.ExcelWriter(f'ARCHive Formats Report_{today}.xlsx') as results:
+with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name="Group Overview")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
