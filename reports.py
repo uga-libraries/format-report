@@ -13,7 +13,7 @@ Ideas for additional reports:
     * Compares the current report to a previous one to show change over time.
     * The number of unique formats for each standardized name, type, or group.
     * The average amount of format variety per collection or AIP.
-    * Summarizing information about shared formats across groups from "name by group".
+    * Groups per type, name, and format id for overlap. Include number of groups and which groups.
     * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
     * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
@@ -158,6 +158,7 @@ def two_categories(cat1, cat2):
     that long, but use this three times and makes it easy to add additional comparisons when needed."""
 
     # The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
+    # TODO: in result, I'd like the column names to become Collections and AIPs for a better label in Excel.
     result = df_aip[[cat1, cat2, 'Collection', 'AIP']].groupby([cat1, cat2]).nunique()
 
     # The file subtotal comes from df and is inflated by files with multiple format identifications.
@@ -228,6 +229,7 @@ overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, and file totals to use in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over count anything with multiple formats.
+# TODO: the totals get in the way for sorting these two sheets - maybe don't include since in group overview tab?
 collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['File_IDs']['total']
