@@ -167,8 +167,10 @@ def two_categories(cat1, cat2):
     that long, but use this three times and makes it easy to add additional comparisons when needed."""
 
     # The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
-    # TODO: in result, I'd like the column names to become Collections and AIPs for a better label in Excel.
     result = df_aip[[cat1, cat2, 'Collection', 'AIP']].groupby([cat1, cat2]).nunique()
+
+    # Renames the column headings to be plural (Collections, AIPs) to be more accurate.
+    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
 
     # The file subtotal comes from df and is inflated by files with multiple format identifications.
     files_result = df.groupby([cat1, cat2])['File_IDs'].sum()
@@ -243,24 +245,27 @@ aip_total = overview['AIPs']['total']
 file_total = overview['File_IDs']['total']
 
 # Makes the format types report (collection, AIP, and file counts and percentages). Creates dataframes for each count
-# type and their percentages and combines all six dataframes into a single dataframe.
+# type and their percentages and combines all six dataframes into a single dataframe. Renames Collection and AIP
+# columns to plural to be more accurate labels.
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
-collection_type_percent = percentage(collection_type, collection_total, "Collection Percentage")
+collection_type_percent = percentage(collection_type, collection_total, "Collections Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
-aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
+aip_type_percent = percentage(aip_type, aip_total, "AIPs Percentage")
 file_type = df.groupby('Format_Type')['File_IDs'].sum()
 file_type_percent = percentage(file_type, file_total, "File_IDs Percentage")
 format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
+format_types = format_types.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
 
 # Makes the format standardized name report (collection, AIP, and file counts and percentages). Creates dataframes
 # for each count type and their percentages and combines all six dataframes into a single dataframe.
 collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
-collection_name_percent = percentage(collection_name, collection_total, "Collection Percentage")
+collection_name_percent = percentage(collection_name, collection_total, "Collections Percentage")
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
-aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
+aip_name_percent = percentage(aip_name, aip_total, "AIPs Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
 file_name_percent = percentage(file_name, file_total, "File_IDs Percentage")
 format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
+format_names = format_names.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
 common_formats = format_names[format_names.File_IDs > 500]
