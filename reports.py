@@ -18,6 +18,8 @@ Ideas for additional reports:
     * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
     * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
+
+Might be helpful to make a function for the each of the reports that are more than a few lines to organize better.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
@@ -286,9 +288,8 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
 
-# TODO: get this report working.
-# Makes a report with the number of groups that have each format type.
 
+# Makes a report with the number of groups that have each format type.
 # First gets a list of the group names for each format. Then gets the count of each of those lists. Then combine to
 # one dataframe and rename the columns. Without the rename, both are 'Group' from the initial dataframe calculation.
 # Had to make them separately because I couldn't figure out how to access the group list iteratively and make a new
@@ -299,9 +300,16 @@ groups_per_type = pd.concat([groups_count, groups_list], axis=1)
 groups_per_type.columns = ['Groups', 'Group_List']
 
 # TODO: would like to change the list to a string so it is easier to read in Excel.
+# If figure this out, also add to the following two "groups per" reports.
 # This was from stakeoverflow but doesn't make a change.
 # groups_per_type['Group_List'].apply(', '.join)
 # print(groups_per_type)
+
+# Makes a report with the number of groups that have each format standardized name.
+groups_list = df.groupby(df['Format_Standardized_Name'])['Group'].unique()
+groups_count = groups_list.str.len()
+groups_per_name = pd.concat([groups_count, groups_list], axis=1)
+groups_per_name.columns = ['Groups', 'Group_List']
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -316,3 +324,4 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_id.to_excel(results, sheet_name="Format ID")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
+    groups_per_name.to_excel(results, sheet_name="Groups per Name")
