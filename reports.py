@@ -1,25 +1,29 @@
-"""Calculates subtotals of collection, AIP, and file identification counts for different categories: format types,
-format standardized names, groups, and combinations of those. Once file size is added to the ARCHive format reports,
-size subtotals will be added. The results are saved to an Excel workbook, with one spreadsheet per subtotal,
+"""Calculates subtotals of collection, AIP, and file identification counts for different categories: groups,
+format types, format standardized names, and combinations of those. Once file size is added to the ARCHive format
+reports, size subtotals will be added. The results are saved to an Excel workbook, with one spreadsheet per subtotal,
 to use for analyzing formats in ARCHive.
 
-# The script uses information from three sources, all CSVs:
+The script uses information from three sources, all CSVs:
     * usage report: downloaded from ARCHive. Has the amount ingested (by file and size) for each group.
     * archive formats: Organized by unique format. Has group, file count, format type, and format standard name.
     * archive formats by aip: For each AIP, has group, collection, aip id, and format information.
+
+Definition of terms:
+    * Group: ARCHive group name, which is the department or departments responsible for the content.
+    * Format type: category of the format, for example audio, image, or text.
+    * Format standardized name: a simplified version of the name, for example removing version information.
+    * Format identification: a combination of the format name, version, and registry key (usually PRONOM).
 
 Ideas for additional reports:
     * Map NARA and/or LOC risk assessments to the most common formats.
     * Compares the current report to a previous one to show change over time.
     * The number of unique formats for each standardized name, type, or group.
     * The average amount of format variety per collection or AIP.
-    * Groups per type, name, and format id for overlap. Include number of groups and which groups.
     * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
     * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
     * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
 
-Might be helpful to make a function for the each of the reports that are more than a few lines to organize better.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
@@ -164,18 +168,51 @@ def percentage(dataframe, total, new_name):
     return new_df
 
 
-def two_categories(cat1, cat2):
-    """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on two criteria. Not
-    that long, but use this three times and makes it easy to add additional comparisons when needed."""
+def one_category(category):
+    """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on one criteria,
+    for example Format Type or Format Standardized Name. """
+
+    # Creates dataframes for each count type (collections, AIPs, and file ids) for each instance of the category.
+    collections = df_aip.groupby(category)['Collection'].nunique()
+    aips = df_aip.groupby(category)['AIP'].nunique()
+    files = df.groupby(category)['File_IDs'].sum()
+
+    # Creates dataframes with the percentage of total collections, AIPs, and file ids for each instance of the category.
+    # The percentage is rounded to two decimal places.
+    # Renames the column to the specified name for a more accurate label.
+
+    collections_percent = (collections / collection_total) * 100
+    collections_percent = round(collections_percent, 2)
+    collections_percent = collections_percent.rename("Collections Percentage")
+
+    aips_percent = (aips / aip_total) * 100
+    aips_percent = round(aips_percent, 2)
+    aips_percent = aips_percent.rename("AIPs Percentage")
+
+    files_percent = (files / file_total) * 100
+    files_percent = round(files_percent, 2)
+    files_percent = files_percent.rename("Files Percentage")
+
+    # Combines all six count and percentage dataframes into a single dataframe.
+    result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent], axis=1)
+
+    # Renames Collection and AIP columns to plural to be more accurate labels.
+    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+
+    return result
+
+
+def two_categories(category1, category2):
+    """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on two criteria."""
 
     # The collection and AIP subtotals come from df_aip to get counts of unique collections and unique AIPs.
-    result = df_aip[[cat1, cat2, 'Collection', 'AIP']].groupby([cat1, cat2]).nunique()
+    result = df_aip[[category1, category2, 'Collection', 'AIP']].groupby([category1, category2]).nunique()
 
     # Renames the column headings to be plural (Collections, AIPs) to be more accurate.
     result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
 
     # The file subtotal comes from df and is inflated by files with multiple format identifications.
-    files_result = df.groupby([cat1, cat2])['File_IDs'].sum()
+    files_result = df.groupby([category1, category2])['File_IDs'].sum()
 
     # Adds the file subtotal to the dataframe with the collection and AIP subtotals.
     result = pd.concat([result, files_result], axis=1)
@@ -259,76 +296,55 @@ if len(missing) > 0:
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
+# Adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
+df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 
-# The rest of this script uses pandas to calculate the collection count, AIP count, and file count for different
-# combinations of data categories. These categories are:
-#   * Group: ARCHive group name, which is the department or departments responsible for the content.
-#   * Format type: category of the format, for example audio, image, or text.
-#   * Format standardized name: a simplified version of the name, for example removing version information.
+# Generate dataframes for each type of analysis. Each dataframe will be saved as a separate sheet in Excel.
 
-
-# Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
+# Makes the ARCHive overview dataframe (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, and file totals to use for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
+# TODO: save these as a list to pass to the function instead of relying on a global variable?
 collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['File_IDs']['total']
 
-# Makes the format types report (collection, AIP, and file counts and percentages). Creates dataframes for each count
-# type and their percentages and combines all six dataframes into a single dataframe. Renames Collection and AIP
-# columns to plural to be more accurate labels.
-collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
-collection_type_percent = percentage(collection_type, collection_total, "Collections Percentage")
-aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
-aip_type_percent = percentage(aip_type, aip_total, "AIPs Percentage")
-file_type = df.groupby('Format_Type')['File_IDs'].sum()
-file_type_percent = percentage(file_type, file_total, "File_IDs Percentage")
-format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
-format_types = format_types.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+# Makes the format types dataframe (collection, AIP, and file counts and percentages).
+format_types = one_category("Format_Type")
 
-# Makes the format standardized name report (collection, AIP, and file counts and percentages). Creates dataframes
-# for each count type and their percentages and combines all six dataframes into a single dataframe.
-collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
-collection_name_percent = percentage(collection_name, collection_total, "Collections Percentage")
-aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
-aip_name_percent = percentage(aip_name, aip_total, "AIPs Percentage")
-file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
-file_name_percent = percentage(file_name, file_total, "File_IDs Percentage")
-format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
-format_names = format_names.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+# Makes the format standardized name dataframe (collection, AIP, and file counts and percentages).
+format_names = one_category("Format_Standardized_Name")
 
-# Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
+# Makes a dataframe with all standardized format names with over 500 instances, to use for risk analysis.
 common_formats = format_names[format_names.File_IDs > 500]
 
-# Makes a report with subtotals first by format type and then subdivided by group.
+# Makes a dataframe with subtotals first by format type and then subdivided by group.
 type_by_group = two_categories("Format_Type", "Group")
 
-# Makes a report with subtotals first by format type and then subdivided by format standardized name.
+# Makes a dataframe with subtotals first by format type and then subdivided by format standardized name.
 type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 
-# Makes a report with subtotals first by format standardized name and then by group.
+# Makes a dataframe with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
-# Makes a report with the file identification count for every format identification (name, version, registry key).
-# First adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
-# Then saves subtotals of file ids for each format identification to another dataframe.
+# Makes a dataframe with the file identification count for every format identification (name, version, registry key).
+# The dataframe is sorted
 # TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate. Ok with that or try to clean up?
-df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
 format_id = format_id.sort_values(ascending=False)
 
-# Makes a report with the number of groups and a list of groups that have each format type.
+# Makes a dataframe with the number of groups and a list of groups that have each format type.
 groups_per_type = group_overlap("Format_Type")
 
-# Makes a report with the number of groups and a list of groups that have each format standardized name.
+# Makes a dataframe with the number of groups and a list of groups that have each format standardized name.
 groups_per_name = group_overlap("Format_Standardized_Name")
 
-# Makes a report with the number of groups and a list of groups that have each format identification.
+# Makes a dataframe with the number of groups and a list of groups that have each format identification.
 groups_per_id = group_overlap("Format Identification (Name|Version|Key)")
 
-# Saves each report as a spreadsheet in an Excel workbook.
+# Saves each dataframe as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
