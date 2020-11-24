@@ -17,8 +17,6 @@ Definition of terms:
 Ideas for additional reports:
     * Map NARA and/or LOC risk assessments to the most common formats.
     * Compares the current report to a previous one to show change over time.
-    * The number of unique formats for each standardized name, type, or group.
-    * The average amount of format variety per collection or AIP.
     * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
     * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
@@ -37,6 +35,8 @@ import pandas as pd
 import sys
 
 # TODO: explain input of the functions better.
+# TODO: some of the things I am calling dataframes are probably really series, e.g. result from unique() or sum().
+# TODO: vocabulary check. Wasn't consistent about terms for format  name, format id, or the different input reports.
 
 
 def archive_overview():
@@ -126,23 +126,37 @@ def archive_overview():
     # Additionally, dlg-hargrett collections in ARCHive that are part of Turningpoint are counted as dlg.
     collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
+    # Gets the number of format types per group from the formats by AIP report.
+    types_by_group = df_aip.groupby('Group')['Format_Type'].nunique()
+
+    # Gets the number of format standardized names per group from the formats by AIP report.
+    formats_by_group = df_aip.groupby('Group')['Format_Standardized_Name'].nunique()
+
     # Gets the number of files per group from the other formats report.
     # These numbers are inflated by files with more than one format identification.
     files_by_group = df.groupby('Group')['File_IDs'].sum()
 
+    # Gets the number of unique format identifications per group from the other formats report.
+    format_ids_by_group = df.groupby('Group')[format_id].nunique()
+
     # Combines the dataframes into a single dataframe.
-    group_frames = [size_and_aips_by_group["Size"], collections_by_group, size_and_aips_by_group["AIPs"], files_by_group]
+    group_frames = [size_and_aips_by_group["Size"], collections_by_group, size_and_aips_by_group["AIPs"],
+                    files_by_group, types_by_group, formats_by_group, format_ids_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
-    # Renames the Size and Collection columns.
-    group_combined = group_combined.rename(columns={"Size": "Size (TB)", "Collection": "Collections"})
+    # Renames columns to be more accurate.
+    rename = {"Size": "Size (TB)", "Collection": "Collections", "Format_Type": "Format_Types",
+              "Format_Standardized_Name": "Format_Standardized_Names",
+              "Format Identification (Name|Version|Key)": "Format Identifications (Name|Version|Key)"}
+    group_combined = group_combined.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
     group_combined = group_combined.fillna(0)
 
     # Adds the column totals.
+    # TODO: how to add the total number of unique types, standard names, and ids?
     group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['Collections'].sum(),
-                                   group_combined['AIPs'].sum(), group_combined['File_IDs'].sum()]
+                                   group_combined['AIPs'].sum(), group_combined['File_IDs'].sum(), "n/a", "n/a", "n/a"]
 
     # Makes all rows except size integers, since they are counts and must be whole numbers.
     group_combined['Collections'] = group_combined['Collections'].astype(int)
