@@ -151,23 +151,6 @@ def archive_overview():
     return group_combined
 
 
-def percentage(dataframe, total, new_name):
-    """Makes a new dataframe that is the percent of each value in an existing dataframe.
-    This is a short function but repeats in the code several times."""
-
-    # Calculates the percentage. It is stored as a number and does not have % sign.
-    new_df = (dataframe / total) * 100
-
-    # Rounds the  percentage to two decimal places.
-    new_df = round(new_df, 2)
-
-    # Renames the column to the specified name. Otherwise, it will the same as the original dataframe.
-    # Column names matter since they become the column header in the results Excel workbook.
-    new_df = new_df.rename(new_name)
-
-    return new_df
-
-
 def one_category(category):
     """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on one criteria,
     for example Format Type or Format Standardized Name. """
