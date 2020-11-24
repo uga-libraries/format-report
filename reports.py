@@ -282,9 +282,26 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 # Makes a report with the file identification count for every format identification (name, version, registry key).
 # First adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
 # Then saves subtotals of file ids for each format identification to another dataframe.
-# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate.
+# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate. Ok with that or try to clean up?
 df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
+
+# TODO: get this report working.
+# Makes a report with the number of groups that have each format type.
+
+# First gets a list of the group names for each format. Then gets the count of each of those lists. Then combine to
+# one dataframe and rename the columns. Without the rename, both are 'Group' from the initial dataframe calculation.
+# Had to make them separately because I couldn't figure out how to access the group list iteratively and make a new
+# column from it.
+groups_list = df.groupby(df['Format_Type'])['Group'].unique()
+groups_count = groups_list.str.len()
+groups_per_type = pd.concat([groups_count, groups_list], axis=1)
+groups_per_type.columns = ['Groups', 'Group_List']
+
+# TODO: would like to change the list to a string so it is easier to read in Excel.
+# This was from stakeoverflow but doesn't make a change.
+# groups_per_type['Group_List'].apply(', '.join)
+# print(groups_per_type)
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -298,3 +315,4 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_id.to_excel(results, sheet_name="Format ID")
+    groups_per_type.to_excel(results, sheet_name="Groups per Type")
