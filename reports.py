@@ -279,6 +279,12 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 # Makes a report with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
+# Makes a report with the file identification count for every format identification (name, version, registry key).
+# First adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
+# Then saves subtotals of file ids for each format identification to another dataframe.
+# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate.
+df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
+format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -291,3 +297,4 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
+    format_id.to_excel(results, sheet_name="Format ID")
