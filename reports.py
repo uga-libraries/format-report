@@ -36,6 +36,8 @@ import os
 import pandas as pd
 import sys
 
+# TODO: explain input of the functions better.
+
 
 def archive_overview():
     """Gets TBs, AIPs, collections, and file ids per group and the total for ARCHive using the usage and format reports.
@@ -151,7 +153,7 @@ def archive_overview():
     return group_combined
 
 
-def one_category(category):
+def one_category(category, totals):
     """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on one criteria,
     for example Format Type or Format Standardized Name. """
 
@@ -164,15 +166,15 @@ def one_category(category):
     # The percentage is rounded to two decimal places.
     # Renames the column to the specified name for a more accurate label.
 
-    collections_percent = (collections / collection_total) * 100
+    collections_percent = (collections / totals[0]) * 100
     collections_percent = round(collections_percent, 2)
     collections_percent = collections_percent.rename("Collections Percentage")
 
-    aips_percent = (aips / aip_total) * 100
+    aips_percent = (aips / totals[1]) * 100
     aips_percent = round(aips_percent, 2)
     aips_percent = aips_percent.rename("AIPs Percentage")
 
-    files_percent = (files / file_total) * 100
+    files_percent = (files / totals[2]) * 100
     files_percent = round(files_percent, 2)
     files_percent = files_percent.rename("Files Percentage")
 
@@ -289,18 +291,15 @@ df[format_id] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Regis
 # Makes the ARCHive overview dataframe (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
-# Saves the ARCHive collection, AIP, and file totals to use for calculating percentages in other dataframes.
+# Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
-# TODO: save these as a list to pass to the function instead of relying on a global variable?
-collection_total = overview['Collections']['total']
-aip_total = overview['AIPs']['total']
-file_total = overview['File_IDs']['total']
+totals_list = [overview['Collections']['total'], overview['AIPs']['total'], overview['File_IDs']['total']]
 
 # Makes the format types dataframe (collection, AIP, and file counts and percentages).
-format_types = one_category("Format_Type")
+format_types = one_category("Format_Type", totals_list)
 
 # Makes the format standardized name dataframe (collection, AIP, and file counts and percentages).
-format_names = one_category("Format_Standardized_Name")
+format_names = one_category("Format_Standardized_Name", totals_list)
 
 # Makes a dataframe with all standardized format names with over 500 instances, to use for risk analysis.
 common_formats = format_names[format_names.File_IDs > 500]
