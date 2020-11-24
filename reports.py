@@ -280,7 +280,9 @@ df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
 # Adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
-df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
+# Saves the column name to a variable since it is long and repeated several times in the script.
+format_id = 'Format Identification (Name|Version|Key)'
+df[format_id] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 
 # Generate dataframes for each type of analysis. Each dataframe will be saved as a separate sheet in Excel.
 
@@ -313,10 +315,11 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
 # Makes a dataframe with the file identification count for every format identification (name, version, registry key).
-# The dataframe is sorted
-# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate. Ok with that or try to clean up?
-format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
-format_id = format_id.sort_values(ascending=False)
+# The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
+# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate.
+#  Ok with that or try to clean up?
+format_ids = df.groupby(df[format_id])['File_IDs'].sum()
+format_ids = format_ids.sort_values(ascending=False)
 
 # Makes a dataframe with the number of groups and a list of groups that have each format type.
 groups_per_type = group_overlap("Format_Type")
@@ -325,7 +328,7 @@ groups_per_type = group_overlap("Format_Type")
 groups_per_name = group_overlap("Format_Standardized_Name")
 
 # Makes a dataframe with the number of groups and a list of groups that have each format identification.
-groups_per_id = group_overlap("Format Identification (Name|Version|Key)")
+groups_per_id = group_overlap(format_id)
 
 # Saves each dataframe as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -338,7 +341,7 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
-    format_id.to_excel(results, sheet_name="Format ID")
+    format_ids.to_excel(results, sheet_name="Format ID")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
