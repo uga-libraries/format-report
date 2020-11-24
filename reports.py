@@ -287,7 +287,7 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 # TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate. Ok with that or try to clean up?
 df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
-
+format_id = format_id.sort_values(ascending=False)
 
 # Makes a report with the number of groups that have each format type.
 # First gets a list of the group names for each format. Then gets the count of each of those lists. Then combine to
@@ -298,6 +298,7 @@ groups_list = df.groupby(df['Format_Type'])['Group'].unique()
 groups_count = groups_list.str.len()
 groups_per_type = pd.concat([groups_count, groups_list], axis=1)
 groups_per_type.columns = ['Groups', 'Group_List']
+groups_per_type = groups_per_type.sort_values(by='Groups', ascending=False)
 
 # TODO: would like to change the list to a string so it is easier to read in Excel.
 # If figure this out, also add to the following two "groups per" reports.
@@ -310,6 +311,14 @@ groups_list = df.groupby(df['Format_Standardized_Name'])['Group'].unique()
 groups_count = groups_list.str.len()
 groups_per_name = pd.concat([groups_count, groups_list], axis=1)
 groups_per_name.columns = ['Groups', 'Group_List']
+groups_per_name = groups_per_name.sort_values(by='Groups', ascending=False)
+
+# Makes a report with the number of groups that have each format identification.
+groups_list = df.groupby(df['Format Identification (Name|Version|Key)'])['Group'].unique()
+groups_count = groups_list.str.len()
+groups_per_id = pd.concat([groups_count, groups_list], axis=1)
+groups_per_id.columns = ['Groups', 'Group_List']
+groups_per_id = groups_per_id.sort_values(by='Groups', ascending=False)
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -325,3 +334,4 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     format_id.to_excel(results, sheet_name="Format ID")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
+    groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
