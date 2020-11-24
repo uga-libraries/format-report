@@ -236,16 +236,14 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # Makes the ARCHive overview report (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
 
-# Saves the ARCHive collection, AIP, and file totals to use in other dataframes.
-# Cannot just get the total of columns in those dataframes because that will over count anything with multiple formats.
-# TODO: the totals get in the way for sorting these two sheets - maybe don't include since in group overview tab?
+# Saves the ARCHive collection, AIP, and file totals to use for calculating percentages in other dataframes.
+# Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
 collection_total = overview['Collections']['total']
 aip_total = overview['AIPs']['total']
 file_total = overview['File_IDs']['total']
 
-# Makes the format types report (collection, AIP, and file counts and percentages).
-# Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
-# Combines all six dataframes and the ARCHive totals into a single dataframe.
+# Makes the format types report (collection, AIP, and file counts and percentages). Creates dataframes for each count
+# type and their percentages and combines all six dataframes into a single dataframe.
 collection_type = df_aip.groupby('Format_Type')['Collection'].nunique()
 collection_type_percent = percentage(collection_type, collection_total, "Collection Percentage")
 aip_type = df_aip.groupby('Format_Type')['AIP'].nunique()
@@ -253,11 +251,9 @@ aip_type_percent = percentage(aip_type, aip_total, "AIP Percentage")
 file_type = df.groupby('Format_Type')['File_IDs'].sum()
 file_type_percent = percentage(file_type, file_total, "File_IDs Percentage")
 format_types = pd.concat([collection_type, collection_type_percent, aip_type, aip_type_percent, file_type, file_type_percent], axis=1)
-format_types.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
-# Makes the format standardized name report (collection, AIP, and file counts and percentages).
-# Creates dataframes with subtotals for each count type and generates dataframes for their percentages.
-# Combines all six dataframes and the ARCHive totals into a single dataframe.
+# Makes the format standardized name report (collection, AIP, and file counts and percentages). Creates dataframes
+# for each count type and their percentages and combines all six dataframes into a single dataframe.
 collection_name = df_aip.groupby('Format_Standardized_Name')['Collection'].nunique()
 collection_name_percent = percentage(collection_name, collection_total, "Collection Percentage")
 aip_name = df_aip.groupby('Format_Standardized_Name')['AIP'].nunique()
@@ -265,12 +261,9 @@ aip_name_percent = percentage(aip_name, aip_total, "AIP Percentage")
 file_name = df.groupby('Format_Standardized_Name')['File_IDs'].sum()
 file_name_percent = percentage(file_name, file_total, "File_IDs Percentage")
 format_names = pd.concat([collection_name, collection_name_percent, aip_name, aip_name_percent, file_name, file_name_percent], axis=1)
-format_names.loc['total'] = [collection_total, "n/a", aip_total, "n/a", file_total, "n/a"]
 
 # Makes a report with all standardized format names with over 500 instances, to use for risk analysis.
-# Removes the total row since that is only accurate for the complete list.
 common_formats = format_names[format_names.File_IDs > 500]
-common_formats = common_formats.drop(['total'])
 
 # Makes a report with subtotals first by format type and then subdivided by group.
 type_by_group = two_categories("Format_Type", "Group")
