@@ -177,7 +177,8 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
     by_aip_csv = csv.writer(by_aip)
 
     # Adds a header to each CSV.
-    by_format_csv.writerow(['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name'])
+    by_format_csv.writerow(['Group', 'File_IDs', 'Format_Type', 'Format_Standardized_Name',  'Format_Name',
+                            'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note'])
     by_aip_csv.writerow(['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Name',
                          'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note'])
 
@@ -206,8 +207,9 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
                 # Gets the standard name and format type for the format. Will be saved to both CSVs.
                 format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-                # Writes the group, file id count, format type, and format standardized name to the by format csv.
-                by_format_csv.writerow([archive_group, row[1], format_type, format_standard])
+                # Writes the group, file id count, and format information to the by format csv.
+                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, row[2], row[3], row[4],
+                                       row[5], row[6]])
 
                 # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
                 # rows to the by aip csv. The values are saved to a variable (aip_row) before writing them to the CSV
