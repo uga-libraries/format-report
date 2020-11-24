@@ -40,6 +40,15 @@ def archive_overview():
         AIP count for all groups combined. Returns a dictionary with the group code as the keys and lists with the
         size and number of AIPs as the values."""
 
+        # TODO: AIP count from usage isn't matching what get from formats. Which to use? From 10-26 data:
+        """
+        BMAC: 27728 usage, 27713 formats
+        DLG: 18802 usage, 18759 formats
+        DLG-Hargrett: 1650, 1649 formats
+        Hargrett: same (45)
+        Russell: 4286 usage, 4280 formats
+        """
+
         # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
         # which is used in the formats reports and in ARCHive metadata generally.
         group_names = {'Brown Media Archives': 'bmac', 'Digital Library of Georgia': 'dlg',
