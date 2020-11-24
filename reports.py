@@ -18,6 +18,8 @@ Ideas for additional reports:
     * Add groups and type to common formats (risk analysis) for additional information.
     * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
     * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
+
+Might be helpful to make a function for the each of the reports that are more than a few lines to organize better.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
@@ -181,6 +183,36 @@ def two_categories(cat1, cat2):
     return result
 
 
+def group_overlap(category):
+    """For each instance of the specified category, which might be format type, format standardized name,
+    or format identification, makes a dataframe with the number of groups and a list of groups."""
+
+    # Gets a series with a list of group names for each instance of the category.
+    groups_list = df.groupby(df[category])['Group'].unique()
+
+    # Makes a series with the number of groups for each instance of the category.
+    groups_count = groups_list.str.len()
+
+    # Combines the count and the list series into a single dataframe. Had to do separately to get the counts for each
+    # instance separately.
+    groups_per_category = pd.concat([groups_count, groups_list], axis=1)
+
+    # Renames the columns to be more accurate. Without renaming, both are named Group.
+    groups_per_category.columns = ['Groups', 'Group_List']
+
+    # Sorts the values by the number of groups, largest to smallest. The primary use for this data is to see what the
+    # most groups have in common.
+    groups_per_category = groups_per_category.sort_values(by='Groups', ascending=False)
+
+    # TODO: the group is formatted as a list and would prefer a string so it is easier to read in Excel.
+    # This was from stackoverflow but doesn't make a change. Index ['Group_list'] also returns row label so maybe it
+    # isn't really getting me to the value itself?
+    # groups_per_category['Group_List'].apply(', '.join)
+    # print(groups_per_category)
+
+    return groups_per_category
+
+
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
 # the argument is missing or not a valid directory.
 try:
@@ -279,6 +311,22 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 # Makes a report with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
+# Makes a report with the file identification count for every format identification (name, version, registry key).
+# First adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
+# Then saves subtotals of file ids for each format identification to another dataframe.
+# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate. Ok with that or try to clean up?
+df['Format Identification (Name|Version|Key)'] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
+format_id = df.groupby(df['Format Identification (Name|Version|Key)'])['File_IDs'].sum()
+format_id = format_id.sort_values(ascending=False)
+
+# Makes a report with the number of groups and a list of groups that have each format type.
+groups_per_type = group_overlap("Format_Type")
+
+# Makes a report with the number of groups and a list of groups that have each format standardized name.
+groups_per_name = group_overlap("Format_Standardized_Name")
+
+# Makes a report with the number of groups and a list of groups that have each format identification.
+groups_per_id = group_overlap("Format Identification (Name|Version|Key)")
 
 # Saves each report as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -291,3 +339,7 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
+    format_id.to_excel(results, sheet_name="Format ID")
+    groups_per_type.to_excel(results, sheet_name="Groups per Type")
+    groups_per_name.to_excel(results, sheet_name="Groups per Name")
+    groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
