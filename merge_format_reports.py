@@ -207,9 +207,11 @@ with open(f'archive_formats_{today}.csv', 'w', newline='') as by_format, open(f'
                 # Gets the standard name and format type for the format. Will be saved to both CSVs.
                 format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-                # Writes the group, file id count, and format information to the by format csv.
-                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, row[2], row[3], row[4],
-                                       row[5], row[6]])
+                # Writes the group, file id count, and format information to the by format csv. The values are saved to a variable (format_row) before writing them to the CSV
+                # so that empty values can be replaced with 'NO VALUE' and make it more clear where there is no data.
+                format_row = [archive_group, row[1], format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
+                format_row = ['NO VALUE' if x == '' else x for x in format_row]
+                by_format_csv.writerow(format_row)
 
                 # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
                 # rows to the by aip csv. The values are saved to a variable (aip_row) before writing them to the CSV
