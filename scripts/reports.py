@@ -154,7 +154,6 @@ def archive_overview():
     group_combined = group_combined.fillna(0)
 
     # Adds the column totals.
-    # TODO: started getting 710 instead of 708 unique format ids. Also changed in Format ID sheet.
     group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['Collections'].sum(),
                                    group_combined['AIPs'].sum(), group_combined['File_IDs'].sum(),
                                    df['Format_Type'].nunique(), df['Format_Standardized_Name'].nunique(),
