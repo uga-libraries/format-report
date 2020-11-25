@@ -154,9 +154,11 @@ def archive_overview():
     group_combined = group_combined.fillna(0)
 
     # Adds the column totals.
-    # TODO: how to add the total number of unique types, standard names, and ids?
+    # TODO: started getting 710 instead of 708 unique format ids. Also changed in Format ID sheet.
     group_combined.loc['total'] = [group_combined['Size (TB)'].sum(), group_combined['Collections'].sum(),
-                                   group_combined['AIPs'].sum(), group_combined['File_IDs'].sum(), "n/a", "n/a", "n/a"]
+                                   group_combined['AIPs'].sum(), group_combined['File_IDs'].sum(),
+                                   df['Format_Type'].nunique(), df['Format_Standardized_Name'].nunique(),
+                                   df[format_id].nunique()]
 
     # Makes all rows except size integers, since they are counts and must be whole numbers.
     group_combined['Collections'] = group_combined['Collections'].astype(int)
