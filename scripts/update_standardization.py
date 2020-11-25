@@ -6,7 +6,7 @@ be added to standardize_formats.csv before merging and analyzing the format repo
 Prior to running the script, download all the ARCHive format reports (one CSV file per group) from the
 ARCHive interface and save them to a single folder."""
 
-# Usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]
+# Usage: python /path/update_standardization.py /path/report_folder [/path/standardize_formats.csv]
 
 import csv
 import os
@@ -19,7 +19,7 @@ try:
     os.chdir(report_folder)
 except (IndexError, FileNotFoundError):
     print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage: python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]")
+    print("Script usage: python /path/update_standardization.py /path/report_folder [/path/standardize_formats.csv]")
     exit()
 
 # Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
