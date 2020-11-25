@@ -224,13 +224,16 @@ def count_ranges(category):
     """Makes and returns a dataframe with the number of instances for the category with 1-9 file identifications,
     10-99, 100-999, etc. """
 
+    # This is the correct number of format standardized names.
+    print("Number of category in df:", df[category].nunique())
+
     # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
     ones = df[(df.File_IDs < 10)]
-    tens = df[(df.File_IDs > 9) & (df.File_IDs < 100)]
-    hundreds = df[(df.File_IDs > 99) & (df.File_IDs < 1000)]
-    thousands = df[(df.File_IDs > 999) & (df.File_IDs < 10000)]
-    ten_thousands = df[(df.File_IDs > 9999) & (df.File_IDs < 100000)]
-    hundred_thousands_plus = df[(df.File_IDs > 99999)]
+    tens = df[(df.File_IDs >= 10) & (df.File_IDs < 100)]
+    hundreds = df[(df.File_IDs >= 100) & (df.File_IDs < 1000)]
+    thousands = df[(df.File_IDs >= 1000) & (df.File_IDs < 10000)]
+    ten_thousands = df[(df.File_IDs >= 10000) & (df.File_IDs < 100000)]
+    hundred_thousands_plus = df[(df.File_IDs >= 100000)]
 
     # Makes a dictionary with the range labels and the count of unique instances of the category in each range.
     counts = {"Ranges": ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"],
@@ -243,7 +246,7 @@ def count_ranges(category):
 
     # TODO: this is returning a very different result from the pivot table. Testing with standardized name.
     #  Pandas gives a sum of 300+ unique names in all categories combined, which is too many.
-    #  When I printed the File_ID columns of the different dataframes, it seemed like they were split right.
+    #  When I printed the File_ID columns of the different dataframes, it seemed like they were split right though.
     print(result)
 
 
