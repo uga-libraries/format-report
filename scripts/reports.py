@@ -192,7 +192,7 @@ def one_category(category, totals):
 
     files_percent = (files / totals[2]) * 100
     files_percent = round(files_percent, 2)
-    files_percent = files_percent.rename("Files Percentage")
+    files_percent = files_percent.rename("File_IDs Percentage")
 
     # Combines all six count and percentage dataframes into a single dataframe.
     result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent], axis=1)
