@@ -33,7 +33,6 @@ import pandas as pd
 import sys
 
 # TODO: explain input of the functions better.
-# TODO: some of the things I am calling dataframes are probably really series, e.g. result from unique() or sum().
 # TODO: vocabulary check. Wasn't consistent about terms for format  name, format id, or the different input reports.
 
 
@@ -170,14 +169,14 @@ def one_category(category, totals):
     """Makes and returns a dataframe with subtotals of collection, AIP, and file counts based on one criteria,
     for example Format Type or Format Standardized Name. """
 
-    # Creates dataframes for each count type (collections, AIPs, and file ids) for each instance of the category.
+    # Creates series for each count type (collections, AIPs, and file ids) for each instance of the category.
     collections = df_aip.groupby(category)['Collection'].nunique()
     aips = df_aip.groupby(category)['AIP'].nunique()
     files = df.groupby(category)['File_IDs'].sum()
 
-    # Creates dataframes with the percentage of total collections, AIPs, and file ids for each instance of the category.
+    # Creates series with the percentage of total collections, AIPs, and file ids for each instance of the category.
     # The percentage is rounded to two decimal places.
-    # Renames the column to the specified name for a more accurate label.
+    # Renames the series for a more accurate column label.
 
     collections_percent = (collections / totals[0]) * 100
     collections_percent = round(collections_percent, 2)
@@ -191,7 +190,7 @@ def one_category(category, totals):
     files_percent = round(files_percent, 2)
     files_percent = files_percent.rename("File_IDs Percentage")
 
-    # Combines all six count and percentage dataframes into a single dataframe.
+    # Combines all six count and percentage series into a single dataframe.
     result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent], axis=1)
 
     # Renames Collection and AIP columns to plural to be more accurate labels.
@@ -225,7 +224,7 @@ def count_ranges(category):
     # Makes a series with the number of file ids for each instance of the category, regardless  of group.
     df_cat = df.groupby(df[category])['File_IDs'].sum()
 
-    # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
+    # Makes series with the subset of the format dataframe within the specified number of file identifications.
     ones = df_cat[(df_cat < 10)]
     tens = df_cat[(df_cat >= 10) & (df_cat < 100)]
     hundreds = df_cat[(df_cat >= 100) & (df_cat < 1000)]
@@ -325,7 +324,7 @@ df_aip = pd.read_csv(formats_by_aip_report)
 format_id = 'Format Identification (Name|Version|Key)'
 df[format_id] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 
-# Generate dataframes for each type of analysis. Each dataframe will be saved as a separate sheet in Excel.
+# Generate a dataframe or series for each type of analysis. Each analysis will be saved as a separate sheet in Excel.
 
 # Makes the ARCHive overview dataframe (TBS, AIPs, Collections, and Files by group).
 overview = archive_overview()
@@ -353,7 +352,7 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 # Makes a dataframe with subtotals first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
-# Makes a dataframe with the file identification count for every format identification (name, version, registry key).
+# Makes a series with the file identification count for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
 format_ids = df.groupby(df[format_id])['File_IDs'].sum()
 format_ids = format_ids.sort_values(ascending=False)
@@ -373,7 +372,7 @@ format_name_ranges = count_ranges("Format_Standardized_Name")
 # Makes a dataframe with the number of format identifications within different ranges of file_id counts.
 format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
 
-# Saves each dataframe as a spreadsheet in an Excel workbook.
+# Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
 # If the row label is just an automatically-supplied number, exclude from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
