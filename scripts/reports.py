@@ -224,8 +224,13 @@ def count_ranges(category):
     """Makes and returns a dataframe with the number of instances for the category with 1-9 file identifications,
     10-99, 100-999, etc. """
 
-    # Makes a series with the number of file ids for each instance of the category.
-    # This is necessary for format standardized name. It doesn't do anything for unique format id.
+    # TODO not giving expected results for unique format ids. My data in the graphs spreadsheet is off somehow -
+    #  total files aren't anywhere near what should be plus excel messed up a lot of version numbers. Confirmed that df matches combined csv and recalculating
+    #  based on that. Still need to adjust expectations for Excel merging capitalization differences but numbers are much closer.
+
+    # Makes a series with the number of file ids for each instance of the category, regardless  of group. Note: pandas does not merge differences of
+    # capitalization, while Excel pivot tables did. 10/26/2020 there were only 5 pairs of formats with different
+    # capitalization, e.g. MPEG Video|NO VALUE|NO VALUE and MPEG video|NO VALUE|NO VALUE.
     df_cat = df.groupby(df[category])['File_IDs'].sum()
 
     # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
@@ -324,6 +329,7 @@ df_aip = pd.read_csv(formats_by_aip_report)
 
 # Adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
 # Saves the column name to a variable since it is long and repeated several times in the script.
+# TODO: three of the Hyptertext Markup Language entries have nothing in Format_Version instead of NO VALUE (fmt/471, NO VALUE, and fmt/96) which means their format id is not made.
 format_id = 'Format Identification (Name|Version|Key)'
 df[format_id] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 
@@ -334,6 +340,7 @@ overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
+# TODO: have archive_overview() return the totals list?
 totals_list = [overview['Collections']['total'], overview['AIPs']['total'], overview['File_IDs']['total']]
 
 # Makes the format types dataframe (collection, AIP, and file counts and percentages).
@@ -381,6 +388,7 @@ format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
 # If the row label is just an automatically-supplied number, exclude from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
+    df.to_excel(results, sheet_name="Format Dataframe")
     overview.to_excel(results, sheet_name="Group Overview")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
@@ -390,7 +398,7 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
-    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index=False)
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
