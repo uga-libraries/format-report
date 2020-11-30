@@ -17,11 +17,9 @@ Definition of terms:
 Ideas for additional reports:
     * Map NARA and/or LOC risk assessments to the most common formats.
     * Compares the current report to a previous one to show change over time.
-    * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
     * Add groups and type to common formats (risk analysis) for additional information.
-    * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
-    * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
 
+# Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Video and MPEG video, when subtotaling.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
@@ -224,13 +222,7 @@ def count_ranges(category):
     """Makes and returns a dataframe with the number of instances for the category with 1-9 file identifications,
     10-99, 100-999, etc. """
 
-    # TODO not giving expected results for unique format ids. My data in the graphs spreadsheet is off somehow -
-    #  total files aren't anywhere near what should be plus excel messed up a lot of version numbers. Confirmed that df matches combined csv and recalculating
-    #  based on that. Still need to adjust expectations for Excel merging capitalization differences but numbers are much closer.
-
-    # Makes a series with the number of file ids for each instance of the category, regardless  of group. Note: pandas does not merge differences of
-    # capitalization, while Excel pivot tables did. 10/26/2020 there were only 5 pairs of formats with different
-    # capitalization, e.g. MPEG Video|NO VALUE|NO VALUE and MPEG video|NO VALUE|NO VALUE.
+    # Makes a series with the number of file ids for each instance of the category, regardless  of group.
     df_cat = df.groupby(df[category])['File_IDs'].sum()
 
     # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
@@ -363,8 +355,6 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 
 # Makes a dataframe with the file identification count for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate.
-#  Ok with that or try to clean up?
 format_ids = df.groupby(df[format_id])['File_IDs'].sum()
 format_ids = format_ids.sort_values(ascending=False)
 
@@ -388,7 +378,6 @@ format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
 # If the row label is just an automatically-supplied number, exclude from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
-    df.to_excel(results, sheet_name="Format Dataframe")
     overview.to_excel(results, sheet_name="Group Overview")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
@@ -398,7 +387,7 @@ with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
-    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges")
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index=False)
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
