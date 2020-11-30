@@ -224,30 +224,26 @@ def count_ranges(category):
     """Makes and returns a dataframe with the number of instances for the category with 1-9 file identifications,
     10-99, 100-999, etc. """
 
-    # This is the correct number of format standardized names.
-    print("Number of category in df:", df[category].nunique())
+    # Makes a series with the number of file ids for each instance of the category.
+    # This is necessary for format standardized name. It doesn't do anything for unique format id.
+    df_cat = df.groupby(df[category])['File_IDs'].sum()
 
     # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
-    ones = df[(df.File_IDs < 10)]
-    tens = df[(df.File_IDs >= 10) & (df.File_IDs < 100)]
-    hundreds = df[(df.File_IDs >= 100) & (df.File_IDs < 1000)]
-    thousands = df[(df.File_IDs >= 1000) & (df.File_IDs < 10000)]
-    ten_thousands = df[(df.File_IDs >= 10000) & (df.File_IDs < 100000)]
-    hundred_thousands_plus = df[(df.File_IDs >= 100000)]
+    ones = df_cat[(df_cat < 10)]
+    tens = df_cat[(df_cat >= 10) & (df_cat < 100)]
+    hundreds = df_cat[(df_cat >= 100) & (df_cat < 1000)]
+    thousands = df_cat[(df_cat >= 1000) & (df_cat < 10000)]
+    ten_thousands = df_cat[(df_cat >= 10000) & (df_cat < 100000)]
+    hundred_thousands_plus = df_cat[(df_cat >= 100000)]
 
     # Makes a dictionary with the range labels and the count of unique instances of the category in each range.
-    counts = {"Ranges": ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"],
-              "File_IDs": [ones[category].nunique(), tens[category].nunique(), hundreds[category].nunique(),
-                           thousands[category].nunique(), ten_thousands[category].nunique(),
-                           hundred_thousands_plus[category].nunique()]}
+    counts = {"File_ID Count Range": ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"],
+              f"Number of Formats ({category})": [ones.count(), tens.count(), hundreds.count(), thousands.count(),
+                                                  ten_thousands.count(), hundred_thousands_plus.count()]}
 
-    # Makes a dataframe out of the dictionary with the counts.
-    result = pd.DataFrame(counts, columns=['Ranges', 'File_IDs'])
-
-    # TODO: this is returning a very different result from the pivot table. Testing with standardized name.
-    #  Pandas gives a sum of 300+ unique names in all categories combined, which is too many.
-    #  When I printed the File_ID columns of the different dataframes, it seemed like they were split right though.
-    print(result)
+    # Makes a dataframe out of the dictionary with the counts and returns that result.
+    result = pd.DataFrame(counts, columns=["File_ID Count Range", f"Number of Formats ({category})"])
+    return result
 
 
 def group_overlap(category):
@@ -375,21 +371,26 @@ groups_per_name = group_overlap("Format_Standardized_Name")
 groups_per_id = group_overlap(format_id)
 
 # Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
-# TODO: not giving correct result yet.
-name_ranges = count_ranges("Format_Standardized_Name")
+format_name_ranges = count_ranges("Format_Standardized_Name")
+
+# Makes a dataframe with the number of format identifications within different ranges of file_id counts.
+format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
 
 # Saves each dataframe as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# If the row label is just an automatically-supplied number, exclude from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name="Group Overview")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
+    format_name_ranges.to_excel(results, sheet_name="Standardized Format Ranges", index=False)
     common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index=False)
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
