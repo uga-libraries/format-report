@@ -17,11 +17,9 @@ Definition of terms:
 Ideas for additional reports:
     * Map NARA and/or LOC risk assessments to the most common formats.
     * Compares the current report to a previous one to show change over time.
-    * Add number of types, standard formats and/or unique formats to the archive overview to show group variation.
     * Add groups and type to common formats (risk analysis) for additional information.
-    * The number of standardized names with 1-9, 10-999, 100-999, etc. files.
-    * Analyze the unique format identifications (name+version+PUID). List 500+ and file count ranges like previous idea.
 
+# Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Video and MPEG video, when subtotaling.
 """
 # Before running this script, run update_standardization.py and merge_format_reports.py
 
@@ -220,6 +218,31 @@ def two_categories(category1, category2):
     return result
 
 
+def count_ranges(category):
+    """Makes and returns a dataframe with the number of instances for the category with 1-9 file identifications,
+    10-99, 100-999, etc. """
+
+    # Makes a series with the number of file ids for each instance of the category, regardless  of group.
+    df_cat = df.groupby(df[category])['File_IDs'].sum()
+
+    # Makes dataframes with the subset of the format dataframe within the specified number of file identifications.
+    ones = df_cat[(df_cat < 10)]
+    tens = df_cat[(df_cat >= 10) & (df_cat < 100)]
+    hundreds = df_cat[(df_cat >= 100) & (df_cat < 1000)]
+    thousands = df_cat[(df_cat >= 1000) & (df_cat < 10000)]
+    ten_thousands = df_cat[(df_cat >= 10000) & (df_cat < 100000)]
+    hundred_thousands_plus = df_cat[(df_cat >= 100000)]
+
+    # Makes a dictionary with the range labels and the count of unique instances of the category in each range.
+    counts = {"File_ID Count Range": ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"],
+              f"Number of Formats ({category})": [ones.count(), tens.count(), hundreds.count(), thousands.count(),
+                                                  ten_thousands.count(), hundred_thousands_plus.count()]}
+
+    # Makes a dataframe out of the dictionary with the counts and returns that result.
+    result = pd.DataFrame(counts, columns=["File_ID Count Range", f"Number of Formats ({category})"])
+    return result
+
+
 def group_overlap(category):
     """For each instance of the specified category, which might be format type, format standardized name,
     or format identification, makes a dataframe with the number of groups and a list of groups."""
@@ -298,6 +321,7 @@ df_aip = pd.read_csv(formats_by_aip_report)
 
 # Adds a column to the "by format" dataframe with name|version|registry_key, which is the format identification.
 # Saves the column name to a variable since it is long and repeated several times in the script.
+# TODO: three of the Hyptertext Markup Language entries have nothing in Format_Version instead of NO VALUE (fmt/471, NO VALUE, and fmt/96) which means their format id is not made.
 format_id = 'Format Identification (Name|Version|Key)'
 df[format_id] = df['Format_Name'] + "|" + df['Format_Version'] + "|" + df['Registry_Key']
 
@@ -308,6 +332,7 @@ overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
+# TODO: have archive_overview() return the totals list?
 totals_list = [overview['Collections']['total'], overview['AIPs']['total'], overview['File_IDs']['total']]
 
 # Makes the format types dataframe (collection, AIP, and file counts and percentages).
@@ -330,8 +355,6 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 
 # Makes a dataframe with the file identification count for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-# TODO: when I did by hand with Excel, it merged differences in capitalization while pandas keeps those separate.
-#  Ok with that or try to clean up?
 format_ids = df.groupby(df[format_id])['File_IDs'].sum()
 format_ids = format_ids.sort_values(ascending=False)
 
@@ -344,18 +367,27 @@ groups_per_name = group_overlap("Format_Standardized_Name")
 # Makes a dataframe with the number of groups and a list of groups that have each format identification.
 groups_per_id = group_overlap(format_id)
 
+# Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
+format_name_ranges = count_ranges("Format_Standardized_Name")
+
+# Makes a dataframe with the number of format identifications within different ranges of file_id counts.
+format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
+
 # Saves each dataframe as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# If the row label is just an automatically-supplied number, exclude from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f'ARCHive Formats Analysis_{today}.xlsx') as results:
     overview.to_excel(results, sheet_name="Group Overview")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
+    format_name_ranges.to_excel(results, sheet_name="Standardized Format Ranges", index=False)
     common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index=False)
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
