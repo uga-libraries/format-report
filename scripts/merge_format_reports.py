@@ -190,7 +190,7 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
 
         # Gets the ARCHive group from the format report filename. Will be saved to both CSVs.
         regex = re.match("file_formats_(.*).csv", report)
-        group = regex.group(1)
+        archive_group = regex.group(1)
 
         # Gets the data from the report.
         with open(report, "r") as open_report:
@@ -208,7 +208,7 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                 # Writes the group, file_id count, and format information to the "by format" csv. The values are saved
                 # to a variable (format_row) before writing them to the CSV so that empty values can be replaced with
                 # "NO VALUE" and make it more clear where there is no data.
-                format_row = [group, row[1], format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
+                format_row = [archive_group, row[1], format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
                 format_row = ["NO VALUE" if x == "" else x for x in format_row]
                 by_format_csv.writerow(format_row)
 
@@ -219,10 +219,11 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                 for aip in aip_list:
                     # If the collection id could not be calculated, supplies a value for the id and prints a warning.
                     try:
-                        collection_id = collection_from_aip(aip, group)
+                        collection_id = collection_from_aip(aip, archive_group)
                     except ValueError:
                         print("Could not calculate collection id for", aip)
                         collection_id = "UNABLE TO CALCULATE"
-                    aip_row = [group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
+                    aip_row = [archive_group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4],
+                               row[5], row[6]]
                     aip_row = ["NO VALUE" if x == "" else x for x in aip_row]
                     by_aip_csv.writerow(aip_row)
