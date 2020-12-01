@@ -6,8 +6,8 @@ with one spreadsheet per subtotal, to use for analyzing formats in ARCHive.
 The script uses information from three sources, all CSVs. The usage report is downloaded from ARCHive. Both archive
 format reports are made from the ARCHive group format reports using the merge_format_reports script.
     * usage report: the amount ingested (AIP count and size) for each group and each user in a group.
-    * archive_formats report: Organized by format and then group. Has group, file_id count, and format information.
-    * archive_formats_by_aip report: Organized by AIP and then format. Has group, collection, aip id, and format information.
+    * archive_formats report: Organized by format and group. Has group, file_id count, and format information.
+    * archive_formats_by_aip report: Organized by AIP and format. Has group, collection, aip id, and format information.
 
 Definition of terms:
     * Group: ARCHive group name, which is the department or departments responsible for the content.
@@ -85,19 +85,11 @@ def archive_overview():
                     # converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
                     # float (decimal number) to do the necessary math and to round the result. If it encounters a unit
                     # of measurement that wasn't anticipated, the script prints a warning message.
-                    # TODO: simpler if there is a dictionary with unit:conversion amount and try/except for not present?
+                    conversion = {"Bytes": 1000000000000, "KB": 1000000000, "MB": 1000000, "GB": 1000, "TB": 1}
                     size, unit = row[2].split()
-                    if unit == "Bytes":
-                        size = float(size) / 1000000000000
-                    elif unit == "KB":
-                        size = float(size) / 1000000000
-                    elif unit == "MB":
-                        size = float(size) / 1000000
-                    elif unit == "GB":
-                        size = float(size) / 1000
-                    elif unit == "TB":
-                        size = float(size)
-                    else:
+                    try:
+                        size = float(size) / conversion[unit]
+                    except KeyError:
                         size = 0
                         print("WARNING! Unexpected unit type:", unit)
 
@@ -332,7 +324,7 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # Adds a column to the archive_formats report dataframe with the format identification: name|version|registry_key.
 # Saves the column name to a variable since it is long and repeated several times in the script.
 # TODO: do this in merge_format_reports.py instead so have in the raw data for additional analysis?
-# TODO: three of the Hyptertext Markup Language entries have nothing in Format_Version instead of NO VALUE
+# TODO: three of the Hypertext Markup Language entries have nothing in Format_Version instead of NO VALUE
 #  (fmt/471, NO VALUE, and fmt/96) which means their format id is not made. Error in merging script?
 format_id = "Format Identification (Name|Version|Key)"
 df[format_id] = df["Format_Name"] + "|" + df["Format_Version"] + "|" + df["Registry_Key"]
