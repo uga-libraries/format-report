@@ -51,8 +51,7 @@ def standardize_formats(format_name, standard):
 def collection_from_aip(aip_id, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on each group's rules for
     constructing AIP ids, all of which include the collection id. If the pattern does not match any known rules,
-    the function returns None and the error is caught where the function is called."""
-    # TODO: make more sense to raise an error instead of returning None?
+    the function raises a ValueError."""
 
     # Brown Media Archives and Peabody Awards Collection
     if group == "bmac":
@@ -119,7 +118,7 @@ def collection_from_aip(aip_id, group):
 
     # At the time of writing this script, there were no AIPs in dlg-magil.
     elif group == "dlg-magil":
-        return None
+        raise ValueError
 
     # Hargrett Rare Book and Manuscript Library
     elif group == "hargrett":
@@ -135,7 +134,7 @@ def collection_from_aip(aip_id, group):
 
     # This would catch a new group.
     else:
-        return None
+        raise ValueError
 
 
 # Makes the report folder (a script argument) the current directory. If the argument is missing or not a valid
@@ -218,10 +217,12 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                 # so that empty values can be replaced with "NO VALUE" and make it more clear where there is no data.
                 aip_list = row[7].split("|")
                 for aip in aip_list:
-                    collection_id = collection_from_aip(aip, group)
-                    # Prints a warning if the script was unable to calculate a collection id.
-                    if collection_id is None:
+                    # If the collection id could not be calculated, supplies a value for the id and prints a warning.
+                    try:
+                        collection_id = collection_from_aip(aip, group)
+                    except ValueError:
                         print("Could not calculate collection id for", aip)
+                        collection_id = "UNABLE TO CALCULATE"
                     aip_row = [group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
                     aip_row = ["NO VALUE" if x == "" else x for x in aip_row]
                     by_aip_csv.writerow(aip_row)
