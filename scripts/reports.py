@@ -337,7 +337,6 @@ overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
-# TODO: have archive_overview() return the totals list?
 totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"]]
 
 # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
@@ -350,7 +349,6 @@ format_names = one_category("Format_Standardized_Name", totals_list)
 common_formats = format_names[format_names.File_IDs > 500]
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-# TODO: should two_categories() also include percentages?
 type_by_group = two_categories("Format_Type", "Group")
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
@@ -362,6 +360,7 @@ name_by_group = two_categories("Format_Standardized_Name", "Group")
 
 # Makes a series with the file_id count for every format identification (name, version, registry key).
 # The series is sorted largest to smallest since the items of most interest are the most common formats.
+# TODO: add percentage of file ids to this.
 format_ids = df.groupby(df[format_id])["File_IDs"].sum()
 format_ids = format_ids.sort_values(ascending=False)
 
