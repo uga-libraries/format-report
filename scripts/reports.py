@@ -225,7 +225,6 @@ def group_overlap(category):
 
     # Combines the count and the list series into a single dataframe.
     # Had to do these separately to get the counts for each instance separately.
-    # TODO: there is probably a more streamlined way to do this.
     groups_per_category = pd.concat([groups_count, groups_list], axis=1)
 
     # Renames the columns to be more descriptive. Without renaming, both are named Group.
@@ -358,11 +357,13 @@ type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
 name_by_group = two_categories("Format_Standardized_Name", "Group")
 
-# Makes a series with the file_id count for every format identification (name, version, registry key).
-# The series is sorted largest to smallest since the items of most interest are the most common formats.
-# TODO: add percentage of file ids to this.
-format_ids = df.groupby(df[format_id])["File_IDs"].sum()
-format_ids = format_ids.sort_values(ascending=False)
+# Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
+# The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
+format_count = df.groupby(df[format_id])["File_IDs"].sum()
+format_percentage = (format_count / format_count.sum()) * 100
+format_percentage = format_percentage.rename("File_IDs Percentage")
+format_ids = pd.concat([format_count, format_percentage], axis=1)
+format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
 
 # Makes a dataframe with the number of groups and list of groups that have each format type.
 groups_per_type = group_overlap("Format_Type")
