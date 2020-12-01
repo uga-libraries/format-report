@@ -216,12 +216,17 @@ def group_overlap(category):
     have each instance of the category, for example format type. Returns a dataframe. """
 
     # Makes a series with a list of group names for each instance of the category.
+
     groups_list = df.groupby(df[category])["Group"].unique()
     groups_list = groups_list.rename("Group List")
 
     # Makes a series with the number of groups for each instance of the category.
     groups_count = groups_list.str.len()
     groups_count = groups_count.rename("Groups")
+
+    # Converts the list from a list to a comma-separated string for easier readability in Excel.
+    # Wait to do this until after groups_count so that the count is correct.
+    groups_list = groups_list.apply(", ".join)
 
     # Combines the count and the list series into a single dataframe.
     # Had to do these separately to get the counts for each instance separately.
@@ -230,12 +235,6 @@ def group_overlap(category):
     # Sorts the values by the number of groups, largest to smallest.
     # The primary use for this data is to see what the most groups have in common.
     groups_per_category = groups_per_category.sort_values(by="Groups", ascending=False)
-
-    # TODO: the group list is formatted as a list and would prefer a string so it is easier to read in Excel.
-    # This was from stackoverflow but doesn't make a change. Index ["Group_list"] also returns row label so maybe it
-    # isn't really getting me to the value itself? Could try making the change while it is a separate series.
-    # groups_per_category["Group_List"].apply(", ".join)
-    # print(groups_per_category)
 
     # Returns the dataframe. Row index is the category and columns are Groups, Group_List.
     return groups_per_category
