@@ -35,26 +35,22 @@ except IndexError:
 def in_standard(standard, format_to_check):
     """Searches for a format name within the standardize formats CSV.
        Returns "Found" if it is present and "Missing" if it is there not."""
-    # TODO: update this with simpler syntax - return match as soon as found, and outside the loop return "Missing"
 
-    # Makes a variable to track if the format is found.
-    format_match = "Missing"
-
-    # Reads the csv file with the standardization rules.
+    # Reads the standardize formats csv.
     with open(standard, encoding="utf-8") as open_standard:
         read_standard = csv.reader(open_standard)
 
-        # Checks each row in the standardize formats CSV. row[0] is the format name in the CSV.
+        # Checks each row in the standardize formats csv. row[0] is the format name.
         for standardize_row in read_standard:
 
-            # If the format name is in the CSV, updates the format_match variable and stops searching the CSV.
+            # If the format name is in the CSV, returns "Found" and stops searching the CSV.
             # Matching lowercase versions of the format names to ignore variations in capitalization.
             if format_to_check.lower() == standardize_row[0].lower():
-                format_match = "Found"
-                break
+                return "Found"
 
-    # Returns if the format is in the CSV already ("Found") or if it is new ("Missing").
-    return format_match
+    # If the format is not in the standardize formats csv (meaning the previous code block did not return anything so
+    # this code runs), returns "Missing".
+    return "Missing"
 
 
 # Increases the size of csv fields to handle long AIP lists.
@@ -109,7 +105,7 @@ for key in formats_checked:
 # Saves the new format names, if any, to a text file in the report folder to use for updating standardize_formats.csv.
 # Each format name is on its own line in the text file so it can be pasted into the CSV, one row per format.
 if len(new_formats) > 0:
-    print("New formats were found")
+    print("New formats were found: check new_formats.txt")
     with open("new_formats.txt", "w") as new_file:
         for new_format_name in new_formats:
             new_file.write(f"{new_format_name}\n")
