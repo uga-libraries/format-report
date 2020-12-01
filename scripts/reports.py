@@ -217,17 +217,15 @@ def group_overlap(category):
 
     # Makes a series with a list of group names for each instance of the category.
     groups_list = df.groupby(df[category])["Group"].unique()
+    groups_list = groups_list.rename("Group List")
 
     # Makes a series with the number of groups for each instance of the category.
     groups_count = groups_list.str.len()
+    groups_count = groups_count.rename("Groups")
 
     # Combines the count and the list series into a single dataframe.
     # Had to do these separately to get the counts for each instance separately.
     groups_per_category = pd.concat([groups_count, groups_list], axis=1)
-
-    # Renames the columns to be more descriptive. Without renaming, both are named Group.
-    # TODO: is it better to rename the series as they are made or is it ok to rely on this being the order?
-    groups_per_category.columns = ["Groups", "Group List"]
 
     # Sorts the values by the number of groups, largest to smallest.
     # The primary use for this data is to see what the most groups have in common.
