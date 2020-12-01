@@ -149,12 +149,11 @@ except (IndexError, FileNotFoundError):
     exit()
 
 # Makes a variable with the file path for the standardize formats csv. Uses the optional script argument if provided,
-# or else uses the folder with this script as the default location for that CSV.
-# TODO reorganized the repo and now the csv is the parent folder for the script.
+# or else uses the parent folder of the folder with this script as the default location for that CSV.
 try:
     standard_csv = sys.argv[2]
 except IndexError:
-    standard_csv = os.path.join(sys.path[0], "standardize_formats.csv")
+    standard_csv = os.path.join(os.path.dirname(sys.path[0]), "standardize_formats.csv")
 
 # Increases the size of CSV fields to handle long AIP lists.
 # Gets the maximum size that doesn't give an overflow error.
