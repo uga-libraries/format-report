@@ -175,10 +175,12 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
     by_aip_csv = csv.writer(by_aip)
 
     # Adds a header to each CSV.
-    by_format_csv.writerow(["Group", "File_IDs", "Format_Type", "Format_Standardized_Name",  "Format_Name",
-                            "Format_Version", "Registry_Name", "Registry_Key", "Format_Note"])
-    by_aip_csv.writerow(["Group", "Collection", "AIP", "Format_Type", "Format_Standardized_Name", "Format_Name",
-                         "Format_Version", "Registry_Name", "Registry_Key", "Format_Note"])
+    by_format_csv.writerow(["Group", "File_IDs", "Format Type", "Format Standardized Name",  "Format Identification",
+                            "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"])
+
+    by_aip_csv.writerow(["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
+                         "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
+                         "Format Note"])
 
     # Gets data from each ARCHive group format report and calculates additional information based on that data.
     # The information is saved to one or both CSV files.
@@ -202,19 +204,21 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
             # Gets the data from each row in the report.
             for row in report_info:
 
+                # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
+                row = ["NO VALUE" if x == "" else x for x in row]
+
                 # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
                 format_standard, format_type = standardize_formats(row[2], standard_csv)
 
-                # Writes the group, file_id count, and format information to the "by format" csv. The values are saved
-                # to a variable (format_row) before writing them to the CSV so that empty values can be replaced with
-                # "NO VALUE" and make it more clear where there is no data.
-                format_row = [archive_group, row[1], format_type, format_standard, row[2], row[3], row[4], row[5], row[6]]
-                format_row = ["NO VALUE" if x == "" else x for x in format_row]
-                by_format_csv.writerow(format_row)
+                # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
+                format_id = f"{row[2]}|{row[3]}|{row[5]}"
+
+                # Writes the group, file_id count, and format information to the "by format" csv.
+                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, format_id, row[2], row[3],
+                                        row[4], row[5], row[6]])
 
                 # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
-                # rows to the "by aip" csv. The values are saved to a variable (aip_row) before writing them to the CSV
-                # so that empty values can be replaced with "NO VALUE" and make it more clear where there is no data.
+                # rows to the "by aip" csv.
                 aip_list = row[7].split("|")
                 for aip in aip_list:
                     # If the collection id could not be calculated, supplies a value for the id and prints a warning.
@@ -223,7 +227,5 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                     except ValueError:
                         print("Could not calculate collection id for", aip)
                         collection_id = "UNABLE TO CALCULATE"
-                    aip_row = [archive_group, collection_id, aip, format_type, format_standard, row[2], row[3], row[4],
-                               row[5], row[6]]
-                    aip_row = ["NO VALUE" if x == "" else x for x in aip_row]
-                    by_aip_csv.writerow(aip_row)
+                    by_aip_csv.writerow([archive_group, collection_id, aip, format_type, format_standard, format_id,
+                                         row[2], row[3], row[4], row[5], row[6]])

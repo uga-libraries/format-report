@@ -114,17 +114,17 @@ def archive_overview():
     collections_by_group = df_aip.groupby("Group")["Collection"].nunique()
 
     # Gets the number of format types per group from the archive_formats_by_aip report.
-    types_by_group = df_aip.groupby("Group")["Format_Type"].nunique()
+    types_by_group = df_aip.groupby("Group")["Format Type"].nunique()
 
     # Gets the number of format standardized names per group from the archive_formats_by_aip report.
-    formats_by_group = df_aip.groupby("Group")["Format_Standardized_Name"].nunique()
+    formats_by_group = df_aip.groupby("Group")["Format Standardized Name"].nunique()
 
     # Gets the number of file_ids per group from the archive_formats report.
     # These numbers are inflated by files with more than one format identification.
     files_by_group = df.groupby("Group")["File_IDs"].sum()
 
     # Gets the number of format identifications per group from the archive_formats report.
-    format_ids_by_group = df.groupby("Group")[format_id].nunique()
+    format_ids_by_group = df.groupby("Group")["Format Identification"].nunique()
 
     # Combines the series with all the counts into a single dataframe.
     group_frames = [size_and_aips_by_group["Size"], collections_by_group, size_and_aips_by_group["AIPs"],
@@ -132,8 +132,8 @@ def archive_overview():
     group_combined = pd.concat(group_frames, axis=1)
 
     # Renames the dataframe columns to be more descriptive.
-    rename = {"Size": "Size (TB)", "Collection": "Collections", "Format_Type": "Format Types",
-              "Format_Standardized_Name": "Format Standardized Names"}
+    rename = {"Size": "Size (TB)", "Collection": "Collections", "Format Type": "Format Types",
+              "Format Standardized Name": "Format Standardized Names"}
     group_combined = group_combined.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
@@ -142,8 +142,8 @@ def archive_overview():
     # Adds the column totals as a row in the dataframe.
     group_combined.loc["total"] = [group_combined["Size (TB)"].sum(), group_combined["Collections"].sum(),
                                    group_combined["AIPs"].sum(), group_combined["File_IDs"].sum(),
-                                   df["Format_Type"].nunique(), df["Format_Standardized_Name"].nunique(),
-                                   df[format_id].nunique()]
+                                   df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
+                                   df["Format Identification"].nunique()]
 
     # Makes these rows integers instead of floats (result of sum()), since they are counts and should be whole numbers.
     group_combined["Collections"] = group_combined["Collections"].astype(int)
@@ -151,7 +151,7 @@ def archive_overview():
     group_combined["File_IDs"] = group_combined["File_IDs"].astype(int)
 
     # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
-    # AIPs, File_IDs, Format_Types, Format_Standardized_Names, and Format Identifications (Name|Version|Key).
+    # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
     return group_combined
 
 
@@ -236,7 +236,7 @@ def group_overlap(category):
     # The primary use for this data is to see what the most groups have in common.
     groups_per_category = groups_per_category.sort_values(by="Groups", ascending=False)
 
-    # Returns the dataframe. Row index is the category and columns are Groups, Group_List.
+    # Returns the dataframe. Row index is the category and columns are Groups, Group List.
     return groups_per_category
 
 
@@ -257,7 +257,7 @@ def count_ranges(category):
 
     # Makes lists with the data for the dataframe: file_id ranges (for index) and the number of instances in each range.
     file_id_ranges = ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"]
-    instances = [ones.count(), tens.count(), hundreds.count(), thousands.count(),ten_thousands.count(),
+    instances = [ones.count(), tens.count(), hundreds.count(), thousands.count(), ten_thousands.count(),
                  hundred_thousands_plus.count()]
 
     # Makes a dataframe from the lists.
@@ -314,13 +314,8 @@ if len(missing) > 0:
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
-# Adds a column to the archive_formats report dataframe with the format identification: name|version|registry_key.
-# Saves the column name to a variable since it is long and repeated several times in the script.
-# TODO: do this in merge_format_reports.py instead so have in the raw data for additional analysis?
 # TODO: three of the Hypertext Markup Language entries have nothing in Format_Version instead of NO VALUE
 #  (fmt/471, NO VALUE, and fmt/96) which means their format id is not made. Error in merging script?
-format_id = "Format Identification (Name|Version|Key)"
-df[format_id] = df["Format_Name"] + "|" + df["Format_Version"] + "|" + df["Registry_Key"]
 
 
 # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
@@ -333,46 +328,46 @@ overview = archive_overview()
 totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"]]
 
 # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-format_types = one_category("Format_Type", totals_list)
+format_types = one_category("Format Type", totals_list)
 
 # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
-format_names = one_category("Format_Standardized_Name", totals_list)
+format_names = one_category("Format Standardized Name", totals_list)
 
 # Makes a dataframe with all standardized format names with over 500 file_id counts, to use for risk analysis.
 common_formats = format_names[format_names.File_IDs > 500]
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-type_by_group = two_categories("Format_Type", "Group")
+type_by_group = two_categories("Format Type", "Group")
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
 # standardized name.
-type_by_name = two_categories("Format_Type", "Format_Standardized_Name")
+type_by_name = two_categories("Format Type", "Format Standardized Name")
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
-name_by_group = two_categories("Format_Standardized_Name", "Group")
+name_by_group = two_categories("Format Standardized Name", "Group")
 
 # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-format_count = df.groupby(df[format_id])["File_IDs"].sum()
+format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
 format_percentage = (format_count / format_count.sum()) * 100
 format_percentage = format_percentage.rename("File_IDs Percentage")
 format_ids = pd.concat([format_count, format_percentage], axis=1)
 format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
 
 # Makes a dataframe with the number of groups and list of groups that have each format type.
-groups_per_type = group_overlap("Format_Type")
+groups_per_type = group_overlap("Format Type")
 
 # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-groups_per_name = group_overlap("Format_Standardized_Name")
+groups_per_name = group_overlap("Format Standardized Name")
 
 # Makes a dataframe with the number of groups and list of groups that have each format identification.
-groups_per_id = group_overlap(format_id)
+groups_per_id = group_overlap("Format Identification")
 
 # Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
-format_name_ranges = count_ranges("Format_Standardized_Name")
+format_name_ranges = count_ranges("Format Standardized Name")
 
 # Makes a dataframe with the number of format identifications within different ranges of file_id counts.
-format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
+format_id_ranges = count_ranges("Format Identification")
 
 # Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
