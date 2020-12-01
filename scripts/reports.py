@@ -258,16 +258,15 @@ def count_ranges(category):
     ten_thousands = df_cat[(df_cat >= 10000) & (df_cat < 100000)]
     hundred_thousands_plus = df_cat[(df_cat >= 100000)]
 
-    # Makes a dictionary with the range labels and the number instances of the category in each range.
-    counts = {"File_ID Count Range": ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"],
-              f"Number of Formats ({category})": [ones.count(), tens.count(), hundreds.count(), thousands.count(),
-                                                  ten_thousands.count(), hundred_thousands_plus.count()]}
+    # Makes lists with the data for the dataframe: file_id ranges (for index) and the number of instances in each range.
+    file_id_ranges = ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"]
+    instances = [ones.count(), tens.count(), hundreds.count(), thousands.count(),ten_thousands.count(),
+                 hundred_thousands_plus.count()]
 
-    # Makes a dataframe out of the dictionary with range labels and category counts.
-    result = pd.DataFrame(counts, columns=["File_ID Count Range", f"Number of Formats ({category})"])
+    # Makes a dataframe from the lists.
+    result = pd.DataFrame(instances, columns=[f"Number of Formats ({category})"], index=file_id_ranges)
 
-    # Returns the dataframe. Row index is a number and columns are Count Range and Number of Formats (category).
-    # TODO: can I make the count range the row index instead? Then don't have to remove index when saving.
+    # Returns the dataframe. Row index is the file_id ranges and column is Number of Formats (category).
     return result
 
 
@@ -380,19 +379,18 @@ format_id_ranges = count_ranges("Format Identification (Name|Version|Key)")
 
 # Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
-# If the row label is just an automatically-supplied number, it is excluded from Excel with index=False.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
-    overview.to_excel(results, sheet_name="Group Overview")
+    overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
-    format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index=False)
+    format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
     common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
-    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index=False)
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
