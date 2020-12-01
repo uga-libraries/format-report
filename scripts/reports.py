@@ -132,10 +132,8 @@ def archive_overview():
     group_combined = pd.concat(group_frames, axis=1)
 
     # Renames the dataframe columns to be more descriptive.
-    # TODO: does Format Identification need to be there since it is staying the same?
-    rename = {"Size": "Size (TB)", "Collection": "Collections", "Format_Type": "Format_Types",
-              "Format_Standardized_Name": "Format_Standardized_Names",
-              "Format Identification (Name|Version|Key)": "Format Identifications (Name|Version|Key)"}
+    rename = {"Size": "Size (TB)", "Collection": "Collections", "Format_Type": "Format Types",
+              "Format_Standardized_Name": "Format Standardized Names"}
     group_combined = group_combined.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
@@ -229,7 +227,7 @@ def group_overlap(category):
 
     # Renames the columns to be more descriptive. Without renaming, both are named Group.
     # TODO: is it better to rename the series as they are made or is it ok to rely on this being the order?
-    groups_per_category.columns = ["Groups", "Group_List"]
+    groups_per_category.columns = ["Groups", "Group List"]
 
     # Sorts the values by the number of groups, largest to smallest.
     # The primary use for this data is to see what the most groups have in common.
