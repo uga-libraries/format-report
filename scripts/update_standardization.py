@@ -24,12 +24,11 @@ except (IndexError, FileNotFoundError):
     exit()
 
 # Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
-# or else uses the folder with this script as the default location.
-# TODO: reorganized the repo so scripts are in a scripts folder, so this is in the parent folder from the script.
+# or else uses the parent folder of the folder with this script as the default location.
 try:
     standard_csv = sys.argv[2]
 except IndexError:
-    standard_csv = os.path.join(sys.path[0], "standardize_formats.csv")
+    standard_csv = os.path.join(os.path.dirname(sys.path[0]), "standardize_formats.csv")
 
 
 def in_standard(standard, format_to_check):
