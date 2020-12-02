@@ -314,9 +314,6 @@ if len(missing) > 0:
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
-# TODO: three of the Hypertext Markup Language entries have nothing in Format_Version instead of NO VALUE
-#  (fmt/471, NO VALUE, and fmt/96) which means their format id is not made. Error in merging script?
-
 
 # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
 
@@ -371,6 +368,7 @@ format_id_ranges = count_ranges("Format Identification")
 
 # Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# TODO: would like to adjust the default formatting in Excel. Un-bold, left justify, expand column width.
 today = datetime.datetime.now().strftime("%Y-%m")
 with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
     overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
