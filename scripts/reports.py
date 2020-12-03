@@ -119,24 +119,24 @@ def archive_overview():
     format_ids_by_group = df.groupby("Group")["Format Identification"].nunique()
 
     # Combines the series with all the counts into a single dataframe.
-    group_combined = pd.concat([size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group,
+    group_stats = pd.concat([size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group,
                                 formats_by_group, format_ids_by_group], axis=1)
 
 
     # Renames the dataframe columns to be more descriptive.
     rename = {"Size": "Size (TB)", "Collection": "Collections", "AIP": "AIPs", "Format Type": "Format Types",
               "Format Standardized Name": "Format Standardized Names", "Format Identification": "Format Identifications"}
-    group_combined = group_combined.rename(columns=rename)
+    group_stats = group_stats.rename(columns=rename)
 
-    # # Replace cells without values (one group has no files yet) with 0.
-    # group_combined = group_combined.fillna(0)
-    #
-    # # Adds the column totals as a row in the dataframe.
-    # group_combined.loc["total"] = [group_combined["Size (TB)"].sum(), group_combined["Collections"].sum(),
-    #                                group_combined["AIPs"].sum(), group_combined["File_IDs"].sum(),
-    #                                df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
-    #                                df["Format Identification"].nunique()]
-    #
+    # Replace cells without values (one group has no files yet) with 0.
+    groups = group_stats.fillna(0)
+
+    # Adds the column totals as a row in the dataframe.
+    group_stats.loc["ARCHive Total"] = [group_stats["Size (TB)"].sum(), group_stats["Collections"].sum(),
+                                   group_stats["AIPs"].sum(), group_stats["File_IDs"].sum(),
+                                   df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
+                                   df["Format Identification"].nunique()]
+    print(group_stats)
     # # Makes these rows integers instead of floats (result of sum()), since they are counts and should be whole numbers.
     # group_combined["Collections"] = group_combined["Collections"].astype(int)
     # group_combined["AIPs"] = group_combined["AIPs"].astype(int)
