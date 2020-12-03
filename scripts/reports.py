@@ -121,13 +121,13 @@ def archive_overview():
     # Combines the series with all the counts into a single dataframe.
     group_combined = pd.concat([size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group,
                                 formats_by_group, format_ids_by_group], axis=1)
-    print(group_combined)
 
-    # # Renames the dataframe columns to be more descriptive.
-    # rename = {"Size": "Size (TB)", "Collection": "Collections", "Format Type": "Format Types",
-    #           "Format Standardized Name": "Format Standardized Names"}
-    # group_combined = group_combined.rename(columns=rename)
-    #
+
+    # Renames the dataframe columns to be more descriptive.
+    rename = {"Size": "Size (TB)", "Collection": "Collections", "AIP": "AIPs", "Format Type": "Format Types",
+              "Format Standardized Name": "Format Standardized Names", "Format Identification": "Format Identifications"}
+    group_combined = group_combined.rename(columns=rename)
+
     # # Replace cells without values (one group has no files yet) with 0.
     # group_combined = group_combined.fillna(0)
     #
