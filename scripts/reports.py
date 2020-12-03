@@ -35,21 +35,12 @@ import sys
 
 
 def archive_overview():
-    """Uses the data from the usage report and both ARCHive format reports to calculate the TBs, AIPs, collections,
-    and file_ids per group and the total for ARCHive. Returns a dataframe. """
+    """Uses the data from the usage report and both ARCHive format reports to calculate statistics for each group and
+    the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
+    and format identifications. Returns a dataframe. """
 
-    def size_and_aips_count():
-        """Uses data from the usage report to calculate the size in TB and AIP count for each group and the total for
-        ARCHive. Returns a dataframe. """
-
-        # TODO: AIP count from usage isn't matching what get from format reports. Which to use? From 10-26 data:
-        """
-        BMAC: 27728 usage, 27713 format report
-        DLG: 18802 usage, 18759 format report
-        DLG-Hargrett: 1650, 1649 format report
-        Hargrett: same (45)
-        Russell: 4286 usage, 4280 format report
-        """
+    def sizes():
+        """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
 
         # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
         # which is used in both archive format reports and in ARCHive metadata generally.
@@ -57,8 +48,8 @@ def archive_overview():
                        "DLG & Hargrett": "dlg-hargrett", "DLG & Map and Government Information Library": "dlg-magil",
                        "Hargrett": "hargrett", "Russell": "russell"}
 
-        # Makes a dictionary for storing data for each group.
-        group_data = {}
+        # Makes a dictionary for the size for each group, gathering all data before converting it to a dataframe.
+        group_size = {}
 
         # Gets the data from the usage report.
         with open(usage_report, 'r') as usage:
@@ -72,21 +63,16 @@ def archive_overview():
 
                 # Processes data from each group. There is only one row per group in the report.
                 # The row has data for a group if it is not blank (if row) and row[0] is one of the group names.
-                # row[0] is group, row[1] is AIP count, and row[2] is size with the unit of measurement.
+                # row[0] is the group and row[2] is the size with the unit of measurement.
                 if row and row[0] in group_names:
 
-                    # Group code is fine as is.
-                    group_code = group_names[row[0]]
+                    # Separates the size number from the unit of measurement by splitting the data at the space.
+                    size, unit = row[2].split()
 
-                    # Changes AIP count from a string to an integer so the total across all groups can be calculated.
-                    aip_count = int(row[1])
-
-                    # Separates the size number from the unit of measurement by splitting the data at the space and
-                    # converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
+                    # Converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
                     # float (decimal number) to do the necessary math and to round the result. If it encounters a unit
                     # of measurement that wasn't anticipated, the script prints a warning message.
                     conversion = {"Bytes": 1000000000000, "KB": 1000000000, "MB": 1000000, "GB": 1000, "TB": 1}
-                    size, unit = row[2].split()
                     try:
                         size = float(size) / conversion[unit]
                     except KeyError:
@@ -97,16 +83,17 @@ def archive_overview():
                     size = round(size, 1)
 
                     # Adds the results for this group to the dictionary.
-                    group_data[group_code] = ([size, aip_count])
+                    group_size[row[0]] = size
 
         # Makes the dictionary into a dataframe so it can be combined with the collection and file_id counts.
-        group_dataframe = pd.DataFrame.from_dict(group_data, orient="index", columns=["Size", "AIPs"])
+        size_by_group = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
+        print(size_by_group)
 
         # Returns the dataframe. Row index is the group_code and columns are Size and AIPs.
-        return group_dataframe
+        return size_by_group
 
     # Gets the size (TB) and number of AIPs per group from the usage report.
-    size_and_aips_by_group = size_and_aips_count()
+    size_and_aips_by_group = sizes()
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
