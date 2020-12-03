@@ -39,7 +39,7 @@ def archive_overview():
     the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
     and format identifications. Returns a dataframe. """
 
-    def sizes():
+    def size_in_TB():
         """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
 
         # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
@@ -86,36 +86,37 @@ def archive_overview():
                     group_size[row[0]] = size
 
         # Makes the dictionary into a dataframe so it can be combined with the collection and file_id counts.
-        size_by_group = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
-        print(size_by_group)
+        sizes = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
 
         # Returns the dataframe. Row index is the group_code and columns are Size and AIPs.
-        return size_by_group
+        return sizes
 
-    # Gets the size (TB) and number of AIPs per group from the usage report.
-    size_and_aips_by_group = sizes()
+    # Gets the size (in TB) per group from the usage report.
+    size_by_group = size_in_TB()
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
     # Additionally, dlg-hargrett collections in ARCHive that are part of turningpoint are counted as dlg.
     collections_by_group = df_aip.groupby("Group")["Collection"].nunique()
 
+    # Gets the number of AIPs per group from the archive_formats_by_aip report.
+    aips_by_group = df_aip.groupby("Group")["AIP"].nunique()
+
     # Gets the number of format types per group from the archive_formats_by_aip report.
     types_by_group = df_aip.groupby("Group")["Format Type"].nunique()
-
-    # Gets the number of format standardized names per group from the archive_formats_by_aip report.
-    formats_by_group = df_aip.groupby("Group")["Format Standardized Name"].nunique()
 
     # Gets the number of file_ids per group from the archive_formats report.
     # These numbers are inflated by files with more than one format identification.
     files_by_group = df.groupby("Group")["File_IDs"].sum()
 
+    # Gets the number of format standardized names per group from the archive_formats_by_aip report.
+    formats_by_group = df_aip.groupby("Group")["Format Standardized Name"].nunique()
+
     # Gets the number of format identifications per group from the archive_formats report.
     format_ids_by_group = df.groupby("Group")["Format Identification"].nunique()
 
     # Combines the series with all the counts into a single dataframe.
-    group_frames = [size_and_aips_by_group["Size"], collections_by_group, size_and_aips_by_group["AIPs"],
-                    files_by_group, types_by_group, formats_by_group, format_ids_by_group]
+    group_frames = [size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group, formats_by_group, format_ids_by_group]
     group_combined = pd.concat(group_frames, axis=1)
 
     # Renames the dataframe columns to be more descriptive.
