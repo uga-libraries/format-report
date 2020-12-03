@@ -370,3 +370,16 @@ with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+
+# Experiment in controlling the Excel formatting
+# https://www.pbpython.com/improve-pandas-excel-output.html
+# https://xlsxwriter.readthedocs.org/
+# https://xlsxwriter.readthedocs.io/format.html#format
+with pd.ExcelWriter("formatting_test.xlsx", engine="xlsxwriter") as writer:
+    workbook = writer.book
+
+    overview.to_excel(writer, sheet_name="Overview")
+    worksheet = writer.sheets['Overview']
+    formatting = workbook.add_format({'align': 'left', 'bold': False})
+    worksheet.set_column('B:H', 10, formatting)
+
