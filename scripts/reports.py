@@ -103,6 +103,7 @@ def archive_overview():
     collections_by_group = df_aip.groupby("Group")["Collection"].nunique()
 
     # Gets the number of AIPs per group from the archive_formats_by_aip report.
+    # Not using data from usage report since each version of an AIP is counted separately.
     aips_by_group = df_aip.groupby("Group")["AIP"].nunique()
 
     # Gets the number of format types per group from the archive_formats_by_aip report.
@@ -120,31 +121,26 @@ def archive_overview():
 
     # Combines the series with all the counts into a single dataframe.
     group_stats = pd.concat([size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group,
-                                formats_by_group, format_ids_by_group], axis=1)
-
+                             formats_by_group, format_ids_by_group], axis=1)
 
     # Renames the dataframe columns to be more descriptive.
     rename = {"Size": "Size (TB)", "Collection": "Collections", "AIP": "AIPs", "Format Type": "Format Types",
-              "Format Standardized Name": "Format Standardized Names", "Format Identification": "Format Identifications"}
+              "Format Standardized Name": "Format Standardized Names",
+              "Format Identification": "Format Identifications"}
     group_stats = group_stats.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
-    groups = group_stats.fillna(0)
+    group_stats = group_stats.fillna(0)
 
     # Adds the column totals as a row in the dataframe.
-    group_stats.loc["ARCHive Total"] = [group_stats["Size (TB)"].sum(), group_stats["Collections"].sum(),
-                                   group_stats["AIPs"].sum(), group_stats["File_IDs"].sum(),
-                                   df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
-                                   df["Format Identification"].nunique()]
-    print(group_stats)
-    # # Makes these rows integers instead of floats (result of sum()), since they are counts and should be whole numbers.
-    # group_combined["Collections"] = group_combined["Collections"].astype(int)
-    # group_combined["AIPs"] = group_combined["AIPs"].astype(int)
-    # group_combined["File_IDs"] = group_combined["File_IDs"].astype(int)
-    #
-    # # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
-    # # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
-    # return group_combined
+    group_stats.loc["total"] = [group_stats["Size (TB)"].sum(), group_stats["Collections"].sum(),
+                                group_stats["AIPs"].sum(), group_stats["File_IDs"].sum(),
+                                df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
+                                df["Format Identification"].nunique()]
+
+    # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
+    # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
+    return group_stats
 
 
 def one_category(category, totals):
@@ -269,7 +265,6 @@ except (IndexError, FileNotFoundError):
     print("Script usage: python /path/reports.py /path/reports")
     exit()
 
-
 # GETS DATA FROM THE FILES USED IN THIS SCRIPT, WHICH SHOULD BE IN THE REPORT FOLDER.
 
 # Variables for the report file names. They start with the value False to test for any that are not found.
@@ -306,73 +301,72 @@ if len(missing) > 0:
 df = pd.read_csv(formats_report)
 df_aip = pd.read_csv(formats_by_aip_report)
 
-
 # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
 
 # Makes the ARCHive overview dataframe (summary statistics by group).
 overview = archive_overview()
 
-# # Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
-# # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
-# totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"]]
-#
-# # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-# format_types = one_category("Format Type", totals_list)
-#
-# # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
-# format_names = one_category("Format Standardized Name", totals_list)
-#
-# # Makes a dataframe with all standardized format names with over 500 file_id counts, to use for risk analysis.
-# common_formats = format_names[format_names.File_IDs > 500]
-#
-# # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-# type_by_group = two_categories("Format Type", "Group")
-#
-# # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
-# # standardized name.
-# type_by_name = two_categories("Format Type", "Format Standardized Name")
-#
-# # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
-# name_by_group = two_categories("Format Standardized Name", "Group")
-#
-# # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
-# # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-# format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
-# format_percentage = (format_count / format_count.sum()) * 100
-# format_percentage = format_percentage.rename("File_IDs Percentage")
-# format_ids = pd.concat([format_count, format_percentage], axis=1)
-# format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
-#
-# # Makes a dataframe with the number of groups and list of groups that have each format type.
-# groups_per_type = group_overlap("Format Type")
-#
-# # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-# groups_per_name = group_overlap("Format Standardized Name")
-#
-# # Makes a dataframe with the number of groups and list of groups that have each format identification.
-# groups_per_id = group_overlap("Format Identification")
-#
-# # Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
-# format_name_ranges = count_ranges("Format Standardized Name")
-#
-# # Makes a dataframe with the number of format identifications within different ranges of file_id counts.
-# format_id_ranges = count_ranges("Format Identification")
-#
-# # Saves each dataframe or series as a spreadsheet in an Excel workbook.
-# # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
-# # TODO: would like to adjust the default formatting in Excel. Un-bold, left justify, expand column width.
-# today = datetime.datetime.now().strftime("%Y-%m")
-# with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
-#     overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
-#     format_types.to_excel(results, sheet_name="Format Types")
-#     format_names.to_excel(results, sheet_name="Format Names")
-#     format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
-#     common_formats.to_excel(results, sheet_name="Risk Analysis")
-#     type_by_group.to_excel(results, sheet_name="Type by Group")
-#     type_by_name.to_excel(results, sheet_name="Type by Name")
-#     name_by_group.to_excel(results, sheet_name="Name by Group")
-#     format_ids.to_excel(results, sheet_name="Format ID")
-#     format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
-#     groups_per_type.to_excel(results, sheet_name="Groups per Type")
-#     groups_per_name.to_excel(results, sheet_name="Groups per Name")
-#     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+# Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
+# Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
+totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"]]
+
+# Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
+format_types = one_category("Format Type", totals_list)
+
+# Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
+format_names = one_category("Format Standardized Name", totals_list)
+
+# Makes a dataframe with all standardized format names with over 500 file_id counts, to use for risk analysis.
+common_formats = format_names[format_names.File_IDs > 500]
+
+# Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
+type_by_group = two_categories("Format Type", "Group")
+
+# Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
+# standardized name.
+type_by_name = two_categories("Format Type", "Format Standardized Name")
+
+# Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
+name_by_group = two_categories("Format Standardized Name", "Group")
+
+# Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
+# The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
+format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
+format_percentage = (format_count / format_count.sum()) * 100
+format_percentage = format_percentage.rename("File_IDs Percentage")
+format_ids = pd.concat([format_count, format_percentage], axis=1)
+format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
+
+# Makes a dataframe with the number of groups and list of groups that have each format type.
+groups_per_type = group_overlap("Format Type")
+
+# Makes a dataframe with the number of groups and list of groups that have each format standardized name.
+groups_per_name = group_overlap("Format Standardized Name")
+
+# Makes a dataframe with the number of groups and list of groups that have each format identification.
+groups_per_id = group_overlap("Format Identification")
+
+# Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
+format_name_ranges = count_ranges("Format Standardized Name")
+
+# Makes a dataframe with the number of format identifications within different ranges of file_id counts.
+format_id_ranges = count_ranges("Format Identification")
+
+# Saves each dataframe or series as a spreadsheet in an Excel workbook.
+# The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+# TODO: would like to adjust the default formatting in Excel. Un-bold, left justify, expand column width.
+today = datetime.datetime.now().strftime("%Y-%m")
+with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
+    overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
+    format_types.to_excel(results, sheet_name="Format Types")
+    format_names.to_excel(results, sheet_name="Format Names")
+    format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
+    common_formats.to_excel(results, sheet_name="Risk Analysis")
+    type_by_group.to_excel(results, sheet_name="Type by Group")
+    type_by_name.to_excel(results, sheet_name="Type by Name")
+    name_by_group.to_excel(results, sheet_name="Name by Group")
+    format_ids.to_excel(results, sheet_name="Format ID")
+    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
+    groups_per_type.to_excel(results, sheet_name="Groups per Type")
+    groups_per_name.to_excel(results, sheet_name="Groups per Name")
+    groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
