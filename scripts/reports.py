@@ -39,7 +39,7 @@ def archive_overview():
     the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
     and format identifications. Returns a dataframe. """
 
-    def size_in_TB():
+    def size_in_tb():
         """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
 
         # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
@@ -95,7 +95,7 @@ def archive_overview():
         return sizes
 
     # Gets the size (in TB) per group from the usage report.
-    size_by_group = size_in_TB()
+    size_by_group = size_in_tb()
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
