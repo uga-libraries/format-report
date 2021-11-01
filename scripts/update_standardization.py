@@ -42,6 +42,11 @@ def in_standard(standard, format_to_check):
         # Checks each row in the standardize formats csv. row[0] is the format name.
         for standardize_row in read_standard:
 
+            # If the format is an undetected error from FITS (the format identification tool), return "Missing"
+            # so it is included in the new_formats.txt spreadsheet and staff see the error.
+            if format_to_check.startswith("ERROR: cannot read"):
+                return "Missing"
+
             # If the format name is in the CSV, returns "Found" and stops searching the CSV.
             # Matching lowercase versions of the format names to ignore variations in capitalization.
             if format_to_check.lower() == standardize_row[0].lower():
