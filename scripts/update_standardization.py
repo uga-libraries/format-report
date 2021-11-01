@@ -82,10 +82,10 @@ for format_report in os.listdir(report_folder):
         # Iterates over every row in the report.
         for row in read_formats:
 
-            # Gets the format name from the 3rd column.
-            # Skips it if there is no value in the 3rd column. Reports may download with a blank row at the end.
+            # Gets the format name from the 4th column.
+            # Skips it if there is no value in the 4th column. Reports may download with a blank row at the end.
             try:
-                format_name = row[2]
+                format_name = row[3]
             except IndexError:
                 continue
 
