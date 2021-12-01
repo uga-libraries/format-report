@@ -177,9 +177,9 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
     by_aip_csv = csv.writer(by_aip)
 
     # Adds a header to each CSV.
-    # TODO: add size
-    by_format_csv.writerow(["Group", "File_IDs", "Format Type", "Format Standardized Name",  "Format Identification",
-                            "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"])
+    by_format_csv.writerow(["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
+                            "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
+                            "Format Note"])
 
     by_aip_csv.writerow(["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
                          "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
@@ -205,7 +205,6 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
             next(report_info)
 
             # Gets the data from each row in the report.
-            # TODO: add size
             for row in report_info:
 
                 # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
@@ -218,8 +217,8 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                 format_id = f"{row[3]}|{row[4]}|{row[6]}"
 
                 # Writes the group, file_id count, and format information to the "by format" csv.
-                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, format_id, row[3], row[4],
-                                        row[5], row[6], row[7]])
+                by_format_csv.writerow([archive_group, row[1], row[2], format_type, format_standard, format_id,
+                                        row[3], row[4], row[5], row[6], row[7]])
 
                 # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
                 # rows to the "by aip" csv.
