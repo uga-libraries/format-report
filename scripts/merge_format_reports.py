@@ -140,8 +140,16 @@ def collection_from_aip(aip_id, group):
     # Hargrett Rare Book and Manuscript Library
     elif group == "hargrett":
         try:
-            coll_regex = re.match("^(.*)(er|-web)", aip_id)
-            return coll_regex.group(1)
+            # Oral histories
+            if aip_id.startswith("har-"):
+                coll_regex = re.match("^(har-ua[0-9]{2}-[0-9]{3})_", aip_id)
+                return coll_regex.group(1)
+
+            # All other identifiers
+            else:
+                coll_regex = re.match("^(.*)(er|-web)", aip_id)
+                return coll_regex.group(1)
+
         except AttributeError:
             raise AttributeError
 
