@@ -35,9 +35,13 @@ def standardize_formats(format_name, standard):
         # Skips the header.
         next(read_standard_list)
 
-        # Checks each row for the format. When there is a match, returns the format standardized name and format type.
+        # Checks if the format name is actually an error and if so, returns default value for name and type.
+        if format_name.startswith("ERROR: cannot read"):
+            return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
+
+        # Checks each row in the standardized formats csv for the format.
+        # When there is a match, returns the format standardized name and format type.
         # Matches lowercase versions of the format names to ignore variations in capitalization.
-        # TODO: also want to provide standardized text if the format starts with "ERROR: cannot read"
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
                 return standard_row[1], standard_row[2]
