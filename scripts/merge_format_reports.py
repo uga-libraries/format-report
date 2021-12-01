@@ -112,15 +112,15 @@ def collection_from_aip(aip_id, group):
             coll_regex = re.match("^([a-z0-9-]*_[a-z0-9-]*)_", aip_id)
             return coll_regex.group(1)
 
-    # Digital Library of Georgia: Hargrett Rare Book and Manuscript Library
+    # Digital Library of Georgia managing content for Hargrett Rare Book and Manuscript Library
     elif group == "dlg-hargrett":
         coll_regex = re.match("^([a-z]{3,4}_[a-z0-9]{4})_", aip_id)
         return coll_regex.group(1)
 
-    # At the time of writing this script, there were no AIPs in dlg-magil.
-    # TODO: there are dlg-magil AIPs now
+    # Digital Library of Georgia managing content for Map and Government Information Library
     elif group == "dlg-magil":
-        raise ValueError
+        coll_regex = re.match("^([a-z]+_[a-z]+)_", aip_id)
+        return coll_regex.group(1)
 
     # Hargrett Rare Book and Manuscript Library
     elif group == "hargrett":
