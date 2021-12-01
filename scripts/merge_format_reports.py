@@ -37,6 +37,7 @@ def standardize_formats(format_name, standard):
 
         # Checks each row for the format. When there is a match, returns the format standardized name and format type.
         # Matches lowercase versions of the format names to ignore variations in capitalization.
+        # TODO: also want to provide standardized text if the format starts with "ERROR: cannot read"
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
                 return standard_row[1], standard_row[2]
@@ -117,6 +118,7 @@ def collection_from_aip(aip_id, group):
         return coll_regex.group(1)
 
     # At the time of writing this script, there were no AIPs in dlg-magil.
+    # TODO: there are dlg-magil AIPs now
     elif group == "dlg-magil":
         raise ValueError
 
@@ -175,6 +177,7 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
     by_aip_csv = csv.writer(by_aip)
 
     # Adds a header to each CSV.
+    # TODO: add size
     by_format_csv.writerow(["Group", "File_IDs", "Format Type", "Format Standardized Name",  "Format Identification",
                             "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"])
 
@@ -202,24 +205,25 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
             next(report_info)
 
             # Gets the data from each row in the report.
+            # TODO: add size
             for row in report_info:
 
                 # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
                 row = ["NO VALUE" if x == "" else x for x in row]
 
                 # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-                format_standard, format_type = standardize_formats(row[2], standard_csv)
+                format_standard, format_type = standardize_formats(row[3], standard_csv)
 
                 # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
-                format_id = f"{row[2]}|{row[3]}|{row[5]}"
+                format_id = f"{row[3]}|{row[4]}|{row[6]}"
 
                 # Writes the group, file_id count, and format information to the "by format" csv.
-                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, format_id, row[2], row[3],
-                                        row[4], row[5], row[6]])
+                by_format_csv.writerow([archive_group, row[1], format_type, format_standard, format_id, row[3], row[4],
+                                        row[5], row[6], row[7]])
 
                 # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
                 # rows to the "by aip" csv.
-                aip_list = row[7].split("|")
+                aip_list = row[8].split("|")
                 for aip in aip_list:
                     # If the collection id could not be calculated, supplies a value for the id and prints a warning.
                     try:
@@ -228,4 +232,4 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                         print("Could not calculate collection id for", aip)
                         collection_id = "UNABLE TO CALCULATE"
                     by_aip_csv.writerow([archive_group, collection_id, aip, format_type, format_standard, format_id,
-                                         row[2], row[3], row[4], row[5], row[6]])
+                                         row[3], row[4], row[5], row[6], row[7]])
