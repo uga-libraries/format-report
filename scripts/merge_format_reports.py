@@ -61,60 +61,68 @@ def collection_from_aip(aip_id, group):
     # Brown Media Archives and Peabody Awards Collection
     if group == "bmac":
 
-        if aip_id[5].isdigit():
-            return "peabody"
+        try:
+            if aip_id[5].isdigit():
+                return "peabody"
 
-        # The next three address errors with how the AIP ID was made.
-        elif aip_id.startswith("har-ms"):
-            coll_regex = re.match("(^har-ms[0-9]+)_", aip_id)
-            return coll_regex.group(1)
+            # The next three address errors with how the AIP ID was made.
+            elif aip_id.startswith("har-ms"):
+                coll_regex = re.match("(^har-ms[0-9]+)_", aip_id)
+                return coll_regex.group(1)
 
-        elif aip_id.startswith("bmac_bmac_wsbn"):
-            return "wsbn"
+            elif aip_id.startswith("bmac_bmac_wsbn"):
+                return "wsbn"
 
-        elif aip_id.startswith("bmac_wrdw_"):
-            return "wrdw-video"
+            elif aip_id.startswith("bmac_wrdw_"):
+                return "wrdw-video"
 
-        else:
-            coll_regex = re.match("^bmac_([a-z0-9-]+)_", aip_id)
-            return coll_regex.group(1)
+            else:
+                coll_regex = re.match("^bmac_([a-z0-9-]+)_", aip_id)
+                return coll_regex.group(1)
+
+        except AttributeError:
+            raise AttributeError
 
     # Digital Library of Georgia
     elif group == "dlg":
 
-        # Everything in turningpoint is also in another collection, which is the one we want.
-        # The collection number is changed to an integer to remove leading zeros.
-        if aip_id.startswith("dlg_turningpoint"):
+        try:
+            # Everything in turningpoint is also in another collection, which is the one we want.
+            # The collection number is changed to an integer to remove leading zeros.
+            if aip_id.startswith("dlg_turningpoint"):
 
-            # This one is from an error in the AIP ID.
-            if aip_id == "dlg_turningpoint_ahc0062f-001":
-                return "geh_ahc-mss820f"
+                # This one is from an error in the AIP ID.
+                if aip_id == "dlg_turningpoint_ahc0062f-001":
+                    return "geh_ahc-mss820f"
 
-            elif aip_id.startswith("dlg_turningpoint_ahc"):
-                coll_regex = re.match("dlg_turningpoint_ahc([0-9]{4})([a-z]?)-", aip_id)
-                if coll_regex.group(2) == "v":
-                    return f"geh_ahc-vis{int(coll_regex.group(1))}"
-                else:
-                    return f"geh_ahc-mss{int(coll_regex.group(1))}{coll_regex.group(2)}"
+                elif aip_id.startswith("dlg_turningpoint_ahc"):
+                    coll_regex = re.match("dlg_turningpoint_ahc([0-9]{4})([a-z]?)-", aip_id)
+                    if coll_regex.group(2) == "v":
+                        return f"geh_ahc-vis{int(coll_regex.group(1))}"
+                    else:
+                        return f"geh_ahc-mss{int(coll_regex.group(1))}{coll_regex.group(2)}"
 
-            elif aip_id.startswith("dlg_turningpoint_ghs"):
-                coll_regex = re.match("dlg_turningpoint_ghs([0-9]{4})([a-z]*)", aip_id)
-                if coll_regex.group(2) == "bs":
-                    return f"g-hi_ms{coll_regex.group(1)}-bs"
-                else:
-                    return f"g-hi_ms{coll_regex.group(1)}"
+                elif aip_id.startswith("dlg_turningpoint_ghs"):
+                    coll_regex = re.match("dlg_turningpoint_ghs([0-9]{4})([a-z]*)", aip_id)
+                    if coll_regex.group(2) == "bs":
+                        return f"g-hi_ms{coll_regex.group(1)}-bs"
+                    else:
+                        return f"g-hi_ms{coll_regex.group(1)}"
 
-            elif aip_id.startswith("dlg_turningpoint_harg"):
-                coll_regex = re.match("dlg_turningpoint_harg([0-9]{4})([a-z]?)", aip_id)
+                elif aip_id.startswith("dlg_turningpoint_harg"):
+                    coll_regex = re.match("dlg_turningpoint_harg([0-9]{4})([a-z]?)", aip_id)
 
-                return f"guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}"
+                    return f"guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}"
 
-        elif aip_id.startswith("batch_gua_"):
-            return "dlg_ghn"
+            elif aip_id.startswith("batch_gua_"):
+                return "dlg_ghn"
 
-        else:
-            coll_regex = re.match("^([a-z0-9-]*_[a-z0-9-]*)_", aip_id)
-            return coll_regex.group(1)
+            else:
+                coll_regex = re.match("^([a-z0-9-]*_[a-z0-9-]*)_", aip_id)
+                return coll_regex.group(1)
+
+        except AttributeError:
+            raise AttributeError
 
     # Digital Library of Georgia managing content for Hargrett Rare Book and Manuscript Library
     elif group == "dlg-hargrett":
@@ -123,20 +131,29 @@ def collection_from_aip(aip_id, group):
 
     # Digital Library of Georgia managing content for Map and Government Information Library
     elif group == "dlg-magil":
-        coll_regex = re.match("^([a-z]+_[a-z]+)_", aip_id)
-        return coll_regex.group(1)
+        try:
+            coll_regex = re.match("^([a-z]+_[a-z]+)_", aip_id)
+            return coll_regex.group(1)
+        except AttributeError:
+            raise AttributeError
 
     # Hargrett Rare Book and Manuscript Library
     elif group == "hargrett":
-        coll_regex = re.match("^(.*)(er|-web)", aip_id)
-        return coll_regex.group(1)
+        try:
+            coll_regex = re.match("^(.*)(er|-web)", aip_id)
+            return coll_regex.group(1)
+        except AttributeError:
+            raise AttributeError
 
     # Richard B. Russell Library for Research and Studies.
     # The same collection can be formatted rbrl-### or rbrl###, so normalizing all IDs to rbrl### to avoid duplicates.
     elif group == "russell":
-        coll_regex = re.match("^rbrl-?([0-9]{3})", aip_id)
-        coll_id = f"rbrl{coll_regex.group(1)}"
-        return coll_id
+        try:
+            coll_regex = re.match("^rbrl-?([0-9]{3})", aip_id)
+            coll_id = f"rbrl{coll_regex.group(1)}"
+            return coll_id
+        except AttributeError:
+            raise AttributeError
 
     # This would catch a new group.
     else:
@@ -231,7 +248,7 @@ with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"
                     # If the collection id could not be calculated, supplies a value for the id and prints a warning.
                     try:
                         collection_id = collection_from_aip(aip, archive_group)
-                    except ValueError:
+                    except (ValueError, AttributeError):
                         print("Could not calculate collection id for", aip)
                         collection_id = "UNABLE TO CALCULATE"
                     by_aip_csv.writerow([archive_group, collection_id, aip, format_type, format_standard, format_id,
