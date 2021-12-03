@@ -76,6 +76,10 @@ def collection_from_aip(aip_id, group):
             elif aip_id.startswith("bmac_wrdw_"):
                 return "wrdw-video"
 
+            # AIPs for this collection can start bmac_walb or bmac_walb-video
+            elif aip_id.startswith("bmac_walb"):
+                return "walb"
+
             else:
                 coll_regex = re.match("^bmac_([a-z0-9-]+)_", aip_id)
                 return coll_regex.group(1)
@@ -114,7 +118,8 @@ def collection_from_aip(aip_id, group):
 
                     return f"guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}"
 
-            elif aip_id.startswith("batch_gua_"):
+            # Georgia Historic Newspapers. Have seen batch_gua_ and batch_gu_
+            elif aip_id.startswith("batch_gu"):
                 return "dlg_ghn"
 
             else:
