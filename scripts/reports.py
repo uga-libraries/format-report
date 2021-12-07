@@ -237,7 +237,7 @@ def group_overlap(category):
     return groups_per_category
 
 
-def count_ranges(category):
+def file_count_ranges(category):
     """Uses the data from the archive_formats report to calculate the number of instances of the category within each
     range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
 
@@ -358,10 +358,10 @@ groups_per_name = group_overlap("Format Standardized Name")
 groups_per_id = group_overlap("Format Identification")
 
 # Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
-format_name_ranges = count_ranges("Format Standardized Name")
+format_name_ranges = file_count_ranges("Format Standardized Name")
 
 # Makes a dataframe with the number of format identifications within different ranges of file_id counts.
-format_id_ranges = count_ranges("Format Identification")
+format_id_ranges = file_count_ranges("Format Identification")
 
 # Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
