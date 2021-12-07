@@ -145,15 +145,17 @@ def archive_overview():
 
 def one_category(category, totals):
     """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
-    per each instance of the category, for example format type. Returns a dataframe. """
+    and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
-    # Creates a series for each count type (collections, AIPs, and file_ids) for each instance of the category.
+    # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
     collections = df_aip.groupby(category)["Collection"].nunique()
     aips = df_aip.groupby(category)["AIP"].nunique()
     files = df.groupby(category)["File_IDs"].sum()
+    size = df.groupby(category)["Size (GB)"].sum()
 
-    # Creates a series for the percentage of each count type (collections, AIPs, and file_ids) for each instance of
-    # the category. The percentage is rounded to two decimal places. Renames the series to be more descriptive.
+    # Creates a series for the percentage of each count type and size for each instance of the category.
+    # The percentage is rounded to two decimal places.
+    # Also renames the series to be more descriptive.
 
     collections_percent = (collections / totals[0]) * 100
     collections_percent = round(collections_percent, 2)
@@ -167,8 +169,13 @@ def one_category(category, totals):
     files_percent = round(files_percent, 2)
     files_percent = files_percent.rename("File_IDs Percentage")
 
-    # Combines all six count and percentage series into a single dataframe.
-    result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent], axis=1)
+    size_percent = (size / totals[3]) * 100
+    size_percent = round(size_percent, 2)
+    size_percent = size_percent.rename("Size (GB) Percentage")
+
+    # Combines all the count and percentage series into a single dataframe.
+    result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent, size, size_percent],
+                       axis=1)
 
     # Renames Collection and AIP columns to plural to be more descriptive.
     result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
@@ -306,9 +313,11 @@ df_aip = pd.read_csv(formats_by_aip_report)
 # Makes the ARCHive overview dataframe (summary statistics by group).
 overview = archive_overview()
 
-# Saves the ARCHive collection, AIP, and file totals to a list for calculating percentages in other dataframes.
+# Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
 # Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
-totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"]]
+# Overview has size in TB but rest of data uses size in GB, so need to convert it.
+totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"],
+               overview["Size (TB)"]["total"]*1000]
 
 # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
 format_types = one_category("Format Type", totals_list)
