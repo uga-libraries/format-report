@@ -264,6 +264,34 @@ def file_count_ranges(category):
     return result
 
 
+def size_count_ranges(category):
+    """Uses the data from the archive_formats report to calculate the number of instances of the category within each
+    range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
+
+    # Makes a series with the total size for each instance of the category, regardless of group.
+    df_cat = df.groupby(df[category])["Size (GB)"].sum()
+
+    # Makes series with the subset of the archive_formats_by_aip report data with the specified numbers of file_ids.
+    tier_one = df_cat[(df_cat < 10)]
+    tier_two = df_cat[(df_cat >= 10) & (df_cat < 100)]
+    tier_three = df_cat[(df_cat >= 100) & (df_cat < 500)]
+    tier_four = df_cat[(df_cat >= 500) & (df_cat < 1000)]
+    tier_five = df_cat[(df_cat >= 1000) & (df_cat < 10000)]
+    tier_six = df_cat[(df_cat >= 10000) & (df_cat < 50000)]
+    tier_seven = df_cat[(df_cat >= 50000)]
+
+    # Makes lists with the data for the dataframe: file_id ranges (for index) and the number of instances in each range.
+    size_ranges = ["0-9 GB", "10-99 GB", "100-499 GB", "500-999 GB", "1-9 TB", "10-49 TB", "50+ TB"]
+    instances = [tier_one.count(), tier_two.count(), tier_three.count(), tier_four.count(), tier_five.count(),
+                 tier_six.count(), tier_seven.count()]
+
+    # Makes a dataframe from the lists.
+    result = pd.DataFrame(instances, columns=[f"Total Size ({category})"], index=size_ranges)
+
+    # Returns the dataframe. Row index is the size ranges and column is Total Size (category).
+    return result
+
+
 # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
 # the argument is missing or not a valid directory.
 try:
@@ -357,11 +385,13 @@ groups_per_name = group_overlap("Format Standardized Name")
 # Makes a dataframe with the number of groups and list of groups that have each format identification.
 groups_per_id = group_overlap("Format Identification")
 
-# Makes a dataframe with the number of format standardized names within different ranges of file_id counts.
+# Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
 format_name_ranges = file_count_ranges("Format Standardized Name")
+format_name_sizes = size_count_ranges("Format Standardized Name")
 
-# Makes a dataframe with the number of format identifications within different ranges of file_id counts.
+# Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
 format_id_ranges = file_count_ranges("Format Identification")
+format_id_sizes = size_count_ranges("Format Identification")
 
 # Saves each dataframe or series as a spreadsheet in an Excel workbook.
 # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
@@ -371,12 +401,14 @@ with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
     format_types.to_excel(results, sheet_name="Format Types")
     format_names.to_excel(results, sheet_name="Format Names")
     format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
+    format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
     common_formats.to_excel(results, sheet_name="Risk Analysis")
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
     format_ids.to_excel(results, sheet_name="Format ID")
     format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
+    format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
     groups_per_type.to_excel(results, sheet_name="Groups per Type")
     groups_per_name.to_excel(results, sheet_name="Groups per Name")
     groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
