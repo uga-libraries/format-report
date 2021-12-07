@@ -186,8 +186,8 @@ def one_category(category, totals):
 
 
 def two_categories(category1, category2):
-    """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts for
-    each instance of two categories, for example format type and group. Returns a dataframe. """
+    """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts and
+    size in GB for each instance of two categories, for example format type and group. Returns a dataframe. """
 
     # Uses the archive_formats_by_aip report data to get counts of unique collections and unique AIPs.
     result = df_aip[[category1, category2, "Collection", "AIP"]].groupby([category1, category2]).nunique()
@@ -195,14 +195,16 @@ def two_categories(category1, category2):
     # Renames the column headings to be plural (Collections, AIPs) to be more descriptive.
     result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
 
-    # Uses the archive_formats report data to get counts of file_ids.
+    # Uses the archive_formats report data to get counts of file_ids and adds to the dataframe.
     # The counts are inflated by files with multiple possible format identifications.
     files_result = df.groupby([category1, category2])["File_IDs"].sum()
-
-    # Adds the file_id subtotal to the dataframe with the collection and AIP subtotals.
     result = pd.concat([result, files_result], axis=1)
 
-    # Returns the dataframe. Row index is the two categories and columns are Collections, AIPs, and File_IDs.
+    # Uses the archive_formats report data to get size in GB and adds to the dataframe.
+    size_result = df.groupby([category1, category2])["Size (GB)"].sum()
+    result = pd.concat([result, size_result], axis=1)
+
+    # Returns the dataframe. Row index is the two categories and columns are the counts and size.
     return result
 
 
