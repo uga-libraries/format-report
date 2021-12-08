@@ -353,10 +353,11 @@ totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], over
 format_types = one_category("Format Type", totals_list)
 
 # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
+# Makes dataframes with the subset of this dataframe with over 500 and 100 file_id counts, to use for risk analysis.
 format_names = one_category("Format Standardized Name", totals_list)
-
-# Makes a dataframe with all standardized format names with over 500 file_id counts, to use for risk analysis.
-common_formats = format_names[format_names.File_IDs > 500]
+common_formats_500 = format_names[format_names.File_IDs > 500]
+common_formats_250 = format_names[(format_names.File_IDs > 250) & (format_names.File_IDs <= 500)]
+common_formats_100 = format_names[(format_names.File_IDs > 100) & (format_names.File_IDs <= 250)]
 
 # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
 type_by_group = two_categories("Format Type", "Group")
@@ -402,7 +403,9 @@ with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
     format_names.to_excel(results, sheet_name="Format Names")
     format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
     format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-    common_formats.to_excel(results, sheet_name="Risk Analysis")
+    common_formats_500.to_excel(results, sheet_name="Risk Analysis 500")
+    common_formats_250.to_excel(results, sheet_name="Risk Analysis 250")
+    common_formats_100.to_excel(results, sheet_name="Risk Analysis 100")
     type_by_group.to_excel(results, sheet_name="Type by Group")
     type_by_name.to_excel(results, sheet_name="Type by Name")
     name_by_group.to_excel(results, sheet_name="Name by Group")
