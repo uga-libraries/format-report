@@ -208,6 +208,32 @@ def two_categories(category1, category2):
     return result
 
 
+def format_id_frequency(totals):
+    """Uses the data from the archive_formats report to calculate the frequency for every format identification (
+    name, version, registry key), which includes the file_id count, percentage of file_ids, size in GB,
+    and percentage of size. Returns a dataframe sorted largest to smallest by file_id count since the items of most
+    interest are the most common formats. """
+
+    # Make series for file_id counts and file_id percentages.
+    format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
+    format_percentage = (format_count / totals[2]) * 100
+    format_percentage = round(format_percentage, 2)
+    format_percentage = format_percentage.rename("File_IDs Percentage")
+
+    # Make series for total size and size percentages.
+    size = df.groupby(df["Format Identification"])["Size (GB)"].sum()
+    size_percentage = (size / totals[3]) * 100
+    size_percentage = round(size_percentage, 2)
+    size_percentage = size_percentage.rename("Size (GB) Percentage")
+
+    # Combine all the series into a single dataframe and sort largest to smallest by file_ids.
+    format_ids = pd.concat([format_count, format_percentage, size, size_percentage], axis=1)
+    format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
+
+    # Returns the dataframe. Row index is the file_ids and columns are the four frequency measures.
+    return format_ids
+
+
 def group_overlap(category):
     """Uses the data from the archive_formats report to calculate the number of groups and a list of the groups which
     have each instance of the category, for example format type. Returns a dataframe. """
@@ -371,11 +397,7 @@ name_by_group = two_categories("Format Standardized Name", "Group")
 
 # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
-format_percentage = (format_count / format_count.sum()) * 100
-format_percentage = format_percentage.rename("File_IDs Percentage")
-format_ids = pd.concat([format_count, format_percentage], axis=1)
-format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
+format_ids = format_id_frequency(totals_list)
 
 # Makes a dataframe with the number of groups and list of groups that have each format type.
 groups_per_type = group_overlap("Format Type")
