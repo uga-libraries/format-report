@@ -205,6 +205,8 @@ def two_categories(category1, category2):
     result = pd.concat([result, size_result], axis=1)
 
     # Returns the dataframe. Row index is the two categories and columns are the counts and size.
+    # Deletes extra columns named with the categories before returning.
+    result = result.drop([category1, category2], axis=1)
     return result
 
 
