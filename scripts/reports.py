@@ -161,19 +161,19 @@ def one_category(category, totals):
     # The percentage is rounded to two decimal places.
     # Also renames the series to be more descriptive.
 
-    collections_percent = (collections / totals[0]) * 100
+    collections_percent = (collections / totals["Collections"]) * 100
     collections_percent = round(collections_percent, 2)
     collections_percent = collections_percent.rename("Collections Percentage")
 
-    aips_percent = (aips / totals[1]) * 100
+    aips_percent = (aips / totals["AIPs"]) * 100
     aips_percent = round(aips_percent, 2)
     aips_percent = aips_percent.rename("AIPs Percentage")
 
-    files_percent = (files / totals[2]) * 100
+    files_percent = (files / totals["Files"]) * 100
     files_percent = round(files_percent, 2)
     files_percent = files_percent.rename("File_IDs Percentage")
 
-    size_percent = (size / totals[3]) * 100
+    size_percent = (size / totals["Size"]) * 100
     size_percent = round(size_percent, 2)
     size_percent = size_percent.rename("Size (GB) Percentage")
 
@@ -222,13 +222,13 @@ def format_id_frequency(totals):
 
     # Make series for file_id counts and file_id percentages.
     format_count = df.groupby(df["Format Identification"])["File_IDs"].sum()
-    format_percentage = (format_count / totals[2]) * 100
+    format_percentage = (format_count / totals["Files"]) * 100
     format_percentage = round(format_percentage, 2)
     format_percentage = format_percentage.rename("File_IDs Percentage")
 
     # Make series for total size and size percentages.
     size = df.groupby(df["Format Identification"])["Size (GB)"].sum()
-    size_percentage = (size / totals[3]) * 100
+    size_percentage = (size / totals["Size"]) * 100
     size_percentage = round(size_percentage, 2)
     size_percentage = size_percentage.rename("Size (GB) Percentage")
 
@@ -378,15 +378,15 @@ overview = archive_overview()
 # Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
 # Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
 # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
-totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"],
-               overview["Size (GB) Inflated"]["total"]]
+totals_dict = {"Collections": overview["Collections"]["total"], "AIPs": overview["AIPs"]["total"],
+               "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
 
 # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-format_types = one_category("Format Type", totals_list)
+format_types = one_category("Format Type", totals_dict)
 
 # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
 # And makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
-format_names = one_category("Format Standardized Name", totals_list)
+format_names = one_category("Format Standardized Name", totals_dict)
 common_formats = format_names[format_names.File_IDs >= 100]
 common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
 
@@ -402,7 +402,7 @@ name_by_group = two_categories("Format Standardized Name", "Group")
 
 # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
 # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-format_ids = format_id_frequency(totals_list)
+format_ids = format_id_frequency(totals_dict)
 
 # Makes a dataframe with the number of groups and list of groups that have each format type.
 groups_per_type = group_overlap("Format Type")
