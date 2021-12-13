@@ -82,8 +82,8 @@ def archive_overview():
                         size = 0
                         print("WARNING! Unexpected unit type:", unit)
 
-                    # Rounds the size in TB to one decimal place so the number is easier to read.
-                    size = round(size, 1)
+                    # Rounds the size in TB to two decimal places so the number is easier to read.
+                    size = round(size, 2)
 
                     # Adds the results for this group to the dictionary.
                     group_size[group] = size
@@ -96,6 +96,10 @@ def archive_overview():
 
     # Gets the size (in TB) per group from the usage report.
     size_by_group = size_in_tb()
+
+    # Gets the size (in GB) from the dataframe to show the difference between unique (from usage)
+    # and inflated by multiple identifications for individual files.
+    size_inflated = round(df.groupby("Group")["Size (GB)"].sum(), 2)
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
@@ -120,12 +124,12 @@ def archive_overview():
     format_ids_by_group = df.groupby("Group")["Format Identification"].nunique()
 
     # Combines the series with all the counts into a single dataframe.
-    group_stats = pd.concat([size_by_group, collections_by_group, aips_by_group, files_by_group, types_by_group,
-                             formats_by_group, format_ids_by_group], axis=1)
+    group_stats = pd.concat([size_by_group, size_inflated, collections_by_group, aips_by_group, files_by_group,
+                             types_by_group, formats_by_group, format_ids_by_group], axis=1)
 
     # Renames the dataframe columns to be more descriptive.
-    rename = {"Size": "Size (TB)", "Collection": "Collections", "AIP": "AIPs", "Format Type": "Format Types",
-              "Format Standardized Name": "Format Standardized Names",
+    rename = {"Size": "Size (TB)", "Size (GB)": "Size (GB) Inflated", "Collection": "Collections", "AIP": "AIPs",
+              "Format Type": "Format Types", "Format Standardized Name": "Format Standardized Names",
               "Format Identification": "Format Identifications"}
     group_stats = group_stats.rename(columns=rename)
 
@@ -133,10 +137,10 @@ def archive_overview():
     group_stats = group_stats.fillna(0)
 
     # Adds the column totals as a row in the dataframe.
-    group_stats.loc["total"] = [group_stats["Size (TB)"].sum(), group_stats["Collections"].sum(),
-                                group_stats["AIPs"].sum(), group_stats["File_IDs"].sum(),
-                                df["Format Type"].nunique(), df["Format Standardized Name"].nunique(),
-                                df["Format Identification"].nunique()]
+    group_stats.loc["total"] = [group_stats["Size (TB)"].sum(), group_stats["Size (GB) Inflated"].sum(),
+                                group_stats["Collections"].sum(), group_stats["AIPs"].sum(),
+                                group_stats["File_IDs"].sum(), df["Format Type"].nunique(),
+                                df["Format Standardized Name"].nunique(), df["Format Identification"].nunique()]
 
     # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
     # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
@@ -206,7 +210,7 @@ def two_categories(category1, category2):
 
     # Returns the dataframe. Row index is the two categories and columns are the counts and size.
     # Deletes extra columns named with the categories before returning.
-    result = result.drop([category1, category2], axis=1)
+    #result = result.drop([category1, category2], axis=1)
     return result
 
 
@@ -372,10 +376,10 @@ df_aip = pd.read_csv(formats_by_aip_report)
 overview = archive_overview()
 
 # Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
-# Cannot just get the total of columns in those dataframes because that will over-count anything with multiple formats.
-# Overview has size in TB but rest of data uses size in GB, so need to convert it.
+# Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
+# Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
 totals_list = [overview["Collections"]["total"], overview["AIPs"]["total"], overview["File_IDs"]["total"],
-               overview["Size (TB)"]["total"]*1000]
+               overview["Size (GB) Inflated"]["total"]]
 
 # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
 format_types = one_category("Format Type", totals_list)
