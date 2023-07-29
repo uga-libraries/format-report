@@ -73,6 +73,35 @@ def in_standard(standard, format_to_check):
     return "Missing"
 
 
+def new_formats_txt(format_matches, report_folder_path):
+    """
+    Locates formats that did not match and saves them to a file (new_formats.txt) in the reports_folder.
+    Returns if there were any new formats or not (Boolean) so a script status message may be printed.
+    """
+
+    # Makes a variable to track if there are any new formats.
+    new = False
+
+    # Makes a list of formats that are not already in standardize_formats.csv
+    # They have a value of "Missing" in the format_matches dictionary.
+    new_formats_list = []
+    for key in format_matches:
+        if format_matches[key] == "Missing":
+            new_formats_list.append(key)
+
+    # If there are any new format names, updates the value of new and
+    # saves the new format names to a text file named "new_formats.txt" in the report folder.
+    # Each format name is on a separate line to make it easy to add as a new row to updating standardize_formats.csv.
+    if len(new_formats_list) > 0:
+        new = True
+        with open(os.path.join(report_folder_path, "new_formats.txt"), "w") as new_file:
+            for new_format_name in new_formats_list:
+                new_file.write(f"{new_format_name}\n")
+
+    # Returns if there are new files so the script can print a status message.
+    return new
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and argument paths are valid.
@@ -130,18 +159,8 @@ if __name__ == '__main__':
                     found = in_standard(standardize_formats_csv, format_name)
                     formats_checked[format_name] = found
 
-    # Makes a list of formats that are not already in standardize_formats.csv (have a value of "Missing" in the dictionary).
-    new_formats = []
-    for key in formats_checked:
-        if formats_checked[key] == "Missing":
-            new_formats.append(key)
-
-    # Saves the new format names, if any, to a text file in the report folder to use for updating standardize_formats.csv.
-    # Each format name is on its own line in the text file so it can be pasted into the CSV, one row per format.
-    if len(new_formats) > 0:
-        print("New formats were found: check new_formats.txt")
-        with open(os.path.join(report_folder, "new_formats.txt"), "w") as new_file:
-            for new_format_name in new_formats:
-                new_file.write(f"{new_format_name}\n")
-    else:
-        print("No new formats to add!")
+    # Saves any formats that are no in standardize_formats.csv to a file in the report folder.
+    # Prints a message if there were new formats so the archivist knows to check for the file.
+    new_formats = new_formats_txt(formats_checked, report_folder)
+    if new_formats:
+        print("New formats were found: check new_formats.txt in report_folder")

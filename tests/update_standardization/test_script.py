@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the expected message was produced. In production, this is printed to the terminal.
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "New formats were found: check new_formats.txt\r\n"
+        msg_expected = "New formats were found: check new_formats.txt in report_folder\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with new formats, message")
 
         # Tests if the new_formats.txt file has the expected values.
@@ -49,9 +49,9 @@ class MyTestCase(unittest.TestCase):
         script_path = os.path.join("..", "..", "update_standardization.py")
         output = subprocess.run(f"python {script_path} reports_no_new_formats", shell=True, stdout=subprocess.PIPE)
 
-        # Tests if the expected message was produced. In production, this is printed to the terminal.
+        # Tests that no message was produced. In production, only print if there are new formats.
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "No new formats to add!\r\n"
+        msg_expected = ""
         self.assertEqual(msg_result, msg_expected, "Problem with no new formats, message")
 
         # Tests that the new_formats.txt file was not created.
