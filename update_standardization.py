@@ -71,7 +71,7 @@ while True:
 formats_checked = {}
 
 # Gets each file in the report folder.
-for format_report in os.listdir(report_folder):
+for format_report in os.listdir("."):
 
     # Skips it if the document is not an ARCHive group format report.
     if not format_report.startswith("file_formats_"):
