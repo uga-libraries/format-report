@@ -13,22 +13,38 @@ import csv
 import os
 import sys
 
-# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
-# the argument is missing or not a valid directory.
-try:
-    report_folder = sys.argv[1]
-    os.chdir(report_folder)
-except (IndexError, FileNotFoundError):
-    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage: python /path/update_standardization.py /path/report_folder [/path/standardize_formats.csv]")
-    exit()
 
-# Makes a variable with the file path for the standardize formats CSV. Uses the optional script argument if provided,
-# or else uses the folder with this script as the default location.
-try:
-    standard_csv = sys.argv[2]
-except IndexError:
-    standard_csv = os.path.join(sys.path[0], "standardize_formats.csv")
+def check_arguments(argument_list):
+    """
+    Verifies the required argument is present and argument paths are valid.
+    If no errors, returns the paths for report_folder and standardize_formats.csv.
+    If there are errors, prints the errors and exits the script.
+    """
+    # Makes a list for errors, so all errors can be tested before printing the result,
+    # and default values for the two variables assigned from arguments.
+    errors = []
+    report = None
+    standard_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+
+    # Verifies that the required argument (report_folder) is present.
+    # and if it is present that it is a valid directory.
+    if len(argument_list) > 1:
+        report = argument_list[1]
+        if not os.path.exists(report):
+            errors.append(f"Report folder '{report}' does not exist")
+    else:
+        errors.append("Required argument report_folder is missing")
+
+    # If the optional second argument is present, replaces the default location (script repo) with the argument value.
+    if len(argument_list) > 2:
+        standard_csv = argument_list[2]
+
+    # Verifies that standard_csv path is a valid path.
+    if not os.path.exists(standard_csv):
+        errors.append(f"Standardize Formats CSV '{standard_csv}' does not exist")
+
+    # Returns results.
+    return report, standard_csv, errors
 
 
 def in_standard(standard, format_to_check):
@@ -57,61 +73,75 @@ def in_standard(standard, format_to_check):
     return "Missing"
 
 
-# Increases the size of csv fields to handle long AIP lists.
-# Gets the maximum size that doesn't give an overflow error.
-while True:
-    try:
-        csv.field_size_limit(sys.maxsize)
-        break
-    except OverflowError:
-        sys.maxsize = int(sys.maxsize / 10)
+if __name__ == '__main__':
 
-# Makes a dictionary for storing every format name checked, and if it was in standardize_formats.csv or not,
-# so that each format is only checked once. Formats may be repeated thousands of times in the ARCHive group reports.
-formats_checked = {}
+    # Verifies the required argument is present and argument paths are valid.
+    # If no errors, returns the path for standardize_formats.csv. Otherwise, prints the error(s) and exits the script.
+    report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
 
-# Gets each file in the report folder.
-for format_report in os.listdir("."):
+    # If there were errors, prints the errors and exits the scripts.
+    if len(errors_list) > 0:
+        print("The following errors were detected:")
+        for error in errors_list:
+            print(f"\t* {error}")
+        print("Script usage: python path/update_standardization.py path/report_folder [path/standardize_formats.csv]")
+        exit()
 
-    # Skips it if the document is not an ARCHive group format report.
-    if not format_report.startswith("file_formats_"):
-        continue
+    # Increases the size of csv fields to handle long AIP lists.
+    # Gets the maximum size that doesn't give an overflow error.
+    while True:
+        try:
+            csv.field_size_limit(sys.maxsize)
+            break
+        except OverflowError:
+            sys.maxsize = int(sys.maxsize / 10)
 
-    # Reads the data from the ARCHive group format report, which is a CSV.
-    with open(format_report) as formats:
-        read_formats = csv.reader(formats)
+    # Makes a dictionary for storing every format name checked, and if it was in standardize_formats.csv or not,
+    # so that each format is only checked once. Formats may be repeated thousands of times in the ARCHive group reports.
+    formats_checked = {}
 
-        # Skips the header row.
-        next(read_formats)
+    # Gets each file in the report folder.
+    for format_report in os.listdir(report_folder):
 
-        # Iterates over every row in the report.
-        for row in read_formats:
+        # Skips it if the document is not an ARCHive group format report.
+        if not format_report.startswith("file_formats_"):
+            continue
 
-            # Gets the format name from the 4th column.
-            # Skips it if there is no value in the 4th column. Reports may download with a blank row at the end.
-            try:
-                format_name = row[3]
-            except IndexError:
-                continue
+        # Reads the data from the ARCHive group format report, which is a CSV.
+        with open(os.path.join(report_folder, format_report)) as formats:
+            read_formats = csv.reader(formats)
 
-            # Checks if the script has already searched for this format in standardize_formats.csv. If it hasn't,
-            # searches for the format and records the result in the formats_checked dictionary.
-            if format_name not in formats_checked:
-                found = in_standard(standard_csv, format_name)
-                formats_checked[format_name] = found
+            # Skips the header row.
+            next(read_formats)
 
-# Makes a list of formats that are not already in standardize_formats.csv (have a value of "Missing" in the dictionary).
-new_formats = []
-for key in formats_checked:
-    if formats_checked[key] == "Missing":
-        new_formats.append(key)
+            # Iterates over every row in the report.
+            for row in read_formats:
 
-# Saves the new format names, if any, to a text file in the report folder to use for updating standardize_formats.csv.
-# Each format name is on its own line in the text file so it can be pasted into the CSV, one row per format.
-if len(new_formats) > 0:
-    print("New formats were found: check new_formats.txt")
-    with open("new_formats.txt", "w") as new_file:
-        for new_format_name in new_formats:
-            new_file.write(f"{new_format_name}\n")
-else:
-    print("No new formats to add!")
+                # Gets the format name from the 4th column.
+                # Skips it if there is no value in the 4th column. Reports may download with a blank row at the end.
+                try:
+                    format_name = row[3]
+                except IndexError:
+                    continue
+
+                # Checks if the script has already searched for this format in standardize_formats.csv. If it hasn't,
+                # searches for the format and records the result in the formats_checked dictionary.
+                if format_name not in formats_checked:
+                    found = in_standard(standardize_formats_csv, format_name)
+                    formats_checked[format_name] = found
+
+    # Makes a list of formats that are not already in standardize_formats.csv (have a value of "Missing" in the dictionary).
+    new_formats = []
+    for key in formats_checked:
+        if formats_checked[key] == "Missing":
+            new_formats.append(key)
+
+    # Saves the new format names, if any, to a text file in the report folder to use for updating standardize_formats.csv.
+    # Each format name is on its own line in the text file so it can be pasted into the CSV, one row per format.
+    if len(new_formats) > 0:
+        print("New formats were found: check new_formats.txt")
+        with open(os.path.join(report_folder, "new_formats.txt"), "w") as new_file:
+            for new_format_name in new_formats:
+                new_file.write(f"{new_format_name}\n")
+    else:
+        print("No new formats to add!")
