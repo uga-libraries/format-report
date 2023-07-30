@@ -190,7 +190,7 @@ if __name__ == '__main__':
     try:
         standard_csv = sys.argv[2]
     except IndexError:
-        standard_csv = os.path.join(os.path.dirname(sys.path[0]), "standardize_formats.csv")
+        standard_csv = os.path.join(sys.path[1], "standardize_formats.csv")
 
     # Increases the size of CSV fields to handle long AIP lists.
     # Gets the maximum size that doesn't give an overflow error.
