@@ -90,28 +90,26 @@ def format_check(report_folder_path, standardize_formats_csv_path):
 
 
 def in_standard(standard, format_to_check):
-    """Searches for a format name within the standardize formats CSV.
-       Returns "Found" if it is present and "Missing" if it is there not."""
+    """
+    Searches for a format name within standardize_formats.csv.
+    Returns "Found" if it is present and "Missing" if it is not.
+    """
 
-    # Reads the standardize formats csv.
+    # If the format is an undetected error from FITS (a format identification tool),
+    # return "Missing" so it is included in new_formats.txt and the archivist sees the error.
+    if format_to_check.startswith("ERROR: cannot read"):
+        return "Missing"
+
+    # Reads standardize_formats.csv and compares the format to every format in the CSV.
+    # If it matches (case insensitive), returns "Found".
     with open(standard, encoding="utf-8") as open_standard:
         read_standard = csv.reader(open_standard)
-
-        # Checks each row in the standardize formats csv. row[0] is the format name.
         for standardize_row in read_standard:
-
-            # If the format is an undetected error from FITS (the format identification tool), return "Missing"
-            # so it is included in the new_formats.txt spreadsheet and staff see the error.
-            if format_to_check.startswith("ERROR: cannot read"):
-                return "Missing"
-
-            # If the format name is in the CSV, returns "Found" and stops searching the CSV.
-            # Matching lowercase versions of the format names to ignore variations in capitalization.
             if format_to_check.lower() == standardize_row[0].lower():
                 return "Found"
 
-    # If the format is not in the standardize formats csv (meaning the previous code block did not return anything so
-    # this code runs), returns "Missing".
+    # Returns "Missing" if the format is not in standardize_formats.csv
+    # (it did not match any rows in the previous code block).
     return "Missing"
 
 
