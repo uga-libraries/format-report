@@ -324,122 +324,124 @@ def size_count_ranges(category):
     return result
 
 
-# Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
-# the argument is missing or not a valid directory.
-try:
-    report_folder = sys.argv[1]
-    os.chdir(report_folder)
-except (IndexError, FileNotFoundError):
-    print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-    print("Script usage: python /path/reports.py /path/reports")
-    exit()
+if __name__ == '__main__':
 
-# GETS DATA FROM THE FILES USED IN THIS SCRIPT, WHICH SHOULD BE IN THE REPORT FOLDER.
+    # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
+    # the argument is missing or not a valid directory.
+    try:
+        report_folder = sys.argv[1]
+        os.chdir(report_folder)
+    except (IndexError, FileNotFoundError):
+        print("The report folder path was either not given or is not a valid directory. Please try the script again.")
+        print("Script usage: python /path/reports.py /path/reports")
+        exit()
 
-# Variables for the report file names. They start with the value False to test for any that are not found.
-formats_by_aip_report = False
-formats_report = False
-usage_report = False
+    # GETS DATA FROM THE FILES USED IN THIS SCRIPT, WHICH SHOULD BE IN THE REPORT FOLDER.
 
-# Searches the report folder for the expected files, and if found updates the variable with the file name.
-# These files include dates, so the entire file name cannot be predicted by the script.
-for file in os.listdir("."):
-    if file.startswith("archive_formats_by_aip") and file.endswith(".csv"):
-        formats_by_aip_report = file
-    elif file.startswith("archive_formats_") and file.endswith(".csv"):
-        formats_report = file
-    elif file.startswith("usage_report_") and file.endswith(".csv"):
-        usage_report = file
+    # Variables for the report file names. They start with the value False to test for any that are not found.
+    formats_by_aip_report = False
+    formats_report = False
+    usage_report = False
 
-# Tests for if all reports were found, and if not prints an error and quits the script.
-missing = []
-if not formats_by_aip_report:
-    missing.append("Could not find the archive_formats_by_aip report in the report folder.")
-if not formats_report:
-    missing.append("Could not find the archive_formats report in the report folder.")
-if not usage_report:
-    missing.append("Could not find the usage report in the report folder.")
+    # Searches the report folder for the expected files, and if found updates the variable with the file name.
+    # These files include dates, so the entire file name cannot be predicted by the script.
+    for file in os.listdir("."):
+        if file.startswith("archive_formats_by_aip") and file.endswith(".csv"):
+            formats_by_aip_report = file
+        elif file.startswith("archive_formats_") and file.endswith(".csv"):
+            formats_report = file
+        elif file.startswith("usage_report_") and file.endswith(".csv"):
+            usage_report = file
 
-if len(missing) > 0:
-    for message in missing:
-        print(message)
-    print("Please add the missing report(s) to the report folder and run this script again.")
-    exit()
+    # Tests for if all reports were found, and if not prints an error and quits the script.
+    missing = []
+    if not formats_by_aip_report:
+        missing.append("Could not find the archive_formats_by_aip report in the report folder.")
+    if not formats_report:
+        missing.append("Could not find the archive_formats report in the report folder.")
+    if not usage_report:
+        missing.append("Could not find the usage report in the report folder.")
 
-# Makes dataframes from both ARCHive format reports.
-df = pd.read_csv(formats_report)
-df_aip = pd.read_csv(formats_by_aip_report)
+    if len(missing) > 0:
+        for message in missing:
+            print(message)
+        print("Please add the missing report(s) to the report folder and run this script again.")
+        exit()
 
-# GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
+    # Makes dataframes from both ARCHive format reports.
+    df = pd.read_csv(formats_report)
+    df_aip = pd.read_csv(formats_by_aip_report)
 
-# Makes the ARCHive overview dataframe (summary statistics by group).
-overview = archive_overview()
+    # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
 
-# Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
-# Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
-# Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
-totals_dict = {"Collections": overview["Collections"]["total"], "AIPs": overview["AIPs"]["total"],
-               "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
+    # Makes the ARCHive overview dataframe (summary statistics by group).
+    overview = archive_overview()
 
-# Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-format_types = one_category("Format Type", totals_dict)
+    # Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
+    # Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
+    # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
+    totals_dict = {"Collections": overview["Collections"]["total"], "AIPs": overview["AIPs"]["total"],
+                   "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
 
-# Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
-# And makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
-format_names = one_category("Format Standardized Name", totals_dict)
-common_formats = format_names[format_names.File_IDs >= 100]
-common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
+    # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
+    format_types = one_category("Format Type", totals_dict)
 
-# Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-type_by_group = two_categories("Format Type", "Group")
+    # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
+    # And makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
+    format_names = one_category("Format Standardized Name", totals_dict)
+    common_formats = format_names[format_names.File_IDs >= 100]
+    common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
 
-# Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
-# standardized name.
-type_by_name = two_categories("Format Type", "Format Standardized Name")
+    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
+    type_by_group = two_categories("Format Type", "Group")
 
-# Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
-name_by_group = two_categories("Format Standardized Name", "Group")
+    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
+    # standardized name.
+    type_by_name = two_categories("Format Type", "Format Standardized Name")
 
-# Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
-# The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-format_ids = format_id_frequency(totals_dict)
+    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
+    name_by_group = two_categories("Format Standardized Name", "Group")
 
-# Makes a dataframe with the number of groups and list of groups that have each format type.
-groups_per_type = group_overlap("Format Type")
+    # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
+    # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
+    format_ids = format_id_frequency(totals_dict)
 
-# Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-groups_per_name = group_overlap("Format Standardized Name")
+    # Makes a dataframe with the number of groups and list of groups that have each format type.
+    groups_per_type = group_overlap("Format Type")
 
-# Makes a dataframe with the number of groups and list of groups that have each format identification.
-groups_per_id = group_overlap("Format Identification")
+    # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
+    groups_per_name = group_overlap("Format Standardized Name")
 
-# Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
-format_name_ranges = file_count_ranges("Format Standardized Name")
-format_name_sizes = size_count_ranges("Format Standardized Name")
+    # Makes a dataframe with the number of groups and list of groups that have each format identification.
+    groups_per_id = group_overlap("Format Identification")
 
-# Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
-format_id_ranges = file_count_ranges("Format Identification")
-format_id_sizes = size_count_ranges("Format Identification")
+    # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
+    format_name_ranges = file_count_ranges("Format Standardized Name")
+    format_name_sizes = size_count_ranges("Format Standardized Name")
 
-# Saves each dataframe or series as a spreadsheet in an Excel workbook.
-# The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
-today = datetime.datetime.now().strftime("%Y-%m")
-with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
-    overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
-    format_types.to_excel(results, sheet_name="Format Types")
-    format_names.to_excel(results, sheet_name="Format Names")
-    format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
-    format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-    common_formats.to_excel(results, sheet_name="Risk Analysis")
-    type_by_group.to_excel(results, sheet_name="Type by Group")
-    type_by_name.to_excel(results, sheet_name="Type by Name")
-    name_by_group.to_excel(results, sheet_name="Name by Group")
-    format_ids.to_excel(results, sheet_name="Format ID")
-    format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
-    format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
-    groups_per_type.to_excel(results, sheet_name="Groups per Type")
-    groups_per_name.to_excel(results, sheet_name="Groups per Name")
-    groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+    # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
+    format_id_ranges = file_count_ranges("Format Identification")
+    format_id_sizes = size_count_ranges("Format Identification")
 
-# Future development: would like to adjust the default formatting in Excel.
-# Experimented with xlsxwriter. Did not find examples where index and header are reformatted.
+    # Saves each dataframe or series as a spreadsheet in an Excel workbook.
+    # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
+    today = datetime.datetime.now().strftime("%Y-%m")
+    with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
+        overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
+        format_types.to_excel(results, sheet_name="Format Types")
+        format_names.to_excel(results, sheet_name="Format Names")
+        format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
+        format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
+        common_formats.to_excel(results, sheet_name="Risk Analysis")
+        type_by_group.to_excel(results, sheet_name="Type by Group")
+        type_by_name.to_excel(results, sheet_name="Type by Name")
+        name_by_group.to_excel(results, sheet_name="Name by Group")
+        format_ids.to_excel(results, sheet_name="Format ID")
+        format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
+        format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
+        groups_per_type.to_excel(results, sheet_name="Groups per Type")
+        groups_per_name.to_excel(results, sheet_name="Groups per Name")
+        groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+
+    # Future development: would like to adjust the default formatting in Excel.
+    # Experimented with xlsxwriter. Did not find examples where index and header are reformatted.
