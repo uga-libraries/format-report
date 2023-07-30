@@ -118,7 +118,7 @@ class MyTestCase(unittest.TestCase):
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)
 
         # Tests that the value of errors_list is correct.
-        expected = ["Required argument report_folder_folder_folder is missing"]
+        expected = ["Required argument report_folder is missing"]
         self.assertEqual(errors_list, expected, "Problem with report: missing")
 
     def test_report_path_error(self):
