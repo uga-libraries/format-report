@@ -1,0 +1,5 @@
+AIP Count,File Count,Size (GB),Format Name,Format Version,Registry Name,Registry Key,Format Note,AIP list
+14,1474,2.001,JPEG File Interchange Format,1.02,https://www.nationalarchives.gov.uk/PRONOM,fmt/44,,harg-ms3786er0001|harg-ms3786er0002|harg-ms3786er0004|harg-ms3786er0005|harg-ms3786er0006|harg-ms3786er0007|harg-ms3786er0010|harg-ms3786er0012|harg-ms3786er0019|harg-ms3786er0020|harg-ms3786er0021|harg-ms3786er0022|harg-ms3786er0024|harg-ms3786er0025
+6,1322,0.687,JPEG File Interchange Format,1.01,https://www.nationalarchives.gov.uk/PRONOM,fmt/43,,harg-ms3786er0001|harg-ms3786er0004|harg-ms3786er0005|harg-ms3786er0016|harg-ms3786er0024|harg-ms3786er0025
+6,55,0.005,Microsoft Word Binary File Format,97-2003,https://www.nationalarchives.gov.uk/PRONOM,fmt/40,,harg-ms3770er0002|harg-ms3786er0001|harg-ms3786er0006|harg-ms3786er0012|harg-ms3786er0014|harg-ms3786er0016
+1,1,1,New AV 1,,,,,harg-001
