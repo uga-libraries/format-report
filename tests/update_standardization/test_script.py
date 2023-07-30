@@ -14,7 +14,9 @@ import unittest
 class MyTestCase(unittest.TestCase):
 
     def tearDown(self):
-        """Deletes the new_formats.txt file, if it is made by the test."""
+        """
+        Deletes the new_formats.txt file, if it is made by the test.
+        """
         file_path = os.path.join("reports_new_formats", "new_formats.txt")
         if os.path.exists(file_path):
             os.remove(file_path)
@@ -49,7 +51,7 @@ class MyTestCase(unittest.TestCase):
         script_path = os.path.join("..", "..", "update_standardization.py")
         output = subprocess.run(f"python {script_path} reports_no_new_formats", shell=True, stdout=subprocess.PIPE)
 
-        # Tests that no message was produced. In production, only print if there are new formats.
+        # Tests that no message was produced. In production, only prints if there are new formats.
         msg_result = output.stdout.decode("utf-8")
         msg_expected = ""
         self.assertEqual(msg_result, msg_expected, "Problem with no new formats, message")

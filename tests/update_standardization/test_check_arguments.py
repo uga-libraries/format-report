@@ -1,5 +1,7 @@
 """
-Tests for the function check_arguments()
+Tests for the function check_arguments(),
+which verifies the required argument is present and argument paths are valid,
+and returns report_folder, standard_csv, and a list with errors.
 
 For input, tests use a list with argument values. In production, this would be the contents of sys.argv.
 """
@@ -14,9 +16,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_csv_argument_correct(self):
         """
-        Test for when the optional argument standardize formats csv is present and a valid path.
+        Test for when the optional argument standard_csv is present and a valid path.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_new_formats",
                     os.path.join(os.getcwd(), "standardize_formats_custom.csv")]
@@ -31,7 +32,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_csv_argument_path_error(self):
         """
-        Test for when the optional argument standardize format csv is present but not a valid path.
+        Test for when the optional argument standard_csv is present but not a valid path.
         """
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_new_formats",
@@ -44,10 +45,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_csv_default_correct(self):
         """
-        Test for when the optional argument standardize formats csv is not present
+        Test for when the optional argument standard_csv is not present
         and the default csv path is a valid path.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_new_formats"]
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)
@@ -61,7 +61,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_csv_default_path_error(self):
         """
-        Test for when the optional argument standardize format csv is not present
+        Test for when the optional argument standard_csv is not present
         but the default csv path is not a valid path.
         """
         # Changes the name of standardize_formats.csv to cause the error.
@@ -78,14 +78,13 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the value of errors_list is correct.
         expected = [f"Standardize Formats CSV '{original_name}' does not exist"]
-        self.assertEqual(errors_list, expected, "Problem with csv from argument: path error")
+        self.assertEqual(errors_list, expected, "Problem with csv from default: path error")
 
     def test_multiple_errors(self):
         """
-        Test for when the required argument report and optional argument standardize formats csv
-        are both present but neither is a valid path.
+        Test for when the required argument report_folder and optional argument standard_csv are both present
+        but neither is a valid path.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_error", "standardize_error.csv"]
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)
@@ -97,9 +96,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_report_correct(self):
         """
-        Test for when the required argument report is present and a valid path.
+        Test for when the required argument report_folder is present and a valid path.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_new_formats"]
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)
@@ -113,22 +111,20 @@ class MyTestCase(unittest.TestCase):
 
     def test_report_missing(self):
         """
-        Test for when the required argument report is not present.
+        Test for when the required argument report_folder is not present.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py")]
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)
 
         # Tests that the value of errors_list is correct.
-        expected = ["Required argument report_folder is missing"]
+        expected = ["Required argument report_folder_folder_folder is missing"]
         self.assertEqual(errors_list, expected, "Problem with report: missing")
 
     def test_report_path_error(self):
         """
-        Test for when the required argument report is present but not a valid path.
+        Test for when the required argument report_folder is present but not a valid path.
         """
-
         # Runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "update_standardization.py"), "reports_error"]
         report_folder, standardize_formats_csv, errors_list = check_arguments(sys_argv)

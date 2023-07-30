@@ -4,7 +4,7 @@ which makes a text file with any formats that are not in standardize_formats.csv
 and returns a Boolean value for if there are new formats for the script to print a message.
 
 For input, each test generates a dictionary with format names as the key and Found/Missing as the value.
-In production, this would be created by the previous script step.
+In production, this would be created by the format_check() function.
 """
 
 import os
@@ -15,7 +15,9 @@ from update_standardization import new_formats_txt
 class MyTestCase(unittest.TestCase):
 
     def tearDown(self):
-        """Deletes the new_formats.txt file, if it is made by the test."""
+        """
+        Deletes the new_formats.txt file, if it is made by the test.
+        """
         file_path = os.path.join("reports_new_formats", "new_formats.txt")
         if os.path.exists(file_path):
             os.remove(file_path)

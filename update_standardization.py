@@ -1,13 +1,14 @@
-"""Makes a list of any formats from the ARCHive group format reports that are new since the last format analysis and
+"""
+Makes a list of any formats from the ARCHive group format reports that are new since the last format analysis and
 therefore are not yet in standardize_formats.csv, the spreadsheet which has the format standardized name and format
-type for every format identification (name, version, and registry key) within the UGA Libraries' digital preservation
-system (ARCHive). These new formats need to be added to standardize_formats.csv before merging and analyzing the
+type for every format name within the UGA Libraries' digital preservation system (ARCHive).
+These new formats need to be added to standardize_formats.csv before merging and analyzing the
 ARCHive group format reports.
+"""
 
-Prior to running the script, download all the ARCHive group format reports (one CSV file per group) from the
-ARCHive interface and save them to a single folder (report_folder)."""
-
-# Usage: python /path/update_standardization.py /path/report_folder [/path/standardize_formats.csv]
+# Usage: python path/update_standardization.py report_folder [standard_csv]
+#    - report_folder is the path to the folder with the ARCHive group format reports (required)
+#    - standard_csv is the path to a CSV for standardization, to use instead of the CSV in the repo (optional)
 
 import csv
 import os
@@ -17,10 +18,9 @@ import sys
 def check_arguments(argument_list):
     """
     Verifies the required argument is present and argument paths are valid.
-    If no errors, returns the paths for report_folder and standardize_formats.csv.
-    If there are errors, prints the errors and exits the script.
+    Returns the paths for report_folder and standardize_formats.csv and an errors list.
     """
-    # Makes a list for errors, so all errors can be tested before printing the result,
+    # Makes a list for errors, so all errors can be tested before returning the result,
     # and default values for the two variables assigned from arguments.
     errors = []
     report = None
@@ -43,7 +43,8 @@ def check_arguments(argument_list):
     if not os.path.exists(standard_csv):
         errors.append(f"Standardize Formats CSV '{standard_csv}' does not exist")
 
-    # Returns results.
+    # Returns the results.
+    # If there are no errors, the errors list will be empty.
     return report, standard_csv, errors
 
 
@@ -56,32 +57,23 @@ def format_check(report_folder_path, standardize_formats_csv_path):
     # Makes a dictionary for storing the results.
     formats_dictionary = {}
 
-    # Gets each file in the report folder.
+    # Gets each file in the report folder, skipping it if it is not a format report.
     for format_report in os.listdir(report_folder_path):
-
-        # Skips it if the document is not an ARCHive group format report.
         if not format_report.startswith("file_formats_"):
             continue
 
-        # Reads the data from the ARCHive group format report, which is a CSV.
+        # Reads the data from each ARCHive group format report, which is a CSV with a header row.
         with open(os.path.join(report_folder_path, format_report)) as formats:
             read_formats = csv.reader(formats)
-
-            # Skips the header row.
             next(read_formats)
 
-            # Iterates over every row in the report.
+            # Gets the format name from each row, skipping it if it is blank (IndexError).
+            # If it is not already in the dictionary, compares it to the formats in standardize_formats.csv.
             for row in read_formats:
-
-                # Gets the format name from the 4th column.
-                # Skips it if there is no value in the 4th column. Reports may download with a blank row at the end.
                 try:
                     format_name = row[3]
                 except IndexError:
                     continue
-
-                # Checks if the script has already searched for this format in standardize_formats.csv. If it hasn't,
-                # searches for the format and records the result in the formats_checked dictionary.
                 if format_name not in formats_dictionary:
                     match_status = in_standard(standardize_formats_csv_path, format_name)
                     formats_dictionary[format_name] = match_status
@@ -94,7 +86,6 @@ def in_standard(standard, format_to_check):
     Searches for a format name within standardize_formats.csv.
     Returns "Found" if it is present and "Missing" if it is not.
     """
-
     # If the format is an undetected error from FITS (a format identification tool),
     # return "Missing" so it is included in new_formats.txt and the archivist sees the error.
     if format_to_check.startswith("ERROR: cannot read"):
@@ -115,14 +106,14 @@ def in_standard(standard, format_to_check):
 
 def new_formats_txt(format_matches, report_folder_path):
     """
-    Locates formats that did not match and saves them to a file (new_formats.txt) in the reports_folder.
+    Locates formats in the format_matches dictionary that did not match
+    and saves them to a file (new_formats.txt) in the reports_folder.
     Returns if there were any new formats or not (Boolean) so a script status message may be printed.
     """
-
     # Makes a variable to track if there are any new formats.
     new = False
 
-    # Makes a list of formats that are not already in standardize_formats.csv
+    # Makes a list of formats that are not already in standardize_formats.csv.
     # They have a value of "Missing" in the format_matches dictionary.
     new_formats_list = []
     for key in format_matches:
@@ -131,7 +122,7 @@ def new_formats_txt(format_matches, report_folder_path):
 
     # If there are any new format names, updates the value of new and
     # saves the new format names to a text file named "new_formats.txt" in the report folder.
-    # Each format name is on a separate line to make it easy to add as a new row to updating standardize_formats.csv.
+    # Each format name is on a separate line to make it easy to add as a new row to update standardize_formats.csv.
     if len(new_formats_list) > 0:
         new = True
         with open(os.path.join(report_folder_path, "new_formats.txt"), "w") as new_file:
@@ -144,8 +135,8 @@ def new_formats_txt(format_matches, report_folder_path):
 
 if __name__ == '__main__':
 
-    # Verifies the required argument is present and argument paths are valid.
-    # If no errors, returns the path for standardize_formats.csv. Otherwise, prints the error(s) and exits the script.
+    # Verifies the required argument is present and both paths are valid.
+    # Returns both paths and an errors list, which is empty if there were no errors.
     report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
 
     # If there were errors, prints the errors and exits the scripts.
@@ -153,7 +144,7 @@ if __name__ == '__main__':
         print("The following errors were detected:")
         for error in errors_list:
             print(f"\t* {error}")
-        print("Script usage: python path/update_standardization.py path/report_folder [path/standardize_formats.csv]")
+        print("Script usage: python path/update_standardization.py report_folder [standard_csv]")
         exit()
 
     # Increases the size of csv fields to handle long AIP lists.

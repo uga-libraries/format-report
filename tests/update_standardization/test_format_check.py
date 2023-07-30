@@ -1,6 +1,6 @@
 """
 Tests for the function format_check(),
-which gets all the format name from every format report in the report_folder,
+which gets all the format names from every format report in the report_folder,
 matches the names to standardize_format.csv, and returns a dictionary
 with the format name as the key and if found or missing as the value.
 
@@ -35,7 +35,7 @@ class MyTestCase(unittest.TestCase):
     def test_not_a_report(self):
         """
         Test for a format_reports folder that includes files which are not format reports.
-        The function will skip those files.
+        The function will skip those files and only read ones that are format reports.
         """
         # Runs the function being tested.
         formats_checked = format_check("reports_not_a_report", os.path.join(sys.path[1], "standardize_formats.csv"))

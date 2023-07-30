@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
     def test_missing_error(self):
         """
         Test for a format name that starts with ERROR: cannot read.
-        This is from a format identification tool and is automatically assigned Missing without checking the CSV.
+        This is an error and is automatically assigned Missing without checking the CSV.
         """
         # Runs the function being tested.
         match_status = in_standard(os.path.join(sys.path[1], "standardize_formats.csv"), "ERROR: cannot read file")
