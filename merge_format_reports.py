@@ -195,37 +195,52 @@ def read_report(report_path, standardize_formats_csv_path):
 
         # Gets the data from each row in the report.
         for row in report_info:
+            format_row, aip_row_list = read_row(row, standardize_formats_csv_path, archive_group)
 
-            # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
-            row = ["NO VALUE" if x == "" else x for x in row]
-
-            # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-            format_standard, format_type = standardize_formats(row[3], standardize_formats_csv_path)
-
-            # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
-            format_id = f"{row[3]}|{row[4]}|{row[6]}"
-
-            # Adds the row for the "by format" csv to the list.
-            # It includes the group, file_id count, and format information.
-            format_csv_rows.append([archive_group, row[1], row[2], format_type, format_standard, format_id, row[3],
-                                    row[4], row[5], row[6], row[7]])
-
-            # Gets a list of AIPs in this row, calculates the row information for each AIP,
-            # and adds the row for the "by aip" csv to the list.
-            # It includes the group, collection id, aip id, and format information.
-            aip_list = row[8].split("|")
-            for aip in aip_list:
-                # If the collection id could not be calculated, supplies a value for the id and prints a warning.
-                try:
-                    collection_id = collection_from_aip(aip, archive_group)
-                except (ValueError, AttributeError):
-                    print("Could not calculate collection id for", aip)
-                    collection_id = "UNABLE TO CALCULATE"
-                aip_csv_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id,
-                                     row[3], row[4], row[5], row[6], row[7]])
+            # Adds the data to the reports.
+            # format_row is a list; aip_row_list is a list of lists, although it may only contain one list.
+            format_csv_rows.append(format_row)
+            aip_csv_rows.extend(aip_row_list)
 
     # Returns both lists of rows to be saved to the correct CSVs.
     return format_csv_rows, aip_csv_rows
+
+
+def read_row(row_data, standardize_formats_csv_path, archive_group):
+    """
+    Gets data from a row from an ARCHive format report and calculates additional infomration based on that data.
+    Returns two lists to be added to format_csv_rows and aip_csv_rows.
+    """
+    # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
+    row = ["NO VALUE" if x == "" else x for x in row_data]
+
+    # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
+    format_standard, format_type = standardize_formats(row[3], standardize_formats_csv_path)
+
+    # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
+    format_id = f"{row[3]}|{row[4]}|{row[6]}"
+
+    # Adds the row for the "by format" csv to the list.
+    # It includes the group, file_id count, and format information.
+    format_row = [archive_group, row[1], row[2], format_type, format_standard, format_id,
+                  row[3], row[4], row[5], row[6], row[7]]
+
+    # Gets a list of AIPs in this row, calculates the row information for each AIP,
+    # and adds the row for the "by aip" csv to the list.
+    # It includes the group, collection id, aip id, and format information.
+    aip_rows = []
+    aip_list = row[8].split("|")
+    for aip in aip_list:
+        # If the collection id could not be calculated, supplies a value for the id and prints a warning.
+        try:
+            collection_id = collection_from_aip(aip, archive_group)
+        except (ValueError, AttributeError):
+            print("Could not calculate collection id for", aip)
+            collection_id = "UNABLE TO CALCULATE"
+        aip_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id,
+                         row[3], row[4], row[5], row[6], row[7]])
+
+    return format_row, aip_rows
 
 
 if __name__ == '__main__':
