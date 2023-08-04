@@ -222,17 +222,18 @@ if __name__ == '__main__':
         # The information is saved to one or both CSV files.
         for report in os.listdir(report_folder):
 
-            # Skips the file if it is not a format report. The usage report and potentially other files are in this folder.
+            # Skips the file if it is not a format report.
+            # The usage report and potentially other files are in this folder.
             if not report.startswith("file_formats"):
                 continue
-
-            # Gets the ARCHive group from the format report filename. Will be saved to both CSVs.
-            regex = re.match("file_formats_(.*).csv", report)
-            archive_group = regex.group(1)
 
             # Gets the data from the report.
             with open(os.path.join(report_folder, report), "r") as open_report:
                 report_info = csv.reader(open_report)
+
+                # Gets the ARCHive group from the format report filename. Will be saved to both CSVs.
+                regex = re.match("file_formats_(.*).csv", report)
+                archive_group = regex.group(1)
 
                 # Skips the header.
                 next(report_info)
