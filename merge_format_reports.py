@@ -22,6 +22,7 @@ import datetime
 import os
 import re
 import sys
+from update_standardization import check_arguments
 
 
 def standardize_formats(format_name, standard):
@@ -175,22 +176,17 @@ def collection_from_aip(aip_id, group):
 
 if __name__ == '__main__':
 
-    # Makes the report folder (a script argument) the current directory. If the argument is missing or not a valid
-    # directory, displays an error message and quits the script.
-    try:
-        report_folder = sys.argv[1]
-        os.chdir(report_folder)
-    except (IndexError, FileNotFoundError):
-        print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-        print("Script usage: python /path/merge_format_reports.py /path/format_reports [/path/standardize_formats.csv]")
-        exit()
+    # Verifies the required argument is present and both paths are valid.
+    # Returns both paths and an errors list, which is empty if there were no errors.
+    report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
 
-    # Makes a variable with the file path for the standardize formats csv. Uses the optional script argument if provided,
-    # or else uses the parent folder of the folder with this script as the default location for that CSV.
-    try:
-        standard_csv = sys.argv[2]
-    except IndexError:
-        standard_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+    # If there were errors, prints the errors and exits the script.
+    if len(errors_list) > 0:
+        print("The following errors were detected:")
+        for error in errors_list:
+            print(f"\t* {error}")
+        print("Script usage: python path/merge_format_reports.py report_folder [standard_csv]")
+        exit()
 
     # Increases the size of CSV fields to handle long AIP lists.
     # Gets the maximum size that doesn't give an overflow error.
@@ -207,8 +203,9 @@ if __name__ == '__main__':
     # Makes two CSV files in the reports folder for script output.
     # archive_formats_YYYYMM.csv is organized by format identification and then by group.
     # archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format identification.
-    with open(f"archive_formats_{today}.csv", "w", newline="") as by_format, open(f"archive_formats_by_aip_{today}.csv",
-                                                                                  "w", newline="") as by_aip:
+    format_csv = os.path.join(report_folder, f"archive_formats_{today}.csv")
+    aip_csv = os.path.join(report_folder, f"archive_formats_by_aip_{today}.csv")
+    with open(format_csv, "w", newline="") as by_format, open(aip_csv, "w", newline="") as by_aip:
         by_format_csv = csv.writer(by_format)
         by_aip_csv = csv.writer(by_aip)
 
@@ -223,7 +220,7 @@ if __name__ == '__main__':
 
         # Gets data from each ARCHive group format report and calculates additional information based on that data.
         # The information is saved to one or both CSV files.
-        for report in os.listdir():
+        for report in os.listdir(report_folder):
 
             # Skips the file if it is not a format report. The usage report and potentially other files are in this folder.
             if not report.startswith("file_formats"):
@@ -234,7 +231,7 @@ if __name__ == '__main__':
             archive_group = regex.group(1)
 
             # Gets the data from the report.
-            with open(report, "r") as open_report:
+            with open(os.path.join(report_folder, report), "r") as open_report:
                 report_info = csv.reader(open_report)
 
                 # Skips the header.
@@ -247,7 +244,7 @@ if __name__ == '__main__':
                     row = ["NO VALUE" if x == "" else x for x in row]
 
                     # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-                    format_standard, format_type = standardize_formats(row[3], standard_csv)
+                    format_standard, format_type = standardize_formats(row[3], standardize_formats_csv)
 
                     # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
                     format_id = f"{row[3]}|{row[4]}|{row[6]}"
