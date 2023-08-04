@@ -174,6 +174,60 @@ def collection_from_aip(aip_id, group):
         raise ValueError
 
 
+def read_report(report_path, standardize_formats_csv_path):
+    """
+    Gets data from each ARCHive group format report and calculates additional information based on that data.
+    Returns two lists with the rows of data to save to the CSV files.
+    """
+    # Makes lists to store the rows of data to save to the CSV files.
+    format_csv_rows = []
+    aip_csv_rows = []
+
+    # Gets the ARCHive group from the format report filename.
+    regex = re.match(".*file_formats_(.*).csv", report_path)
+    archive_group = regex.group(1)
+
+    with open(report_path, "r") as open_report:
+        report_info = csv.reader(open_report)
+
+        # Skips the header.
+        next(report_info)
+
+        # Gets the data from each row in the report.
+        for row in report_info:
+
+            # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
+            row = ["NO VALUE" if x == "" else x for x in row]
+
+            # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
+            format_standard, format_type = standardize_formats(row[3], standardize_formats_csv_path)
+
+            # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
+            format_id = f"{row[3]}|{row[4]}|{row[6]}"
+
+            # Adds the row for the "by format" csv to the list.
+            # It includes the group, file_id count, and format information.
+            format_csv_rows.append([archive_group, row[1], row[2], format_type, format_standard, format_id, row[3],
+                                    row[4], row[5], row[6], row[7]])
+
+            # Gets a list of AIPs in this row, calculates the row information for each AIP,
+            # and adds the row for the "by aip" csv to the list.
+            # It includes the group, collection id, aip id, and format information.
+            aip_list = row[8].split("|")
+            for aip in aip_list:
+                # If the collection id could not be calculated, supplies a value for the id and prints a warning.
+                try:
+                    collection_id = collection_from_aip(aip, archive_group)
+                except (ValueError, AttributeError):
+                    print("Could not calculate collection id for", aip)
+                    collection_id = "UNABLE TO CALCULATE"
+                aip_csv_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id,
+                                     row[3], row[4], row[5], row[6], row[7]])
+
+    # Returns both lists of rows to be saved to the correct CSVs.
+    return format_csv_rows, aip_csv_rows
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and both paths are valid.
@@ -211,12 +265,12 @@ if __name__ == '__main__':
 
         # Adds a header to each CSV.
         by_format_csv.writerow(["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                                "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                                "Format Note"])
+                                "Format Identification", "Format Name", "Format Version", "Registry Name",
+                                "Registry Key", "Format Note"])
 
         by_aip_csv.writerow(["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
-                             "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                             "Format Note"])
+                             "Format Identification", "Format Name", "Format Version", "Registry Name",
+                             "Registry Key", "Format Note"])
 
         # Gets data from each ARCHive group format report and calculates additional information based on that data.
         # The information is saved to one or both CSV files.
@@ -227,42 +281,10 @@ if __name__ == '__main__':
             if not report.startswith("file_formats"):
                 continue
 
-            # Gets the data from the report.
-            with open(os.path.join(report_folder, report), "r") as open_report:
-                report_info = csv.reader(open_report)
+            # Gets the a list of rows from the report to add to the CSVs.
+            format_report_list, aip_report_list = read_report(os.path.join(report_folder, report),
+                                                              standardize_formats_csv)
 
-                # Gets the ARCHive group from the format report filename. Will be saved to both CSVs.
-                regex = re.match("file_formats_(.*).csv", report)
-                archive_group = regex.group(1)
-
-                # Skips the header.
-                next(report_info)
-
-                # Gets the data from each row in the report.
-                for row in report_info:
-
-                    # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
-                    row = ["NO VALUE" if x == "" else x for x in row]
-
-                    # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-                    format_standard, format_type = standardize_formats(row[3], standardize_formats_csv)
-
-                    # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
-                    format_id = f"{row[3]}|{row[4]}|{row[6]}"
-
-                    # Writes the group, file_id count, and format information to the "by format" csv.
-                    by_format_csv.writerow([archive_group, row[1], row[2], format_type, format_standard, format_id,
-                                            row[3], row[4], row[5], row[6], row[7]])
-
-                    # Gets a list of AIPs in this row, calculates the row information for each AIP, and saves the AIP
-                    # rows to the "by aip" csv.
-                    aip_list = row[8].split("|")
-                    for aip in aip_list:
-                        # If the collection id could not be calculated, supplies a value for the id and prints a warning.
-                        try:
-                            collection_id = collection_from_aip(aip, archive_group)
-                        except (ValueError, AttributeError):
-                            print("Could not calculate collection id for", aip)
-                            collection_id = "UNABLE TO CALCULATE"
-                        by_aip_csv.writerow([archive_group, collection_id, aip, format_type, format_standard, format_id,
-                                             row[3], row[4], row[5], row[6], row[7]])
+            # Saves the rows to the CSVs.
+            by_format_csv.writerows(format_report_list)
+            by_aip_csv.writerows(aip_report_list)
