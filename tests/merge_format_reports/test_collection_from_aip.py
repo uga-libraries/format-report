@@ -51,12 +51,29 @@ class MyTestCase(unittest.TestCase):
         collection_id = collection_from_aip("bmac_walb-video_0134", "bmac")
         self.assertEqual(collection_id, "walb", "Problem with bmac: walb-video")
 
-    def test_bmac_general(self):
+    def test_bmac_general1(self):
         """
         Test for an AIP ID that matches the pattern: letters, numbers, and dashes between 'bmac_' and '_'
+        This collection ID is letters only.
         """
         collection_id = collection_from_aip("bmac_artrosen_0138_01", "bmac")
-        self.assertEqual(collection_id, "artrosen", "Problem with bmac: general")
+        self.assertEqual(collection_id, "artrosen", "Problem with bmac: general1 ")
+
+    def test_bmac_general2(self):
+        """
+        Test for an AIP ID that matches the pattern: letters, numbers, and dashes between 'bmac_' and '_'
+        This collection ID is letters and a dash.
+        """
+        collection_id = collection_from_aip("bmac_hm-bennettk_0001", "bmac")
+        self.assertEqual(collection_id, "hm-bennettk", "Problem with bmac: general 2")
+
+    def test_bmac_general3(self):
+        """
+        Test for an AIP ID that matches the pattern: letters, numbers, and dashes between 'bmac_' and '_'
+        This collection ID is letters, numbers, and dashes
+        """
+        collection_id = collection_from_aip("bmac_har-ua12-002_005", "bmac")
+        self.assertEqual(collection_id, "har-ua12-002", "Problem with bmac: general 3")
 
     def test_bmac_error(self):
         """
@@ -121,13 +138,32 @@ class MyTestCase(unittest.TestCase):
         collection_id = collection_from_aip("batch_gua_athensgazette_archival", "dlg")
         self.assertEqual(collection_id, "dlg_ghn", "Problem with dlg: batch_gu")
 
-    def test_dlg_general(self):
+    def test_dlg_general1(self):
         """
         Test for an AIP ID that matches the pattern:
         letters, numbers, dashes, and one underscore before the second underscore
+        This collection ID is just letters and the underscore.
         """
         collection_id = collection_from_aip("aarl_afpc_adamscarlton20171104", "dlg")
-        self.assertEqual(collection_id, "aarl_afpc", "Problem with dlg: general")
+        self.assertEqual(collection_id, "aarl_afpc", "Problem with dlg: general 1")
+
+    def test_dlg_general2(self):
+        """
+        Test for an AIP ID that matches the pattern:
+        letters, numbers, dashes, and one underscore before the second underscore
+        This collection ID is letters, a number and the underscore.
+        """
+        collection_id = collection_from_aip("c8y_gac_gac006", "dlg")
+        self.assertEqual(collection_id, "c8y_gac", "Problem with dlg: general 2")
+
+    def test_dlg_general3(self):
+        """
+        Test for an AIP ID that matches the pattern:
+        letters, numbers, dashes, and one underscore before the second underscore
+        This collection ID is letters, a dash and the underscore.
+        """
+        collection_id = collection_from_aip("eccca_aafp-ec_ecaaam-006", "dlg")
+        self.assertEqual(collection_id, "eccca_aafp-ec", "Problem with dlg: general 3")
 
     def test_dlg_error(self):
         """
@@ -140,7 +176,7 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(AttributeError):
             collection_from_aip("error_123", "dlg")
 
-    def test_dlg_hargrett_general_pattern(self):
+    def test_dlg_hargrett_general(self):
         """
         Test for an AIP ID that matches the pattern:
         3-4 letters, and underscore, and 4 letters, numbers and/or dashes before a second underscore
@@ -157,8 +193,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_dlg_magil_general(self):
         """
-        Test for an AIP ID that matches the pattern:
-        letters, numbers, dashes, and one underscore before the second underscore
+        Test for an AIP ID that matches the pattern: letters and one underscore before the second underscore
         """
         collection_id = collection_from_aip("dlg_sanb_abbeville-1913", "dlg-magil")
         self.assertEqual(collection_id, "dlg_sanb", "Problem with dlg-magil: general")
@@ -177,12 +212,19 @@ class MyTestCase(unittest.TestCase):
         collection_id = collection_from_aip("har-ua20-002_0003_media", "hargrett")
         self.assertEqual(collection_id, "har-ua20-002", "Problem with hargrett: har-")
 
-    def test_hargrett_general(self):
+    def test_hargrett_general_er(self):
         """
-        Test for an AIP ID that matches the pattern: anything before er or -web
+        Test for an AIP ID that matches the pattern: anything before er (this test) or -web
         """
         collection_id = collection_from_aip("harg-ms3770er0003", "hargrett")
-        self.assertEqual(collection_id, "harg-ms3770", "Problem with hargrett: general")
+        self.assertEqual(collection_id, "harg-ms3770", "Problem with hargrett: general_er")
+
+    def test_hargrett_general_web(self):
+        """
+        Test for an AIP ID that matches the pattern: anything before er or -web (this test)
+        """
+        collection_id = collection_from_aip("harg-0000-web-202007-0003", "hargrett")
+        self.assertEqual(collection_id, "harg-0000", "Problem with hargrett: general")
 
     def test_hargrett_error(self):
         """
@@ -191,13 +233,29 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(AttributeError):
             collection_from_aip("wrong_123", "hargrett")
 
-    def test_russell_general(self):
+    def test_russell_general1(self):
         """
-        Test for an AIP ID that matches the pattern:
-        rbrl, dash (optional), 3 numbers
+        Test for an AIP ID that matches the pattern: rbrl, dash (optional), 3 numbers
+        This AIP ID is used for digital archives.
+        """
+        collection_id = collection_from_aip("rbrl-153-er-000015", "russell")
+        self.assertEqual(collection_id, "rbrl153", "Problem with russell: general 1")
+
+    def test_russell_general2(self):
+        """
+        Test for an AIP ID that matches the pattern: rbrl, dash (optional), 3 numbers
+        This AIP ID is used for oral histories
+        """
+        collection_id = collection_from_aip("rbrl361aohp-002_media", "russell")
+        self.assertEqual(collection_id, "rbrl361", "Problem with russell: general 2")
+
+    def test_russell_general3(self):
+        """
+        Test for an AIP ID that matches the pattern: rbrl, dash (optional), 3 numbers
+        This AIP ID is used for web AIPs.
         """
         collection_id = collection_from_aip("rbrl-057-web-202302-0001", "russell")
-        self.assertEqual(collection_id, "rbrl057", "Problem with russell: general")
+        self.assertEqual(collection_id, "rbrl057", "Problem with russell: general 3")
 
     def test_russell_error(self):
         """
