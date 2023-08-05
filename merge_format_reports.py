@@ -119,6 +119,9 @@ def collection_from_aip(aip_id, group):
 
                     return f"guan_ms{int(coll_regex.group(1))}{coll_regex.group(2)}"
 
+                else:
+                    raise AttributeError
+
             # Georgia Historic Newspapers. Have seen batch_gua_ and batch_gu_
             elif aip_id.startswith("batch_gu"):
                 return "dlg_ghn"
@@ -132,8 +135,11 @@ def collection_from_aip(aip_id, group):
 
     # Digital Library of Georgia managing content for Hargrett Rare Book and Manuscript Library
     elif group == "dlg-hargrett":
-        coll_regex = re.match("^([a-z]{3,4}_[a-z0-9]{4})_", aip_id)
-        return coll_regex.group(1)
+        try:
+            coll_regex = re.match("^([a-z]{3,4}_[a-z0-9]{4})_", aip_id)
+            return coll_regex.group(1)
+        except AttributeError:
+            raise AttributeError
 
     # Digital Library of Georgia managing content for Map and Government Information Library
     elif group == "dlg-magil":
