@@ -249,6 +249,32 @@ def read_row(row_data, standardize_formats_csv_path, archive_group):
     return format_row, aip_rows
 
 
+def save_to_csv(csv_path, rows):
+    """
+    Saves rows to the specified CSV.
+    If rows indicates a header, uses the header information stored in this function.
+    """
+
+    # Headers for the two different CSVs created by this script.
+    aip_header = ["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
+                  "Format Identification", "Format Name", "Format Version", "Registry Name",
+                  "Registry Key", "Format Note"]
+    format_header = ["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
+                     "Format Identification", "Format Name", "Format Version", "Registry Name",
+                     "Registry Key", "Format Note"]
+
+    # If rows is "format_csv_header" or "aip_csv_header", saves the correct header to the CSV.
+    # Otherwise, saves the rows to the CSV.
+    with open(csv_path, "a", newline="") as csv_open:
+        csv_write = csv.writer(csv_open)
+        if rows == "aip_csv_header":
+            csv_write.writerow(aip_header)
+        elif rows == "format_csv_header":
+            csv_write.writerow(format_header)
+        else:
+            csv_write.writerows(rows)
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and both paths are valid.
@@ -272,40 +298,30 @@ if __name__ == '__main__':
         except OverflowError:
             sys.maxsize = int(sys.maxsize / 10)
 
-    # Gets the current date, formatted YYYYMM, to use in naming the script outputs.
-    today = datetime.datetime.now().strftime("%Y-%m")
-
-    # Makes two CSV files in the reports folder for script output.
-    # archive_formats_YYYYMM.csv is organized by format identification and then by group.
+    # Makes the paths for the two CSVs files for the script output, in the reports folder.
+    # archive_formats_YYYYMM.csv is organized by group and then format identification.
     # archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format identification.
-    format_csv = os.path.join(report_folder, f"archive_formats_{today}.csv")
+    today = datetime.datetime.now().strftime("%Y-%m")
     aip_csv = os.path.join(report_folder, f"archive_formats_by_aip_{today}.csv")
-    with open(format_csv, "w", newline="") as by_format, open(aip_csv, "w", newline="") as by_aip:
-        by_format_csv = csv.writer(by_format)
-        by_aip_csv = csv.writer(by_aip)
+    format_csv = os.path.join(report_folder, f"archive_formats_{today}.csv")
 
-        # Adds a header to each CSV.
-        by_format_csv.writerow(["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                                "Format Identification", "Format Name", "Format Version", "Registry Name",
-                                "Registry Key", "Format Note"])
+    # Adds headers to the CSVs.
+    save_to_csv(aip_csv, "aip_csv_header")
+    save_to_csv(format_csv, "format_csv_header")
 
-        by_aip_csv.writerow(["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
-                             "Format Identification", "Format Name", "Format Version", "Registry Name",
-                             "Registry Key", "Format Note"])
+    # Gets data from each ARCHive group format report and calculates additional information based on that data.
+    # The information is saved to one or both CSV files.
+    for report in os.listdir(report_folder):
 
-        # Gets data from each ARCHive group format report and calculates additional information based on that data.
-        # The information is saved to one or both CSV files.
-        for report in os.listdir(report_folder):
+        # Skips the file if it is not a format report.
+        # The usage report and potentially other files are in this folder.
+        if not report.startswith("file_formats"):
+            continue
 
-            # Skips the file if it is not a format report.
-            # The usage report and potentially other files are in this folder.
-            if not report.startswith("file_formats"):
-                continue
+        # Gets the a list of rows from the report to add to the CSVs.
+        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report), standardize_formats_csv)
 
-            # Gets the a list of rows from the report to add to the CSVs.
-            format_report_list, aip_report_list = read_report(os.path.join(report_folder, report),
-                                                              standardize_formats_csv)
+        # Saves the rows to the CSVs.
+        save_to_csv(aip_csv, aip_report_list)
+        save_to_csv(format_csv, format_report_list)
 
-            # Saves the rows to the CSVs.
-            by_format_csv.writerows(format_report_list)
-            by_aip_csv.writerows(aip_report_list)
