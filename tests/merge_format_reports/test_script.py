@@ -44,6 +44,28 @@ class MyTestCase(unittest.TestCase):
             if os.path.exists(file_path):
                 os.remove(file_path)
 
+    def test_argument_error(self):
+        """
+        Test for running the script without the required argument.
+        It will print a message and exit the script.
+        """
+        # Runs the script without the required argument
+        # and tests that the script exits.
+        script_path = os.path.join("..", "..", "merge_format_reports.py")
+
+        # Tests that the script exits due to the error.
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.run(f"python {script_path}", shell=True, check=True)
+
+        # Tests if the expected message was produced. In production, this is printed to the terminal.
+        # Must run the script a second time because cannot capture output within self.assertRaises.
+        output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
+        msg_result = output.stdout.decode("utf-8")
+        msg_expected = "The following errors were detected:\r\n" \
+                       "\t* Required argument report_folder is missing\r\n" \
+                       "Script usage: python path/merge_format_reports.py report_folder [standard_csv]\r\n"
+        self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
+
     def test_one_report(self):
         """
         Test for a report_folder that only contains one ARCHive format report.
@@ -99,7 +121,6 @@ class MyTestCase(unittest.TestCase):
                     ["hargrett", "harg-ms3770", "harg-ms3770er0002", "text", "Plain Text File",
                      "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with one report, archive_formats_by_aip.csv")
-
 
     def test_three_reports(self):
         """

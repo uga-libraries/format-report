@@ -283,7 +283,7 @@ if __name__ == '__main__':
         for error in errors_list:
             print(f"\t* {error}")
         print("Script usage: python path/merge_format_reports.py report_folder [standard_csv]")
-        exit()
+        sys.exit(1)
 
     # Increases the size of CSV fields to handle long AIP lists.
     # Gets the maximum size that doesn't give an overflow error.
