@@ -192,7 +192,7 @@ def read_row(row_data, standardize_formats_csv_path, archive_group):
     row = ["NO VALUE" if x == "" else x for x in row_data]
 
     # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-    format_standard, format_type = standardize_formats(row[3], standardize_formats_csv_path)
+    format_standard, format_type = standardize_format(row[3], standardize_formats_csv_path)
 
     # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
     format_id = f"{row[3]}|{row[4]}|{row[6]}"
@@ -244,27 +244,22 @@ def save_to_csv(csv_path, rows):
             csv_write.writerows(rows)
 
 
-def standardize_formats(format_name, standard):
+def standardize_format(format_name, standard):
     """
     Finds the format name within standardize_formats.csv
-    and returns the standard (simplified) format name and the format type.
+    and returns the standard (simplified) format name and the format type from the CSV for that format.
     These values reduce the data variability so the summaries are more useful.
+    If there is no match, exits the script.
     """
 
-    # Reads standardize_formats.csv.
+    # Checks if the format name is actually an error and if so, returns default value for name and type.
+    if format_name.startswith("ERROR: cannot read"):
+        return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
+
+    # Reads standardize_formats.csv and compares the format to every format in the CSV.
+    # When there is a match (case insensitive), returns the format standardized name and type.
     with open(standard) as standard_list:
         read_standard_list = csv.reader(standard_list)
-
-        # Skips the header.
-        next(read_standard_list)
-
-        # Checks if the format name is actually an error and if so, returns default value for name and type.
-        if format_name.startswith("ERROR: cannot read"):
-            return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
-
-        # Checks each row in the standardized formats csv for the format.
-        # When there is a match, returns the format standardized name and format type.
-        # Matches lowercase versions of the format names to ignore variations in capitalization.
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
                 return standard_row[1], standard_row[2]
