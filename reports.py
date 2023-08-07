@@ -24,7 +24,7 @@ Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Vide
 """
 
 # Before running this script, run update_standardization.py and merge_format_reports.py
-# Usage: python /path/reports.py report_folder
+# Usage: python path/reports.py report_folder
 # Report folder should contain the usage report and both archive format reports.
 
 import csv
@@ -332,9 +332,9 @@ if __name__ == '__main__':
         report_folder = sys.argv[1]
         os.chdir(report_folder)
     except (IndexError, FileNotFoundError):
-        print("The report folder path was either not given or is not a valid directory. Please try the script again.")
-        print("Script usage: python /path/reports.py /path/reports")
-        exit()
+        print(f"The report folder path was either not given or is not a valid directory. Please try the script again.")
+        print("Script usage: python path/reports.py report_folder")
+        sys.exit(1)
 
     # GETS DATA FROM THE FILES USED IN THIS SCRIPT, WHICH SHOULD BE IN THE REPORT FOLDER.
 
@@ -366,7 +366,7 @@ if __name__ == '__main__':
         for message in missing:
             print(message)
         print("Please add the missing report(s) to the report folder and run this script again.")
-        exit()
+        sys.exit(1)
 
     # Makes dataframes from both ARCHive format reports.
     df = pd.read_csv(formats_report)
