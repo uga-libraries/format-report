@@ -228,8 +228,7 @@ def read_row(row_data, standardize_formats_csv_path, archive_group):
 
     # Adds the row for the "by format" csv to the list.
     # It includes the group, file_id count, and format information.
-    format_row = [archive_group, row[1], row[2], format_type, format_standard, format_id,
-                  row[3], row[4], row[5], row[6], row[7]]
+    format_row = [archive_group, row[1], row[2], format_type, format_standard, format_id] + row[3:8]
 
     # Gets a list of AIPs in this row, calculates the row information for each AIP,
     # and adds the row for the "by aip" csv to the list.
@@ -243,8 +242,7 @@ def read_row(row_data, standardize_formats_csv_path, archive_group):
         except (ValueError, AttributeError):
             print("Could not calculate collection id for", aip)
             collection_id = "UNABLE TO CALCULATE"
-        aip_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id,
-                         row[3], row[4], row[5], row[6], row[7]])
+        aip_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id] + row[3:8])
 
     return format_row, aip_rows
 
