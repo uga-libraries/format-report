@@ -25,35 +25,6 @@ import sys
 from update_standardization import check_arguments
 
 
-def standardize_formats(format_name, standard):
-    """Finds the format name within the standardize formats csv and returns the standard (simplified) format
-    name and the format type. These values reduce the data variability so summaries are more useful."""
-
-    # Reads the standardize formats csv.
-    with open(standard) as standard_list:
-        read_standard_list = csv.reader(standard_list)
-
-        # Skips the header.
-        next(read_standard_list)
-
-        # Checks if the format name is actually an error and if so, returns default value for name and type.
-        if format_name.startswith("ERROR: cannot read"):
-            return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
-
-        # Checks each row in the standardized formats csv for the format.
-        # When there is a match, returns the format standardized name and format type.
-        # Matches lowercase versions of the format names to ignore variations in capitalization.
-        for standard_row in read_standard_list:
-            if format_name.lower() == standard_row[0].lower():
-                return standard_row[1], standard_row[2]
-
-        # If there was no match (meaning the previous code block did not return a result so the function keeps
-        # running), prints an error message and quits the script.
-        print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
-        print("Update that CSV using update_standardization.py and run this script again.")
-        exit()
-
-
 def collection_from_aip(aip_id, group):
     """Returns the collection id. The collection id is extracted from the AIP id based on each group's rules for
     constructing AIP ids, all of which include the collection id. If the pattern does not match any known rules,
@@ -271,6 +242,38 @@ def save_to_csv(csv_path, rows):
             csv_write.writerow(format_header)
         else:
             csv_write.writerows(rows)
+
+
+def standardize_formats(format_name, standard):
+    """
+    Finds the format name within standardize_formats.csv
+    and returns the standard (simplified) format name and the format type.
+    These values reduce the data variability so the summaries are more useful.
+    """
+
+    # Reads standardize_formats.csv.
+    with open(standard) as standard_list:
+        read_standard_list = csv.reader(standard_list)
+
+        # Skips the header.
+        next(read_standard_list)
+
+        # Checks if the format name is actually an error and if so, returns default value for name and type.
+        if format_name.startswith("ERROR: cannot read"):
+            return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
+
+        # Checks each row in the standardized formats csv for the format.
+        # When there is a match, returns the format standardized name and format type.
+        # Matches lowercase versions of the format names to ignore variations in capitalization.
+        for standard_row in read_standard_list:
+            if format_name.lower() == standard_row[0].lower():
+                return standard_row[1], standard_row[2]
+
+        # If there was no match (meaning the previous code block did not return a result so the function keeps
+        # running), prints an error message and quits the script.
+        print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
+        print("Update that CSV using update_standardization.py and run this script again.")
+        exit()
 
 
 if __name__ == '__main__':
