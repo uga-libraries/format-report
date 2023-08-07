@@ -21,6 +21,28 @@ class MyTestCase(unittest.TestCase):
         if os.path.exists(file_path):
             os.remove(file_path)
 
+    def test_argument_error(self):
+        """
+        Test for running the script without the required argument.
+        It will print a message and exit the script.
+        """
+        # Runs the script without the required argument
+        # and tests that the script exits.
+        script_path = os.path.join("..", "..", "update_standardization.py")
+
+        # Tests that the script exits due to the error.
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.run(f"python {script_path}", shell=True, check=True)
+
+        # Tests if the expected message was produced. In production, this is printed to the terminal.
+        # Must run the script a second time because cannot capture output within self.assertRaises.
+        output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
+        msg_result = output.stdout.decode("utf-8")
+        msg_expected = "The following errors were detected:\r\n" \
+                       "\t* Required argument report_folder is missing\r\n" \
+                       "Script usage: python path/update_standardization.py report_folder [standard_csv]\r\n"
+        self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
+
     def test_new_formats(self):
         """
         Test for format reports that include formats which are not in standardize_formats.csv.
