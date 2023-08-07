@@ -268,7 +268,7 @@ def standardize_format(format_name, standard):
         # running), prints an error message and quits the script.
         print(f'Could not match the format name "{format_name}" in standardize_formats.csv.')
         print("Update that CSV using update_standardization.py and run this script again.")
-        exit()
+        sys.exit()
 
 
 if __name__ == '__main__':
