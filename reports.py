@@ -92,6 +92,29 @@ def archive_overview():
     return group_stats
 
 
+def check_argument(argument_list):
+    """
+    Verifies the required argument report_folder is present and valid.
+    Returns the path for report_folder and the error (or None if no error).
+    """
+    # Makes a list for errors, so all errors can be tested before returning the result,
+    # and default values for the two variables assigned from arguments.
+    error = None
+    report = None
+
+    # Verifies that the required argument (report_folder) is present.
+    # and if it is present that it is a valid directory.
+    if len(argument_list) > 1:
+        report = argument_list[1]
+        if not os.path.exists(report):
+            error = f"Report folder '{report}' does not exist"
+    else:
+        error = "Required argument report_folder is missing"
+
+    # Returns the results.
+    return report, error
+
+
 def file_count_ranges(category):
     """Uses the data from the archive_formats report to calculate the number of instances of the category within each
     range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
@@ -327,13 +350,11 @@ def two_categories(category1, category2):
 
 if __name__ == '__main__':
 
-    # Makes the report folder (script argument) the current directory. Displays an error message and quits the script if
-    # the argument is missing or not a valid directory.
-    try:
-        report_folder = sys.argv[1]
-        os.chdir(report_folder)
-    except (IndexError, FileNotFoundError):
-        print(f"The report folder path was either not given or is not a valid directory. Please try the script again.")
+    # Verifies the required argument is present and the path is valid.
+    # If there was an error, prints the error and exits the script.
+    report_folder, error_message = check_argument(sys.argv)
+    if error_message:
+        print(error_message)
         print("Script usage: python path/reports.py report_folder")
         sys.exit(1)
 
@@ -346,13 +367,13 @@ if __name__ == '__main__':
 
     # Searches the report folder for the expected files, and if found updates the variable with the file name.
     # These files include dates, so the entire file name cannot be predicted by the script.
-    for file in os.listdir("."):
+    for file in os.listdir(report_folder):
         if file.startswith("archive_formats_by_aip") and file.endswith(".csv"):
-            formats_by_aip_report = file
+            formats_by_aip_report = os.path.join(report_folder, file)
         elif file.startswith("archive_formats_") and file.endswith(".csv"):
-            formats_report = file
+            formats_report = os.path.join(report_folder, file)
         elif file.startswith("usage_report_") and file.endswith(".csv"):
-            usage_report = file
+            usage_report = os.path.join(report_folder, file)
 
     # Tests for if all reports were found, and if not prints an error and quits the script.
     missing = []
@@ -427,7 +448,7 @@ if __name__ == '__main__':
     # Saves each dataframe or series as a spreadsheet in an Excel workbook.
     # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
     today = datetime.datetime.now().strftime("%Y-%m")
-    with pd.ExcelWriter(f"ARCHive Formats Analysis_{today}.xlsx") as results:
+    with pd.ExcelWriter(os.path.join(report_folder, f"ARCHive Formats Analysis_{today}.xlsx")) as results:
         overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
         format_types.to_excel(results, sheet_name="Format Types")
         format_names.to_excel(results, sheet_name="Format Names")

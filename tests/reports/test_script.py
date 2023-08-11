@@ -239,8 +239,7 @@ class MyTestCase(unittest.TestCase):
         # Must run the script a second time because cannot capture output with self.assertRaises.
         output = subprocess.run(f"python {self.script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "The report folder path was either not given or is not a valid directory. " \
-                       "Please try the script again.\r\n" \
+        msg_expected = "Required argument report_folder is missing\r\n" \
                        "Script usage: python path/reports.py report_folder\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for missing argument, message")
 
