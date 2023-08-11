@@ -39,61 +39,6 @@ def archive_overview():
     the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
     and format identifications. Returns a dataframe. """
 
-    def size_in_tb():
-        """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
-
-        # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
-        # which is used in both archive format reports and in ARCHive metadata generally.
-        group_names = {"Brown Media Archives": "bmac", "Digital Library of Georgia": "dlg",
-                       "DLG & Hargrett": "dlg-hargrett", "DLG & Map and Government Information Library": "dlg-magil",
-                       "Hargrett": "hargrett", "Russell": "russell"}
-
-        # Makes a dictionary for the size for each group, gathering all data before converting it to a dataframe.
-        group_size = {}
-
-        # Gets the data from the usage report.
-        with open(usage_report, 'r') as usage:
-            usage_read = csv.reader(usage)
-
-            # Skips the header row.
-            next(usage_read)
-
-            # Gets data from each row. A row can have data on a group, an individual user, or be blank.
-            for row in usage_read:
-
-                # Processes data from each group. There is only one row per group in the report.
-                # The row has data for a group if it is not blank (if row) and row[0] is one of the group names.
-                # row[0] is the group and row[2] is the size with the unit of measurement.
-                if row and row[0] in group_names:
-
-                    # Gets the group code.
-                    group = group_names[row[0]]
-
-                    # Separates the size number from the unit of measurement by splitting the data at the space.
-                    size, unit = row[2].split()
-
-                    # Converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
-                    # float (decimal number) to do the necessary math and to round the result. If it encounters a unit
-                    # of measurement that wasn't anticipated, the script prints a warning message.
-                    conversion = {"Bytes": 1000000000000, "KB": 1000000000, "MB": 1000000, "GB": 1000, "TB": 1}
-                    try:
-                        size = float(size) / conversion[unit]
-                    except KeyError:
-                        size = 0
-                        print("WARNING! Unexpected unit type:", unit)
-
-                    # Rounds the size in TB to two decimal places so the number is easier to read.
-                    size = round(size, 2)
-
-                    # Adds the results for this group to the dictionary.
-                    group_size[group] = size
-
-        # Makes the dictionary into a dataframe so it can be combined with the collection and file_id counts.
-        sizes = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
-
-        # Returns the dataframe. Row index is the group_code and columns are Size and AIPs.
-        return sizes
-
     # Gets the size (in TB) per group from the usage report.
     size_by_group = size_in_tb()
 
@@ -147,70 +92,30 @@ def archive_overview():
     return group_stats
 
 
-def one_category(category, totals):
-    """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
-    and size in GB per each instance of the category, for example format type. Returns a dataframe. """
+def file_count_ranges(category):
+    """Uses the data from the archive_formats report to calculate the number of instances of the category within each
+    range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
 
-    # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
-    collections = df_aip.groupby(category)["Collection"].nunique()
-    aips = df_aip.groupby(category)["AIP"].nunique()
-    files = df.groupby(category)["File_IDs"].sum()
-    size = df.groupby(category)["Size (GB)"].sum()
+    # Makes a series with the number of file_ids for each instance of the category, regardless  of group.
+    df_cat = df.groupby(df[category])["File_IDs"].sum()
 
-    # Creates a series for the percentage of each count type and size for each instance of the category.
-    # The percentage is rounded to two decimal places.
-    # Also renames the series to be more descriptive.
+    # Makes series with the subset of the archive_formats_by_aip report data with the specified numbers of file_ids.
+    ones = df_cat[(df_cat < 10)]
+    tens = df_cat[(df_cat >= 10) & (df_cat < 100)]
+    hundreds = df_cat[(df_cat >= 100) & (df_cat < 1000)]
+    thousands = df_cat[(df_cat >= 1000) & (df_cat < 10000)]
+    ten_thousands = df_cat[(df_cat >= 10000) & (df_cat < 100000)]
+    hundred_thousands_plus = df_cat[(df_cat >= 100000)]
 
-    collections_percent = (collections / totals["Collections"]) * 100
-    collections_percent = round(collections_percent, 2)
-    collections_percent = collections_percent.rename("Collections Percentage")
+    # Makes lists with the data for the dataframe: file_id ranges (for index) and the number of instances in each range.
+    file_id_ranges = ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"]
+    instances = [ones.count(), tens.count(), hundreds.count(), thousands.count(), ten_thousands.count(),
+                 hundred_thousands_plus.count()]
 
-    aips_percent = (aips / totals["AIPs"]) * 100
-    aips_percent = round(aips_percent, 2)
-    aips_percent = aips_percent.rename("AIPs Percentage")
+    # Makes a dataframe from the lists.
+    result = pd.DataFrame(instances, columns=[f"Number of Formats ({category})"], index=file_id_ranges)
 
-    files_percent = (files / totals["Files"]) * 100
-    files_percent = round(files_percent, 2)
-    files_percent = files_percent.rename("File_IDs Percentage")
-
-    size_percent = (size / totals["Size"]) * 100
-    size_percent = round(size_percent, 2)
-    size_percent = size_percent.rename("Size (GB) Percentage")
-
-    # Combines all the count and percentage series into a single dataframe.
-    result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent, size, size_percent],
-                       axis=1)
-
-    # Renames Collection and AIP columns to plural to be more descriptive.
-    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
-
-    # Returns the dataframe. Row index is the category and columns are Collections, Collections Percentage, AIPs,
-    # AIPs Percentage, File_IDs, File_IDs Percentage.
-    return result
-
-
-def two_categories(category1, category2):
-    """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts and
-    size in GB for each instance of two categories, for example format type and group. Returns a dataframe. """
-
-    # Uses the archive_formats_by_aip report data to get counts of unique collections and unique AIPs.
-    result = df_aip[[category1, category2, "Collection", "AIP"]].groupby([category1, category2]).nunique()
-
-    # Renames the column headings to be plural (Collections, AIPs) to be more descriptive.
-    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
-
-    # Uses the archive_formats report data to get counts of file_ids and adds to the dataframe.
-    # The counts are inflated by files with multiple possible format identifications.
-    files_result = df.groupby([category1, category2])["File_IDs"].sum()
-    result = pd.concat([result, files_result], axis=1)
-
-    # Uses the archive_formats report data to get size in GB and adds to the dataframe.
-    size_result = df.groupby([category1, category2])["Size (GB)"].sum()
-    result = pd.concat([result, size_result], axis=1)
-
-    # Returns the dataframe. Row index is the two categories and columns are the counts and size.
-    # Deletes extra columns named with the categories before returning.
-    #result = result.drop([category1, category2], axis=1)
+    # Returns the dataframe. Row index is the file_id ranges and column is Number of Formats (category).
     return result
 
 
@@ -269,30 +174,45 @@ def group_overlap(category):
     return groups_per_category
 
 
-def file_count_ranges(category):
-    """Uses the data from the archive_formats report to calculate the number of instances of the category within each
-    range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
+def one_category(category, totals):
+    """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
+    and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
-    # Makes a series with the number of file_ids for each instance of the category, regardless  of group.
-    df_cat = df.groupby(df[category])["File_IDs"].sum()
+    # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
+    collections = df_aip.groupby(category)["Collection"].nunique()
+    aips = df_aip.groupby(category)["AIP"].nunique()
+    files = df.groupby(category)["File_IDs"].sum()
+    size = df.groupby(category)["Size (GB)"].sum()
 
-    # Makes series with the subset of the archive_formats_by_aip report data with the specified numbers of file_ids.
-    ones = df_cat[(df_cat < 10)]
-    tens = df_cat[(df_cat >= 10) & (df_cat < 100)]
-    hundreds = df_cat[(df_cat >= 100) & (df_cat < 1000)]
-    thousands = df_cat[(df_cat >= 1000) & (df_cat < 10000)]
-    ten_thousands = df_cat[(df_cat >= 10000) & (df_cat < 100000)]
-    hundred_thousands_plus = df_cat[(df_cat >= 100000)]
+    # Creates a series for the percentage of each count type and size for each instance of the category.
+    # The percentage is rounded to two decimal places.
+    # Also renames the series to be more descriptive.
 
-    # Makes lists with the data for the dataframe: file_id ranges (for index) and the number of instances in each range.
-    file_id_ranges = ["1-9", "10-99", "100-999", "1000-9999", "10000-99999", "100000+"]
-    instances = [ones.count(), tens.count(), hundreds.count(), thousands.count(), ten_thousands.count(),
-                 hundred_thousands_plus.count()]
+    collections_percent = (collections / totals["Collections"]) * 100
+    collections_percent = round(collections_percent, 2)
+    collections_percent = collections_percent.rename("Collections Percentage")
 
-    # Makes a dataframe from the lists.
-    result = pd.DataFrame(instances, columns=[f"Number of Formats ({category})"], index=file_id_ranges)
+    aips_percent = (aips / totals["AIPs"]) * 100
+    aips_percent = round(aips_percent, 2)
+    aips_percent = aips_percent.rename("AIPs Percentage")
 
-    # Returns the dataframe. Row index is the file_id ranges and column is Number of Formats (category).
+    files_percent = (files / totals["Files"]) * 100
+    files_percent = round(files_percent, 2)
+    files_percent = files_percent.rename("File_IDs Percentage")
+
+    size_percent = (size / totals["Size"]) * 100
+    size_percent = round(size_percent, 2)
+    size_percent = size_percent.rename("Size (GB) Percentage")
+
+    # Combines all the count and percentage series into a single dataframe.
+    result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent, size, size_percent],
+                       axis=1)
+
+    # Renames Collection and AIP columns to plural to be more descriptive.
+    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+
+    # Returns the dataframe. Row index is the category and columns are Collections, Collections Percentage, AIPs,
+    # AIPs Percentage, File_IDs, File_IDs Percentage.
     return result
 
 
@@ -321,6 +241,87 @@ def size_count_ranges(category):
     result = pd.DataFrame(instances, columns=[f"Total Size ({category})"], index=size_ranges)
 
     # Returns the dataframe. Row index is the size ranges and column is Total Size (category).
+    return result
+
+
+def size_in_tb():
+    """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
+
+    # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
+    # which is used in both archive format reports and in ARCHive metadata generally.
+    group_names = {"Brown Media Archives": "bmac", "Digital Library of Georgia": "dlg",
+                   "DLG & Hargrett": "dlg-hargrett", "DLG & Map and Government Information Library": "dlg-magil",
+                   "Hargrett": "hargrett", "Russell": "russell"}
+
+    # Makes a dictionary for the size for each group, gathering all data before converting it to a dataframe.
+    group_size = {}
+
+    # Gets the data from the usage report.
+    with open(usage_report, 'r') as usage:
+        usage_read = csv.reader(usage)
+
+        # Skips the header row.
+        next(usage_read)
+
+        # Gets data from each row. A row can have data on a group, an individual user, or be blank.
+        for row in usage_read:
+
+            # Processes data from each group. There is only one row per group in the report.
+            # The row has data for a group if it is not blank (if row) and row[0] is one of the group names.
+            # row[0] is the group and row[2] is the size with the unit of measurement.
+            if row and row[0] in group_names:
+
+                # Gets the group code.
+                group = group_names[row[0]]
+
+                # Separates the size number from the unit of measurement by splitting the data at the space.
+                size, unit = row[2].split()
+
+                # Converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
+                # float (decimal number) to do the necessary math and to round the result. If it encounters a unit
+                # of measurement that wasn't anticipated, the script prints a warning message.
+                conversion = {"Bytes": 1000000000000, "KB": 1000000000, "MB": 1000000, "GB": 1000, "TB": 1}
+                try:
+                    size = float(size) / conversion[unit]
+                except KeyError:
+                    size = 0
+                    print("WARNING! Unexpected unit type:", unit)
+
+                # Rounds the size in TB to two decimal places so the number is easier to read.
+                size = round(size, 2)
+
+                # Adds the results for this group to the dictionary.
+                group_size[group] = size
+
+    # Makes the dictionary into a dataframe so it can be combined with the collection and file_id counts.
+    sizes = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
+
+    # Returns the dataframe. Row index is the group_code and columns are Size and AIPs.
+    return sizes
+
+
+def two_categories(category1, category2):
+    """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts and
+    size in GB for each instance of two categories, for example format type and group. Returns a dataframe. """
+
+    # Uses the archive_formats_by_aip report data to get counts of unique collections and unique AIPs.
+    result = df_aip[[category1, category2, "Collection", "AIP"]].groupby([category1, category2]).nunique()
+
+    # Renames the column headings to be plural (Collections, AIPs) to be more descriptive.
+    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+
+    # Uses the archive_formats report data to get counts of file_ids and adds to the dataframe.
+    # The counts are inflated by files with multiple possible format identifications.
+    files_result = df.groupby([category1, category2])["File_IDs"].sum()
+    result = pd.concat([result, files_result], axis=1)
+
+    # Uses the archive_formats report data to get size in GB and adds to the dataframe.
+    size_result = df.groupby([category1, category2])["Size (GB)"].sum()
+    result = pd.concat([result, size_result], axis=1)
+
+    # Returns the dataframe. Row index is the two categories and columns are the counts and size.
+    # Deletes extra columns named with the categories before returning.
+    #result = result.drop([category1, category2], axis=1)
     return result
 
 
