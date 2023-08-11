@@ -168,6 +168,38 @@ def format_id_frequency(totals):
     return format_ids
 
 
+def get_report_paths(report_folder_path):
+    """Finds the path to the three reports used as script input.
+    Returns the three paths and a list of any missing files."""
+
+    # Makes variables to store the paths, if found.
+    formats_by_aip_path = None
+    formats_path = None
+    usage_path = None
+
+    # Searches the report folder for the expected files, and if found updates the variable with the file name.
+    # These files include dates, so the entire file name cannot be predicted by the script.
+    for file in os.listdir(report_folder_path):
+        if file.startswith("archive_formats_by_aip") and file.endswith(".csv"):
+            formats_by_aip_path = os.path.join(report_folder_path, file)
+        elif file.startswith("archive_formats_") and file.endswith(".csv"):
+            formats_path = os.path.join(report_folder_path, file)
+        elif file.startswith("usage_report_") and file.endswith(".csv"):
+            usage_path = os.path.join(report_folder_path, file)
+
+    # Tests if all three paths were found, and if not adds the missing ones to a list.
+    missing_list = []
+    if not formats_by_aip_path:
+        missing_list.append("archive_formats_by_aip.csv")
+    if not formats_path:
+        missing_list.append("archive_formats.csv")
+    if not usage_path:
+        missing_list.append("usage_report.csv")
+
+    # Returns the results. The errors list is empty if all three files were found.
+    return formats_by_aip_path, formats_path, usage_path, missing_list
+
+
 def group_overlap(category):
     """Uses the data from the archive_formats report to calculate the number of groups and a list of the groups which
     have each instance of the category, for example format type. Returns a dataframe. """
@@ -358,35 +390,12 @@ if __name__ == '__main__':
         print("Script usage: python path/reports.py report_folder")
         sys.exit(1)
 
-    # GETS DATA FROM THE FILES USED IN THIS SCRIPT, WHICH SHOULD BE IN THE REPORT FOLDER.
-
-    # Variables for the report file names. They start with the value False to test for any that are not found.
-    formats_by_aip_report = False
-    formats_report = False
-    usage_report = False
-
-    # Searches the report folder for the expected files, and if found updates the variable with the file name.
-    # These files include dates, so the entire file name cannot be predicted by the script.
-    for file in os.listdir(report_folder):
-        if file.startswith("archive_formats_by_aip") and file.endswith(".csv"):
-            formats_by_aip_report = os.path.join(report_folder, file)
-        elif file.startswith("archive_formats_") and file.endswith(".csv"):
-            formats_report = os.path.join(report_folder, file)
-        elif file.startswith("usage_report_") and file.endswith(".csv"):
-            usage_report = os.path.join(report_folder, file)
-
-    # Tests for if all reports were found, and if not prints an error and quits the script.
-    missing = []
-    if not formats_by_aip_report:
-        missing.append("Could not find the archive_formats_by_aip report in the report folder.")
-    if not formats_report:
-        missing.append("Could not find the archive_formats report in the report folder.")
-    if not usage_report:
-        missing.append("Could not find the usage report in the report folder.")
-
+    # Gets paths of the three reports to be analyzed, which are in report_folder.
+    # If any where not found (missing is not empty), prints the missing one(s) and exits the script.
+    formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder)
     if len(missing) > 0:
-        for message in missing:
-            print(message)
+        for file_name in missing:
+            print(f"Could not find {file_name} in '{report_folder}'.")
         print("Please add the missing report(s) to the report folder and run this script again.")
         sys.exit(1)
 

@@ -256,9 +256,9 @@ class MyTestCase(unittest.TestCase):
         # Must run the script a second time because cannot capture output with self.assertRaises.
         output = subprocess.run(f"python {self.script_path} missing_input_all", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Could not find the archive_formats_by_aip report in the report folder.\r\n" \
-                       "Could not find the archive_formats report in the report folder.\r\n" \
-                       "Could not find the usage report in the report folder.\r\n" \
+        msg_expected = "Could not find archive_formats_by_aip.csv in 'missing_input_all'.\r\n" \
+                       "Could not find archive_formats.csv in 'missing_input_all'.\r\n" \
+                       "Could not find usage_report.csv in 'missing_input_all'.\r\n" \
                        "Please add the missing report(s) to the report folder and run this script again.\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for missing input, message")
 
