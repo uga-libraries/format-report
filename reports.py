@@ -306,44 +306,33 @@ def size_in_tb(usage):
     # which is used in both archive format reports and in ARCHive metadata generally.
     group_names = {"Brown Media Archives": "bmac", "Digital Library of Georgia": "dlg",
                    "DLG & Hargrett": "dlg-hargrett", "DLG & Map and Government Information Library": "dlg-magil",
-                   "Hargrett": "hargrett", "Russell": "russell"}
+                   "Hargrett Library": "hargrett", "Map and Government Information Library": "magil",
+                   "Richard B. Russell Library": "russell"}
 
     # Makes a dictionary for the size for each group, gathering all data before converting it to a dataframe.
     group_size = {}
 
-    # Gets the data from the usage report.
+    # Gets the data from each row of the usage report.
+    # A row can have data on a group, an individual user, or be blank.
     with open(usage, 'r') as usage_open:
         usage_read = csv.reader(usage_open)
-
-        # Skips the header row.
-        next(usage_read)
-
-        # Gets data from each row. A row can have data on a group, an individual user, or be blank.
         for row in usage_read:
 
-            # Processes data from each group. There is only one row per group in the report.
-            # The row has data for a group if it is not blank (if row) and row[0] is one of the group names.
-            # row[0] is the group and row[2] is the size with the unit of measurement.
+            # Parses data (group name, size, and size unit of measurement)from each group's row,
+            # identified by not being blank and having a group name at row[0].
             if row and row[0] in group_names:
-
-                # Gets the group code.
                 group = group_names[row[0]]
-
-                # Separates the size number from the unit of measurement by splitting the data at the space.
                 size, unit = row[2].split()
 
-                # Converts the size to TB. Example: 100 GB becomes 0.1. All sizes are converted from a string to a
-                # float (decimal number) to do the necessary math and to round the result. If it encounters a unit
-                # of measurement that wasn't anticipated, the script prints a warning message.
+                # Converts the size to TB, rounded to two decimal places.
+                # If it encounters a unit of measurement that wasn't anticipated, the script prints a warning message.
                 conversion = {"Bytes": 1000000000000, "KB": 1000000000, "MB": 1000000, "GB": 1000, "TB": 1}
                 try:
                     size = float(size) / conversion[unit]
+                    size = round(size, 2)
                 except KeyError:
                     size = 0
                     print("WARNING! Unexpected unit type:", unit)
-
-                # Rounds the size in TB to two decimal places so the number is easier to read.
-                size = round(size, 2)
 
                 # Adds the results for this group to the dictionary.
                 group_size[group] = size
@@ -351,7 +340,7 @@ def size_in_tb(usage):
     # Makes the dictionary into a dataframe so it can be combined with the collection and file_id counts.
     sizes = pd.DataFrame.from_dict(group_size, orient="index", columns=["Size"])
 
-    # Returns the dataframe. Row index is the group_code and columns are Size and AIPs.
+    # Returns the dataframe. Row index is the group_code and the column is Size.
     return sizes
 
 

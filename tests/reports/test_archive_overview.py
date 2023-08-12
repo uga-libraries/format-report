@@ -29,9 +29,9 @@ class MyTestCase(unittest.TestCase):
         expected = [["Size (TB)", "Size (GB) Inflated", "Collections", "AIPs", "File_IDs", "Format Types",
                      "Format Standardized Names", "Format Identifications"],
                     ["bmac", 554.0, 326822.42, 1.0, 20.0, 6607.0, 2.0, 2.0, 2.0],
-                    ["dlg", 10.6, 3231.06, 9.0, 29.0, 264332, 3.0, 5.0, 8.0],
-                    ["hargrett", 0.15, 143.97, 2.0, 47.0, 5507, 2.0, 3.0, 6.0],
-                    ["total", 564.75, 330197.44999999995, 12.0, 96.0, 276446, 4.0, 7.0, 12.0]]
+                    ["dlg", 10.6, 3231.06, 9.0, 29.0, 264332.0, 3.0, 5.0, 8.0],
+                    ["hargrett", 0.15, 143.97, 2.0, 47.0, 5507.0, 2.0, 3.0, 6.0],
+                    ["total", 564.75, 330197.44999999995, 12.0, 96.0, 276446.0, 4.0, 7.0, 12.0]]
         self.assertEqual(result, expected, "Problem with test for archive overview")
 
 
