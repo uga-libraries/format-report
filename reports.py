@@ -34,13 +34,13 @@ import pandas as pd
 import sys
 
 
-def archive_overview():
+def archive_overview(df_aip, df, usage):
     """Uses the data from the usage report and both ARCHive format reports to calculate statistics for each group and
     the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
     and format identifications. Returns a dataframe. """
 
     # Gets the size (in TB) per group from the usage report.
-    size_by_group = size_in_tb()
+    size_by_group = size_in_tb(usage)
 
     # Gets the size (in GB) from the dataframe to show the difference between unique (from usage)
     # and inflated by multiple identifications for individual files.
@@ -115,7 +115,7 @@ def check_argument(argument_list):
     return report, error
 
 
-def file_count_ranges(category):
+def file_count_ranges(category, df):
     """Uses the data from the archive_formats report to calculate the number of instances of the category within each
     range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
 
@@ -142,7 +142,7 @@ def file_count_ranges(category):
     return result
 
 
-def format_id_frequency(totals):
+def format_id_frequency(totals, df):
     """Uses the data from the archive_formats report to calculate the frequency for every format identification (
     name, version, registry key), which includes the file_id count, percentage of file_ids, size in GB,
     and percentage of size. Returns a dataframe sorted largest to smallest by file_id count since the items of most
@@ -200,7 +200,7 @@ def get_report_paths(report_folder_path):
     return formats_by_aip_path, formats_path, usage_path, missing_list
 
 
-def group_overlap(category):
+def group_overlap(category, df):
     """Uses the data from the archive_formats report to calculate the number of groups and a list of the groups which
     have each instance of the category, for example format type. Returns a dataframe. """
 
@@ -229,7 +229,7 @@ def group_overlap(category):
     return groups_per_category
 
 
-def one_category(category, totals):
+def one_category(category, totals, df_aip, df):
     """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
     and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
@@ -271,7 +271,7 @@ def one_category(category, totals):
     return result
 
 
-def size_count_ranges(category):
+def size_count_ranges(category, df):
     """Uses the data from the archive_formats report to calculate the number of instances of the category within each
     range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
 
@@ -299,7 +299,7 @@ def size_count_ranges(category):
     return result
 
 
-def size_in_tb():
+def size_in_tb(usage):
     """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
 
     # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
@@ -355,7 +355,7 @@ def size_in_tb():
     return sizes
 
 
-def two_categories(category1, category2):
+def two_categories(category1, category2, df_aip, df):
     """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts and
     size in GB for each instance of two categories, for example format type and group. Returns a dataframe. """
 
@@ -400,13 +400,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Makes dataframes from both ARCHive format reports.
-    df = pd.read_csv(formats_report)
-    df_aip = pd.read_csv(formats_by_aip_report)
+    df_formats_by_aip = pd.read_csv(formats_by_aip_report)
+    df_formats = pd.read_csv(formats_report)
 
     # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
 
     # Makes the ARCHive overview dataframe (summary statistics by group).
-    overview = archive_overview()
+    overview = archive_overview(df_formats_by_aip, df_formats, usage_report)
 
     # Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
     # Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
@@ -415,44 +415,44 @@ if __name__ == '__main__':
                    "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
 
     # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-    format_types = one_category("Format Type", totals_dict)
+    format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats)
 
     # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
     # And makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
-    format_names = one_category("Format Standardized Name", totals_dict)
+    format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats)
     common_formats = format_names[format_names.File_IDs >= 100]
     common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
 
     # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-    type_by_group = two_categories("Format Type", "Group")
+    type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats)
 
     # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
     # standardized name.
-    type_by_name = two_categories("Format Type", "Format Standardized Name")
+    type_by_name = two_categories("Format Type", "Format Standardized Name", df_formats_by_aip, df_formats)
 
     # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
-    name_by_group = two_categories("Format Standardized Name", "Group")
+    name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats)
 
     # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
     # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
-    format_ids = format_id_frequency(totals_dict)
+    format_ids = format_id_frequency(totals_dict, df_formats)
 
     # Makes a dataframe with the number of groups and list of groups that have each format type.
-    groups_per_type = group_overlap("Format Type")
+    groups_per_type = group_overlap("Format Type", df_formats)
 
     # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-    groups_per_name = group_overlap("Format Standardized Name")
+    groups_per_name = group_overlap("Format Standardized Name", df_formats)
 
     # Makes a dataframe with the number of groups and list of groups that have each format identification.
-    groups_per_id = group_overlap("Format Identification")
+    groups_per_id = group_overlap("Format Identification", df_formats)
 
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
-    format_name_ranges = file_count_ranges("Format Standardized Name")
-    format_name_sizes = size_count_ranges("Format Standardized Name")
+    format_name_ranges = file_count_ranges("Format Standardized Name", df_formats)
+    format_name_sizes = size_count_ranges("Format Standardized Name", df_formats)
 
     # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
-    format_id_ranges = file_count_ranges("Format Identification")
-    format_id_sizes = size_count_ranges("Format Identification")
+    format_id_ranges = file_count_ranges("Format Identification", df_formats)
+    format_id_sizes = size_count_ranges("Format Identification", df_formats)
 
     # Saves each dataframe or series as a spreadsheet in an Excel workbook.
     # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
