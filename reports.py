@@ -397,8 +397,8 @@ if __name__ == '__main__':
     # Makes the ARCHive overview dataframe (summary statistics by group).
     overview = archive_overview(df_formats_by_aip, df_formats, usage_report)
 
-    # Saves the ARCHive collection, AIP, file, and size totals to a list for calculating percentages in other dataframes.
-    # Not calculating totals in those dataframes so collection and AIP counts aren't inflated by multiple identifications.
+    # Saves totals to a dictionary for calculating percentages in other dataframes.
+    # Use these totals each time so collection and AIP counts aren't inflated by multiple identifications.
     # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
     totals_dict = {"Collections": overview["Collections"]["total"], "AIPs": overview["AIPs"]["total"],
                    "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
@@ -407,23 +407,25 @@ if __name__ == '__main__':
     format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats)
 
     # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
-    # And makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
     format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats)
+
+    # Makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
     common_formats = format_names[format_names.File_IDs >= 100]
     common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
 
     # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
     type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats)
 
-    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by format
-    # standardized name.
+    # Makes a dataframe with collection, AIP, and file_id subtotals,
+    # first by format type and then subdivided by format standardized name.
     type_by_name = two_categories("Format Type", "Format Standardized Name", df_formats_by_aip, df_formats)
 
-    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format standardized name and then by group.
+    # Makes a dataframe with collection, AIP, and file_id subtotals,
+    # first by format standardized name and then by group.
     name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats)
 
-    # Makes a dataframe with the file_id count and percentage for every format identification (name, version, registry key).
-    # The dataframe is sorted largest to smallest since the items of most interest are the most common formats.
+    # Makes a dataframe with the file_id count and percentage
+    # for every format identification (name, version, registry key).
     format_ids = format_id_frequency(totals_dict, df_formats)
 
     # Makes a dataframe with the number of groups and list of groups that have each format type.
@@ -462,6 +464,3 @@ if __name__ == '__main__':
         groups_per_type.to_excel(results, sheet_name="Groups per Type")
         groups_per_name.to_excel(results, sheet_name="Groups per Name")
         groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
-
-    # Future development: would like to adjust the default formatting in Excel.
-    # Experimented with xlsxwriter. Did not find examples where index and header are reformatted.
