@@ -312,8 +312,8 @@ def size_in_tb(usage):
     group_size = {}
 
     # Gets the data from the usage report.
-    with open(usage_report, 'r') as usage:
-        usage_read = csv.reader(usage)
+    with open(usage, 'r') as usage_open:
+        usage_read = csv.reader(usage_open)
 
         # Skips the header row.
         next(usage_read)
