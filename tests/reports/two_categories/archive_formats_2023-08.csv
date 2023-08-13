@@ -1,0 +1,5 @@
+Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note
+dlg,20,40,image,JP2,JPEG 2000 JP2|NO VALUE|x-fmt/392,JPEG 2000 JP2,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/392,NO VALUE
+dlg,15,30,image,TIFF,Tagged Image File Format|6|fmt/353,Tagged Image File Format,6,https://www.nationalarchives.gov.uk/PRONOM,fmt/353,NO VALUE
+hargrett,10,20,image,TIFF,Tagged Image File Format|NO VALUE|NO VALUE,Tagged Image File Format,NO VALUE,NO VALUE,NO VALUE,NO VALUE
+hargrett,5,10,web_archive,WARC,WARC|NO VALUE|fmt/289,WARC,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,fmt/289,NO VALUE
