@@ -74,13 +74,13 @@ def in_standard(format_to_check):
     Searches for a format name within standardize_formats.csv.
     Returns "Found" if it is present and "Missing" if it is not.
     """
-    # Path to standardize_formats.csv, which is in the script repo.
-    standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
-
     # If the format is an undetected error from FITS (a format identification tool),
     # return "Missing" so it is included in new_formats.txt and the archivist sees the error.
     if format_to_check.startswith("ERROR: cannot read"):
         return "Missing"
+
+    # Path to standardize_formats.csv, which is in the script repo.
+    standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
 
     # Reads standardize_formats.csv and compares the format to every format in the CSV.
     # If it matches (case insensitive), returns "Found".
