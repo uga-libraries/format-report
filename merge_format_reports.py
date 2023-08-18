@@ -1,14 +1,15 @@
 """Combines the ARCHive format reports, which are one CSV per group, into single CSVs for analysis.
 
-One CSV (archive_formats_YYYYMM.csv) has the information organized by group and then by format identification. It
-includes the ARCHive group, number of file_ids, and format information (format type,format standardized name,
-format name, format version, registry name, registry key, and format note) It is used for aggregating the number of
-file_ids. The numbers are inflated by files that have more than one possible format identification.
+One CSV (archive_formats_by_aip_YYYYMM.csv) is organized by AIP and then by format identification. 
+It includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
+format standardized name, format name, format version, registry name, registry key, and format note). 
+It is used for aggregating the number of collections and AIPs.
 
-The other CSV (archive_formats_by_aip_YYYYMM.csv) has the information organized by AIP and then by unique format. It
-includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
-format standardized name, format name, format version, registry name, registry key, and format note). It is used for
-aggregating the number of collections and AIPs.
+The other CSV (archive_formats_by_group_YYYYMM.csv) is organized by group and then by format identification. 
+It includes the ARCHive group, number of file_ids, and format information (format type,format standardized name,
+format name, format version, registry name, registry key, and format note) 
+It is used for aggregating the number of file_ids. 
+The numbers are inflated by files that have more than one possible format identification.
 
 Before running this script, run update_standardization.py
 """
@@ -156,8 +157,8 @@ def read_report(report_path):
     Returns two lists with the rows of data to save to the CSV files.
     """
     # Makes lists to store the rows of data to save to the CSV files.
-    format_csv_rows = []
     aip_csv_rows = []
+    group_csv_rows = []
 
     # Gets the ARCHive group from the format report filename.
     regex = re.match(".*file_formats_(.*).csv", report_path)
@@ -171,21 +172,21 @@ def read_report(report_path):
 
         # Gets the data from each row in the report.
         for row in report_info:
-            format_row, aip_row_list = read_row(row, archive_group)
+            aip_row_list, group_row = read_row(row, archive_group)
 
             # Adds the data to the reports.
-            # format_row is a list; aip_row_list is a list of lists, although it may only contain one list.
-            format_csv_rows.append(format_row)
+            # group_row is a list; aip_row_list is a list of lists, although it may only contain one list.
             aip_csv_rows.extend(aip_row_list)
+            group_csv_rows.append(group_row)
 
     # Returns both lists of rows to be saved to the correct CSVs.
-    return format_csv_rows, aip_csv_rows
+    return aip_csv_rows, group_csv_rows
 
 
 def read_row(row_data, archive_group):
     """
     Gets data from a row from an ARCHive format report and calculates additional information based on that data.
-    Returns two lists to be added to format_csv_rows and aip_csv_rows.
+    Returns two lists to be added to group_csv_rows and aip_csv_rows.
     """
     # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
     row = ["NO VALUE" if x == "" else x for x in row_data]
@@ -196,9 +197,9 @@ def read_row(row_data, archive_group):
     # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
     format_id = f"{row[3]}|{row[4]}|{row[6]}"
 
-    # Adds the row for the "by format" csv to the list.
+    # Adds the row for the "by group" csv to the list.
     # It includes the group, file_id count, and format information.
-    format_row = [archive_group, row[1], row[2], format_type, format_standard, format_id] + row[3:8]
+    group_row = [archive_group, row[1], row[2], format_type, format_standard, format_id] + row[3:8]
 
     # Gets a list of AIPs in this row, calculates the row information for each AIP,
     # and adds the row for the "by aip" csv to the list.
@@ -214,7 +215,7 @@ def read_row(row_data, archive_group):
             collection_id = "UNABLE TO CALCULATE"
         aip_rows.append([archive_group, collection_id, aip, format_type, format_standard, format_id] + row[3:8])
 
-    return format_row, aip_rows
+    return aip_rows, group_row
 
 
 def save_to_csv(csv_path, rows):
@@ -227,18 +228,18 @@ def save_to_csv(csv_path, rows):
     aip_header = ["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
                   "Format Identification", "Format Name", "Format Version", "Registry Name",
                   "Registry Key", "Format Note"]
-    format_header = ["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name",
-                     "Registry Key", "Format Note"]
+    group_header = ["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
+                    "Format Identification", "Format Name", "Format Version", "Registry Name",
+                    "Registry Key", "Format Note"]
 
-    # If rows is "format_csv_header" or "aip_csv_header", saves the correct header to the CSV.
+    # If rows is "group_csv_header" or "aip_csv_header", saves the correct header to the CSV.
     # Otherwise, saves the rows to the CSV.
     with open(csv_path, "a", newline="") as csv_open:
         csv_write = csv.writer(csv_open)
         if rows == "aip_csv_header":
             csv_write.writerow(aip_header)
-        elif rows == "format_csv_header":
-            csv_write.writerow(format_header)
+        elif rows == "group_csv_header":
+            csv_write.writerow(group_header)
         else:
             csv_write.writerows(rows)
 
@@ -292,15 +293,13 @@ if __name__ == '__main__':
             sys.maxsize = int(sys.maxsize / 10)
 
     # Makes the paths for the two CSVs files for the script output, in the reports folder.
-    # archive_formats_YYYYMM.csv is organized by group and then format identification.
-    # archive_formats_by_aip.YYYYMM.csv is organized by AIP and then format identification.
     today = datetime.datetime.now().strftime("%Y-%m")
     aip_csv = os.path.join(report_folder, f"archive_formats_by_aip_{today}.csv")
-    format_csv = os.path.join(report_folder, f"archive_formats_{today}.csv")
+    group_csv = os.path.join(report_folder, f"archive_formats_by_group_{today}.csv")
 
     # Adds headers to the CSVs.
     save_to_csv(aip_csv, "aip_csv_header")
-    save_to_csv(format_csv, "format_csv_header")
+    save_to_csv(group_csv, "group_csv_header")
 
     # Gets data from each ARCHive group format report and calculates additional information based on that data.
     # The information is saved to one or both CSV files.
@@ -312,9 +311,9 @@ if __name__ == '__main__':
             continue
 
         # Gets the a list of rows from the report to add to the CSVs.
-        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report))
+        aip_report_list, group_report_list = read_report(os.path.join(report_folder, report))
 
         # Saves the rows to the CSVs.
         save_to_csv(aip_csv, aip_report_list)
-        save_to_csv(format_csv, format_report_list)
+        save_to_csv(group_csv, group_report_list)
 

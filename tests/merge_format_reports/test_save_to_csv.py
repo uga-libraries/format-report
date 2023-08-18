@@ -28,24 +28,24 @@ class MyTestCase(unittest.TestCase):
         """
         if os.path.exists("archive_formats_by_aip_2023-08.csv"):
             os.remove("archive_formats_by_aip_2023-08.csv")
-        if os.path.exists("archive_formats_2023-08.csv"):
-            os.remove("archive_formats_2023-08.csv")
+        if os.path.exists("archive_formats_by_group_2023-08.csv"):
+            os.remove("archive_formats_by_group_2023-08.csv")
 
     def test_add_iteratively(self):
         """
         Test for adding multiple sets of rows to a CSV, first the header and then a list of 2 rows.
         """
         # Runs the function being tested, twice.
-        save_to_csv("archive_formats_2023-08.csv", "format_csv_header")
-        format_report_list = [["hargrett", "1474", "2.001", "image", "JPEG",
-                               "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                               "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+        save_to_csv("archive_formats_by_group_2023-08.csv", "group_csv_header")
+        group_report_list = [["hargrett", "1474", "2.001", "image", "JPEG",
+                              "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
+                              "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
                               ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
                                "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "For testing"]]
-        save_to_csv("archive_formats_2023-08.csv", format_report_list)
+        save_to_csv("archive_formats_by_group_2023-08.csv", group_report_list)
 
         # Tests that the content of the CSV contains the correct information.
-        result = csv_to_list("archive_formats_2023-08.csv")
+        result = csv_to_list("archive_formats_by_group_2023-08.csv")
         expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
                      "Format Identification", "Format Name", "Format Version", "Registry Name",
                      "Registry Key", "Format Note"],
@@ -58,7 +58,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_aip_header(self):
         """
-        Test for adding the header for by the "by_aip" CSV.
+        Test for adding the header for the "by_aip" CSV.
         """
         # Runs the function being tested.
         save_to_csv("archive_formats_by_aip_2023-08.csv", "aip_csv_header")
@@ -70,48 +70,48 @@ class MyTestCase(unittest.TestCase):
                      "Registry Key", "Format Note"]]
         self.assertEqual(result, expected, "Problem with test for aip header")
 
-    def test_format_header(self):
+    def test_group_header(self):
         """
-        Test for adding the header for by the "by_format" CSV.
+        Test for adding the header for the "by_group" CSV.
         """
         # Runs the function being tested.
-        save_to_csv("archive_formats_2023-08.csv", "format_csv_header")
+        save_to_csv("archive_formats_by_group_2023-08.csv", "group_csv_header")
 
         # Tests that the content of the CSV contains the correct information.
-        result = csv_to_list("archive_formats_2023-08.csv")
+        result = csv_to_list("archive_formats_by_group_2023-08.csv")
         expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
                      "Format Identification", "Format Name", "Format Version", "Registry Name",
                      "Registry Key", "Format Note"]]
-        self.assertEqual(result, expected, "Problem with test for format header")
+        self.assertEqual(result, expected, "Problem with test for group header")
 
     def test_one_row(self):
         """
         Test for adding a single row that is not the header to a CSV.
         """
         # Runs the function being tested.
-        format_report_list = [["dlg", "17", "0.161", "image", "TIFF", "TIFF|NO VALUE|NO VALUE", "TIFF",
-                               "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
-        save_to_csv("archive_formats_2023-08.csv", format_report_list)
+        group_report_list = [["dlg", "17", "0.161", "image", "TIFF", "TIFF|NO VALUE|NO VALUE", "TIFF",
+                              "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+        save_to_csv("archive_formats_by_group_2023-08.csv", group_report_list)
 
         # Tests that the content of the CSV contains the correct information.
-        result = csv_to_list("archive_formats_2023-08.csv")
-        self.assertEqual(result, format_report_list, "Problem with test for one row")
+        result = csv_to_list("archive_formats_by_group_2023-08.csv")
+        self.assertEqual(result, group_report_list, "Problem with test for one row")
 
     def test_two_rows(self):
         """
         Test for adding a two rows at once to a CSV.
         """
         # Runs the function being tested.
-        format_report_list = [["hargrett", "1474", "2.001", "image", "JPEG",
-                               "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                               "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
-                              ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
-                               "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "For testing"]]
-        save_to_csv("archive_formats_2023-08.csv", format_report_list)
+        group_report_list = [["hargrett", "1474", "2.001", "image", "JPEG",
+                              "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
+                              "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+                             ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
+                              "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "For testing"]]
+        save_to_csv("archive_formats_by_group_2023-08.csv", group_report_list)
 
         # Tests that the content of the CSV contains the correct information.
-        result = csv_to_list("archive_formats_2023-08.csv")
-        self.assertEqual(result, format_report_list, "Problem with test for one row")
+        result = csv_to_list("archive_formats_by_group_2023-08.csv")
+        self.assertEqual(result, group_report_list, "Problem with test for one row")
 
 
 if __name__ == '__main__':
