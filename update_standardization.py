@@ -15,37 +15,26 @@ import os
 import sys
 
 
-def check_arguments(argument_list):
+def check_argument(argument_list):
     """
-    Verifies the required argument is present and argument paths are valid.
-    Returns the paths for report_folder and standardize_formats.csv and an errors list.
+    Verifies the required argument report_folder is present and the path is valid.
+    Returns the path for report_folder and the error, if any.
     """
-    # Makes a list for errors, so all errors can be tested before returning the result,
-    # and default values for the two variables assigned from arguments.
-    errors = []
-    report = None
-    standard_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+    # Makes variables with default values to store the results of the function.
+    report_path = None
+    error = None
 
-    # Verifies that the required argument (report_folder) is present.
+    # Verifies that the required argument (report_folder) is present,
     # and if it is present that it is a valid directory.
     if len(argument_list) > 1:
-        report = argument_list[1]
-        if not os.path.exists(report):
-            errors.append(f"Report folder '{report}' does not exist")
+        report_path = argument_list[1]
+        if not os.path.exists(report_path):
+            error = f"Report folder '{report_path}' does not exist"
     else:
-        errors.append("Required argument report_folder is missing")
-
-    # If the optional second argument is present, replaces the default location (script repo) with the argument value.
-    if len(argument_list) > 2:
-        standard_csv = argument_list[2]
-
-    # Verifies that standard_csv path is a valid path.
-    if not os.path.exists(standard_csv):
-        errors.append(f"Standardize Formats CSV '{standard_csv}' does not exist")
+        error = "Required argument report_folder is missing"
 
     # Returns the results.
-    # If there are no errors, the errors list will be empty.
-    return report, standard_csv, errors
+    return report_path, error
 
 
 def format_check(report_folder_path, standardize_formats_csv_path):
@@ -135,16 +124,12 @@ def new_formats_txt(format_matches, report_folder_path):
 
 if __name__ == '__main__':
 
-    # Verifies the required argument is present and both paths are valid.
-    # Returns both paths and an errors list, which is empty if there were no errors.
-    report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
-
-    # If there were errors, prints the errors and exits the scripts.
-    if len(errors_list) > 0:
-        print("The following errors were detected:")
-        for error in errors_list:
-            print(f"\t* {error}")
-        print("Script usage: python path/update_standardization.py report_folder [standard_csv]")
+    # Verifies the required argument is present and the path is valid.
+    # If there was an error, prints the error and exits the script.
+    report_folder, error_message = check_argument(sys.argv)
+    if error_message:
+        print(error_message)
+        print("Script usage: python path/update_standardization.py report_folder")
         sys.exit(1)
 
     # Increases the size of csv fields to handle long AIP lists.

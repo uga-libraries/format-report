@@ -22,7 +22,7 @@ import datetime
 import os
 import re
 import sys
-from update_standardization import check_arguments
+from update_standardization import check_argument
 
 
 def collection_from_aip(aip_id, group):
@@ -275,7 +275,7 @@ if __name__ == '__main__':
 
     # Verifies the required argument is present and both paths are valid.
     # Returns both paths and an errors list, which is empty if there were no errors.
-    report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
+    report_folder, standardize_formats_csv, errors_list = check_argument(sys.argv)
 
     # If there were errors, prints the errors and exits the script.
     if len(errors_list) > 0:
