@@ -17,6 +17,7 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when all three expected reports are present in the reports folder.
         """
+        # Runs the function being tested.
         formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("correct_input")
 
         # Tests that the value of formats_by_aip_report is correct.
@@ -39,7 +40,11 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when all three expected reports are missing from the reports folder.
         """
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("missing_input_all")
+        # Runs the function being tested.
+        report_folder_path = os.path.join("get_report_paths", "missing_input_all")
+        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+
+        # Tests that the value of missing is correct.
         expected = ["archive_formats_by_aip.csv", "archive_formats.csv", "usage_report.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing all reports")
 
@@ -47,7 +52,11 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the formats_by_aip report is missing from the reports folder.
         """
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("missing_formats_by_aip")
+        # Runs the function being tested.
+        report_folder_path = os.path.join("get_report_paths", "missing_formats_by_aip")
+        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+
+        # Tests that the value of missing is correct.
         expected = ["archive_formats_by_aip.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing formats by aip report")
 
@@ -55,7 +64,11 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the formats report is missing from the reports folder.
         """
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("missing_formats")
+        # Runs the function being tested.
+        report_folder_path = os.path.join("get_report_paths", "missing_formats")
+        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+
+        # Tests that the value of missing is correct.
         expected = ["archive_formats.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing formats report")
 
@@ -63,7 +76,11 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the usage report is missing from the reports folder.
         """
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("missing_usage")
+        # Runs the function being tested.
+        report_folder_path = os.path.join("get_report_paths", "missing_usage")
+        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+
+        # Tests that the value of missing is correct.
         expected = ["usage_report.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing usage report")
 

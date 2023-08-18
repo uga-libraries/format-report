@@ -1,0 +1,11 @@
+Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note
+bmac,545,3257,video,Matroska,Matroska|NO VALUE|NO VALUE,Matroska,NO VALUE,NO VALUE,NO VALUE,Video is encoded in the following codec: FFV1 3.4.
+dlg,190,776.817,image,JP2,JPEG 2000 JP2|NO VALUE|x-fmt/392,JPEG 2000 JP2,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/392,NO VALUE
+dlg,10,662.702,video,Matroska,Matroska|NO VALUE|NO VALUE,Matroska,NO VALUE,NO VALUE,NO VALUE,Video is encoded in the following codec: FFV1 3.4.
+dlg,715,169.088,image,TIFF,Tagged Image File Format|5|NO VALUE,Tagged Image File Format,5,NO VALUE,NO VALUE,NO VALUE
+dlg,280,690.2,image,TIFF,Tagged Image File Format|6|fmt/353,Tagged Image File Format,6,https://www.nationalarchives.gov.uk/PRONOM,fmt/353,NO VALUE
+dlg,80,290.147,audio,Waveform Audio,Waveform Audio|NO VALUE|NO VALUE,Waveform Audio,NO VALUE,NO VALUE,NO VALUE,NO VALUE
+hargrett,195,15.897,image,JPEG,JPEG EXIF|2.1|x-fmt/390,JPEG EXIF,2.1,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/390,NO VALUE
+hargrett,145,25.001,image,JPEG,JPEG File Interchange Format|1.02|fmt/44,JPEG File Interchange Format,1.02,https://www.nationalarchives.gov.uk/PRONOM,fmt/44,NO VALUE
+hargrett,165,15.251,image,TIFF,Tagged Image File Format|NO VALUE|NO VALUE,Tagged Image File Format,NO VALUE,NO VALUE,NO VALUE,NO VALUE
+hargrett,220,138.1,web_archive,WARC,WARC|NO VALUE|fmt/289,WARC,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,fmt/289,NO VALUE

@@ -2,6 +2,10 @@
 Test for the function file_count_ranges(),
 which calculates the number of instances of a category
 with file counts within seven specified ranges.
+
+For input, tests use files in the reports folder of this script repo.
+The names of the input CSV do not follow the naming convention used in production
+so that the variations can be saved to the same folder in the repo for easier organization.
 """
 
 import os
@@ -16,8 +20,10 @@ class MyTestCase(unittest.TestCase):
         """
         Test for making the format identification file count ranges.
         """
-        # Runs the function being tested and converts the output into a list for easier comparison.
+        # Makes the variable used for function input.
         df_formats = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_id.csv"))
+
+        # Runs the function being tested and converts the output into a list for easier comparison.
         format_id_ranges = file_count_ranges("Format Identification", df_formats)
         result = [format_id_ranges.columns.tolist()] + format_id_ranges.reset_index().values.tolist()
 
@@ -30,8 +36,10 @@ class MyTestCase(unittest.TestCase):
         """
         Test for making the format standardized name file count ranges.
         """
-        # Runs the function being tested and converts the output into a list for easier comparison.
+        # Makes the variable used for function input.
         df_formats = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_name.csv"))
+
+        # Runs the function being tested and converts the output into a list for easier comparison.
         format_name_ranges = file_count_ranges("Format Standardized Name", df_formats)
         result = [format_name_ranges.columns.tolist()] + format_name_ranges.reset_index().values.tolist()
 

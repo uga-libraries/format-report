@@ -1,6 +1,8 @@
 """
 Test for the function archive_overview(),
-which summarizes group counts.
+which summarizes group information.
+
+For input, the test uses files in the reports folder of this script repo.
 """
 
 import os
@@ -16,13 +18,13 @@ class MyTestCase(unittest.TestCase):
         Test for the function working correctly.
         There is no error handling or variations of input to test.
         """
-        # Runs the function being tested.
+        # Makes the variables used for function input.
         df_formats_by_aip = pd.read_csv(os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv"))
         df_formats = pd.read_csv(os.path.join("correct_input", "archive_formats_2023-08.csv"))
         usage_report = os.path.join("correct_input", "usage_report_20171101_20211101.csv")
-        overview = archive_overview(df_formats_by_aip, df_formats, usage_report)
 
-        # Converts overview from a dataframe to a list for easier comparison.
+        # Runs the function being tested and converts the output into a list for easier comparison.
+        overview = archive_overview(df_formats_by_aip, df_formats, usage_report)
         result = [overview.columns.tolist()] + overview.reset_index().values.tolist()
 
         # Tests if overview has the expected values.

@@ -1,6 +1,8 @@
 """
 Test for the function format_id_frequency(),
 which calculates the number and percentage of files and size for each format id.
+
+For input, the test uses a file in the reports folder of this script repo.
 """
 
 import os
@@ -13,9 +15,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_format_id_frequency(self):
         """
-        Test for running the function. There are no variations to test.
+        Test for the function working correctly.
+        There is no error handling or variations of input to test.
         """
-        # Calculates the values of variables used for function input.
+        # Makes the variables used for function input.
         totals_dict = {"Collections": 7, "AIPs": 14, "Files": 2290, "Size": 3326.99}
         df_formats = pd.read_csv(os.path.join("format_id_frequency", "archive_formats_2023-08.csv"))
 

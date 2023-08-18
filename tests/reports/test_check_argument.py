@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the required argument report_folder is present and a valid path.
         """
-        # Runs the function being tested.
+        # Makes the variable used for function input and runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "reports.py"), "correct_input"]
         report_folder, errors_message = check_argument(sys_argv)
 
@@ -33,7 +33,7 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the required argument report_folder is not present.
         """
-        # Runs the function being tested.
+        # Makes the variable used for function input and runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "reports.py")]
         report_folder, error_message = check_argument(sys_argv)
 
@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when the required argument report_folder is present but not a valid path.
         """
-        # Runs the function being tested.
+        # Makes the variable used for function input and runs the function being tested.
         sys_argv = [os.path.join(sys.path[1], "reports.py"), "reports_error"]
         report_folder, error_message = check_argument(sys_argv)
 

@@ -248,17 +248,18 @@ class MyTestCase(unittest.TestCase):
         Test for running the script on a report_folder without the expected reports.
         It will print a message and exit the script.
         """
-        # Runs the script without the required argument and tests that the script exits.
+        # Runs the script with a report_folder that does not have the required reports and tests that the script exits.
+        report_folder = os.path.join("get_report_paths", "missing_input_all")
         with self.assertRaises(subprocess.CalledProcessError):
-            subprocess.run(f"python {self.script_path} missing_input_all", shell=True, check=True)
+            subprocess.run(f"python {self.script_path} {report_folder}", shell=True, check=True)
 
         # Tests if the expected message was produced. In production, this is printed to the terminal.
         # Must run the script a second time because cannot capture output with self.assertRaises.
-        output = subprocess.run(f"python {self.script_path} missing_input_all", shell=True, stdout=subprocess.PIPE)
+        output = subprocess.run(f"python {self.script_path} {report_folder}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Could not find archive_formats_by_aip.csv in 'missing_input_all'.\r\n" \
-                       "Could not find archive_formats.csv in 'missing_input_all'.\r\n" \
-                       "Could not find usage_report.csv in 'missing_input_all'.\r\n" \
+        msg_expected = "Could not find archive_formats_by_aip.csv in 'get_report_paths\\missing_input_all'.\r\n" \
+                       "Could not find archive_formats.csv in 'get_report_paths\\missing_input_all'.\r\n" \
+                       "Could not find usage_report.csv in 'get_report_paths\\missing_input_all'.\r\n" \
                        "Please add the missing report(s) to the report folder and run this script again.\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for missing input, message")
 

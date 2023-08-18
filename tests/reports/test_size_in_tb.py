@@ -3,7 +3,9 @@ Test for the function size_in_tb(),
 which finds the group sizes in the usage report
 and returns a dataframe with the sizes for each group, converted to TB.
 
-The dataframe returned by the function is converted into a list for easier comparisons.
+For input, tests use files in the reports folder of this script repo.
+The names of the input CSV does not follow the naming convention used in production
+so that the variations can be saved to the same folder in the repo for easier organization.
 """
 
 import os
@@ -19,7 +21,7 @@ class MyTestCase(unittest.TestCase):
         and no other groups, with a mix of size units.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_all.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_all.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -32,7 +34,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are all in bytes.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_byte.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_byte.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -44,7 +46,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are all in KBs.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_kb.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_kb.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -56,7 +58,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are all in MBs.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_mb.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_mb.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -68,7 +70,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are all in GBs.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_gb.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_gb.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -80,7 +82,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are all in TBs.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_tb.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_tb.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -93,7 +95,7 @@ class MyTestCase(unittest.TestCase):
         as well as additional groups that are not included, with a mix of size units.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_all.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_all.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -106,7 +108,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the sizes in the usage report are in PB (which isn't accounted for in the function) and TB.
         """
         # Runs the function being tested and converts the output into a list for easier comparison.
-        size_by_group = size_in_tb(os.path.join("usage", "usage_report_unexpected_unit.csv"))
+        size_by_group = size_in_tb(os.path.join("size_in_tb", "usage_report_unexpected_unit.csv"))
         result = [size_by_group.columns.tolist()] + size_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.

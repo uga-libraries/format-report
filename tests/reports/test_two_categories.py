@@ -1,6 +1,10 @@
 """
 Test for the function two_categories(),
 which calculates the number of collections, AIPs, file_ids, and GB for each combination of two categories.
+
+For input, tests use files in the reports folder of this script repo.
+The names of the input CSVs do not follow the naming convention used in production
+so that the variations can be saved to the same folder in the repo for easier organization.
 """
 
 import os
@@ -11,19 +15,16 @@ from reports import two_categories
 
 class MyTestCase(unittest.TestCase):
 
-    def setUp(self):
-        """
-        Calculates the values of variables used for function input.
-        """
-        self.df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_2023-08.csv"))
-        self.df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_2023-08.csv"))
-
     def test_name_by_group(self):
         """
         Test for making the format standardized name by group subtotals.
         """
+
+        df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_name_group.csv"))
+        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_name_group.csv"))
+
         # Runs the function being tested and converts the output into a list for easier comparison.
-        name_by_group = two_categories("Format Standardized Name", "Group", self.df_formats_by_aip, self.df_formats)
+        name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats)
         result = [name_by_group.columns.tolist()] + name_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -38,8 +39,12 @@ class MyTestCase(unittest.TestCase):
         """
         Test for making the format type by group subtotals.
         """
+        # Makes the variables used for function input.
+        df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_type_group.csv"))
+        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_type_group.csv"))
+
         # Runs the function being tested and converts the output into a list for easier comparison.
-        type_by_group = two_categories("Format Type", "Group", self.df_formats_by_aip, self.df_formats)
+        type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats)
         result = [type_by_group.columns.tolist()] + type_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -53,9 +58,13 @@ class MyTestCase(unittest.TestCase):
         """
         Test for making the format type by format standardized name subtotals.
         """
+        # Makes the variables used for function input.
+        df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_type_group.csv"))
+        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_type_group.csv"))
+
         # Runs the function being tested and converts the output into a list for easier comparison.
         type_by_name = two_categories("Format Type", "Format Standardized Name",
-                                      self.df_formats_by_aip, self.df_formats)
+                                      df_formats_by_aip, df_formats)
         result = [type_by_name.columns.tolist()] + type_by_name.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.

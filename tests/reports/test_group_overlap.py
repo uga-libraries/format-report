@@ -1,7 +1,8 @@
 """
 Tests for the function group_overlap(),
-which calculates the number of groups and a list of groups
-that share each instance of a category.
+which calculates the number of groups and a list of groups that share each instance of a category.
+
+For input, tests use report folders in the repo for this script.
 """
 
 import os
@@ -16,8 +17,10 @@ class MyTestCase(unittest.TestCase):
         """
         Test for group overlap of format identifications.
         """
-        # Runs the function being tested and converts the output into a list for easier comparison.
+        # Makes the variable used for function input.
         df_formats = pd.read_csv(os.path.join("group_overlap", "archive_formats_id.csv"))
+
+        # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_id = group_overlap("Format Identification", df_formats)
         result = [groups_per_id.columns.tolist()] + groups_per_id.reset_index().values.tolist()
 
@@ -33,8 +36,10 @@ class MyTestCase(unittest.TestCase):
         """
         Test for group overlap of format standardized names.
         """
-        # Runs the function being tested and converts the output into a list for easier comparison.
+        # Makes the variable used for function input.
         df_formats = pd.read_csv(os.path.join("group_overlap", "archive_formats_name.csv"))
+
+        # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_name = group_overlap("Format Standardized Name", df_formats)
         result = [groups_per_name.columns.tolist()] + groups_per_name.reset_index().values.tolist()
 
@@ -47,10 +52,12 @@ class MyTestCase(unittest.TestCase):
 
     def test_group_per_type(self):
         """
-        Test for group overlap of format type.groups_per_id
+        Test for group overlap of format type.
         """
-        # Runs the function being tested and converts the output into a list for easier comparison.
+        # Makes the variable used for function input.
         df_formats = pd.read_csv(os.path.join("group_overlap", "archive_formats_type.csv"))
+
+        # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_type = group_overlap("Format Type", df_formats)
         result = [groups_per_type.columns.tolist()] + groups_per_type.reset_index().values.tolist()
 
