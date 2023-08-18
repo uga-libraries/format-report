@@ -1,0 +1,11 @@
+Format_Name,Standardized_Format_Name,Format_Type
+JPEG,JPEG,image
+JPEG 2000 JP2,JP2,image
+JPEG EXIF,JPEG,image
+JPEG File Interchange Format,JPEG,image
+Microsoft Excel,Microsoft Excel,spreadsheet
+Microsoft Excel 2007+,Microsoft Excel,spreadsheet
+Microsoft Excel 3 Worksheet,Microsoft Excel,spreadsheet
+Microsoft Works Spreadsheet,Microsoft Works Spreadsheet,spreadsheet
+Microsoft Works Spreadsheet for Macintosh,Microsoft Works Spreadsheet,spreadsheet
+ZIP Format,ZIP Format,archive

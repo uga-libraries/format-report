@@ -1,0 +1,7 @@
+Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note
+bmac,545,825,video,Matroska,Matroska|NO VALUE|NO VALUE,Matroska,NO VALUE,NO VALUE,NO VALUE,Video is encoded in the following codec: FFV1 3.4.
+bmac,290,700,image,TIFF,Tagged Image File Format|6|fmt/353,Tagged Image File Format,6,https://www.nationalarchives.gov.uk/PRONOM,fmt/353,NO VALUE
+dlg,100,662.702,video,Matroska,Matroska|NO VALUE|NO VALUE,Matroska,NO VALUE,NO VALUE,NO VALUE,Video is encoded in the following codec: FFV1 3.4.
+dlg,280,690.2,image,TIFF,Tagged Image File Format|6|fmt/353,Tagged Image File Format,6,https://www.nationalarchives.gov.uk/PRONOM,fmt/353,NO VALUE
+hargrett,195,130,image,JPEG,JPEG EXIF|2.1|x-fmt/390,JPEG EXIF,2.1,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/390,NO VALUE
+hargrett,165,150,image,TIFF,Tagged Image File Format|6|fmt/353,Tagged Image File Format,6,https://www.nationalarchives.gov.uk/PRONOM,fmt/353,NO VALUE
