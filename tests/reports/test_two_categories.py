@@ -21,10 +21,10 @@ class MyTestCase(unittest.TestCase):
         """
 
         df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_name_group.csv"))
-        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_name_group.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("two_categories", "archive_formats_by_group_name_group.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats)
+        name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats_by_group)
         result = [name_by_group.columns.tolist()] + name_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -41,10 +41,10 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the variables used for function input.
         df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_type_group.csv"))
-        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_type_group.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("two_categories", "archive_formats_by_group_type_group.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats)
+        type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats_by_group)
         result = [type_by_group.columns.tolist()] + type_by_group.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -60,11 +60,11 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the variables used for function input.
         df_formats_by_aip = pd.read_csv(os.path.join("two_categories", "archive_formats_by_aip_type_group.csv"))
-        df_formats = pd.read_csv(os.path.join("two_categories", "archive_formats_type_group.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("two_categories", "archive_formats_by_group_type_group.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
         type_by_name = two_categories("Format Type", "Format Standardized Name",
-                                      df_formats_by_aip, df_formats)
+                                      df_formats_by_aip, df_formats_by_group)
         result = [type_by_name.columns.tolist()] + type_by_name.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.

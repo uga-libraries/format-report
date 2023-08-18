@@ -17,14 +17,15 @@ from reports import file_count_ranges
 class MyTestCase(unittest.TestCase):
 
     def test_format_id_ranges(self):
+
         """
         Test for making the format identification file count ranges.
         """
         # Makes the variable used for function input.
-        df_formats = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_id.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_by_group_id.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_id_ranges = file_count_ranges("Format Identification", df_formats)
+        format_id_ranges = file_count_ranges("Format Identification", df_formats_by_group)
         result = [format_id_ranges.columns.tolist()] + format_id_ranges.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -37,10 +38,10 @@ class MyTestCase(unittest.TestCase):
         Test for making the format standardized name file count ranges.
         """
         # Makes the variable used for function input.
-        df_formats = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_name.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("file_count_ranges", "archive_formats_by_group_name.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_name_ranges = file_count_ranges("Format Standardized Name", df_formats)
+        format_name_ranges = file_count_ranges("Format Standardized Name", df_formats_by_group)
         result = [format_name_ranges.columns.tolist()] + format_name_ranges.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.

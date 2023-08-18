@@ -20,11 +20,11 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the variables used for function input.
         df_formats_by_aip = pd.read_csv(os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv"))
-        df_formats = pd.read_csv(os.path.join("correct_input", "archive_formats_2023-08.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("correct_input", "archive_formats_by_group_2023-08.csv"))
         usage_report = os.path.join("correct_input", "usage_report_20171101_20211101.csv")
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        overview = archive_overview(df_formats_by_aip, df_formats, usage_report)
+        overview = archive_overview(df_formats_by_aip, df_formats_by_group, usage_report)
         result = [overview.columns.tolist()] + overview.reset_index().values.tolist()
 
         # Tests if overview has the expected values.

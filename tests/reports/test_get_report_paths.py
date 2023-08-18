@@ -18,15 +18,15 @@ class MyTestCase(unittest.TestCase):
         Test for when all three expected reports are present in the reports folder.
         """
         # Runs the function being tested.
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths("correct_input")
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths("correct_input")
 
         # Tests that the value of formats_by_aip_report is correct.
         expected = os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv")
         self.assertEqual(formats_by_aip_report, expected, "Problem with test for all present, formats_by_aip")
 
-        # Tests that the value of formats_report is correct.
-        expected = os.path.join("correct_input", "archive_formats_2023-08.csv")
-        self.assertEqual(formats_report, expected, "Problem with test for all present, formats")
+        # Tests that the value of formats_by_group_report is correct.
+        expected = os.path.join("correct_input", "archive_formats_by_group_2023-08.csv")
+        self.assertEqual(formats_by_group_report, expected, "Problem with test for all present, formats")
 
         # Tests that the value of usage_report is correct.
         expected = os.path.join("correct_input", "usage_report_20171101_20211101.csv")
@@ -42,10 +42,10 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_input_all")
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder_path)
 
         # Tests that the value of missing is correct.
-        expected = ["archive_formats_by_aip.csv", "archive_formats.csv", "usage_report.csv"]
+        expected = ["archive_formats_by_aip.csv", "archive_formats_by_group.csv", "usage_report.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing all reports")
 
     def test_missing_formats_by_aip(self):
@@ -54,23 +54,23 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_formats_by_aip")
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder_path)
 
         # Tests that the value of missing is correct.
         expected = ["archive_formats_by_aip.csv"]
         self.assertEqual(missing, expected, "Problem with test for missing formats by aip report")
 
-    def test_missing_format(self):
+    def test_missing_formats_by_group(self):
         """
-        Test for when the formats report is missing from the reports folder.
+        Test for when the formats_by_group report is missing from the reports folder.
         """
         # Runs the function being tested.
-        report_folder_path = os.path.join("get_report_paths", "missing_formats")
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+        report_folder_path = os.path.join("get_report_paths", "missing_formats_by_group")
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder_path)
 
         # Tests that the value of missing is correct.
-        expected = ["archive_formats.csv"]
-        self.assertEqual(missing, expected, "Problem with test for missing formats report")
+        expected = ["archive_formats_by_group.csv"]
+        self.assertEqual(missing, expected, "Problem with test for missing formats by group report")
 
     def test_missing_usage(self):
         """
@@ -78,7 +78,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_usage")
-        formats_by_aip_report, formats_report, usage_report, missing = get_report_paths(report_folder_path)
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder_path)
 
         # Tests that the value of missing is correct.
         expected = ["usage_report.csv"]

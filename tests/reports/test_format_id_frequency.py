@@ -20,10 +20,10 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the variables used for function input.
         totals_dict = {"Collections": 7, "AIPs": 14, "Files": 2290, "Size": 3326.99}
-        df_formats = pd.read_csv(os.path.join("format_id_frequency", "archive_formats_2023-08.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("format_id_frequency", "archive_formats_by_group_2023-08.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_ids = format_id_frequency(totals_dict, df_formats)
+        format_ids = format_id_frequency(totals_dict, df_formats_by_group)
         result = [format_ids.columns.tolist()] + format_ids.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
