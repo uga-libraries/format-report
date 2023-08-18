@@ -244,21 +244,23 @@ def save_to_csv(csv_path, rows):
             csv_write.writerows(rows)
 
 
-def standardize_format(format_name, standard):
+def standardize_format(format_name):
     """
     Finds the format name within standardize_formats.csv
     and returns the standard (simplified) format name and the format type from the CSV for that format.
     These values reduce the data variability so the summaries are more useful.
     If there is no match, exits the script.
     """
-
     # Checks if the format name is actually an error and if so, returns default value for name and type.
     if format_name.startswith("ERROR: cannot read"):
         return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
 
+    # Path to standardize_formats.csv, which is in the script repo.
+    standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+
     # Reads standardize_formats.csv and compares the format to every format in the CSV.
     # When there is a match (case insensitive), returns the format standardized name and type.
-    with open(standard) as standard_list:
+    with open(standardize_formats_csv) as standard_list:
         read_standard_list = csv.reader(standard_list)
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
