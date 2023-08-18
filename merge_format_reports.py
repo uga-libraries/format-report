@@ -183,16 +183,16 @@ def read_report(report_path, standardize_formats_csv_path):
     return format_csv_rows, aip_csv_rows
 
 
-def read_row(row_data, standardize_formats_csv_path, archive_group):
+def read_row(row_data, archive_group):
     """
-    Gets data from a row from an ARCHive format report and calculates additional infomration based on that data.
+    Gets data from a row from an ARCHive format report and calculates additional information based on that data.
     Returns two lists to be added to format_csv_rows and aip_csv_rows.
     """
     # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
     row = ["NO VALUE" if x == "" else x for x in row_data]
 
     # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-    format_standard, format_type = standardize_format(row[3], standardize_formats_csv_path)
+    format_standard, format_type = standardize_format(row[3])
 
     # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
     format_id = f"{row[3]}|{row[4]}|{row[6]}"
