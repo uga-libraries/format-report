@@ -22,10 +22,10 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input.
         totals_dict = {"Collections": 7, "AIPs": 11, "Files": 2545, "Size": 6100}
         df_formats_by_aip = pd.read_csv(os.path.join("one_category", "archive_formats_by_aip_name.csv"))
-        df_formats = pd.read_csv(os.path.join("one_category", "archive_formats_name.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("one_category", "archive_formats_by_group_name.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats)
+        format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats_by_group)
         result = [format_names.columns.tolist()] + format_names.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
@@ -46,10 +46,10 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input.
         totals_dict = {"Collections": 7, "AIPs": 11, "Files": 2545, "Size": 6100}
         df_formats_by_aip = pd.read_csv(os.path.join("one_category", "archive_formats_by_aip_type.csv"))
-        df_formats = pd.read_csv(os.path.join("one_category", "archive_formats_type.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("one_category", "archive_formats_by_group_type.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats)
+        format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats_by_group)
         result = [format_types.columns.tolist()] + format_types.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.

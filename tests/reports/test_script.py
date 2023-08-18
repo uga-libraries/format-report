@@ -258,7 +258,7 @@ class MyTestCase(unittest.TestCase):
         output = subprocess.run(f"python {self.script_path} {report_folder}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
         msg_expected = "Could not find archive_formats_by_aip.csv in 'get_report_paths\\missing_input_all'.\r\n" \
-                       "Could not find archive_formats.csv in 'get_report_paths\\missing_input_all'.\r\n" \
+                       "Could not find archive_formats_by_group.csv in 'get_report_paths\\missing_input_all'.\r\n" \
                        "Could not find usage_report.csv in 'get_report_paths\\missing_input_all'.\r\n" \
                        "Please add the missing report(s) to the report folder and run this script again.\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for missing input, message")

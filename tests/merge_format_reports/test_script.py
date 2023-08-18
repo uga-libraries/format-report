@@ -36,10 +36,10 @@ class MyTestCase(unittest.TestCase):
         """
         Deletes the CSVs produced by the script, if it is made by the test.
         """
-        file_paths = [os.path.join("reports_one", f"archive_formats_{self.today}.csv"),
-                      os.path.join("reports_one", f"archive_formats_by_aip_{self.today}.csv"),
-                      os.path.join("reports_three", f"archive_formats_{self.today}.csv"),
-                      os.path.join("reports_three", f"archive_formats_by_aip_{self.today}.csv")]
+        file_paths = [os.path.join("reports_one", f"archive_formats_by_aip_{self.today}.csv"),
+                      os.path.join("reports_one", f"archive_formats_by_group_{self.today}.csv"),
+                      os.path.join("reports_three", f"archive_formats_by_aip_{self.today}.csv"),
+                      os.path.join("reports_three", f"archive_formats_by_group_{self.today}.csv")]
         for file_path in file_paths:
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -74,24 +74,6 @@ class MyTestCase(unittest.TestCase):
         script_path = os.path.join("..", "..", "merge_format_reports.py")
         subprocess.run(f"python {script_path} reports_one", shell=True)
 
-        # Tests if archive_formats.csv has the expected values.
-        result = csv_to_list(os.path.join("reports_one", f"archive_formats_{self.today}.csv"))
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
-                    ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
-                    ["hargrett", "1322", "0.687", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
-                     "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/43", "NO VALUE"],
-                    ["hargrett", "55", "0.005", "text", "Microsoft Word",
-                     "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
-                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing"],
-                    ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
-                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
-        self.assertEqual(result, expected, "Problem with one report, archive_formats.csv")
-
         # Tests if archive_formats_by_aip.csv has the expected values.
         result = csv_to_list(os.path.join("reports_one", f"archive_formats_by_aip_{self.today}.csv"))
         expected = [["Group", "Collection", "AIP", "Format Type", "Format Standardized Name", "Format Identification",
@@ -121,6 +103,24 @@ class MyTestCase(unittest.TestCase):
                      "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with one report, archive_formats_by_aip.csv")
 
+        # Tests if archive_formats_by_group.csv has the expected values.
+        result = csv_to_list(os.path.join("reports_one", f"archive_formats_by_group_{self.today}.csv"))
+        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
+                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
+                     "Format Note"],
+                    ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "fmt/44", "NO VALUE"],
+                    ["hargrett", "1322", "0.687", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
+                     "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "fmt/43", "NO VALUE"],
+                    ["hargrett", "55", "0.005", "text", "Microsoft Word",
+                     "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
+                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing"],
+                    ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
+                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+        self.assertEqual(result, expected, "Problem with one report, archive_formats_by_group.csv")
+
     def test_three_reports(self):
         """
         Test for a report_folder that contains three ARCHive format reports.
@@ -129,28 +129,6 @@ class MyTestCase(unittest.TestCase):
         # Runs the script.
         script_path = os.path.join("..", "..", "merge_format_reports.py")
         subprocess.run(f"python {script_path} reports_three", shell=True)
-
-        # Tests if archive_formats.csv has the expected values.
-        result = csv_to_list(os.path.join("reports_three", f"archive_formats_{self.today}.csv"))
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
-                    ["bmac", "836", "17005.995", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
-                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ"],
-                    ["bmac", "26", "0.005", "application", "Cue Sheet", "cue|NO VALUE|NO VALUE", "cue",
-                     "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"],
-                    ["dlg", "1", "0.001", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
-                     "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/43", "NO VALUE"],
-                    ["dlg", "33", "0.025", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
-                    ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
-                    ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
-                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
-        self.assertEqual(result, expected, "Problem with three reports, archive_formats.csv")
 
         # Tests if archive_formats_by_aip.csv has the expected values.
         result = csv_to_list(os.path.join("reports_three", f"archive_formats_by_aip_{self.today}.csv"))
@@ -180,6 +158,28 @@ class MyTestCase(unittest.TestCase):
                     ["hargrett", "harg-ms3770", "harg-ms3770er0002", "text", "Plain Text File",
                      "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_aip.csv")
+
+        # Tests if archive_formats_by_group.csv has the expected values.
+        result = csv_to_list(os.path.join("reports_three", f"archive_formats_by_group_{self.today}.csv"))
+        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
+                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
+                     "Format Note"],
+                    ["bmac", "836", "17005.995", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
+                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ"],
+                    ["bmac", "26", "0.005", "application", "Cue Sheet", "cue|NO VALUE|NO VALUE", "cue",
+                     "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"],
+                    ["dlg", "1", "0.001", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
+                     "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "fmt/43", "NO VALUE"],
+                    ["dlg", "33", "0.025", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "fmt/44", "NO VALUE"],
+                    ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "fmt/44", "NO VALUE"],
+                    ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
+                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+        self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_group.csv")
 
 
 if __name__ == '__main__':
