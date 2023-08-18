@@ -271,7 +271,7 @@ def one_category(category, totals, df_aip, df):
     return result
 
 
-def size_count_ranges(category, df):
+def size_ranges(category, df):
     """Uses the data from the archive_formats report to calculate the number of instances of the category within each
     range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
 
@@ -437,11 +437,11 @@ if __name__ == '__main__':
 
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
     format_name_ranges = file_count_ranges("Format Standardized Name", df_formats)
-    format_name_sizes = size_count_ranges("Format Standardized Name", df_formats)
+    format_name_sizes = size_ranges("Format Standardized Name", df_formats)
 
     # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
     format_id_ranges = file_count_ranges("Format Identification", df_formats)
-    format_id_sizes = size_count_ranges("Format Identification", df_formats)
+    format_id_sizes = size_ranges("Format Identification", df_formats)
 
     # Saves each dataframe or series as a spreadsheet in an Excel workbook.
     # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.

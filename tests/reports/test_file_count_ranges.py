@@ -38,7 +38,7 @@ class MyTestCase(unittest.TestCase):
         # Tests if the function output has the expected values.
         expected = [["Number of Formats (Format Standardized Name)"],
                     ["1-9", 3], ["10-99", 0], ["100-999", 0], ["1000-9999", 2], ["10000-99999", 1], ["100000+", 1]]
-        self.assertEqual(result, expected, "Problem with test for format id ranges")
+        self.assertEqual(result, expected, "Problem with test for format name ranges")
 
 
 if __name__ == '__main__':
