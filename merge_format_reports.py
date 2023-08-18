@@ -274,15 +274,11 @@ def standardize_format(format_name):
 
 if __name__ == '__main__':
 
-    # Verifies the required argument is present and both paths are valid.
-    # Returns both paths and an errors list, which is empty if there were no errors.
-    report_folder, standardize_formats_csv, errors_list = check_argument(sys.argv)
-
-    # If there were errors, prints the errors and exits the script.
-    if len(errors_list) > 0:
-        print("The following errors were detected:")
-        for error in errors_list:
-            print(f"\t* {error}")
+    # Verifies the required argument is present and the path is valid.
+    # If there was an error, prints the error and exits the script.
+    report_folder, error_message = check_argument(sys.argv)
+    if error_message:
+        print(error_message)
         print("Script usage: python path/merge_format_reports.py report_folder")
         sys.exit(1)
 
