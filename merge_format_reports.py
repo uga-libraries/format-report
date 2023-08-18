@@ -13,16 +13,15 @@ aggregating the number of collections and AIPs.
 Before running this script, run update_standardization.py
 """
 
-# Usage: python /path/merge_format_reports.py /path/report_folder [/path/standardize_formats.csv]
-# Report folder should contain the ARCHive group format reports. Script output is saved to this folder as well.
-# A default value for the path to the standardize formats csv is used if one is not provided as an argument.
+# Usage: python path/merge_format_reports.py report_folder
+#     - report_folder contains the ARCHive group format reports. Script output is saved to this folder as well.
 
 import csv
 import datetime
 import os
 import re
 import sys
-from update_standardization import check_arguments
+from update_standardization import check_argument
 
 
 def collection_from_aip(aip_id, group):
@@ -151,7 +150,7 @@ def collection_from_aip(aip_id, group):
         raise ValueError
 
 
-def read_report(report_path, standardize_formats_csv_path):
+def read_report(report_path):
     """
     Gets data from each ARCHive group format report and calculates additional information based on that data.
     Returns two lists with the rows of data to save to the CSV files.
@@ -172,7 +171,7 @@ def read_report(report_path, standardize_formats_csv_path):
 
         # Gets the data from each row in the report.
         for row in report_info:
-            format_row, aip_row_list = read_row(row, standardize_formats_csv_path, archive_group)
+            format_row, aip_row_list = read_row(row, archive_group)
 
             # Adds the data to the reports.
             # format_row is a list; aip_row_list is a list of lists, although it may only contain one list.
@@ -183,16 +182,16 @@ def read_report(report_path, standardize_formats_csv_path):
     return format_csv_rows, aip_csv_rows
 
 
-def read_row(row_data, standardize_formats_csv_path, archive_group):
+def read_row(row_data, archive_group):
     """
-    Gets data from a row from an ARCHive format report and calculates additional infomration based on that data.
+    Gets data from a row from an ARCHive format report and calculates additional information based on that data.
     Returns two lists to be added to format_csv_rows and aip_csv_rows.
     """
     # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
     row = ["NO VALUE" if x == "" else x for x in row_data]
 
     # Gets the format standardized name and format type for the format. Will be saved to both CSVs.
-    format_standard, format_type = standardize_format(row[3], standardize_formats_csv_path)
+    format_standard, format_type = standardize_format(row[3])
 
     # Calculates the format identification: name|version|registry_key. Will be saved to both CSVs.
     format_id = f"{row[3]}|{row[4]}|{row[6]}"
@@ -244,21 +243,23 @@ def save_to_csv(csv_path, rows):
             csv_write.writerows(rows)
 
 
-def standardize_format(format_name, standard):
+def standardize_format(format_name):
     """
     Finds the format name within standardize_formats.csv
     and returns the standard (simplified) format name and the format type from the CSV for that format.
     These values reduce the data variability so the summaries are more useful.
     If there is no match, exits the script.
     """
-
     # Checks if the format name is actually an error and if so, returns default value for name and type.
     if format_name.startswith("ERROR: cannot read"):
         return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
 
+    # Path to standardize_formats.csv, which is in the script repo.
+    standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+
     # Reads standardize_formats.csv and compares the format to every format in the CSV.
     # When there is a match (case insensitive), returns the format standardized name and type.
-    with open(standard) as standard_list:
+    with open(standardize_formats_csv) as standard_list:
         read_standard_list = csv.reader(standard_list)
         for standard_row in read_standard_list:
             if format_name.lower() == standard_row[0].lower():
@@ -273,16 +274,12 @@ def standardize_format(format_name, standard):
 
 if __name__ == '__main__':
 
-    # Verifies the required argument is present and both paths are valid.
-    # Returns both paths and an errors list, which is empty if there were no errors.
-    report_folder, standardize_formats_csv, errors_list = check_arguments(sys.argv)
-
-    # If there were errors, prints the errors and exits the script.
-    if len(errors_list) > 0:
-        print("The following errors were detected:")
-        for error in errors_list:
-            print(f"\t* {error}")
-        print("Script usage: python path/merge_format_reports.py report_folder [standard_csv]")
+    # Verifies the required argument is present and the path is valid.
+    # If there was an error, prints the error and exits the script.
+    report_folder, error_message = check_argument(sys.argv)
+    if error_message:
+        print(error_message)
+        print("Script usage: python path/merge_format_reports.py report_folder")
         sys.exit(1)
 
     # Increases the size of CSV fields to handle long AIP lists.
@@ -315,7 +312,7 @@ if __name__ == '__main__':
             continue
 
         # Gets the a list of rows from the report to add to the CSVs.
-        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report), standardize_formats_csv)
+        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report))
 
         # Saves the rows to the CSVs.
         save_to_csv(aip_csv, aip_report_list)

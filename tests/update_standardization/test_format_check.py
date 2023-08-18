@@ -7,8 +7,6 @@ with the format name as the key and if found or missing as the value.
 For input, tests use format reports that are in the update_standardization tests folder of this script repo.
 """
 
-import os
-import sys
 import unittest
 from update_standardization import format_check
 
@@ -21,7 +19,7 @@ class MyTestCase(unittest.TestCase):
         The function will skip those rows.
         """
         # Runs the function being tested.
-        formats_checked = format_check("reports_blank_row", os.path.join(sys.path[1], "standardize_formats.csv"))
+        formats_checked = format_check("reports_blank_row")
 
         # Tests that the formats_checked dictionary contains the correct information.
         expected = {"DPX": "Found",
@@ -38,7 +36,7 @@ class MyTestCase(unittest.TestCase):
         The function will skip those files and only read ones that are format reports.
         """
         # Runs the function being tested.
-        formats_checked = format_check("reports_not_a_report", os.path.join(sys.path[1], "standardize_formats.csv"))
+        formats_checked = format_check("reports_not_a_report")
 
         # Tests that the formats_checked dictionary contains the correct information.
         expected = {"DPX": "Found",
@@ -54,7 +52,7 @@ class MyTestCase(unittest.TestCase):
         Test for a format_reports folder that only contains one format report.
         """
         # Runs the function being tested.
-        formats_checked = format_check("reports_one", os.path.join(sys.path[1], "standardize_formats.csv"))
+        formats_checked = format_check("reports_one")
 
         # Tests that the formats_checked dictionary contains the correct information.
         expected = {"JPEG File Interchange Format": "Found",
@@ -67,7 +65,7 @@ class MyTestCase(unittest.TestCase):
         Test for a format_reports folder that contains three format reports.
         """
         # Runs the function being tested.
-        formats_checked = format_check("reports_three", os.path.join(sys.path[1], "standardize_formats.csv"))
+        formats_checked = format_check("reports_three")
 
         # Tests that the formats_checked dictionary contains the correct information.
         expected = {"DPX": "Found",

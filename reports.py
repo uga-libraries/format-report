@@ -32,6 +32,7 @@ import datetime
 import os
 import pandas as pd
 import sys
+from update_standardization import check_argument
 
 
 def archive_overview(df_aip, df, usage):
@@ -90,29 +91,6 @@ def archive_overview(df_aip, df, usage):
     # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
     # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
     return group_stats
-
-
-def check_argument(argument_list):
-    """
-    Verifies the required argument report_folder is present and valid.
-    Returns the path for report_folder and the error (or None if no error).
-    """
-    # Makes a list for errors, so all errors can be tested before returning the result,
-    # and default values for the two variables assigned from arguments.
-    error = None
-    report = None
-
-    # Verifies that the required argument (report_folder) is present.
-    # and if it is present that it is a valid directory.
-    if len(argument_list) > 1:
-        report = argument_list[1]
-        if not os.path.exists(report):
-            error = f"Report folder '{report}' does not exist"
-    else:
-        error = "Required argument report_folder is missing"
-
-    # Returns the results.
-    return report, error
 
 
 def file_count_ranges(category, df):

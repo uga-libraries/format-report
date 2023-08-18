@@ -4,8 +4,6 @@ which compares a format name to standardize_formats.csv
 and returns "Found" or "Missing".
 """
 
-import os
-import sys
 import unittest
 from update_standardization import in_standard
 
@@ -17,7 +15,7 @@ class MyTestCase(unittest.TestCase):
         Test for a format that matches a format in the CSV, including having the same letter cases.
         """
         # Runs the function being tested.
-        match_status = in_standard(os.path.join(sys.path[1], "standardize_formats.csv"), "TIFF")
+        match_status = in_standard("TIFF")
 
         # Tests that the function returns the correct value.
         self.assertEqual(match_status, "Found", "Problem with found: case match")
@@ -27,7 +25,7 @@ class MyTestCase(unittest.TestCase):
         Test for a format that matched a format in the CSV, but has different letter cases.
         """
         # Runs the function being tested.
-        match_status = in_standard(os.path.join(sys.path[1], "standardize_formats.csv"), "Quicktime")
+        match_status = in_standard("Quicktime")
 
         # Tests that the function returns the correct value.
         self.assertEqual(match_status, "Found", "Problem with found: case not match")
@@ -37,7 +35,7 @@ class MyTestCase(unittest.TestCase):
         Test for a format that does not match a format in the CSV.
         """
         # Runs the function being tested.
-        match_status = in_standard(os.path.join(sys.path[1], "standardize_formats.csv"), "New AV 1")
+        match_status = in_standard("New AV 1")
 
         # Tests that the function returns the correct value.
         self.assertEqual(match_status, "Missing", "Problem with missing")
@@ -48,7 +46,7 @@ class MyTestCase(unittest.TestCase):
         This is an error and is automatically assigned Missing without checking the CSV.
         """
         # Runs the function being tested.
-        match_status = in_standard(os.path.join(sys.path[1], "standardize_formats.csv"), "ERROR: cannot read file")
+        match_status = in_standard("ERROR: cannot read file")
 
         # Tests that the function returns the correct value.
         self.assertEqual(match_status, "Missing", "Problem with missing: error")

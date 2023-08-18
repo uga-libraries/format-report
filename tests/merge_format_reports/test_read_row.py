@@ -17,7 +17,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes test input and runs the function being tested.
         report_row = ["1", "48", "0.001", "Plain text", "", "", "", "", "har-error-001_001"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "hargrett")
+        format_row, aip_row_list = read_row(report_row, "hargrett")
 
         # Tests that format_row contains the correct information.
         expected_format = ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
@@ -35,7 +35,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes test input and runs the function being tested.
         report_row = ["1", "48", "0.001", "Plain text", "", "", "", "", "error_new_0001"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "error")
+        format_row, aip_row_list = read_row(report_row, "error")
 
         # Tests that format_row contains the correct information.
         expected_format = ["error", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
@@ -53,7 +53,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes test input and runs the function being tested.
         report_row = ["1", "17", "0.161", "TIFF", "", "", "", "", "zjf_skp_skp001"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "dlg")
+        format_row, aip_row_list = read_row(report_row, "dlg")
 
         # Tests that format_row contains the correct information.
         expected_format = ["dlg", "17", "0.161", "image", "TIFF", "TIFF|NO VALUE|NO VALUE", "TIFF",
@@ -72,7 +72,7 @@ class MyTestCase(unittest.TestCase):
         # Makes test input and runs the function being tested.
         report_row = ["3", "386", "16.934", "TIFF EXIF", "2.2", "https://www.nationalarchives.gov.uk/PRONOM",
                       "x-fmt/387", "", "arl_awc_awc343a|chat_scp_cvl205|satp_hrl_hrl039"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "dlg")
+        format_row, aip_row_list = read_row(report_row, "dlg")
 
         # Tests that format_row contains the correct information.
         expected_format = ["dlg", "386", "16.934", "image", "TIFF", "TIFF EXIF|2.2|x-fmt/387", "TIFF EXIF", "2.2",
@@ -95,7 +95,7 @@ class MyTestCase(unittest.TestCase):
         # Makes test input and runs the function being tested.
         report_row = ["2", "28656", "256468.469", "MXF", "", "", "", "Video is encoded in the following codec: DV",
                       "bmac_wsb-video_ac01012003|bmac_wsb-video_ac01012004"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "bmac")
+        format_row, aip_row_list = read_row(report_row, "bmac")
 
         # Tests that format_row contains the correct information.
         expected_format = ["bmac", "28656", "256468.469", "video", "MXF", "MXF|NO VALUE|NO VALUE", "MXF",
@@ -118,7 +118,7 @@ class MyTestCase(unittest.TestCase):
                       "https://www.nationalarchives.gov.uk/PRONOM", "x-fmt/384",
                       "File is encoded in the following wrapper:ProRes 422 HQ",
                       "bmac_99144ent-2|bmac_athdept_0066"]
-        format_row, aip_row_list = read_row(report_row, os.path.join("..", "..", "standardize_formats.csv"), "bmac")
+        format_row, aip_row_list = read_row(report_row, "bmac")
 
         # Tests that format_row contains the correct information.
         expected_format = ["bmac", "836", "17005.995", "video", "Quicktime", "QuickTime|for_test_version|x-fmt/384",
