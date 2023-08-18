@@ -37,7 +37,7 @@ def check_argument(argument_list):
     return report_path, error
 
 
-def format_check(report_folder_path, standardize_formats_csv_path):
+def format_check(report_folder_path):
     """
     Gets every format name from every format report in the report_folder,
     matches the names to standardize_format.csv,
@@ -64,17 +64,20 @@ def format_check(report_folder_path, standardize_formats_csv_path):
                 except IndexError:
                     continue
                 if format_name not in formats_dictionary:
-                    match_status = in_standard(standardize_formats_csv_path, format_name)
+                    match_status = in_standard(format_name)
                     formats_dictionary[format_name] = match_status
 
     return formats_dictionary
 
 
-def in_standard(standard, format_to_check):
+def in_standard(format_to_check):
     """
     Searches for a format name within standardize_formats.csv.
     Returns "Found" if it is present and "Missing" if it is not.
     """
+    # Path to standardize_formats.csv, which is in the script repo.
+    standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
+
     # If the format is an undetected error from FITS (a format identification tool),
     # return "Missing" so it is included in new_formats.txt and the archivist sees the error.
     if format_to_check.startswith("ERROR: cannot read"):
@@ -82,7 +85,7 @@ def in_standard(standard, format_to_check):
 
     # Reads standardize_formats.csv and compares the format to every format in the CSV.
     # If it matches (case insensitive), returns "Found".
-    with open(standard, encoding="utf-8") as open_standard:
+    with open(standardize_formats_csv, encoding="utf-8") as open_standard:
         read_standard = csv.reader(open_standard)
         for standardize_row in read_standard:
             if format_to_check.lower() == standardize_row[0].lower():
@@ -143,7 +146,7 @@ if __name__ == '__main__':
 
     # Makes a dictionary with a unique set of formats from the format reports as the key
     # and 'Found' or 'Missing' for the value to indicate if it is in the standardize_formats.csv.
-    formats_checked = format_check(report_folder, standardize_formats_csv)
+    formats_checked = format_check(report_folder)
 
     # Saves any formats that are no in standardize_formats.csv to a file in the report folder.
     # Prints a message if there were new formats so the archivist knows to check for the file.
