@@ -151,7 +151,7 @@ def collection_from_aip(aip_id, group):
         raise ValueError
 
 
-def read_report(report_path, standardize_formats_csv_path):
+def read_report(report_path):
     """
     Gets data from each ARCHive group format report and calculates additional information based on that data.
     Returns two lists with the rows of data to save to the CSV files.
@@ -172,7 +172,7 @@ def read_report(report_path, standardize_formats_csv_path):
 
         # Gets the data from each row in the report.
         for row in report_info:
-            format_row, aip_row_list = read_row(row, standardize_formats_csv_path, archive_group)
+            format_row, aip_row_list = read_row(row, archive_group)
 
             # Adds the data to the reports.
             # format_row is a list; aip_row_list is a list of lists, although it may only contain one list.
@@ -317,7 +317,7 @@ if __name__ == '__main__':
             continue
 
         # Gets the a list of rows from the report to add to the CSVs.
-        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report), standardize_formats_csv)
+        format_report_list, aip_report_list = read_report(os.path.join(report_folder, report))
 
         # Saves the rows to the CSVs.
         save_to_csv(aip_csv, aip_report_list)

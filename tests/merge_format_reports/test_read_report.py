@@ -20,8 +20,7 @@ class MyTestCase(unittest.TestCase):
         Test for reading a a report correctly.
         """
         # Runs the function being tested.
-        format_report_list, aip_report_list = read_report(os.path.join("read_report", "file_formats_hargrett.csv"),
-                                                          os.path.join("..", "..", "standardize_formats.csv"))
+        format_report_list, aip_report_list = read_report(os.path.join("read_report", "file_formats_hargrett.csv"))
 
         # Tests that the format_report_list contains the correct information.
         expected_format = [["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
