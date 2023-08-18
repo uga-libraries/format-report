@@ -6,9 +6,8 @@ These new formats need to be added to standardize_formats.csv before merging and
 ARCHive group format reports.
 """
 
-# Usage: python path/update_standardization.py report_folder [standard_csv]
+# Usage: python path/update_standardization.py report_folder
 #    - report_folder is the path to the folder with the ARCHive group format reports (required)
-#    - standard_csv is the path to a CSV for standardization, to use instead of the CSV in the repo (optional)
 
 import csv
 import os

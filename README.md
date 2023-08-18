@@ -12,14 +12,14 @@ following the accessioning script https://github.com/uga-libraries/accessioning-
  
  2. Run the update standardization script to identify any formats that are not in the standardize_formats.csv, which is used to add format types and format standardized names to the format data to allow for easier analysis of trends. If any new formats are found, the script produces a file called new_formats.txt. Using the standardization guidelines, add the new formats to the standardize_formats.csv.
  
-        python /path/update_standardization.py /path/reports [/path/standardize_formats.csv]
+        python /path/update_standardization.py report_folder
  
  3. Run the merge format reports script to make two versions of CSVs that combine format information from all the group format reports and add standardized information. One CSV is organized by format and then by group. The other csv is organized by AIP and then by format.
  
-        python /path/merge_format_reports.py /path/report_folder [/path/standardize_formats.csv]
+        python /path/merge_format_reports.py report_folder
  
  4. Run the reports.py script to make an Excel workbook with analysis of the format data.
  
-        python /path/reports.py /path/report_folder
+        python /path/reports.py report_folder
  
  5. Manually match the formats in the Risk Analysis sheet in the Excel Workbook to the [National Archives Digital Preservation Framework](https://github.com/usnationalarchives/digital-preservation) and the [Library of Congress Recommended Formats Statement](https://www.loc.gov/preservation/resources/rfs/).
