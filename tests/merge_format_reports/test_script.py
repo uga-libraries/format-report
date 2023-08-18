@@ -63,7 +63,7 @@ class MyTestCase(unittest.TestCase):
         msg_result = output.stdout.decode("utf-8")
         msg_expected = "The following errors were detected:\r\n" \
                        "\t* Required argument report_folder is missing\r\n" \
-                       "Script usage: python path/merge_format_reports.py report_folder [standard_csv]\r\n"
+                       "Script usage: python path/merge_format_reports.py report_folder\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_one_report(self):

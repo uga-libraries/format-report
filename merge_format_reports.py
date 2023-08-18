@@ -13,9 +13,8 @@ aggregating the number of collections and AIPs.
 Before running this script, run update_standardization.py
 """
 
-# Usage: python /path/merge_format_reports.py /path/report_folder [/path/standardize_formats.csv]
-# Report folder should contain the ARCHive group format reports. Script output is saved to this folder as well.
-# A default value for the path to the standardize formats csv is used if one is not provided as an argument.
+# Usage: python path/merge_format_reports.py report_folder
+#     - report_folder contains the ARCHive group format reports. Script output is saved to this folder as well.
 
 import csv
 import datetime
@@ -284,7 +283,7 @@ if __name__ == '__main__':
         print("The following errors were detected:")
         for error in errors_list:
             print(f"\t* {error}")
-        print("Script usage: python path/merge_format_reports.py report_folder [standard_csv]")
+        print("Script usage: python path/merge_format_reports.py report_folder")
         sys.exit(1)
 
     # Increases the size of CSV fields to handle long AIP lists.
