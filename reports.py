@@ -357,7 +357,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Gets paths of the three reports to be analyzed, which are in report_folder.
-    # If any where not found (missing is not empty), prints the missing one(s) and exits the script.
+    # If any were not found (missing is not empty), prints the missing one(s) and exits the script.
     formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder)
     if len(missing) > 0:
         for file_name in missing:

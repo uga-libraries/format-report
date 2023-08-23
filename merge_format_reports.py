@@ -259,7 +259,7 @@ def standardize_format(format_name):
     standardize_formats_csv = os.path.join(sys.path[1], "standardize_formats.csv")
 
     # Reads standardize_formats.csv and compares the format to every format in the CSV.
-    # When there is a match (case insensitive), returns the format standardized name and type.
+    # When there is a match (case-insensitive), returns the format standardized name and type.
     with open(standardize_formats_csv) as standard_list:
         read_standard_list = csv.reader(standard_list)
         for standard_row in read_standard_list:
@@ -310,7 +310,7 @@ if __name__ == '__main__':
         if not report.startswith("file_formats"):
             continue
 
-        # Gets the a list of rows from the report to add to the CSVs.
+        # Gets a list of rows from the report to add to the CSVs.
         aip_report_list, group_report_list = read_report(os.path.join(report_folder, report))
 
         # Saves the rows to the CSVs.
