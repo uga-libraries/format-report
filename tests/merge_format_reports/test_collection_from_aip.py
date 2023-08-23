@@ -233,6 +233,20 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(AttributeError):
             collection_from_aip("wrong_123", "hargrett")
 
+    def test_magil_ggp(self):
+        """
+        Test for an AIP ID that matches the pattern: magil-ggp-7 numbers-4 numbers-2 numbers
+        """
+        collection_id = collection_from_aip("magil-ggp-2508399-2022-05", "magil")
+        self.assertEqual(collection_id, "no-coll", "Problem with magil: ggp")
+
+    def test_magil_error(self):
+        """
+        Test for an AIP ID that does not match any patterns and raises an AttributeError.
+        """
+        with self.assertRaises(AttributeError):
+            collection_from_aip("wrong_123", "magil")
+
     def test_russell_general1(self):
         """
         Test for an AIP ID that matches the pattern: rbrl, dash (optional), 3 numbers
