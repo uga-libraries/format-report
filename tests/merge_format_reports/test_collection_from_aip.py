@@ -212,6 +212,13 @@ class MyTestCase(unittest.TestCase):
         collection_id = collection_from_aip("har-ua20-002_0003_media", "hargrett")
         self.assertEqual(collection_id, "har-ua20-002", "Problem with hargrett: har-")
 
+    def test_hargrett_guan(self):
+        """
+        Test for an AIP ID that matches the pattern: starts with guan_caes_0004
+        """
+        collection_id = collection_from_aip("guan_caes_0004-011", "hargrett")
+        self.assertEqual(collection_id, "ua19-010", "Problem with hargrett: guan")
+
     def test_hargrett_general_er(self):
         """
         Test for an AIP ID that matches the pattern: anything before er (this test) or -web
