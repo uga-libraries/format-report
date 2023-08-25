@@ -20,9 +20,29 @@ Before running this script, run update_standardization.py
 import csv
 import datetime
 import os
+import pandas as pd
 import re
 import sys
-from update_standardization import check_argument
+
+
+def add_nara_risk(format_csv):
+    """
+    Updates the format CSVs with the NARA Risk Level and Proposed Preservation Plan,
+    the NARA format information so that the accuracy of the match can be evaluated,
+    and the name of the technique that produced the match (NARA_Match_Type).
+    """
+    # Reads the format CSV into a dataframe, ignoring encoding errors.
+    df = csv_to_dataframe(format_csv)
+
+    # Reads the NARA CSV into a dataframe, ignoring encoding errors.
+
+    # Adds NARA risk columns to the format dataframe.
+
+    # Saves the format dataframe with NARA risk columns to the format CSV.
+    # This replaces the information that was in the format CSV.
+
+    # TEMP: return the result for testing function progress.
+    return df
 
 
 def collection_from_aip(aip_id, group):
@@ -164,6 +184,60 @@ def collection_from_aip(aip_id, group):
         raise ValueError
 
 
+def check_arguments(argument_list):
+    """
+    Verifies the required arguments report_folder and nara_csv are present and the paths are valid.
+    Returns the two paths and a list of errors, if any.
+    """
+    # Makes variables with default values to store the results of the function.
+    report_path = None
+    nara_path = None
+    errors = []
+
+    # Verifies that the first required argument (report_folder) is present,
+    # and if it is present that it is a valid directory.
+    if len(argument_list) > 1:
+        report_path = argument_list[1]
+        if not os.path.exists(report_path):
+            errors.append(f"Report folder '{report_path}' does not exist")
+    else:
+        errors.append("Required argument report_folder is missing")
+
+    # Verifies that the second required argument (nara_csv) is present,
+    # and if it is present that it is a valid directory.
+    if len(argument_list) > 2:
+        nara_path = argument_list[2]
+        if not os.path.exists(nara_path):
+            errors.append(f"NARA CSV '{nara_path}' does not exist")
+    else:
+        errors.append("Required argument nara_csv is missing")
+
+    # Returns the results.
+    return report_path, nara_path, errors
+
+
+def csv_to_dataframe(csv_file):
+    """
+    Reads a CSV into a dataframe, renames columns if it is NARA, and returns the dataframe.
+    If special characters require the CSV to be read while ignoring encoding errors, it prints a warning.
+    This is copied from https://github.com/uga-libraries/accessioning-scripts/blob/main/format_analysis_functions.py
+    """
+    # Reads the CSV into a dataframe, ignoring encoding errors from special characters if necessary.
+    # Reads a string to allow better comparisons between dataframes.
+    try:
+        df = pd.read_csv(csv_file, dtype=str)
+    except UnicodeDecodeError:
+        print("UnicodeDecodeError when trying to read:", csv_file)
+        print("The CSV was read by ignoring encoding errors, so those characters are omitted from the dataframe.")
+        df = pd.read_csv(csv_file, dtype=str, encoding_errors="ignore")
+
+    # Adds a prefix to the NARA dataframe columns so the source of the data is clear when the data is combined.
+    if "NARA" in csv_file:
+        df = df.add_prefix("NARA_")
+
+    return df
+
+
 def read_report(report_path):
     """
     Gets data from each ARCHive group format report and calculates additional information based on that data.
@@ -290,9 +364,10 @@ if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
     # If there was an error, prints the error and exits the script.
-    report_folder, error_message = check_argument(sys.argv)
-    if error_message:
-        print(error_message)
+    report_folder, nara_csv, errors_list = check_arguments(sys.argv)
+    if len(errors_list) > 0:
+        for error in errors_list:
+            print(error)
         print("Script usage: python path/merge_format_reports.py report_folder")
         sys.exit(1)
 
@@ -329,3 +404,7 @@ if __name__ == '__main__':
         # Saves the rows to the CSVs.
         save_to_csv(aip_csv, aip_report_list)
         save_to_csv(group_csv, group_report_list)
+
+    # Adds risk information from the NARA Preservation Action Plans CSV to both format CSVs.
+    add_nara_risk(aip_csv)
+    add_nara_risk(group_csv)
