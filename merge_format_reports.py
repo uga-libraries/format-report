@@ -136,6 +136,15 @@ def collection_from_aip(aip_id, group):
         except AttributeError:
             raise AttributeError
 
+    # Map and Government Information Library
+    # There is currently only one pattern of AIP ID, which has no related collection.
+    # Testing if the AIP ID matches the pattern to catch any new patterns.
+    elif group == "magil":
+        if re.match("^magil-ggp-[0-9]{7}-[0-9]{4}-[0-9]{2}", aip_id):
+            return "no-coll"
+        else:
+            raise AttributeError
+
     # Richard B. Russell Library for Research and Studies.
     # The same collection can be formatted rbrl-### or rbrl###, so normalizing all IDs to rbrl### to avoid duplicates.
     elif group == "russell":
@@ -316,4 +325,3 @@ if __name__ == '__main__':
         # Saves the rows to the CSVs.
         save_to_csv(aip_csv, aip_report_list)
         save_to_csv(group_csv, group_report_list)
-
