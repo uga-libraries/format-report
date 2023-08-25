@@ -128,6 +128,10 @@ def collection_from_aip(aip_id, group):
                 coll_regex = re.match("^(har-ua[0-9]{2}-[0-9]{3})_", aip_id)
                 return coll_regex.group(1)
 
+            # College of Agriculture photographs
+            elif aip_id.startswith("guan_caes_0004"):
+                return "ua19-010"
+
             # All other identifiers
             else:
                 coll_regex = re.match("^(.*)(er|-web)", aip_id)
