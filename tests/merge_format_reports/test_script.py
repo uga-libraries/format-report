@@ -28,8 +28,11 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self):
         """
-        Gets the current date, formatted YYYYMM, to use in naming the script outputs.
+        Variables with constant values used in all of the tests.
+        Today's date is used for naming the script outputs.
         """
+        self.script_path = os.path.join("..", "..", "merge_format_reports.py")
+        self.nara_csv = "NARA_PreservationActionPlan_FileFormats_test.csv"
         self.today = datetime.datetime.now().strftime("%Y-%m")
 
     def tearDown(self):
@@ -46,22 +49,18 @@ class MyTestCase(unittest.TestCase):
 
     def test_argument_error(self):
         """
-        Test for running the script without the required argument.
+        Test for running the script without the second required argument.
         It will print a message and exit the script.
         """
-        # Runs the script without the required argument
-        # and tests that the script exits.
-        script_path = os.path.join("..", "..", "merge_format_reports.py")
-
         # Tests that the script exits due to the error.
         with self.assertRaises(subprocess.CalledProcessError):
-            subprocess.run(f"python {script_path}", shell=True, check=True)
+            subprocess.run(f"python {self.script_path} reports_one", shell=True, check=True)
 
         # Tests if the expected message was produced. In production, this is printed to the terminal.
         # Must run the script a second time because cannot capture output within self.assertRaises.
-        output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
+        output = subprocess.run(f"python {self.script_path} reports_one", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Required argument report_folder is missing\r\n" \
+        msg_expected = "Required argument nara_csv is missing\r\n" \
                        "Script usage: python path/merge_format_reports.py report_folder\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
@@ -71,54 +70,66 @@ class MyTestCase(unittest.TestCase):
         Also contains a usage report.
         """
         # Runs the script.
-        script_path = os.path.join("..", "..", "merge_format_reports.py")
-        subprocess.run(f"python {script_path} reports_one", shell=True)
+        subprocess.run(f"python {self.script_path} reports_one {self.nara_csv}", shell=True)
 
         # Tests if archive_formats_by_aip.csv has the expected values.
         result = csv_to_list(os.path.join("reports_one", f"archive_formats_by_aip_{self.today}.csv"))
         expected = [["Group", "Collection", "AIP", "Format Type", "Format Standardized Name", "Format Identification",
-                     "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"],
+                     "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note",
+                     "NARA_Format Name", "NARA_PRONOM URL", "NARA_Risk Level", "NARA_Proposed Preservation Plan",
+                     "NARA_Match_Type"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "image", "JPEG",
                      "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE", 
+                     "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0002", "image", "JPEG",
                      "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE", 
+                     "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "image", "JPEG",
                      "JPEG File Interchange Format|1.01|fmt/43", "JPEG File Interchange Format", "1.01",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0004", "image", "JPEG",
                      "JPEG File Interchange Format|1.01|fmt/43", "JPEG File Interchange Format", "1.01",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0005", "image", "JPEG",
                      "JPEG File Interchange Format|1.01|fmt/43", "JPEG File Interchange Format", "1.01",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3770", "harg-ms3770er0002", "text", "Microsoft Word",
                      "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
-                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing"],
+                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing", "Microsoft Word for Windows 97-2003", "https://www.nationalarchives.gov.uk/pronom/fmt/40", "Moderate Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "text", "Microsoft Word",
                      "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
-                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing"],
+                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing", "Microsoft Word for Windows 97-2003", "https://www.nationalarchives.gov.uk/pronom/fmt/40", "Moderate Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3770", "harg-ms3770er0002", "text", "Plain Text File",
-                     "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+                     "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "Plain Text", "https://www.nationalarchives.gov.uk/pronom/x-fmt/111", "Low Risk", "Retain", "Format Name"]]
         self.assertEqual(result, expected, "Problem with one report, archive_formats_by_aip.csv")
 
         # Tests if archive_formats_by_group.csv has the expected values.
         result = csv_to_list(os.path.join("reports_one", f"archive_formats_by_group_{self.today}.csv"))
         expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
                      "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
+                     "Format Note", "NARA_Format Name", "NARA_PRONOM URL", "NARA_Risk Level",
+                     "NARA_Proposed Preservation Plan", "NARA_Match_Type"],
                     ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
+                     "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "1322", "0.687", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
                      "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/43", "NO VALUE"],
+                     "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "55", "0.005", "text", "Microsoft Word",
                      "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
-                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing"],
+                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "For testing", "Microsoft Word for Windows 97-2003", "https://www.nationalarchives.gov.uk/pronom/fmt/40", "Moderate Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
-                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "Plain Text", "https://www.nationalarchives.gov.uk/pronom/x-fmt/111", "Low Risk", "Retain", "Format Name"]]
         self.assertEqual(result, expected, "Problem with one report, archive_formats_by_group.csv")
 
     def test_three_reports(self):
@@ -127,58 +138,71 @@ class MyTestCase(unittest.TestCase):
         Also contains a usage report.
         """
         # Runs the script.
-        script_path = os.path.join("..", "..", "merge_format_reports.py")
-        subprocess.run(f"python {script_path} reports_three", shell=True)
+        subprocess.run(f"python {self.script_path} reports_three {self.nara_csv}", shell=True)
 
         # Tests if archive_formats_by_aip.csv has the expected values.
         result = csv_to_list(os.path.join("reports_three", f"archive_formats_by_aip_{self.today}.csv"))
         expected = [["Group", "Collection", "AIP", "Format Type", "Format Standardized Name", "Format Identification",
-                     "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"],
-                    ["bmac", "wtoc", "bmac_wtoc_8984", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
-                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ"],
-                    ["bmac", "hm-lawton", "bmac_hm-lawton_0021", "application", "Cue Sheet",
-                     "cue|NO VALUE|NO VALUE", "cue", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"],
-                    ["bmac", "hm-lawton", "bmac_hm-lawton_0022", "application", "Cue Sheet",
-                     "cue|NO VALUE|NO VALUE", "cue", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"],
+                     "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note",
+                     "NARA_Format Name", "NARA_PRONOM URL", "NARA_Risk Level", "NARA_Proposed Preservation Plan",
+                     "NARA_Match_Type"],
                     ["dlg", "arl_awc", "arl_awc_awc171", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
                      "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/43", "NO VALUE"],
+                     "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["dlg", "arl_awc", "arl_awc_awc171", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
+                     "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
+                     "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "image", "JPEG",
                      "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0002", "image", "JPEG",
                      "JPEG File Interchange Format|1.02|fmt/44", "JPEG File Interchange Format", "1.02",
-                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE"],
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02", "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "harg-ms3770", "harg-ms3770er0002", "text", "Plain Text File",
-                     "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+                     "Plain text|NO VALUE|NO VALUE", "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "Plain Text", "https://www.nationalarchives.gov.uk/pronom/x-fmt/111", "Low Risk", "Retain", "Format Name"],
+                    ["bmac", "wtoc", "bmac_wtoc_8984", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
+                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ",
+                     "No Match", "", "No Match", "", "No NARA Match"],
+                    ["bmac", "hm-lawton", "bmac_hm-lawton_0021", "application", "Cue Sheet",
+                     "cue|NO VALUE|NO VALUE", "cue", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", "",
+                     "No Match", "", "No NARA Match"],
+                    ["bmac", "hm-lawton", "bmac_hm-lawton_0022", "application", "Cue Sheet",
+                     "cue|NO VALUE|NO VALUE", "cue", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", "",
+                     "No Match", "", "No NARA Match"]]
         self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_aip.csv")
 
         # Tests if archive_formats_by_group.csv has the expected values.
         result = csv_to_list(os.path.join("reports_three", f"archive_formats_by_group_{self.today}.csv"))
         expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
                      "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
-                    ["bmac", "836", "17005.995", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
-                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ"],
-                    ["bmac", "26", "0.005", "application", "Cue Sheet", "cue|NO VALUE|NO VALUE", "cue",
-                     "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"],
+                     "Format Note", "NARA_Format Name", "NARA_PRONOM URL", "NARA_Risk Level",
+                     "NARA_Proposed Preservation Plan", "NARA_Match_Type"],
                     ["dlg", "1", "0.001", "image", "JPEG", "JPEG File Interchange Format|1.01|fmt/43",
                      "JPEG File Interchange Format", "1.01", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/43", "NO VALUE"],
+                     "fmt/43", "NO VALUE",
+                     "JPEG File Interchange Format 1.01", "https://www.nationalarchives.gov.uk/pronom/fmt/43",
+                     "Low Risk", "Retain", "PRONOM and Version"],
                     ["dlg", "33", "0.025", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
+                     "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
-                     "fmt/44", "NO VALUE"],
+                     "fmt/44", "NO VALUE", "JPEG File Interchange Format 1.02",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/44", "Low Risk", "Retain", "PRONOM and Version"],
                     ["hargrett", "48", "0.001", "text", "Plain Text File", "Plain text|NO VALUE|NO VALUE",
-                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE"]]
+                     "Plain text", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "Plain Text",
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/111", "Low Risk", "Retain", "Format Name"],
+                    ["bmac", "836", "17005.995", "video", "Quicktime", "QuickTime|NO VALUE|NO VALUE", "QuickTime",
+                     "NO VALUE", "NO VALUE", "NO VALUE", "File is encoded in the following wrapper:ProRes 422 HQ", "No Match", "", "No Match", "", "No NARA Match"],
+                    ["bmac", "26", "0.005", "application", "Cue Sheet", "cue|NO VALUE|NO VALUE", "cue",
+                     "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", "", "No Match", "",
+                     "No NARA Match"]]
         self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_group.csv")
 
 
