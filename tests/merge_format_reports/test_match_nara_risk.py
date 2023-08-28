@@ -52,7 +52,7 @@ class MyTestCase(unittest.TestCase):
         # Creates a list with the expected result.
         expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
                      'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
-                    ['batch script', 'NO VALUE', 'NO VALUE', 'Batch Script',
+                    ['batch script', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'Batch Script',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/413', 'Moderate Risk', 'Retain', 'Format Name'],
                     ['Rom image', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'ROM Image', np.NaN, 'Moderate Risk',
                      'Retain', 'Format Name']]
@@ -105,8 +105,8 @@ class MyTestCase(unittest.TestCase):
                     ['lotus 1-2-3 worksheet', '3.0', 'NO VALUE', 'NO VALUE', 'Lotus 1-2-3 Worksheet 3.0',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/115', 'Moderate Risk',
                      'Transform to CSV or XLSX', 'Format Name'],
-                    ['microsoft ACCESS', '2016', 'NO VALUE', ' NO VALUE', 'TBD',
-                     np.NaN, 'TBD Risk', 'TBD Retain', 'Format Name']]
+                    ['microsoft ACCESS', '2016', 'NO VALUE', 'NO VALUE', 'Microsoft Access 2016',
+                     np.NaN, 'Moderate Risk', 'Transform to CSV', 'Format Name']]
 
         # Compares the results. assertEqual prints "OK" or the differences between the two lists.
         self.assertEqual(result, expected, 'Problem with name and version, case does not match')
@@ -134,7 +134,7 @@ class MyTestCase(unittest.TestCase):
 
         # Compares the results. assertEqual prints "OK" or the differences between the two lists.
         self.assertEqual(result, expected, 'Problem with no matches')
-    
+
     def test_puid_multiple(self):
         """
         Test for format ids that match multiple PUIDs in the NARA spreadsheet.

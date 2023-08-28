@@ -255,7 +255,7 @@ def match_nara_risk(df_format, df_nara):
     # Combines ARCHive format name and version, since NARA has that information in one column.
     # Removes " nan" from the combined column, which happens if there is no version.
     df_format["name_version"] = df_format["Format Name"].str.lower() + " " + df_format["version_string"]
-    df_format["name_version"] = df_format["name_version"].str.replace("\snan$", "")
+    df_format["name_version"] = df_format["name_version"].str.replace("\sNO VALUE$", "")
 
     # Combines ARCHive registry name and registry key to make a PUID (PRONOM URI) that matches NARA's PUID formatting.
     df_format["puid"] = "https://www.nationalarchives.gov.uk/pronom/" + df_format["Registry Key"]
@@ -290,7 +290,7 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part two matches:
 
     # ARCHive identifications that have a PUID.
-    df_format_puid = df_format[df_format["puid"].notnull()]
+    df_format_puid = df_format[df_format["puid"] != "https://www.nationalarchives.gov.uk/pronom/NO VALUE"].copy()
 
     # NARA identifications that do not have a PUID.
     df_nara_no_puid = df_nara[df_nara["NARA_PRONOM URL"].isnull()]
@@ -343,7 +343,7 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part three matches:
 
     # FITS identifications that have no PUID.
-    df_format_no_puid = df_format[df_format["puid"].isnull()].copy()
+    df_format_no_puid = df_format[df_format["puid"] == "https://www.nationalarchives.gov.uk/pronom/NO VALUE"].copy()
 
     # Technique 4 (repeated with different format DF): Format Name, and Format Version if it has one, are both a match.
     # This only works if the NARA Format Name is structured name[SPACE]version.
