@@ -19,6 +19,7 @@ Before running this script, run update_standardization.py
 
 import csv
 import datetime
+import numpy as np
 import os
 import pandas as pd
 import re
@@ -258,7 +259,10 @@ def match_nara_risk(df_format, df_nara):
     df_format["name_version"] = df_format["name_version"].str.replace("\sNO VALUE$", "")
 
     # Combines ARCHive registry name and registry key to make a PUID (PRONOM URI) that matches NARA's PUID formatting.
-    df_format["puid"] = "https://www.nationalarchives.gov.uk/pronom/" + df_format["Registry Key"]
+    # If the registry is not PRONOM (the only registry we use for NARA comparison), assigns "NO VALUE".
+    df_format["puid"] = np.where(df_format["Registry Name"] == "https://www.nationalarchives.gov.uk/PRONOM",
+                                 "https://www.nationalarchives.gov.uk/pronom/" + df_format["Registry Key"],
+                                 "NO VALUE")
 
     # Makes ARCHive and NARA format names lowercase for case-insensitive matching.
     df_format["name_lower"] = df_format["Format Name"].str.lower()
@@ -290,7 +294,7 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part two matches:
 
     # ARCHive identifications that have a PUID.
-    df_format_puid = df_format[df_format["puid"] != "https://www.nationalarchives.gov.uk/pronom/NO VALUE"].copy()
+    df_format_puid = df_format[df_format["puid"] != "NO VALUE"].copy()
 
     # NARA identifications that do not have a PUID.
     df_nara_no_puid = df_nara[df_nara["NARA_PRONOM URL"].isnull()]
@@ -343,7 +347,7 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part three matches:
 
     # FITS identifications that have no PUID.
-    df_format_no_puid = df_format[df_format["puid"] == "https://www.nationalarchives.gov.uk/pronom/NO VALUE"].copy()
+    df_format_no_puid = df_format[df_format["puid"] == "NO VALUE"].copy()
 
     # Technique 4 (repeated with different format DF): Format Name, and Format Version if it has one, are both a match.
     # This only works if the NARA Format Name is structured name[SPACE]version.
