@@ -16,9 +16,40 @@ import pandas as pd
 import sys
 
 
+def check_argument(argument_list):
+    """
+    Verifies the required argument format_csv is present, the path is valid,
+    and the CSV has the expected data based on the filename.
+    """
+    # Makes variables with default values to store the results of the function.
+    csv_path = None
+    errors = []
+
+    # Verifies that the required argument (format_csv) is present,
+    # and if it is present that it is a valid directory and has the expected filename.
+    if len(argument_list) > 1:
+        csv_path = argument_list[1]
+        if not os.path.exists(csv_path):
+            errors.append(f"Format CSV '{csv_path}' does not exist")
+        csv_name = os.path.basename(csv_path)
+        if not csv_name.startswith("archive_formats_by_aip"):
+            errors.append(f"Format CSV '{csv_path}' is not the correct type (should be by_aip)")
+    else:
+        errors.append("Required argument format_csv is missing")
+
+    # Returns the results.
+    return  csv_path, errors
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
+    format_csv, errors_list = check_argument(sys.argv)
+    if len(errors_list) > 0:
+        for error in errors_list:
+            print(error)
+        print("Script usage: python path/department_reports.py archive_formats_by_aip")
+        sys.exit(1)
 
     # Makes a dataframe for each group (department) in archive_formats_by_aip.
 
