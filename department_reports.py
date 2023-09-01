@@ -74,6 +74,7 @@ def csv_to_dataframes(csv_file):
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
+    # If there is an error, exits the script.
     format_csv, errors_list = check_argument(sys.argv)
     if len(errors_list) > 0:
         for error in errors_list:
@@ -85,8 +86,12 @@ if __name__ == '__main__':
     department_dfs = csv_to_dataframes(format_csv)
 
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
+    for df in department_dfs:
 
         # Makes the department spreadsheet and adds risk data.
+        dept = df.at[0, "Group"]
+        with pd.ExcelWriter(f"{dept}_risk_report.xlsx") as report:
+            df.to_excel(report, sheet_name="AIP Risk Data")
 
         # Makes a collection risk summary and adds to the department spreadsheet.
 
