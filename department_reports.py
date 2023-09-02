@@ -64,10 +64,16 @@ def csv_to_dataframes(csv_file):
 
     # Removes unwanted columns.
     df = df.drop(["Format Type", "Format Standardized Name", "Format Identification", "Registry Name",
-                  "Registry Key", "Format Note"], axis=1)
+                  "Registry Key", "Format Note", "NARA_Format Name", "NARA_PRONOM URL", "NARA_Match_Type"], axis=1)
+
+    # Changes the order of the columns to group format information and risk information.
+    # Otherwise, the PRONOM URL would be at the end.
+    df = df[["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+             "NARA_Risk Level", "NARA_Proposed Preservation Plan"]]
 
     # Splits the dataframe into a list of dataframes, with one dataframe per group.
     df_list = [d for _, d in df.groupby(['Group'])]
+
     return df_list
 
 
@@ -85,13 +91,18 @@ if __name__ == '__main__':
     # Makes a list of dataframes, one for each group (department), in archive_formats_by_aip.
     department_dfs = csv_to_dataframes(format_csv)
 
+    # Calculates the directory that format_csv is in, to use for saving script outputs.
+    output_folder = os.path.dirname(format_csv)
+
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
-    for df in department_dfs:
+    for dept_df in department_dfs:
 
         # Makes the department spreadsheet and adds risk data.
-        dept = df.at[0, "Group"]
-        with pd.ExcelWriter(f"{dept}_risk_report.xlsx") as report:
-            df.to_excel(report, sheet_name="AIP Risk Data")
+        dept_df = dept_df.reset_index(drop=True)
+        dept = dept_df.at[0, "Group"]
+        xlsx_path = os.path.join(output_folder, f"{dept}_risk_report.xlsx")
+        with pd.ExcelWriter(xlsx_path) as report:
+            dept_df.to_excel(report, sheet_name="AIP Risk Data", index=False)
 
         # Makes a collection risk summary and adds to the department spreadsheet.
 
