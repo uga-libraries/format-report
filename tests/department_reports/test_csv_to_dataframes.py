@@ -25,9 +25,12 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the dataframe in the list contains the correct information.
         result = [department_dfs[0].columns.to_list()] + department_dfs[0].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
-                    ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska", "NO VALUE", "NO VALUE"],
-                    ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska", "NO VALUE", "NO VALUE"]]
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+                    ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE"],
+                    ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with test for encoding error, df contents")
 
     def test_multi_groups(self):
@@ -44,27 +47,32 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the first dataframe in the list contains the correct information.
         result = [department_dfs[0].columns.to_list()] + department_dfs[0].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
-                    ["bmac", "peabody", "bmac_51021enr-1a", "Wave", "NO VALUE", "NO VALUE"]]
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+                    ["bmac", "peabody", "bmac_51021enr-1a", "Wave", "NO VALUE", "NO VALUE",
+                     "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for multiple groups, first df contents")
 
         # Tests that the second dataframe in the list contains the correct information.
         result = [department_dfs[1].columns.to_list()] + department_dfs[1].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
                     ["dlg", "arl_acl", "arl_acl_acl332", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353"],
-                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-001", "Waveform Audio", "NO VALUE", "NO VALUE"]]
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
+                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-001", "Waveform Audio", "NO VALUE", "NO VALUE",
+                     "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for multiple groups, second df contents")
 
         # Tests that the third dataframe in the list contains the correct information.
         result = [department_dfs[2].columns.to_list()] + department_dfs[2].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
-                    ["hargrett", "harg-ms3786", "harg-ms3786er0007", "Tagged Image File Format", "NO VALUE",
-                     "NO VALUE"],
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+                    ["hargrett", "harg-ms3786", "harg-ms3786er0007", "Tagged Image File Format", "NO VALUE", "NO VALUE",
+                     "Low Risk", "Depends on version, retain TIFF 1-6, otherwise see specific version plan"],
                     ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/289"],
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"],
                     ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/289"]]
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for multiple groups, third df contents")
 
     def test_puid_all(self):
@@ -80,13 +88,14 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the dataframe in the list contains the correct information.
         result = [department_dfs[0].columns.to_list()] + department_dfs[0].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0013", "JPEG EXIF", "2.1",
-                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390"],
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390", "Low Risk", "Retain"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0016", "JPEG EXIF", "2.1",
-                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390"],
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390", "Low Risk", "Retain"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/43"]]
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/43", "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for PUID: all, df contents")
 
     def test_puid_mix(self):
@@ -102,14 +111,16 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the dataframe in the list contains the correct information.
         result = [department_dfs[0].columns.to_list()] + department_dfs[0].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
-                    ["dlg", "arl_nnc", "arl_nnc_nnc004-001-003", "Tagged Image File Format", "5", "NO VALUE"],
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+                    ["dlg", "arl_nnc", "arl_nnc_nnc004-001-003", "Tagged Image File Format", "5", "NO VALUE",
+                     "Low Risk", "Retain"],
                     ["dlg", "arl_acl", "arl_acl_acl328", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353"],
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
                     ["dlg", "arl_acl", "arl_acl_acl329", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353"],
-                    ["dlg", "guan_ms40", "dlg_turningpoint_harg0040-001-002", "Tagged Image File Format",
-                     "NO VALUE", "NO VALUE"]]
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
+                    ["dlg", "guan_ms40", "dlg_turningpoint_harg0040-001-002", "Tagged Image File Format", "NO VALUE",
+                     "NO VALUE", "Low Risk", "Depends on version, retain TIFF 1-6, otherwise see specific version plan"]]
         self.assertEqual(result, expected, "Problem with test for PUID: mix, df contents")
 
     def test_puid_none(self):
@@ -125,9 +136,12 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the dataframe in the list contains the correct information.
         result = [department_dfs[0].columns.to_list()] + department_dfs[0].values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL"],
-                    ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska", "NO VALUE", "NO VALUE"],
-                    ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska", "NO VALUE", "NO VALUE"]]
+        expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
+                     "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+                    ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE"],
+                    ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with test for PUID: none, df contents")
 
 
