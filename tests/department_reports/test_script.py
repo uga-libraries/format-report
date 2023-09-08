@@ -52,11 +52,13 @@ class MyTestCase(unittest.TestCase):
         # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
         bmac = pd.ExcelFile(os.path.join("script", "bmac_risk_report.xlsx"))
         df_b1 = pd.read_excel(bmac, "AIP Risk Data")
+        df_b2 = pd.read_excel(bmac, "Collection Risk Levels")
         bmac.close()
 
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
         hargrett = pd.ExcelFile(os.path.join("script", "hargrett_risk_report.xlsx"))
         df_h1 = pd.read_excel(hargrett, "AIP Risk Data")
+        df_h2 = pd.read_excel(hargrett, "Collection Risk Levels")
         hargrett.close()
 
         # Tests if the BMAC AIP Risk Data sheet has the expected values.
@@ -67,6 +69,12 @@ class MyTestCase(unittest.TestCase):
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0021", "cue", "NO VALUE", "NO VALUE", "No Match",
                         "NO VALUE"]]
         self.assertEqual(result_b1, expected_b1, "Problem with BMAC AIP Risk Data")
+
+        # Tests if the BMAC Collection Risk Levels sheet has the expected values.
+        result_b2 = [df_b2.columns.tolist()] + df_b2.values.tolist()
+        expected_b2 = [["Collection", "Low Risk", "No Match", "AIPs"],
+                       ["hm-lawton", 0, 1, 1], ["peabody", 1, 0, 1], ["All", 1, 1, 2]]
+        self.assertEqual(result_b2, expected_b2, "Problem with BMAC Collection Risk Levels")
 
         # Tests if the Hargrett AIP Risk Data sheet has the expected values.
         result_h1 = [df_h1.columns.tolist()] + df_h1.values.tolist()
@@ -82,6 +90,12 @@ class MyTestCase(unittest.TestCase):
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
                         "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
+
+        # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
+        result_h2 = [df_h2.columns.tolist()] + df_h2.values.tolist()
+        expected_h2 = [["Collection", "High Risk", "Low Risk", "AIPs"],
+                       ["harg-0000", 0, 2, 2], ["harg-ms3786", 1, 1, 2], ["All", 1, 3, 4]]
+        self.assertEqual(result_h2, expected_h2, "Problem with Hargrett Collection Risk Levels")
 
 
 if __name__ == '__main__':

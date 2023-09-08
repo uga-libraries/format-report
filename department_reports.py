@@ -97,13 +97,23 @@ if __name__ == '__main__':
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
     for dept_df in department_dfs:
 
-        # Makes the department spreadsheet and adds risk data.
+        # Calculates the department, which is the value of the Group column in the first row.
+        # The index is reset first or else the first row is not always 0.
         dept_df = dept_df.reset_index(drop=True)
         dept = dept_df.at[0, "Group"]
-        xlsx_path = os.path.join(output_folder, f"{dept}_risk_report.xlsx")
-        with pd.ExcelWriter(xlsx_path) as report:
-            dept_df.to_excel(report, sheet_name="AIP Risk Data", index=False)
 
-        # Makes a collection risk summary and adds to the department spreadsheet.
+        # Calculates the number of AIPs with formats at each risk level for each collection.
+        # The AIP is counted once for each format it contains that is at that risk level.
+        # Including margins adds totals for each row and each column.
+        collection_risk = pd.pivot_table(dept_df, index="Collection", columns="NARA_Risk Level", values="AIP",
+                                         margins=True, aggfunc=len)
+        collection_risk.fillna(0, inplace=True)
+        collection_risk.rename(columns={"All": "AIPs"}, inplace=True)
 
         # Makes a collection and AIP format summary and adds to the department spreadsheet.
+
+        # Saves the results to the department risk report.
+        xlsx_path = os.path.join(output_folder, f"{dept}_risk_report.xlsx")
+        with pd.ExcelWriter(xlsx_path) as risk_report:
+            dept_df.to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
+            collection_risk.to_excel(risk_report, sheet_name="Collection Risk Levels")
