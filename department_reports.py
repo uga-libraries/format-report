@@ -110,10 +110,18 @@ if __name__ == '__main__':
         collection_risk.fillna(0, inplace=True)
         collection_risk.rename(columns={"All": "AIPs"}, inplace=True)
 
-        # Makes a collection and AIP format summary and adds to the department spreadsheet.
+        # Makes a summary of formats by collection and AIP.
+        # For format, it combines the format name, version (if has one), and NARA risk level.
+        dept_df["Format"] = dept_df['Format Name'] + " " + dept_df['Format Version'] + " (" + dept_df['NARA_Risk Level'] + ")"
+        dept_df["Format"] = dept_df["Format"].str.replace(" NO VALUE", "")
+        formats = pd.pivot_table(dept_df, index=["Collection", "AIP"], columns=["Format"], values=["Format Name"],
+                                 aggfunc=len)
+        formats.fillna(0, inplace=True)
+        dept_df.drop(["Format"], axis=1, inplace=True)
 
         # Saves the results to the department risk report.
         xlsx_path = os.path.join(output_folder, f"{dept}_risk_report.xlsx")
         with pd.ExcelWriter(xlsx_path) as risk_report:
             dept_df.to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
             collection_risk.to_excel(risk_report, sheet_name="Collection Risk Levels")
+            formats.to_excel(risk_report, sheet_name="Formats")
