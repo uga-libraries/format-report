@@ -110,8 +110,7 @@ if __name__ == '__main__':
         # The AIP is counted once for each format it contains that is at that risk level.
         # Including margins adds totals for each row and each column.
         collection_risk = pd.pivot_table(df, index='Collection', columns='NARA_Risk Level', values='AIP',
-                                         margins=True, aggfunc=len)
-        collection_risk.fillna(0, inplace=True)
+                                         margins=True, aggfunc=len, fill_value=0)
         collection_risk.rename(columns={'All': 'AIPs'}, inplace=True)
 
         # Calculates the formats in each collection and AIP.
@@ -119,8 +118,7 @@ if __name__ == '__main__':
         df['Format'] = df['Format Name'] + " " + df['Format Version'] + " (" + df['NARA_Risk Level'] + ")"
         df['Format'] = df['Format'].str.replace(" NO VALUE", "")
         formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['Format'], values=['Format Name'],
-                                 aggfunc=len)
-        formats.fillna(0, inplace=True)
+                                 aggfunc=len, fill_value=0)
         df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report.
