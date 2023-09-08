@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(format_csv, expected_path, "Problem with test for argument is missing, format_csv")
 
         # Tests that the value of errors_list is correct.
-        expected_list = ["Required argument format_csv is missing"]
+        expected_list = ["Required argument archive_formats_by_aip_csv is missing"]
         self.assertEqual(errors_list, expected_list, "Problem with test for argument is missing, errors_list")
 
     def test_name_error(self):
@@ -62,7 +62,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(format_csv, expected_path, "Problem with test for argument name error, format_csv")
 
         # Tests that the value of errors_list is correct.
-        expected_list = [f"Format CSV '{expected_path}' is not the correct type (should be by_aip)"]
+        expected_list = [f"archive_formats_by_aip_csv '{expected_path}' is not the correct type (should be by_aip)"]
         self.assertEqual(errors_list, expected_list, "Problem with test for argument name error, errors_list")
 
     def test_name_and_path_error(self):
@@ -79,8 +79,8 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(format_csv, expected_path, "Problem with test for argument name and path error, format_csv")
 
         # Tests that the value of errors_list is correct.
-        expected_list = [f"Format CSV '{expected_path}' does not exist",
-                         f"Format CSV '{expected_path}' is not the correct type (should be by_aip)"]
+        expected_list = [f"archive_formats_by_aip_csv '{expected_path}' does not exist",
+                         f"archive_formats_by_aip_csv '{expected_path}' is not the correct type (should be by_aip)"]
         self.assertEqual(errors_list, expected_list, "Problem with test for argument name and path error, errors_list")
 
     def test_path_error(self):
@@ -97,7 +97,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(format_csv, expected_path, "Problem with test for argument name error, format_csv")
 
         # Tests that the value of errors_list is correct.
-        expected_list = [f"Format CSV '{expected_path}' does not exist"]
+        expected_list = [f"archive_formats_by_aip_csv '{expected_path}' does not exist"]
         self.assertEqual(errors_list, expected_list, "Problem with test for argument name error, errors_list")
 
 

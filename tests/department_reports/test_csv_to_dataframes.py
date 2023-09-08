@@ -58,7 +58,7 @@ class MyTestCase(unittest.TestCase):
         expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
                      "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
                     ["dlg", "arl_acl", "arl_acl_acl332", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353", "Low Risk", "Retain"],
                     ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-001", "Waveform Audio", "NO VALUE", "NO VALUE",
                      "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for multiple groups, second df contents")
@@ -70,9 +70,9 @@ class MyTestCase(unittest.TestCase):
                     ["hargrett", "harg-ms3786", "harg-ms3786er0007", "Tagged Image File Format", "NO VALUE", "NO VALUE",
                      "Low Risk", "Depends on version, retain TIFF 1-6, otherwise see specific version plan"],
                     ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
                     ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"]]
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for multiple groups, third df contents")
 
     def test_puid_all(self):
@@ -91,11 +91,11 @@ class MyTestCase(unittest.TestCase):
         expected = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
                      "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0013", "JPEG EXIF", "2.1",
-                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/390", "Low Risk", "Retain"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0016", "JPEG EXIF", "2.1",
-                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/390", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/390", "Low Risk", "Retain"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/43", "Low Risk", "Retain"]]
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"]]
         self.assertEqual(result, expected, "Problem with test for PUID: all, df contents")
 
     def test_puid_mix(self):
@@ -116,9 +116,9 @@ class MyTestCase(unittest.TestCase):
                     ["dlg", "arl_nnc", "arl_nnc_nnc004-001-003", "Tagged Image File Format", "5", "NO VALUE",
                      "Low Risk", "Retain"],
                     ["dlg", "arl_acl", "arl_acl_acl328", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353", "Low Risk", "Retain"],
                     ["dlg", "arl_acl", "arl_acl_acl329", "Tagged Image File Format", "6",
-                     "https://www.nationalarchives.gov.uk/pronom/fmt/353", "Low Risk", "Retain"],
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353", "Low Risk", "Retain"],
                     ["dlg", "guan_ms40", "dlg_turningpoint_harg0040-001-002", "Tagged Image File Format", "NO VALUE",
                      "NO VALUE", "Low Risk", "Depends on version, retain TIFF 1-6, otherwise see specific version plan"]]
         self.assertEqual(result, expected, "Problem with test for PUID: mix, df contents")

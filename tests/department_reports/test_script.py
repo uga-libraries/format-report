@@ -36,8 +36,8 @@ class MyTestCase(unittest.TestCase):
         # Must run the script a second time because cannot capture output within self.assertRaises.
         output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Required argument format_csv is missing\r\n" \
-                       "Script usage: python path/department_reports.py archive_formats_by_aip\r\n"
+        msg_expected = "Required argument archive_formats_by_aip_csv is missing\r\n" \
+                       "Script usage: python path/department_reports.py archive_formats_by_aip_csv\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):
@@ -94,14 +94,14 @@ class MyTestCase(unittest.TestCase):
         expected_h1 = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
                         "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0004", "CorelDraw Drawing", "8.0",
-                        "https://www.nationalarchives.gov.uk/pronom/x-fmt/292", "High Risk",
+                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
                         "Transform to a TBD format, possibly PDF or TIFF"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
-                        "https://www.nationalarchives.gov.uk/pronom/fmt/43", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/pronom/fmt/289", "Low Risk", "Retain"]]
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
