@@ -68,15 +68,16 @@ class MyTestCase(unittest.TestCase):
         result_b1 = [df_b1.columns.tolist()] + df_b1.values.tolist()
         expected_b1 = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
                         "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
-                       ["bmac", "peabody", "bmac_51021enr-1a", "Wave", "NO VALUE", "NO VALUE", "Low Risk", "Retain"],
-                       ["bmac", "hm-lawton", "bmac_hm-lawton_0021", "cue", "NO VALUE", "NO VALUE", "No Match",
+                       ["bmac", "hm-lawton", "bmac_hm-lawton_0001", "Wave", "NO VALUE", "NO VALUE", "Low Risk",
+                        "Retain"],
+                       ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE", "No Match",
                         "NO VALUE"]]
         self.assertEqual(result_b1, expected_b1, "Problem with BMAC AIP Risk Data")
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
         result_b2 = [df_b2.columns.tolist()] + df_b2.values.tolist()
         expected_b2 = [["Collection", "Low Risk", "No Match", "AIPs"],
-                       ["hm-lawton", 0, 1, 1], ["peabody", 1, 0, 1], ["All", 1, 1, 2]]
+                       ["hm-lawton", 1, 1, 2], ["All", 1, 1, 2]]
         self.assertEqual(result_b2, expected_b2, "Problem with BMAC Collection Risk Levels")
 
         # Tests if the BMAC Formats sheet has the expected values.
@@ -84,8 +85,8 @@ class MyTestCase(unittest.TestCase):
         expected_b3 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3"],
                        [np.NaN, "Format", "Wave (Low Risk)", "cue (No Match)"],
                        ["Collection", "AIP", np.NaN, np.NaN],
-                       ["hm-lawton", "bmac_hm-lawton_0021", 0, 1],
-                       ["peabody", "bmac_51021enr-1a", 1, 0]]
+                       ["hm-lawton", "bmac_hm-lawton_0001", 1, 0],
+                       [np.NaN, "bmac_hm-lawton_0002", 0, 1]]
 
         self.assertEqual(result_b3, expected_b3, "Problem with BMAC Formats")
 
@@ -93,21 +94,25 @@ class MyTestCase(unittest.TestCase):
         result_h1 = [df_h1.columns.tolist()] + df_h1.values.tolist()
         expected_h1 = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
                         "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
-                       ["hargrett", "harg-ms3786", "harg-ms3786er0004", "CorelDraw Drawing", "8.0",
-                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
-                        "Transform to a TBD format, possibly PDF or TIFF"],
-                       ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
                         "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0002", "CorelDraw Drawing", "8.0",
+                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
+                        "Transform to a TBD format, possibly PDF or TIFF"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0002", "JPEG File Interchange Format", "1.01",
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE",
                         "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_h2 = [df_h2.columns.tolist()] + df_h2.values.tolist()
         expected_h2 = [["Collection", "High Risk", "Low Risk", "AIPs"],
-                       ["harg-0000", 0, 2, 2], ["harg-ms3786", 1, 1, 2], ["All", 1, 3, 4]]
+                       ["harg-0000", 0, 2, 2], ["harg-ms3786", 1, 3, 4], ["All", 1, 5, 6]]
         self.assertEqual(result_h2, expected_h2, "Problem with Hargrett Collection Risk Levels")
 
         # Tests if the Hargrett Formats sheet has the expected values.
@@ -119,7 +124,8 @@ class MyTestCase(unittest.TestCase):
                        ["harg-0000", "harg-0000-web-202007-0001", 0, 0, 1],
                        [np.NaN, "harg-0000-web-202007-0002", 0, 0, 1],
                        ["harg-ms3786", "harg-ms3786er0001", 0, 1, 0],
-                       [np.NaN, "harg-ms3786er0004", 1, 0, 0]]
+                       [np.NaN, "harg-ms3786er0002", 1, 1, 0],
+                       [np.NaN, "harg-ms3786er0003", 0, 0, 1]]
         self.assertEqual(result_h3, expected_h3, "Problem with Hargrett Formats")
 
 
