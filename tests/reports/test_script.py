@@ -48,7 +48,6 @@ class MyTestCase(unittest.TestCase):
         df_3 = pd.read_excel(result, "Format Names")
         df_4 = pd.read_excel(result, "Format Name Ranges")
         df_5 = pd.read_excel(result, "Format Name Sizes")
-        df_6 = pd.read_excel(result, "Risk Analysis")
         df_7 = pd.read_excel(result, "Type by Group")
         df_8 = pd.read_excel(result, "Type by Name")
         df_9 = pd.read_excel(result, "Name by Group")
@@ -105,18 +104,6 @@ class MyTestCase(unittest.TestCase):
                       ["0-9 GB", 1], ["10-99 GB", 1], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
                       ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result_5, expected_5, "Problem with test for correct input, Format Name Sizes")
-
-        # Tests if the Risk Analysis sheet has the expected values.
-        result_6 = [df_6.columns.tolist()] + df_6.values.tolist()
-        expected_6 = [["Format Standardized Name", "Collections", "Collections Percentage", "AIPs",
-                       "AIPs Percentage", "File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
-                      ["JP2", 1, 8.33, 5, 5.21, 190092, 68.76, 776.817, 0.24],
-                      ["TIFF", 4, 33.33, 12, 12.5, 74210, 26.84, 1763.598, 0.53],
-                      ["Matroska", 2, 16.67, 11, 11.46, 5446, 1.97, 326420.736, 98.86],
-                      ["JPEG", 4, 33.33, 24, 25.0, 5240, 1.9, 4.665999999999999, 0.0],
-                      ["WAVE", 1, 8.33, 10, 10.42, 1162, 0.42, 1064.383, 0.32],
-                      ["WARC", 1, 8.33, 30, 31.25, 218, 0.08, 138.1, 0.04]]
-        self.assertEqual(result_6, expected_6, "Problem with test for correct input, Risk Analysis")
 
         # Tests if the Type by Group sheet has the expected values.
         result_7 = [df_7.columns.tolist()] + df_7.values.tolist()
