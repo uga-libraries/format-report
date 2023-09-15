@@ -48,7 +48,6 @@ class MyTestCase(unittest.TestCase):
         df_3 = pd.read_excel(result, "Format Names")
         df_4 = pd.read_excel(result, "Format Name Ranges")
         df_5 = pd.read_excel(result, "Format Name Sizes")
-        df_7 = pd.read_excel(result, "Type by Group")
         df_8 = pd.read_excel(result, "Type by Name")
         df_9 = pd.read_excel(result, "Name by Group")
         df_10 = pd.read_excel(result, "Format ID")
@@ -104,18 +103,6 @@ class MyTestCase(unittest.TestCase):
                       ["0-9 GB", 1], ["10-99 GB", 1], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
                       ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result_5, expected_5, "Problem with test for correct input, Format Name Sizes")
-
-        # Tests if the Type by Group sheet has the expected values.
-        result_7 = [df_7.columns.tolist()] + df_7.values.tolist()
-        expected_7 = [["Format Type", "Group", "Collections", "AIPs", "File_IDs", "Size (GB)"],
-                      ["audio", "bmac", 1, 10, 1162, 1064.383],
-                      [np.NaN, "dlg", 1, 5, 78, 29.147],
-                      ["image", "dlg", 7, 23, 264253, 2539.21],
-                      [np.NaN, "hargrett", 1, 17, 5289, 5.871],
-                      ["video", "bmac", 1, 10, 5445, 325758.034],
-                      [np.NaN, "dlg", 1, 1, 1, 662.702],
-                      ["web_archive", "hargrett", 1, 30, 218, 138.1]]
-        self.assertEqual(result_7, expected_7, "Problem with test for correct input, Type by Group")
 
         # Tests if the Type by Name sheet has the expected values.
         result_8 = [df_8.columns.tolist()] + df_8.values.tolist()

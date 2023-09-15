@@ -386,9 +386,6 @@ if __name__ == '__main__':
     # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
     format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats_by_group)
 
-    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-    type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats_by_group)
-
     # Makes a dataframe with collection, AIP, and file_id subtotals,
     # first by format type and then subdivided by format standardized name.
     type_by_name = two_categories("Format Type", "Format Standardized Name", df_formats_by_aip, df_formats_by_group)
@@ -427,7 +424,6 @@ if __name__ == '__main__':
         format_names.to_excel(results, sheet_name="Format Names")
         format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
         format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        type_by_group.to_excel(results, sheet_name="Type by Group")
         type_by_name.to_excel(results, sheet_name="Type by Name")
         name_by_group.to_excel(results, sheet_name="Name by Group")
         format_ids.to_excel(results, sheet_name="Format ID")
