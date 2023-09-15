@@ -323,29 +323,6 @@ def size_in_tb(usage):
     return sizes
 
 
-def two_categories(category1, category2, df_aip, df_group):
-    """Uses data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts and
-    size in GB for each instance of two categories, for example format type and group. Returns a dataframe. """
-
-    # Uses the archive_formats_by_aip report data to get counts of unique collections and unique AIPs.
-    result = df_aip[[category1, category2, "Collection", "AIP"]].groupby([category1, category2]).nunique()
-
-    # Renames the column headings to be plural (Collections, AIPs) to be more descriptive.
-    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
-
-    # Uses the archive_formats_by_group report data to get counts of file_ids and adds to the dataframe.
-    # The counts are inflated by files with multiple possible format identifications.
-    files_result = df_group.groupby([category1, category2])["File_IDs"].sum()
-    result = pd.concat([result, files_result], axis=1)
-
-    # Uses the archive_formats_by_group report data to get size in GB and adds to the dataframe.
-    size_result = df_group.groupby([category1, category2])["Size (GB)"].sum()
-    result = pd.concat([result, size_result], axis=1)
-
-    # Returns the dataframe. Row index is the two categories and columns are the counts and size.
-    return result
-
-
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
@@ -386,21 +363,6 @@ if __name__ == '__main__':
     # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
     format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats_by_group)
 
-    # Makes a dataframe with any in this dataframe with over 100 file_id counts to use for risk analysis.
-    common_formats = format_names[format_names.File_IDs >= 100]
-    common_formats = common_formats.sort_values(by="File_IDs", ascending=False)
-
-    # Makes a dataframe with collection, AIP, and file_id subtotals, first by format type and then subdivided by group.
-    type_by_group = two_categories("Format Type", "Group", df_formats_by_aip, df_formats_by_group)
-
-    # Makes a dataframe with collection, AIP, and file_id subtotals,
-    # first by format type and then subdivided by format standardized name.
-    type_by_name = two_categories("Format Type", "Format Standardized Name", df_formats_by_aip, df_formats_by_group)
-
-    # Makes a dataframe with collection, AIP, and file_id subtotals,
-    # first by format standardized name and then by group.
-    name_by_group = two_categories("Format Standardized Name", "Group", df_formats_by_aip, df_formats_by_group)
-
     # Makes a dataframe with the file_id count and percentage
     # for every format identification (name, version, registry key).
     format_ids = format_id_frequency(totals_dict, df_formats_by_group)
@@ -431,10 +393,6 @@ if __name__ == '__main__':
         format_names.to_excel(results, sheet_name="Format Names")
         format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
         format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        common_formats.to_excel(results, sheet_name="Risk Analysis")
-        type_by_group.to_excel(results, sheet_name="Type by Group")
-        type_by_name.to_excel(results, sheet_name="Type by Name")
-        name_by_group.to_excel(results, sheet_name="Name by Group")
         format_ids.to_excel(results, sheet_name="Format ID")
         format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
         format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
