@@ -48,13 +48,12 @@ class MyTestCase(unittest.TestCase):
         df_3 = pd.read_excel(result, "Format Names")
         df_4 = pd.read_excel(result, "Format Name Ranges")
         df_5 = pd.read_excel(result, "Format Name Sizes")
-        df_9 = pd.read_excel(result, "Name by Group")
-        df_10 = pd.read_excel(result, "Format ID")
-        df_11 = pd.read_excel(result, "Format ID Ranges")
-        df_12 = pd.read_excel(result, "Format ID Sizes")
-        df_13 = pd.read_excel(result, "Groups per Type")
-        df_14 = pd.read_excel(result, "Groups per Name")
-        df_15 = pd.read_excel(result, "Groups per Format ID")
+        df_6 = pd.read_excel(result, "Format ID")
+        df_7 = pd.read_excel(result, "Format ID Ranges")
+        df_8 = pd.read_excel(result, "Format ID Sizes")
+        df_9 = pd.read_excel(result, "Groups per Type")
+        df_10 = pd.read_excel(result, "Groups per Name")
+        df_11 = pd.read_excel(result, "Groups per Format ID")
         result.close()
 
         # Tests if the Group Overview sheet has the expected values.
@@ -103,64 +102,49 @@ class MyTestCase(unittest.TestCase):
                       ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result_5, expected_5, "Problem with test for correct input, Format Name Sizes")
 
-        # Tests if the Name by Group Overview sheet has the expected values.
-        result_9 = [df_9.columns.tolist()] + df_9.values.tolist()
-        expected_9 = [["Format Standardized Name", "Group", "Collections", "AIPs", "File_IDs", "Size (GB)"],
-                      ["JP2", "dlg", 1, 5, 190092, 776.817],
-                      ["JPEG", "dlg", 3, 7, 117, 0.046],
-                      [np.NaN, "hargrett", 1, 17, 5123, 4.62],
-                      ["Matroska", "bmac", 1, 10, 5445, 325758.034],
-                      [np.NaN, "dlg", 1, 1, 1, 662.702],
-                      ["TIFF", "dlg", 3, 11, 74044, 1762.347],
-                      [np.NaN, "hargrett", 1, 1, 166, 1.251],
-                      ["WARC", "hargrett", 1, 30, 218, 138.1],
-                      ["WAVE", "bmac", 1, 10, 1162, 1064.383],
-                      ["Waveform Audio", "dlg", 1, 5, 78, 29.147]]
-        self.assertEqual(result_9, expected_9, "Problem with test for correct input, Name by Group")
-
         # Tests if the Format ID sheet has the expected values.
-        result_10 = [df_10.columns.tolist()] + df_10.values.tolist()
-        expected_10 = [["Format Identification", "File_IDs", "File_IDs Percentage", "Size (GB)",
-                        "Size (GB) Percentage"],
-                       ["JPEG 2000 JP2|NO VALUE|x-fmt/392", 190092, 68.76, 776.817, 0.24],
-                       ["Tagged Image File Format|5|NO VALUE", 71228, 25.77, 1693.088, 0.51],
-                       ["Matroska|NO VALUE|NO VALUE", 5446, 1.97, 326420.736, 98.86],
-                       ["Tagged Image File Format|6|fmt/353", 2812, 1.02, 69.2, 0.02],
-                       ["JPEG EXIF|2.1|x-fmt/390", 1946, 0.7, 1.897, 0.0],
-                       ["JPEG File Interchange Format|1.02|fmt/44", 1507, 0.55, 2.026, 0.0],
-                       ["JPEG File Interchange Format|1.01|fmt/43", 1322, 0.48, 0.687, 0.0],
-                       ["Wave|NO VALUE|NO VALUE", 1162, 0.42, 1064.383, 0.32],
-                       ["JPEG File Interchange Format|1|fmt/42", 465, 0.17, 0.05600000000000001, 0.0],
-                       ["WARC|NO VALUE|fmt/289", 218, 0.08, 138.1, 0.04],
-                       ["Tagged Image File Format|NO VALUE|NO VALUE", 170, 0.06, 1.31, 0.0],
-                       ["Waveform Audio|NO VALUE|NO VALUE", 78, 0.03, 29.147, 0.01]]
-        self.assertEqual(result_10, expected_10, "Problem with test for correct input, Format ID")
+        result_6 = [df_6.columns.tolist()] + df_6.values.tolist()
+        expected_6 = [["Format Identification", "File_IDs", "File_IDs Percentage", "Size (GB)",
+                       "Size (GB) Percentage"],
+                      ["JPEG 2000 JP2|NO VALUE|x-fmt/392", 190092, 68.76, 776.817, 0.24],
+                      ["Tagged Image File Format|5|NO VALUE", 71228, 25.77, 1693.088, 0.51],
+                      ["Matroska|NO VALUE|NO VALUE", 5446, 1.97, 326420.736, 98.86],
+                      ["Tagged Image File Format|6|fmt/353", 2812, 1.02, 69.2, 0.02],
+                      ["JPEG EXIF|2.1|x-fmt/390", 1946, 0.7, 1.897, 0.0],
+                      ["JPEG File Interchange Format|1.02|fmt/44", 1507, 0.55, 2.026, 0.0],
+                      ["JPEG File Interchange Format|1.01|fmt/43", 1322, 0.48, 0.687, 0.0],
+                      ["Wave|NO VALUE|NO VALUE", 1162, 0.42, 1064.383, 0.32],
+                      ["JPEG File Interchange Format|1|fmt/42", 465, 0.17, 0.05600000000000001, 0.0],
+                      ["WARC|NO VALUE|fmt/289", 218, 0.08, 138.1, 0.04],
+                      ["Tagged Image File Format|NO VALUE|NO VALUE", 170, 0.06, 1.31, 0.0],
+                      ["Waveform Audio|NO VALUE|NO VALUE", 78, 0.03, 29.147, 0.01]]
+        self.assertEqual(result_6, expected_6, "Problem with test for correct input, Format ID")
 
         # Tests if the Format ID Ranges sheet has the expected values.
-        result_11 = [df_11.columns.tolist()] + df_11.values.tolist()
-        expected_11 = [["File_ID Count Range", "Number of Formats (Format Identification)"],
-                       ["1-9", 0], ["10-99", 1], ["100-999", 3], ["1000-9999", 6], ["10000-99999", 1], ["100000+", 1]]
-        self.assertEqual(result_11, expected_11, "Problem with test for correct input, Format ID Ranges")
+        result_7 = [df_7.columns.tolist()] + df_7.values.tolist()
+        expected_7 = [["File_ID Count Range", "Number of Formats (Format Identification)"],
+                      ["1-9", 0], ["10-99", 1], ["100-999", 3], ["1000-9999", 6], ["10000-99999", 1], ["100000+", 1]]
+        self.assertEqual(result_7, expected_7, "Problem with test for correct input, Format ID Ranges")
 
         # Tests if the Format ID Sizes sheet has the expected values.
-        result_12 = [df_12.columns.tolist()] + df_12.values.tolist()
-        expected_12 = [["Size Range", "Total Size (Format Identification)"],
-                       ["0-9 GB", 5], ["10-99 GB", 2], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
-                       ["10-49 TB", 0], ["50+ TB", 1]]
-        self.assertEqual(result_12, expected_12, "Problem with test for correct input, Format ID Sizes")
+        result_8 = [df_8.columns.tolist()] + df_8.values.tolist()
+        expected_8 = [["Size Range", "Total Size (Format Identification)"],
+                      ["0-9 GB", 5], ["10-99 GB", 2], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
+                      ["10-49 TB", 0], ["50+ TB", 1]]
+        self.assertEqual(result_8, expected_8, "Problem with test for correct input, Format ID Sizes")
 
         # Tests if the Groups per Type sheet has the expected values.
-        result_13 = [df_13.columns.tolist()] + df_13.values.tolist()
-        expected_13 = [["Format Type", "Groups", "Group List"],
-                       ["audio", 2, "bmac, dlg"],
-                       ["image", 2, "dlg, hargrett"],
-                       ["video", 2, "bmac, dlg"],
-                       ["web_archive", 1, "hargrett"]]
-        self.assertEqual(result_13, expected_13, "Problem with test for correct input, Groups per Type")
+        result_9 = [df_9.columns.tolist()] + df_9.values.tolist()
+        expected_9 = [["Format Type", "Groups", "Group List"],
+                      ["audio", 2, "bmac, dlg"],
+                      ["image", 2, "dlg, hargrett"],
+                      ["video", 2, "bmac, dlg"],
+                      ["web_archive", 1, "hargrett"]]
+        self.assertEqual(result_9, expected_9, "Problem with test for correct input, Groups per Type")
 
         # Tests if the Groups per Name sheet has the expected values.
-        result_14 = [df_14.columns.tolist()] + df_14.values.tolist()
-        expected_14 = [["Format Standardized Name", "Groups", "Group List"],
+        result_10 = [df_10.columns.tolist()] + df_10.values.tolist()
+        expected_10 = [["Format Standardized Name", "Groups", "Group List"],
                        ["JPEG", 2, "hargrett, dlg"],
                        ["Matroska", 2, "bmac, dlg"],
                        ["TIFF", 2, "dlg, hargrett"],
@@ -168,11 +152,11 @@ class MyTestCase(unittest.TestCase):
                        ["WARC", 1, "hargrett"],
                        ["WAVE", 1, "bmac"],
                        ["Waveform Audio", 1, "dlg"]]
-        self.assertEqual(result_14, expected_14, "Problem with test for correct input, Groups per Name")
+        self.assertEqual(result_10, expected_10, "Problem with test for correct input, Groups per Name")
 
         # Tests if the Groups per Format ID sheet has the expected values.
-        result_15 = [df_15.columns.tolist()] + df_15.values.tolist()
-        expected_15 = [["Format Identification", "Groups", "Group List"],
+        result_11 = [df_11.columns.tolist()] + df_11.values.tolist()
+        expected_11 = [["Format Identification", "Groups", "Group List"],
                        ["JPEG File Interchange Format|1.02|fmt/44", 2, "dlg, hargrett"],
                        ["JPEG File Interchange Format|1|fmt/42", 2, "dlg, hargrett"],
                        ["Matroska|NO VALUE|NO VALUE", 2, "bmac, dlg"],
@@ -185,7 +169,7 @@ class MyTestCase(unittest.TestCase):
                        ["WARC|NO VALUE|fmt/289", 1, "hargrett"],
                        ["Waveform Audio|NO VALUE|NO VALUE", 1, "dlg"],
                        ["Wave|NO VALUE|NO VALUE", 1, "bmac"]]
-        self.assertEqual(result_15, expected_15, "Problem with test for correct input, Groups per Format ID")
+        self.assertEqual(result_11, expected_11, "Problem with test for correct input, Groups per Format ID")
 
     def test_missing_argument(self):
         """
