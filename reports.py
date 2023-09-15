@@ -371,11 +371,33 @@ def spreadsheet_group_overlap(df_group, output_folder):
     # Makes a dataframe with the number of groups and list of groups that have each format identification.
     groups_per_id = group_overlap("Format Identification", df_group)
 
-    # Saves each summary as a separate sheet in an Excel spreadsheet.
+    # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Group-Overlap.xlsx")) as results:
         groups_per_type.to_excel(results, sheet_name="Groups per Type")
         groups_per_name.to_excel(results, sheet_name="Groups per Name")
         groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+
+
+def spreadsheet_ranges(df_group, output_folder):
+    """
+    Calculates the the number of instances of format types and format standardized names
+    within predetermined ranges of file id counts or size and saves them to a spreadsheet named
+    ARCHive-Formats Analysis_Ranges.xlsx.
+    """
+    # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
+    format_name_ranges = file_count_ranges("Format Standardized Name", df_group)
+    format_name_sizes = size_ranges("Format Standardized Name", df_group)
+
+    # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
+    format_id_ranges = file_count_ranges("Format Identification", df_group)
+    format_id_sizes = size_ranges("Format Identification", df_group)
+
+    # Saves each dataframe as a separate sheet in an Excel spreadsheet.
+    with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Ranges.xlsx")) as results:
+        format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
+        format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
+        format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
+        format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
 
 
 if __name__ == '__main__':
@@ -401,27 +423,14 @@ if __name__ == '__main__':
     df_formats_by_aip = pd.read_csv(formats_by_aip_report)
     df_formats_by_group = pd.read_csv(formats_by_group_report)
 
-    # Makes a spreadsheet with summaries based on counts and percentages of collection, AIP, file ids, and/or size
-    # in the folder with the ARCHive reports.
+    # Makes a spreadsheet in the folder with the ARCHive reports
+    # with summaries based on counts and percentages of collection, AIP, file ids, and/or size.
     spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, report_folder)
 
-    # Makes a spreadsheet with summaries of group overlap for each instance of
-    # format type, format name, and format id, in the folder with the ARCHive reports.
+    # Makes a spreadsheet in the folder with the ARCHive reports
+    # with summaries of group overlap for each instance of format type, format name, and format id.
     spreadsheet_group_overlap(df_formats_by_group, report_folder)
 
-    # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
-    format_name_ranges = file_count_ranges("Format Standardized Name", df_formats_by_group)
-    format_name_sizes = size_ranges("Format Standardized Name", df_formats_by_group)
-
-    # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
-    format_id_ranges = file_count_ranges("Format Identification", df_formats_by_group)
-    format_id_sizes = size_ranges("Format Identification", df_formats_by_group)
-
-    # Saves each dataframe or series as a spreadsheet in an Excel workbook.
-    # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
-    today = datetime.datetime.now().strftime("%Y-%m")
-    with pd.ExcelWriter(os.path.join(report_folder, f"ARCHive Formats Analysis_{today}.xlsx")) as results:
-        format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
-        format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
-        format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
+    # Makes a spreadsheet in the folder with the ARCHive reports
+    # with summaries of the number of instances within predetermined ranges of file id counts or size.
+    spreadsheet_ranges(df_formats_by_group, report_folder)
