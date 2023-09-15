@@ -323,6 +323,39 @@ def size_in_tb(usage):
     return sizes
 
 
+def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
+    """
+    Calculates summaries based on counts and percentages of different categories
+    and saves them to a spreadsheet named ARCHive Formats Analysis_Frequency.xlsx.
+    """
+    # Makes the ARCHive overview dataframe (summary statistics by group).
+    overview = archive_overview(df_aip, df_group, usage)
+
+    # Saves totals to a dictionary for calculating percentages in other dataframes.
+    # Use these totals each time so collection and AIP counts aren't inflated by multiple identifications.
+    # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
+    totals_dict = {"Collections": overview["Collections"]["total"],
+                   "AIPs": overview["AIPs"]["total"],
+                   "Files": overview["File_IDs"]["total"],
+                   "Size": overview["Size (GB) Inflated"]["total"]}
+
+    # Makes the format type summary (collection, AIP, file_id, and size counts and percentages).
+    format_types = one_category("Format Type", totals_dict, df_aip, df_group)
+
+    # Makes the format standardized name summary (collection, AIP, file_id, and size counts and percentages).
+    format_names = one_category("Format Standardized Name", totals_dict, df_aip, df_group)
+
+    # Makes a format identifications summary (file_id and size count and percentage).
+    format_ids = format_id_frequency(totals_dict, df_group)
+
+    # Saves each summary as a separate sheet in an Excel spreadsheet.
+    with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Frequency.xlsx")) as results:
+        overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
+        format_types.to_excel(results, sheet_name="Format Types")
+        format_names.to_excel(results, sheet_name="Format Names")
+        format_ids.to_excel(results, sheet_name="Format IDs")
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
@@ -346,26 +379,9 @@ if __name__ == '__main__':
     df_formats_by_aip = pd.read_csv(formats_by_aip_report)
     df_formats_by_group = pd.read_csv(formats_by_group_report)
 
-    # GENERATE A DATAFRAME OR SERIES FOR EACH TYPE OF ANALYSIS.
-
-    # Makes the ARCHive overview dataframe (summary statistics by group).
-    overview = archive_overview(df_formats_by_aip, df_formats_by_group, usage_report)
-
-    # Saves totals to a dictionary for calculating percentages in other dataframes.
-    # Use these totals each time so collection and AIP counts aren't inflated by multiple identifications.
-    # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
-    totals_dict = {"Collections": overview["Collections"]["total"], "AIPs": overview["AIPs"]["total"],
-                   "Files": overview["File_IDs"]["total"], "Size": overview["Size (GB) Inflated"]["total"]}
-
-    # Makes the format type dataframe (collection, AIP, and file_id counts and percentages).
-    format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats_by_group)
-
-    # Makes the format standardized name dataframe (collection, AIP, and file_id counts and percentages).
-    format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats_by_group)
-
-    # Makes a dataframe with the file_id count and percentage
-    # for every format identification (name, version, registry key).
-    format_ids = format_id_frequency(totals_dict, df_formats_by_group)
+    # Makes a spreadsheet with summaries based on counts and percentages of collection, AIP, file ids, and/or size
+    # in the folder with the ARCHive reports.
+    spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, report_folder)
 
     # Makes a dataframe with the number of groups and list of groups that have each format type.
     groups_per_type = group_overlap("Format Type", df_formats_by_group)
@@ -388,12 +404,8 @@ if __name__ == '__main__':
     # The workbook filename includes today's date, formatted YYYYMM, and is saved in the report folder.
     today = datetime.datetime.now().strftime("%Y-%m")
     with pd.ExcelWriter(os.path.join(report_folder, f"ARCHive Formats Analysis_{today}.xlsx")) as results:
-        overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
-        format_types.to_excel(results, sheet_name="Format Types")
-        format_names.to_excel(results, sheet_name="Format Names")
         format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
         format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        format_ids.to_excel(results, sheet_name="Format ID")
         format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
         format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
         groups_per_type.to_excel(results, sheet_name="Groups per Type")
