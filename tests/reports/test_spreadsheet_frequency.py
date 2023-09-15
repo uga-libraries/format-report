@@ -17,12 +17,12 @@ class MyTestCase(unittest.TestCase):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-    def test_spreadsheet_counts(self):
+    def test_spreadsheet_frequency(self):
         """
         Test for the function working correctly.
         There is no error handling or variations of input to test.
         """
-        # Makes the dataframes used for function input.
+        # Makes the variables used for function input.
         df_formats_by_aip = pd.read_csv(os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv"))
         df_formats_by_group = pd.read_csv(os.path.join("correct_input", "archive_formats_by_group_2023-08.csv"))
         usage_report = os.path.join("correct_input", "usage_report_20171101_20211101.csv")

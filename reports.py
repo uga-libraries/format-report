@@ -326,7 +326,7 @@ def size_in_tb(usage):
 def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
     """
     Calculates summaries based on counts and percentages of different categories
-    and saves them to a spreadsheet named ARCHive Formats Analysis_Frequency.xlsx.
+    and saves them to a spreadsheet named ARCHive-Formats-Analysis_Frequency.xlsx.
     """
     # Makes the ARCHive overview dataframe (summary statistics by group).
     overview = archive_overview(df_aip, df_group, usage)
@@ -356,6 +356,28 @@ def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
         format_ids.to_excel(results, sheet_name="Format IDs")
 
 
+def spreadsheet_group_overlap(df_group, output_folder):
+    """
+    Calculates the groups which contain the same instances of different categories
+    (format type, format name, format ids) and saves them to a spreadsheet named
+    ARCHive-Formats Analysis_Group_Overlap.xlsx.
+    """
+    # Makes a dataframe with the number of groups and list of groups that have each format type.
+    groups_per_type = group_overlap("Format Type", df_group)
+
+    # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
+    groups_per_name = group_overlap("Format Standardized Name", df_group)
+
+    # Makes a dataframe with the number of groups and list of groups that have each format identification.
+    groups_per_id = group_overlap("Format Identification", df_group)
+
+    # Saves each summary as a separate sheet in an Excel spreadsheet.
+    with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Group-Overlap.xlsx")) as results:
+        groups_per_type.to_excel(results, sheet_name="Groups per Type")
+        groups_per_name.to_excel(results, sheet_name="Groups per Name")
+        groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
@@ -383,14 +405,9 @@ if __name__ == '__main__':
     # in the folder with the ARCHive reports.
     spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, report_folder)
 
-    # Makes a dataframe with the number of groups and list of groups that have each format type.
-    groups_per_type = group_overlap("Format Type", df_formats_by_group)
-
-    # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-    groups_per_name = group_overlap("Format Standardized Name", df_formats_by_group)
-
-    # Makes a dataframe with the number of groups and list of groups that have each format identification.
-    groups_per_id = group_overlap("Format Identification", df_formats_by_group)
+    # Makes a spreadsheet with summaries of group overlap for each instance of
+    # format type, format name, and format id, in the folder with the ARCHive reports.
+    spreadsheet_group_overlap(df_formats_by_group, report_folder)
 
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
     format_name_ranges = file_count_ranges("Format Standardized Name", df_formats_by_group)
@@ -408,6 +425,3 @@ if __name__ == '__main__':
         format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
         format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
         format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
-        groups_per_type.to_excel(results, sheet_name="Groups per Type")
-        groups_per_name.to_excel(results, sheet_name="Groups per Name")
-        groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
