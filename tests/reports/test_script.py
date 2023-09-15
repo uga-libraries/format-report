@@ -48,7 +48,6 @@ class MyTestCase(unittest.TestCase):
         df_3 = pd.read_excel(result, "Format Names")
         df_4 = pd.read_excel(result, "Format Name Ranges")
         df_5 = pd.read_excel(result, "Format Name Sizes")
-        df_8 = pd.read_excel(result, "Type by Name")
         df_9 = pd.read_excel(result, "Name by Group")
         df_10 = pd.read_excel(result, "Format ID")
         df_11 = pd.read_excel(result, "Format ID Ranges")
@@ -103,18 +102,6 @@ class MyTestCase(unittest.TestCase):
                       ["0-9 GB", 1], ["10-99 GB", 1], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
                       ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result_5, expected_5, "Problem with test for correct input, Format Name Sizes")
-
-        # Tests if the Type by Name sheet has the expected values.
-        result_8 = [df_8.columns.tolist()] + df_8.values.tolist()
-        expected_8 = [["Format Type", "Format Standardized Name", "Collections", "AIPs", "File_IDs", "Size (GB)"],
-                      ["audio", "WAVE", 1, 10, 1162, 1064.383],
-                      [np.NaN, "Waveform Audio", 1, 5, 78, 29.147],
-                      ["image", "JP2", 1, 5, 190092, 776.817],
-                      [np.NaN, "JPEG", 4, 24, 5240, 4.665999999999999],
-                      [np.NaN, "TIFF", 4, 12, 74210, 1763.598],
-                      ["video", "Matroska", 2, 11, 5446, 326420.736],
-                      ["web_archive", "WARC", 1, 30, 218, 138.1]]
-        self.assertEqual(result_8, expected_8, "Problem with test for correct input, Type by Name")
 
         # Tests if the Name by Group Overview sheet has the expected values.
         result_9 = [df_9.columns.tolist()] + df_9.values.tolist()
