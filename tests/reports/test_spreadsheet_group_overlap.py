@@ -13,7 +13,7 @@ class MyTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Deletes the Excel spreadsheet produced by the function, if it was made by the test."""
-        file_path = os.path.join("correct_input", "ARCHive-Formats-Analysis_Group-Overlap.xlsx")
+        file_path = os.path.join("spreadsheet_group_overlap", "ARCHive-Formats-Analysis_Group-Overlap.xlsx")
         if os.path.exists(file_path):
             os.remove(file_path)
 
