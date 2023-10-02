@@ -13,7 +13,7 @@ class MyTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Deletes the Excel spreadsheet produced by the function, if it is made by the test."""
-        file_path = os.path.join("correct_input", "ARCHive-Formats-Analysis_Frequency.xlsx")
+        file_path = os.path.join("spreadsheet_frequency", "ARCHive-Formats-Analysis_Frequency.xlsx")
         if os.path.exists(file_path):
             os.remove(file_path)
 
@@ -23,17 +23,17 @@ class MyTestCase(unittest.TestCase):
         There is no error handling or variations of input to test.
         """
         # Makes the variables used for function input.
-        df_formats_by_aip = pd.read_csv(os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv"))
-        df_formats_by_group = pd.read_csv(os.path.join("correct_input", "archive_formats_by_group_2023-08.csv"))
-        usage_report = os.path.join("correct_input", "usage_report_20171101_20211101.csv")
+        df_formats_by_aip = pd.read_csv(os.path.join("spreadsheet_frequency", "archive_formats_by_aip_2023-08.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("spreadsheet_frequency", "archive_formats_by_group_2023-08.csv"))
+        usage_report = os.path.join("spreadsheet_frequency", "usage_report_20171101_20211101.csv")
 
         # Runs the function being tested.
-        spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, "correct_input")
+        spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, "spreadsheet_frequency")
 
         # Reads the entire Excel file into pandas, and then each sheet into a separate dataframe.
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
-        result = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Frequency.xlsx"))
+        result = pd.ExcelFile(os.path.join("spreadsheet_frequency", "ARCHive-Formats-Analysis_Frequency.xlsx"))
         df_1 = pd.read_excel(result, "Group Overview")
         df_2 = pd.read_excel(result, "Format Types")
         df_3 = pd.read_excel(result, "Format Names")
@@ -44,51 +44,54 @@ class MyTestCase(unittest.TestCase):
         result_1 = [df_1.columns.tolist()] + df_1.values.tolist()
         expected_1 = [["Group", "Size (TB)", "Size (GB) Inflated", "Collections", "AIPs", "File_IDs", "Format Types",
                        "Format Standardized Names", "Format Identifications"],
-                      ["bmac", 554, 326822.42, 1, 20, 6607, 2, 2, 2],
-                      ["dlg", 10.6, 3231.06, 9, 29, 264332, 3, 5, 8],
-                      ["hargrett", 0.15, 143.97, 2, 47, 5507, 2, 3, 6],
-                      ["total", 564.75, 330197.45, 12, 96, 276446, 4, 7, 12]]
+                      ["dlg", 10.6, 29.15, 1, 78, 78, 1, 1, 1],
+                      ["hargrett", 0.15, 0.01, 2, 7, 231, 2, 2, 5],
+                      ["russell", 35.8, 30.65, 29, 230, 22951, 4, 6, 15],
+                      ["total", 46.55, 59.81, 32, 315, 23260, 4, 6, 16]]
         self.assertEqual(result_1, expected_1, "Problem with test for Group Overview")
 
         # Tests if the Format Types sheet has the expected values.
         result_2 = [df_2.columns.tolist()] + df_2.values.tolist()
         expected_2 = [["Format Type", "Collections", "Collections Percentage", "AIPs", "AIPs Percentage", "File_IDs",
                        "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
-                      ["audio", 2, 16.67, 15, 15.62, 1240, 0.45, 1093.53, 0.33],
-                      ["image", 8, 66.67, 40, 41.67, 269542, 97.5, 2545.081, 0.77],
-                      ["video", 2, 16.67, 11, 11.46, 5446, 1.97, 326420.736, 98.86],
-                      ["web_archive", 1, 8.33, 30, 31.25, 218, 0.08, 138.1, 0.04]]
+                      ["archive", 13, 40.62, 47, 14.92, 292, 1.26, 2.057, 3.44],
+                      ["audio", 19, 59.38, 163, 51.75, 854, 3.67, 53.499, 89.45],
+                      ["database", 8, 25.00, 31, 9.84, 66, 0.28, 0.33, 0.55],
+                      ["text", 10, 31.25, 97, 30.79, 22048, 94.79, 3.924, 6.56]]
         self.assertEqual(result_2, expected_2, "Problem with test for Format Types")
 
         # Tests if the Format Names sheet has the expected values.
         result_3 = [df_3.columns.tolist()] + df_3.values.tolist()
         expected_3 = [["Format Standardized Name", "Collections", "Collections Percentage", "AIPs", "AIPs Percentage",
                        "File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
-                      ["JP2", 1, 8.33, 5, 5.21, 190092, 68.76, 776.817, 0.24],
-                      ["JPEG", 4, 33.33, 24, 25.0, 5240, 1.9, 4.665999999999999, 0.0],
-                      ["Matroska", 2, 16.67, 11, 11.46, 5446, 1.97, 326420.736, 98.86],
-                      ["TIFF", 4, 33.33, 12, 12.5, 74210, 26.84, 1763.598, 0.53],
-                      ["WARC", 1, 8.33, 30, 31.25, 218, 0.08, 138.1, 0.04],
-                      ["WAVE", 1, 8.33, 10, 10.42, 1162, 0.42, 1064.383, 0.32],
-                      ["Waveform Audio", 1, 8.33, 5, 5.21, 78, 0.03, 29.147, 0.01]]
+                      ["MS DOS Compression format (KWAJ variant)", 1, 3.12, 1, 0.32, 53, 0.23, 0.001, 0.0],
+                      ["Microsoft Access Database", 8, 25.0, 31, 9.84, 66, 0.28, 0.33, 0.55],
+                      ["Microsoft Word", 10, 31.25, 97, 30.79, 22048, 94.79, 3.924, 6.56],
+                      ["StuffIt Archive File", 1, 3.12, 2, 0.63, 2, 0.01, 0.002, 0.0],
+                      ["Waveform Audio", 19, 59.38, 163, 51.75, 854, 3.67, 53.499, 89.45],
+                      ["ZIP Format", 12, 37.50, 46, 14.60, 237, 1.02, 2.054, 3.43]]
         self.assertEqual(result_3, expected_3, "Problem with test for Format Names")
 
         # Tests if the Format IDs sheet has the expected values.
         result_4 = [df_4.columns.tolist()] + df_4.values.tolist()
         expected_4 = [["Format Identification", "File_IDs", "File_IDs Percentage", "Size (GB)",
                        "Size (GB) Percentage"],
-                      ["JPEG 2000 JP2|NO VALUE|x-fmt/392", 190092, 68.76, 776.817, 0.24],
-                      ["Tagged Image File Format|5|NO VALUE", 71228, 25.77, 1693.088, 0.51],
-                      ["Matroska|NO VALUE|NO VALUE", 5446, 1.97, 326420.736, 98.86],
-                      ["Tagged Image File Format|6|fmt/353", 2812, 1.02, 69.2, 0.02],
-                      ["JPEG EXIF|2.1|x-fmt/390", 1946, 0.7, 1.897, 0.0],
-                      ["JPEG File Interchange Format|1.02|fmt/44", 1507, 0.55, 2.026, 0.0],
-                      ["JPEG File Interchange Format|1.01|fmt/43", 1322, 0.48, 0.687, 0.0],
-                      ["Wave|NO VALUE|NO VALUE", 1162, 0.42, 1064.383, 0.32],
-                      ["JPEG File Interchange Format|1|fmt/42", 465, 0.17, 0.05600000000000001, 0.0],
-                      ["WARC|NO VALUE|fmt/289", 218, 0.08, 138.1, 0.04],
-                      ["Tagged Image File Format|NO VALUE|NO VALUE", 170, 0.06, 1.31, 0.0],
-                      ["Waveform Audio|NO VALUE|NO VALUE", 78, 0.03, 29.147, 0.01]]
+                      ["Microsoft Word Binary File Format|97-2003|fmt/40", 14677, 63.10, 2.552, 4.27],
+                      ["Microsoft Word Binary File Format|NO VALUE|NO VALUE", 6987, 30.04, 1.369, 2.29],
+                      ["Waveform Audio|NO VALUE|fmt/141", 407, 1.75, 20.717, 34.64],
+                      ["Microsoft Word Binary File Format|4.0|x-fmt/64", 326, 1.4, 0.002, 0.0],
+                      ["Waveform Audio|NO VALUE|fmt/142", 314, 1.35, 2.61, 4.36],
+                      ["ZIP Format|2.0|x-fmt/263", 221, 0.95, 2.024, 3.38],
+                      ["Waveform Audio|NO VALUE|NO VALUE", 78, 0.34, 29.147, 48.73],
+                      ["Microsoft Access Database|NO VALUE|NO VALUE", 66, 0.28, 0.33, 0.55],
+                      ["Microsoft Word Binary File Format|5.0|x-fmt/65", 58, 0.25, 0.001, 0.0],
+                      ["MS DOS Compression format (KWAJ variant)|NO VALUE|fmt/469", 53, 0.23, 0.001, 0.0],
+                      ["Waveform Audio|0 MPEG Encoding|fmt/142 fmt/706", 52, 0.22, 1.025, 1.71],
+                      ["ZIP Format|1.0|x-fmt/263", 8, 0.03, 0.003, 0.01],
+                      ["ZIP Format|NO VALUE|x-fmt/263", 7, 0.03, 0.027, 0.05],
+                      ["Waveform Audio|NO VALUE|fmt/6", 3, 0.01, 0.0, 0.0],
+                      ["StuffIt Archive|NO VALUE|NO VALUE", 2, 0.01, 0.002, 0.0],
+                      ["ZIP Format|2.0|NO VALUE", 1, 0.0, 0.0, 0.0]]
         self.assertEqual(result_4, expected_4, "Problem with test for Format IDs")
 
 
