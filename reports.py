@@ -1,7 +1,7 @@
 """Calculates subtotals of collection, AIP, and file_id counts for different categories: groups, format types,
 format standardized names, format identifications, and combinations of those. File size subtotals will be added once
-that information is added to the ARCHive group format reports. The results are saved to an Excel workbook,
-with one spreadsheet per subtotal, to use for analyzing formats in ARCHive.
+that information is added to the ARCHive group format reports. The results are saved to Excel workbooks
+(Frequency, Group-Overlap, and Ranges) to use for analyzing formats in ARCHive.
 
 The script uses information from three sources, all CSVs. The usage report is downloaded from ARCHive. Both archive
 format reports are made from the ARCHive group format reports using the merge_format_reports script.
@@ -15,11 +15,6 @@ Definition of terms:
     * Format standardized name: a simplified version of the name, removing details to group related formats together.
     * Format identification: a combination of the format name, version, and registry key (usually PRONOM).
 
-Ideas for additional reports:
-    * Map NARA and/or LOC risk assessments to the most common formats.
-    * Compare the current report to a previous one to show change over time.
-    * Add groups and type to common formats (risk analysis) for additional information.
-
 Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Video and MPEG video, when subtotaling.
 """
 
@@ -28,7 +23,6 @@ Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Vide
 # Report folder should contain the usage report and both archive format reports.
 
 import csv
-import datetime
 import os
 import pandas as pd
 import sys
