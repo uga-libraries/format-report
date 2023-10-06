@@ -94,10 +94,11 @@ class MyTestCase(unittest.TestCase):
         # Tests if the BMAC Formats sheet has the expected values.
         result_b4 = [df_b4.columns.tolist()] + df_b4.values.tolist()
         expected_b4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3"],
-                       [np.NaN, "Format", "Wave (Low Risk)", "cue (No Match)"],
+                       [np.NaN, "NARA_Risk Level", "No Match", "Low Risk"],
+                       [np.NaN, "Format", "cue (No Match)", "Wave (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN],
-                       ["hm-lawton", "bmac_hm-lawton_0001", 1, 0],
-                       [np.NaN, "bmac_hm-lawton_0002", 0, 1]]
+                       ["hm-lawton", "bmac_hm-lawton_0001", 0, 1],
+                       [np.NaN, "bmac_hm-lawton_0002", 1, 0]]
 
         self.assertEqual(result_b4, expected_b4, "Problem with BMAC Formats")
 
@@ -139,6 +140,7 @@ class MyTestCase(unittest.TestCase):
         # Tests if the Hargrett Formats sheet has the expected values.
         result_h4 = [df_h4.columns.tolist()] + df_h4.values.tolist()
         expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3", "Unnamed: 4"],
+                       [np.NaN, "NARA_Risk Level", "High Risk", "Low Risk", np.NaN],
                        [np.NaN, "Format", "CorelDraw Drawing 8.0 (High Risk)",
                         "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
