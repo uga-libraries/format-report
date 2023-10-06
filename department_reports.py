@@ -82,6 +82,41 @@ def csv_to_dataframes(csv_file):
     return df_list
 
 
+def risk_levels(dept_df, index_column):
+    """
+    Calculates the percentage of formats at each risk level.
+    Returns a dataframe.
+        # Including margins adds totals for each row and renames from default All.
+        # Adds columns for any risk level not present. Risk is ordered from high-low.
+    """
+    # Calculates the number of formats at each risk level.
+    # Including margins adds totals for each column and row.
+    risk = pd.pivot_table(dept_df, index=index_column, columns='NARA_Risk Level', values='Format',
+                          margins=True, aggfunc=len, fill_value=0)
+
+    # Renames the column of each row's totals from default All to Formats, to be more intuitive.
+    # Removes the row of each column's totals, which also has the name All by default.
+    risk.rename(columns={'All': 'Formats'}, inplace=True)
+    risk.drop(['All'], axis='index', inplace=True)
+
+    # Adds in columns for any of the four NARA risk levels that are not present in the dataframe,
+    # with a default value of 0 for every row.
+    for risk_level in ["No Match", "High Risk", "Moderate Risk", "Low Risk"]:
+        if risk_level not in risk:
+            risk[risk_level] = 0
+
+    # Calculates the percentage of formats at each risk level for each row, rounded to 2 decimal places.
+    risk['No Match %'] = round(risk['No Match'] / risk['Formats'] * 100, 2)
+    risk['High Risk %'] = round(risk['High Risk'] / risk['Formats'] * 100, 2)
+    risk['Moderate Risk %'] = round(risk['Moderate Risk'] / risk['Formats'] * 100, 2)
+    risk['Low Risk %'] = round(risk['Low Risk'] / risk['Formats'] * 100, 2)
+
+    # Removes the columns with format counts, now that the percentages are calculated.
+    risk.drop(['No Match', 'High Risk', 'Moderate Risk', 'Low Risk'], axis=1, inplace=True)
+
+    return risk
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
@@ -111,17 +146,20 @@ if __name__ == '__main__':
         df.reset_index(drop=True, inplace=True)
         dept = df.at[0, 'Group']
 
-        # Calculates the number of AIPs with formats at each risk level for each collection.
-        # The AIP is counted once for each format it contains that is at that risk level.
-        # Including margins adds totals for each row and each column.
-        collection_risk = pd.pivot_table(df, index='Collection', columns='NARA_Risk Level', values='AIP',
-                                         margins=True, aggfunc=len, fill_value=0)
-        collection_risk.rename(columns={'All': 'AIPs'}, inplace=True)
-
-        # Calculates the formats in each collection and AIP.
-        # For format, it combines the format name, version (if has one), and NARA risk level.
+        # Adds a column with combined format name and version (if has one).
+        # This is used for multiple summaries.
         df['Format'] = df['Format Name'] + " " + df['Format Version'] + " (" + df['NARA_Risk Level'] + ")"
         df['Format'] = df['Format'].str.replace(" NO VALUE", "")
+
+        # Calculates the percentage of formats at each risk level for each collection.
+        # Duplicates are removed so each format is counted once per collection instead of once per AIP.
+        df_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
+        collection_risk = risk_levels(df_dedup, 'Collection')
+
+        # Calculates the percentage of formats at each risk level for each AIP.
+        aip_risk = risk_levels(df, 'AIP')
+
+        # Calculates which formats are in each collection and AIP.
         formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['Format'], values=['Format Name'],
                                  aggfunc=len, fill_value=0)
         df.drop(['Format'], axis=1, inplace=True)
@@ -132,4 +170,5 @@ if __name__ == '__main__':
         with pd.ExcelWriter(xlsx_path) as risk_report:
             df.sort_values(['Collection', 'AIP']).to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
             collection_risk.to_excel(risk_report, sheet_name="Collection Risk Levels")
+            aip_risk.to_excel(risk_report, sheet_name="AIP Risk Levels")
             formats.to_excel(risk_report, sheet_name="Formats")

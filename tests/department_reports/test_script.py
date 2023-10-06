@@ -56,14 +56,16 @@ class MyTestCase(unittest.TestCase):
         bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
         df_b1 = pd.read_excel(bmac, "AIP Risk Data")
         df_b2 = pd.read_excel(bmac, "Collection Risk Levels")
-        df_b3 = pd.read_excel(bmac, "Formats")
+        df_b3 = pd.read_excel(bmac, "AIP Risk Levels")
+        df_b4 = pd.read_excel(bmac, "Formats")
         bmac.close()
 
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
         hargrett = pd.ExcelFile(os.path.join("script", f"hargrett_risk_report_{date}.xlsx"))
         df_h1 = pd.read_excel(hargrett, "AIP Risk Data")
         df_h2 = pd.read_excel(hargrett, "Collection Risk Levels")
-        df_h3 = pd.read_excel(hargrett, "Formats")
+        df_h3 = pd.read_excel(hargrett, "AIP Risk Levels")
+        df_h4 = pd.read_excel(hargrett, "Formats")
         hargrett.close()
 
         # Tests if the BMAC AIP Risk Data sheet has the expected values.
@@ -78,19 +80,26 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
         result_b2 = [df_b2.columns.tolist()] + df_b2.values.tolist()
-        expected_b2 = [["Collection", "Low Risk", "No Match", "AIPs"],
-                       ["hm-lawton", 1, 1, 2], ["All", 1, 1, 2]]
+        expected_b2 = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["hm-lawton", 2, 50, 0, 0, 50]]
         self.assertEqual(result_b2, expected_b2, "Problem with BMAC Collection Risk Levels")
 
-        # Tests if the BMAC Formats sheet has the expected values.
+        # Tests if the BMAC AIP Risk Levels sheet has the expected values.
         result_b3 = [df_b3.columns.tolist()] + df_b3.values.tolist()
-        expected_b3 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3"],
+        expected_b3 = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["bmac_hm-lawton_0001", 1, 0, 0, 0, 100],
+                       ["bmac_hm-lawton_0002", 1, 100, 0, 0, 0]]
+        self.assertEqual(result_b3, expected_b3, "Problem with BMAC AIP Risk Levels")
+
+        # Tests if the BMAC Formats sheet has the expected values.
+        result_b4 = [df_b4.columns.tolist()] + df_b4.values.tolist()
+        expected_b4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3"],
                        [np.NaN, "Format", "Wave (Low Risk)", "cue (No Match)"],
                        ["Collection", "AIP", np.NaN, np.NaN],
                        ["hm-lawton", "bmac_hm-lawton_0001", 1, 0],
                        [np.NaN, "bmac_hm-lawton_0002", 0, 1]]
 
-        self.assertEqual(result_b3, expected_b3, "Problem with BMAC Formats")
+        self.assertEqual(result_b4, expected_b4, "Problem with BMAC Formats")
 
         # Tests if the Hargrett AIP Risk Data sheet has the expected values.
         result_h1 = [df_h1.columns.tolist()] + df_h1.values.tolist()
@@ -113,13 +122,23 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_h2 = [df_h2.columns.tolist()] + df_h2.values.tolist()
-        expected_h2 = [["Collection", "High Risk", "Low Risk", "AIPs"],
-                       ["harg-0000", 0, 2, 2], ["harg-ms3786", 1, 3, 4], ["All", 1, 5, 6]]
+        expected_h2 = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["harg-0000", 1, 0, 0, 0, 100], ["harg-ms3786", 3, 0, 33.33, 0, 66.67]]
         self.assertEqual(result_h2, expected_h2, "Problem with Hargrett Collection Risk Levels")
 
-        # Tests if the Hargrett Formats sheet has the expected values.
+        # Tests if the Hargrett AIP Risk Levels sheet has the expected values.
         result_h3 = [df_h3.columns.tolist()] + df_h3.values.tolist()
-        expected_h3 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3", "Unnamed: 4"],
+        expected_h3 = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["harg-0000-web-202007-0001", 1, 0, 0, 0, 100],
+                       ["harg-0000-web-202007-0002", 1, 0, 0, 0, 100],
+                       ["harg-ms3786er0001", 1, 0, 0, 0, 100],
+                       ["harg-ms3786er0002", 2, 0, 50, 0, 50],
+                       ["harg-ms3786er0003", 1, 0, 0, 0, 100]]
+        self.assertEqual(result_h3, expected_h3, "Problem with Hargrett AIP Risk Levels")
+
+        # Tests if the Hargrett Formats sheet has the expected values.
+        result_h4 = [df_h4.columns.tolist()] + df_h4.values.tolist()
+        expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3", "Unnamed: 4"],
                        [np.NaN, "Format", "CorelDraw Drawing 8.0 (High Risk)",
                         "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
@@ -128,7 +147,7 @@ class MyTestCase(unittest.TestCase):
                        ["harg-ms3786", "harg-ms3786er0001", 0, 1, 0],
                        [np.NaN, "harg-ms3786er0002", 1, 1, 0],
                        [np.NaN, "harg-ms3786er0003", 0, 0, 1]]
-        self.assertEqual(result_h3, expected_h3, "Problem with Hargrett Formats")
+        self.assertEqual(result_h4, expected_h4, "Problem with Hargrett Formats")
 
 
 if __name__ == '__main__':
