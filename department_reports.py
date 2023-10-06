@@ -151,6 +151,10 @@ if __name__ == '__main__':
         df['Format'] = df['Format Name'] + " " + df['Format Version'] + " (" + df['NARA_Risk Level'] + ")"
         df['Format'] = df['Format'].str.replace(" NO VALUE", "")
 
+        # Makes the NARA_Risk Level column categorical, so it can be automatically sorted from high to low risk.
+        df['NARA_Risk Level'] = pd.Categorical(df['NARA_Risk Level'],
+                                               ["No Match", "High Risk", "Moderate Risk", "Low Risk"])
+
         # Calculates the percentage of formats at each risk level for each collection.
         # Duplicates are removed so each format is counted once per collection instead of once per AIP.
         df_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
@@ -159,8 +163,10 @@ if __name__ == '__main__':
         # Calculates the percentage of formats at each risk level for each AIP.
         aip_risk = risk_levels(df, 'AIP')
 
-        # Calculates which formats are in each collection and AIP.
-        formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['Format'], values=['Format Name'],
+        # Calculates which formats are in each collection and AIP,
+        # sorted first by risk level and then by format.
+        df.sort_values(['NARA_Risk Level', 'Format'], inplace=True)
+        formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['NARA_Risk Level', 'Format'], values=['Format Name'],
                                  aggfunc=len, fill_value=0)
         df.drop(['Format'], axis=1, inplace=True)
 
