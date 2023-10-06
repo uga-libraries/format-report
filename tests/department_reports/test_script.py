@@ -2,7 +2,7 @@
 Tests the entire script department_reports.py,
 which makes summaries of data from the archive_formats_by_aip.csv for each department.
 """
-
+import datetime
 import numpy as np
 import os
 import pandas as pd
@@ -16,8 +16,9 @@ class MyTestCase(unittest.TestCase):
         """
         Deletes the Excel spreadsheets produced by the script, if they were made by the test.
         """
-        file_paths = [os.path.join("script", "bmac_risk_report.xlsx"),
-                      os.path.join("script", "hargrett_risk_report.xlsx")]
+        date = datetime.date.today().strftime("%Y%m")
+        file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
+                      os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
         for file_path in file_paths:
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -51,14 +52,15 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)
 
         # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
-        bmac = pd.ExcelFile(os.path.join("script", "bmac_risk_report.xlsx"))
+        date = datetime.date.today().strftime("%Y%m")
+        bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
         df_b1 = pd.read_excel(bmac, "AIP Risk Data")
         df_b2 = pd.read_excel(bmac, "Collection Risk Levels")
         df_b3 = pd.read_excel(bmac, "Formats")
         bmac.close()
 
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
-        hargrett = pd.ExcelFile(os.path.join("script", "hargrett_risk_report.xlsx"))
+        hargrett = pd.ExcelFile(os.path.join("script", f"hargrett_risk_report_{date}.xlsx"))
         df_h1 = pd.read_excel(hargrett, "AIP Risk Data")
         df_h2 = pd.read_excel(hargrett, "Collection Risk Levels")
         df_h3 = pd.read_excel(hargrett, "Formats")

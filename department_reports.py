@@ -11,6 +11,7 @@ Before running this script, run merge_format_reports.py
 
 # usage: python path/department_reports.py archive_formats_by_aip_csv
 
+import datetime
 import numpy as np
 import os
 import pandas as pd
@@ -98,6 +99,9 @@ if __name__ == '__main__':
     # Department risk reports will also be saved to this directory.
     output_folder = os.path.dirname(format_csv)
 
+    # Calculates today's date, formatted YYYYMM, to include in the spreadsheet names.
+    date = datetime.date.today().strftime("%Y%m")
+
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
     for df in department_dfs:
 
@@ -122,7 +126,7 @@ if __name__ == '__main__':
         df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report.
-        xlsx_path = os.path.join(output_folder, f"{dept}_risk_report.xlsx")
+        xlsx_path = os.path.join(output_folder, f"{dept}_risk_report_{date}.xlsx")
         with pd.ExcelWriter(xlsx_path) as risk_report:
             df.to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
             collection_risk.to_excel(risk_report, sheet_name="Collection Risk Levels")
