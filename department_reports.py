@@ -130,6 +130,6 @@ if __name__ == '__main__':
         # in the same folder as the CSV with ARCHive format data (format_csv).
         xlsx_path = os.path.join(output_folder, f"{dept}_risk_report_{date}.xlsx")
         with pd.ExcelWriter(xlsx_path) as risk_report:
-            df.to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
+            df.sort_values(['Collection', 'AIP']).to_excel(risk_report, sheet_name="AIP Risk Data", index=False)
             collection_risk.to_excel(risk_report, sheet_name="Collection Risk Levels")
             formats.to_excel(risk_report, sheet_name="Formats")
