@@ -10,7 +10,7 @@ Information included:
 Before running this script, run merge_format_reports.py
 """
 
-# usage: python path/department_reports.py archive_formats_by_aip_csv
+# usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report
 
 import datetime
 import numpy as np
@@ -19,29 +19,42 @@ import pandas as pd
 import sys
 
 
-def check_argument(argument_list):
+def check_arguments(argument_list):
     """
-    Verifies the required argument format_csv is present, the path is valid,
-    and the CSV has the expected data based on the filename.
+    Verifies that both required arguments are present, the paths are valid,
+    and they have the expected data based on the filenames.
     """
     # Makes variables with default values to store the results of the function.
-    csv_path = None
+    aip_path = None
+    dept_path = None
     errors = []
 
-    # Verifies that the required argument (archive_formats_by_aip_csv) is present,
+    # Verifies that the first required argument (archive_formats_by_aip_csv) is present,
     # and if it is present that it is a valid directory and has the expected filename.
     if len(argument_list) > 1:
-        csv_path = argument_list[1]
-        if not os.path.exists(csv_path):
-            errors.append(f"archive_formats_by_aip_csv '{csv_path}' does not exist")
-        csv_name = os.path.basename(csv_path)
-        if not csv_name.startswith("archive_formats_by_aip"):
-            errors.append(f"archive_formats_by_aip_csv '{csv_path}' is not the correct type (should be by_aip)")
+        aip_path = argument_list[1]
+        if not os.path.exists(aip_path):
+            errors.append(f"archive_formats_by_aip_csv '{aip_path}' does not exist")
+        aip_filename = os.path.basename(aip_path)
+        if not (aip_filename.startswith("archive_formats_by_aip") and aip_filename.endswith(".csv")):
+            errors.append(f"archive_formats_by_aip_csv '{aip_path}' is not the correct type (should be by_aip.csv)")
     else:
         errors.append("Required argument archive_formats_by_aip_csv is missing")
 
+    # Verifies that the second required argument (dept_risk_report) is present,
+    # and if it is present that it is a valid directory and has the expected filename.
+    if len(argument_list) > 2:
+        dept_path = argument_list[2]
+        if not os.path.exists(dept_path):
+            errors.append(f"dept_risk_report '{dept_path}' does not exist")
+        dept_filename = os.path.basename(dept_path)
+        if not ("_risk_report_" in dept_filename and dept_filename.endswith(".xlsx")):
+            errors.append(f"dept_risk_report '{dept_path}' is not the correct type (should be dept_risk_report.xlsx)")
+    else:
+        errors.append("Required argument dept_risk_report is missing")
+
     # Returns the results.
-    return csv_path, errors
+    return aip_path, dept_path, errors
 
 
 def csv_to_dataframes(csv_file):
@@ -121,11 +134,11 @@ if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
     # If there is an error, exits the script.
-    format_csv, errors_list = check_argument(sys.argv)
+    format_csv, previous_risk_csv, errors_list = check_arguments(sys.argv)
     if len(errors_list) > 0:
         for error in errors_list:
             print(error)
-        print("Script usage: python path/department_reports.py archive_formats_by_aip_csv")
+        print("Script usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report")
         sys.exit(1)
 
     # Makes a list of dataframes, one for each group (department), in archive_formats_by_aip_csv.

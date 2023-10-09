@@ -25,7 +25,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_argument_error(self):
         """
-        Test for running the script without the required argument.
+        Test for running the script without both required arguments.
         It will print a message and exit the script.
         """
         # Tests that the script exits due to the error.
@@ -38,7 +38,8 @@ class MyTestCase(unittest.TestCase):
         output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
         msg_expected = "Required argument archive_formats_by_aip_csv is missing\r\n" \
-                       "Script usage: python path/department_reports.py archive_formats_by_aip_csv\r\n"
+                       "Required argument dept_risk_report is missing\r\n" \
+                       "Script usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):
@@ -48,7 +49,8 @@ class MyTestCase(unittest.TestCase):
         # Runs the script.
         script_path = os.path.join("..", "..", "department_reports.py")
         format_csv = os.path.join("script", "archive_formats_by_aip_2023-09.csv")
-        subprocess.run(f"python {script_path} {format_csv}")
+        previous_risk_xlsx = "hargrett_risk_report_202110.xlsx"
+        subprocess.run(f"python {script_path} {format_csv} {previous_risk_xlsx}")
         self.assertEqual(True, True)
 
         # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
