@@ -97,8 +97,8 @@ class MyTestCase(unittest.TestCase):
                        [np.NaN, "NARA_Risk Level", "No Match", "Low Risk"],
                        [np.NaN, "Format", "cue (No Match)", "Wave (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN],
-                       ["hm-lawton", "bmac_hm-lawton_0001", 0, 1],
-                       [np.NaN, "bmac_hm-lawton_0002", 1, 0]]
+                       ["hm-lawton", "bmac_hm-lawton_0001", False, True],
+                       [np.NaN, "bmac_hm-lawton_0002", True, False]]
 
         self.assertEqual(result_b4, expected_b4, "Problem with BMAC Formats")
 
@@ -118,7 +118,9 @@ class MyTestCase(unittest.TestCase):
                        ["hargrett", "harg-ms3786", "harg-ms3786er0002", "JPEG File Interchange Format", "1.01",
                         "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"]]
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE", "NO VALUE",
+                        "Low Risk", "Retain"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
@@ -134,7 +136,7 @@ class MyTestCase(unittest.TestCase):
                        ["harg-0000-web-202007-0002", 1, 0, 0, 0, 100],
                        ["harg-ms3786er0001", 1, 0, 0, 0, 100],
                        ["harg-ms3786er0002", 2, 0, 50, 0, 50],
-                       ["harg-ms3786er0003", 1, 0, 0, 0, 100]]
+                       ["harg-ms3786er0003", 2, 0, 0, 0, 100]]
         self.assertEqual(result_h3, expected_h3, "Problem with Hargrett AIP Risk Levels")
 
         # Tests if the Hargrett Formats sheet has the expected values.
@@ -144,11 +146,11 @@ class MyTestCase(unittest.TestCase):
                        [np.NaN, "Format", "CorelDraw Drawing 8.0 (High Risk)",
                         "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
-                       ["harg-0000", "harg-0000-web-202007-0001", 0, 0, 1],
-                       [np.NaN, "harg-0000-web-202007-0002", 0, 0, 1],
-                       ["harg-ms3786", "harg-ms3786er0001", 0, 1, 0],
-                       [np.NaN, "harg-ms3786er0002", 1, 1, 0],
-                       [np.NaN, "harg-ms3786er0003", 0, 0, 1]]
+                       ["harg-0000", "harg-0000-web-202007-0001", False, False, True],
+                       [np.NaN, "harg-0000-web-202007-0002", False, False, True],
+                       ["harg-ms3786", "harg-ms3786er0001", False, True, False],
+                       [np.NaN, "harg-ms3786er0002", True, True, False],
+                       [np.NaN, "harg-ms3786er0003", False, False, True]]
         self.assertEqual(result_h4, expected_h4, "Problem with Hargrett Formats")
 
 

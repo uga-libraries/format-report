@@ -165,9 +165,8 @@ if __name__ == '__main__':
 
         # Calculates which formats are in each collection and AIP,
         # sorted first by risk level and then by format.
-        df.sort_values(['NARA_Risk Level', 'Format'], inplace=True)
         formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['NARA_Risk Level', 'Format'], values=['Format Name'],
-                                 aggfunc=len, fill_value=0)
+                                 aggfunc=len, fill_value=0).astype(bool)
         df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report,
