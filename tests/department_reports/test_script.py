@@ -37,9 +37,9 @@ class MyTestCase(unittest.TestCase):
         # Must run the script a second time because cannot capture output within self.assertRaises.
         output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Required argument archive_formats_by_aip_csv is missing\r\n" \
-                       "Required argument dept_risk_report is missing\r\n" \
-                       "Script usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report\r\n"
+        msg_expected = "Required argument formats_current is missing\r\n" \
+                       "Required argument formats_previous is missing\r\n" \
+                       "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):
@@ -48,9 +48,9 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the script.
         script_path = os.path.join("..", "..", "department_reports.py")
-        format_csv = os.path.join("script", "archive_formats_by_aip_2023-09.csv")
-        previous_risk_xlsx = "hargrett_risk_report_202110.xlsx"
-        subprocess.run(f"python {script_path} {format_csv} {previous_risk_xlsx}")
+        formats_current = os.path.join("script", "archive_formats_by_aip_2023-09.csv")
+        formats_previous = "archive_formats_by_aip_2021-08.csv"
+        subprocess.run(f"python {script_path} {formats_current} {formats_previous}")
         self.assertEqual(True, True)
 
         # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.

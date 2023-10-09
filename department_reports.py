@@ -10,7 +10,9 @@ Information included:
 Before running this script, run merge_format_reports.py
 """
 
-# usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report
+# usage: python path/department_reports.py formats_current formats_previous
+# The arguments are paths to the archive_formats_by_aip.csv
+# from the current year and from the last previous format analysis.
 
 import datetime
 import numpy as np
@@ -25,36 +27,36 @@ def check_arguments(argument_list):
     and they have the expected data based on the filenames.
     """
     # Makes variables with default values to store the results of the function.
-    aip_path = None
-    dept_path = None
+    current_path = None
+    previous_path = None
     errors = []
 
-    # Verifies that the first required argument (archive_formats_by_aip_csv) is present,
+    # Verifies that the first required argument (formats_current) is present,
     # and if it is present that it is a valid directory and has the expected filename.
     if len(argument_list) > 1:
-        aip_path = argument_list[1]
-        if not os.path.exists(aip_path):
-            errors.append(f"archive_formats_by_aip_csv '{aip_path}' does not exist")
-        aip_filename = os.path.basename(aip_path)
-        if not (aip_filename.startswith("archive_formats_by_aip") and aip_filename.endswith(".csv")):
-            errors.append(f"archive_formats_by_aip_csv '{aip_path}' is not the correct type (should be by_aip.csv)")
+        current_path = argument_list[1]
+        if not os.path.exists(current_path):
+            errors.append(f"formats_current '{current_path}' does not exist")
+        current_filename = os.path.basename(current_path)
+        if not (current_filename.startswith("archive_formats_by_aip") and current_filename.endswith(".csv")):
+            errors.append(f"'{current_path}' is not the correct type (should be archive_formats_by_aip_date.csv)")
     else:
-        errors.append("Required argument archive_formats_by_aip_csv is missing")
+        errors.append("Required argument formats_current is missing")
 
-    # Verifies that the second required argument (dept_risk_report) is present,
+    # Verifies that the second required argument (formats_previous) is present,
     # and if it is present that it is a valid directory and has the expected filename.
     if len(argument_list) > 2:
-        dept_path = argument_list[2]
-        if not os.path.exists(dept_path):
-            errors.append(f"dept_risk_report '{dept_path}' does not exist")
-        dept_filename = os.path.basename(dept_path)
-        if not ("_risk_report_" in dept_filename and dept_filename.endswith(".xlsx")):
-            errors.append(f"dept_risk_report '{dept_path}' is not the correct type (should be dept_risk_report.xlsx)")
+        previous_path = argument_list[2]
+        if not os.path.exists(previous_path):
+            errors.append(f"formats_previous '{previous_path}' does not exist")
+        previous_filename = os.path.basename(previous_path)
+        if not (previous_filename.startswith("archive_formats_by_aip") and previous_filename.endswith(".csv")):
+            errors.append(f"'{previous_path}' is not the correct type (should be archive_formats_by_aip_date.csv)")
     else:
-        errors.append("Required argument dept_risk_report is missing")
+        errors.append("Required argument formats_previous is missing")
 
     # Returns the results.
-    return aip_path, dept_path, errors
+    return current_path, previous_path, errors
 
 
 def csv_to_dataframes(csv_file):
@@ -134,19 +136,19 @@ if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
     # If there is an error, exits the script.
-    format_csv, previous_risk_csv, errors_list = check_arguments(sys.argv)
+    current_format_csv, previous_format_csv, errors_list = check_arguments(sys.argv)
     if len(errors_list) > 0:
         for error in errors_list:
             print(error)
-        print("Script usage: python path/department_reports.py archive_formats_by_aip_csv dept_risk_report")
+        print("Script usage: python path/department_reports.py formats_current formats_previous")
         sys.exit(1)
 
     # Makes a list of dataframes, one for each group (department), in archive_formats_by_aip_csv.
-    department_dfs = csv_to_dataframes(format_csv)
+    department_dfs = csv_to_dataframes(current_format_csv)
 
     # Calculates the directory that archive_formats_by_aip_csv is in.
     # Department risk reports will also be saved to this directory.
-    output_folder = os.path.dirname(format_csv)
+    output_folder = os.path.dirname(current_format_csv)
 
     # Calculates today's date, formatted YYYYMM, to include in the spreadsheet names.
     date = datetime.date.today().strftime("%Y%m")
