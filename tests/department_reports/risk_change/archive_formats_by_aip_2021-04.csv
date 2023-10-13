@@ -1,0 +1,2 @@
+Group,Collection,AIP,Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note,NARA_Format Name,NARA_PRONOM URL,NARA_Risk Level,NARA_Proposed Preservation Plan,NARA_Match_Type
+dlg,dlg_ghn,batch_gua_augweeklychronsent02_archival,structured_text,XML,Extensible Markup Language|1.0|fmt/101,Extensible Markup Language,1.0,https://www.nationalarchives.gov.uk/PRONOM,fmt/101,NO VALUE,eXtensible Markup Language 1.0,https://www.nationalarchives.gov.uk/pronom/fmt/101,High Risk,Retain,PUID

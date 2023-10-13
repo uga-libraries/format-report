@@ -87,8 +87,8 @@ def csv_to_dataframe(csv_file):
                                     csv_df['Registry Name'] + "/" + csv_df['Registry Key'], "NO VALUE")
 
     # Makes the NARA_Risk Level column categorical, so it can be automatically sorted from high to low risk.
-    risk_order = ["No Match", "High Risk", "Moderate Risk", "Low Risk"]
-    csv_df['NARA_Risk Level'] = pd.Categorical(csv_df['NARA_Risk Level'], risk_order)
+    risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+    csv_df['NARA_Risk Level'] = pd.Categorical(csv_df['NARA_Risk Level'], risk_order, ordered=True)
 
     # Removes unwanted columns.
     # These are used for the ARCHive report but not department reports.
@@ -120,7 +120,22 @@ def risk_change(current_df, previous_df):
     the type of change between the previous analysis and current analysis.
     Returns the updated current dataframe.
     """
-    # TODO
+    # Adds previous risk data to the current, matching on the AIP and Format_Identification columns.
+    previous_columns = ['AIP', 'Format_Identification', '2021_NARA_Risk_Level']
+    current_df = pd.merge(current_df, previous_df[previous_columns], how="left")
+
+    # Removes the Format_Identification column, which was only needed to align previous with current.
+    current_df.drop(['Format_Identification'], axis=1, inplace=True)
+
+    # Adds a column to current with the type of change from previous to current.
+    conditions = [(current_df['2021_NARA_Risk_Level'] != "No Match") & (current_df['2021_NARA_Risk_Level'] > current_df['2023_NARA_Risk_Level']),
+                  current_df['2021_NARA_Risk_Level'] < current_df['2023_NARA_Risk_Level'],
+                  current_df['2021_NARA_Risk_Level'].isnull(),
+                  (current_df['2021_NARA_Risk_Level'] == "No Match") & (current_df['2023_NARA_Risk_Level'] != "No Match"),
+                  current_df['2021_NARA_Risk_Level'] == current_df['2023_NARA_Risk_Level']]
+    change_type = ["Decrease", "Increase", "New Format", "New Match", "Unchanged"]
+    current_df['Risk_Change'] = np.select(conditions, change_type)
+
     return current_df
 
 
