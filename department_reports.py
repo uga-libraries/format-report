@@ -59,11 +59,11 @@ def check_arguments(argument_list):
     return current_path, previous_path, errors
 
 
-def csv_to_dataframes(csv_file):
+def csv_to_dataframe(csv_file):
     """
-    Reads the archive_formats_by_aip_csv into a dataframe, including error handling for encoding errors,
-    cleans up the data, and splits it into separate dataframes for each group.
-    Returns a list of the dataframes.
+    Reads the previous or current archive_formats_by_aip_csv into a dataframe,
+    including error handling for encoding errors, and cleans up the data.
+    Returns a dataframe.
     """
     # Reads the CSV into a dataframe, ignoring encoding errors from special characters if necessary.
     # Reads everything as a string to make actions taken on the dataframes predictable.
@@ -74,11 +74,20 @@ def csv_to_dataframes(csv_file):
         print("The CSV was read by ignoring encoding errors, so those characters are omitted from the dataframe.")
         csv_df = pd.read_csv(csv_file, dtype=str, encoding_errors="ignore")
 
+    # Adds a column with combined format name, version (if has one), and NARA risk level.
+    # This is used for summaries but removed before the risk information is saved to the department report.
+    csv_df['Format'] = csv_df['Format Name'] + " " + csv_df['Format Version'] + " (" + csv_df['NARA_Risk Level'] + ")"
+    csv_df['Format'] = csv_df['Format'].str.replace(" NO VALUE", "")
+
     # Makes a new column (PRONOM URL) by combining Registry Name and Registry Key, if Registry Name is PRONOM.
     # If the registry is not PRONOM, the column will have NO VALUE.
     # PRONOM is the only possible registry that our format data currently contains.
     csv_df['PRONOM URL'] = np.where(csv_df['Registry Name'] == "https://www.nationalarchives.gov.uk/PRONOM",
                                     csv_df['Registry Name'] + "/" + csv_df['Registry Key'], "NO VALUE")
+
+    # Makes the NARA_Risk Level column categorical, so it can be automatically sorted from high to low risk.
+    risk_order = ["No Match", "High Risk", "Moderate Risk", "Low Risk"]
+    csv_df['NARA_Risk Level'] = pd.Categorical(csv_df['NARA_Risk Level'], risk_order)
 
     # Removes unwanted columns.
     # These are used for the ARCHive report but not department reports.
@@ -86,15 +95,25 @@ def csv_to_dataframes(csv_file):
                  'Registry Key', 'Format Note', 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Match_Type'],
                 axis=1, inplace=True)
 
+    # TODO: add current year to NARA columns. Year must be parsed from file name.
+
+    # TODO: replace spaces with underscores in column names.
+
     # Changes the order of the columns to group format information and risk information.
     # Otherwise, the PRONOM URL would be at the end.
-    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format Name', 'Format Version', 'PRONOM URL',
+    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format', 'Format Name', 'Format Version', 'PRONOM URL',
                      'NARA_Risk Level', 'NARA_Proposed Preservation Plan']]
 
-    # Splits the dataframe into a list of dataframes, with one dataframe per group.
-    df_list = [d for _, d in csv_df.groupby(['Group'])]
+    return csv_df
 
-    return df_list
+
+def risk_change(current_df, previous_df):
+    """
+    Calculates the type of change between the previous analysis and current analysis.
+    Returns an updated current dataframe, with columns for previous risk level and risk change.
+    """
+    # TODO
+    return current_df
 
 
 def risk_levels(dept_df, index_column):
@@ -134,7 +153,7 @@ def risk_levels(dept_df, index_column):
 
 if __name__ == '__main__':
 
-    # Verifies the required argument is present and the path is valid.
+    # Verifies the required arguments are present and the paths are valid.
     # If there is an error, exits the script.
     current_format_csv, previous_format_csv, errors_list = check_arguments(sys.argv)
     if len(errors_list) > 0:
@@ -143,8 +162,12 @@ if __name__ == '__main__':
         print("Script usage: python path/department_reports.py formats_current formats_previous")
         sys.exit(1)
 
-    # Makes a list of dataframes, one for each group (department), in archive_formats_by_aip_csv.
-    department_dfs = csv_to_dataframes(current_format_csv)
+    # Reads each CSV into a dataframe, with some data cleanup.
+    current_format_df = csv_to_dataframe(current_format_csv)
+    previous_format_df = csv_to_dataframe(previous_format_csv)
+
+    # Adds information about change in risk from previous analysis to the current.
+    current_format_df = risk_change(current_format_df, previous_format_df)
 
     # Calculates the directory that archive_formats_by_aip_csv is in.
     # Department risk reports will also be saved to this directory.
@@ -153,6 +176,9 @@ if __name__ == '__main__':
     # Calculates today's date, formatted YYYYMM, to include in the spreadsheet names.
     date = datetime.date.today().strftime("%Y%m")
 
+    # Splits the dataframe into a list of dataframes, with one dataframe per group.
+    department_dfs = [d for _, d in current_format_df.groupby(['Group'])]
+
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
     for df in department_dfs:
 
@@ -160,15 +186,6 @@ if __name__ == '__main__':
         # The index is reset first or else the first row is not always 0.
         df.reset_index(drop=True, inplace=True)
         dept = df.at[0, 'Group']
-
-        # Adds a column with combined format name and version (if has one).
-        # This is used for multiple summaries.
-        df['Format'] = df['Format Name'] + " " + df['Format Version'] + " (" + df['NARA_Risk Level'] + ")"
-        df['Format'] = df['Format'].str.replace(" NO VALUE", "")
-
-        # Makes the NARA_Risk Level column categorical, so it can be automatically sorted from high to low risk.
-        df['NARA_Risk Level'] = pd.Categorical(df['NARA_Risk Level'],
-                                               ["No Match", "High Risk", "Moderate Risk", "Low Risk"])
 
         # Calculates the percentage of formats at each risk level for each collection.
         # Duplicates are removed so each format is counted once per collection instead of once per AIP.
