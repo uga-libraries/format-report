@@ -97,12 +97,13 @@ def csv_to_dataframe(csv_file):
 
     # TODO: add current year to NARA columns. Year must be parsed from file name.
 
-    # TODO: replace spaces with underscores in column names.
+    # Replaces spaces in column names with underscores.
+    csv_df.columns = csv_df.columns.str.replace(" ", "_")
 
     # Changes the order of the columns to group format information and risk information.
     # Otherwise, the PRONOM URL would be at the end.
-    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format', 'Format Name', 'Format Version', 'PRONOM URL',
-                     'NARA_Risk Level', 'NARA_Proposed Preservation Plan']]
+    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format', 'Format_Name', 'Format_Version', 'PRONOM_URL',
+                     'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan']]
 
     return csv_df
 
