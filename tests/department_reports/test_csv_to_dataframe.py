@@ -123,6 +123,72 @@ class MyTestCase(unittest.TestCase):
                      "NO VALUE", "No Match", "NO VALUE"]]
         self.assertEqual(result, expected, "Problem with test for PUID: none")
 
+    def test_version_all(self):
+        """
+        Test for an archive_formats_by_aip CSV with one group and all formats have a version number.
+        """
+        # Runs the function being tested.
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-all_2023-08.csv")
+        format_df = csv_to_dataframe(format_csv)
+
+        # Tests that the dataframe contains the correct information.
+        result = [format_df.columns.to_list()] + format_df.values.tolist()
+        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
+                    ["russell", "rbrl213", "rbrl-213-er-000102", "Microsoft Excel 8X (Moderate Risk)",
+                     "Microsoft Excel", "8X", "https://www.nationalarchives.gov.uk/PRONOM/fmt/61 fmt/62",
+                     "Moderate Risk", "Transform to XLSX"],
+                    ["russell", "rbrl459", "rbrl-459-er-000030",
+                     "Microsoft Works Database for DOS 1.05 (Moderate Risk)", "Microsoft Works Database for DOS",
+                     "1.05", "https://www.nationalarchives.gov.uk/PRONOM/fmt/169", "Moderate Risk", "Transform to CSV"],
+                    ["russell", "rbrl213", "rbrl-213-er-000101", "Rich Text Format (RTF) 1.5-1.6 (Moderate Risk)",
+                     "Rich Text Format (RTF)", "1.5-1.6", "https://www.nationalarchives.gov.uk/PRONOM/fmt/50",
+                     "Moderate Risk", "Transform to PDF"]]
+        self.assertEqual(result, expected, "Problem with test for version: all")
+
+    def test_version_mix(self):
+        """
+        Test for an archive_formats_by_aip CSV with one group and some formats have a version number.
+        """
+        # Runs the function being tested.
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-mix_2023-08.csv")
+        format_df = csv_to_dataframe(format_csv)
+
+        # Tests that the dataframe contains the correct information.
+        result = [format_df.columns.to_list()] + format_df.values.tolist()
+        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
+                    ["dlg-magil", "gyca_gaphind", "gyca_gaphind_banks-1980", "Plain text (Low Risk)",
+                     "Plain text", "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111",
+                     "Low Risk", "Retain"],
+                    ["dlg-magil", "gyca_gaphind", "gyca_gaphind_lee-1993", "Tagged Image File Format 4.0 (Low Risk)",
+                     "Tagged Image File Format", "4.0", "NO VALUE", "Low Risk", "Retain"],
+                    ["dlg-magil", "dlg_sanb", "dlg_sanb_savannah-1888", "Tagged Image File Format 6.0 (Low Risk)",
+                     "Tagged Image File Format", "6.0", "NO VALUE", "Low Risk", "Retain"]]
+        self.assertEqual(result, expected, "Problem with test for version: mix")
+
+    def test_version_none(self):
+        """
+        Test for an archive_formats_by_aip CSV with one group and no formats have a version number.
+        """
+        # Runs the function being tested.
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-none_2023-08.csv")
+        format_df = csv_to_dataframe(format_csv)
+
+        # Tests that the dataframe contains the correct information.
+        result = [format_df.columns.to_list()] + format_df.values.tolist()
+        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
+                    ["russell", "rbrl459", "rbrl-459-er-000072", "Lotus 1-2-3 wk4 document data (Moderate Risk)",
+                     "Lotus 1-2-3 wk4 document data", "NO VALUE", "NO VALUE", "Moderate Risk",
+                     "Transform to CSV or XLSX"],
+                    ["russell", "rbrl377", "rbrl-377-er-000001", "SWF (Moderate Risk)", "SWF", "NO VALUE", "NO VALUE",
+                     "Moderate Risk", "Retain"],
+                    ["russell", "rbrl455", "rbrl-455-er-000069", "Quicken Data File (No Match)",
+                     "Quicken Data File", "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/213",
+                     "No Match", "NO VALUE"]]
+        self.assertEqual(result, expected, "Problem with test for version: none")
+
 
 if __name__ == "__main__":
     unittest.main()
