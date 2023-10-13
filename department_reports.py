@@ -18,6 +18,7 @@ import datetime
 import numpy as np
 import os
 import pandas as pd
+import re
 import sys
 
 
@@ -95,15 +96,20 @@ def csv_to_dataframe(csv_file):
                  'Registry Key', 'Format Note', 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Match_Type'],
                 axis=1, inplace=True)
 
-    # TODO: add current year to NARA columns. Year must be parsed from file name.
-
     # Replaces spaces in column names with underscores.
     csv_df.columns = csv_df.columns.str.replace(" ", "_")
+
+    # Adds the year the CSV data is from to NARA column names. Year is parsed from the file name.
+    regex = re.match(".*_([0-9]{4})-[0-9]{2}.csv", csv_file)
+    year = regex.group(1)
+    csv_df.rename(columns={'NARA_Risk_Level': f'{year}_NARA_Risk_Level',
+                           'NARA_Proposed_Preservation_Plan': f'{year}_NARA_Proposed_Preservation_Plan'},
+                  inplace=True)
 
     # Changes the order of the columns to group format information and risk information.
     # Otherwise, the PRONOM URL would be at the end.
     csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format', 'Format_Name', 'Format_Version', 'PRONOM_URL',
-                     'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan']]
+                     f'{year}_NARA_Risk_Level', f'{year}_NARA_Proposed_Preservation_Plan']]
 
     return csv_df
 

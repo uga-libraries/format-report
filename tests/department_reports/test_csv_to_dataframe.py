@@ -23,7 +23,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that the dataframe contains the correct information.
         result = [format_df.columns.to_list()] + format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
-                     "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan"],
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska (No Match)", "Matroska", "NO VALUE",
                      "NO VALUE", "No Match", "NO VALUE"],
                     ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska (No Match)", "Matroska", "NO VALUE",
@@ -42,7 +42,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that the dataframe contains the correct information.
         result = [format_df.columns.to_list()] + format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
-                     "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan"],
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["dlg", "arl_acl", "arl_acl_acl332", "Tagged Image File Format 6 (Low Risk)",
                      "Tagged Image File Format", "6", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Low Risk", "Retain"],
@@ -70,7 +70,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that the dataframe contains the correct information.
         result = [format_df.columns.to_list()] + format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
-                     "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan"],
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0013", "JPEG EXIF 2.1 (Low Risk)", "JPEG EXIF", "2.1",
                      "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/390", "Low Risk", "Retain"],
                     ["hargrett", "harg-ms3786", "harg-ms3786er0016", "JPEG EXIF 2.1 (Low Risk)", "JPEG EXIF", "2.1",
@@ -91,7 +91,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that the dataframe contains the correct information.
         result = [format_df.columns.to_list()] + format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
-                     "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan"],
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["dlg", "arl_nnc", "arl_nnc_nnc004-001-003", "Tagged Image File Format 5 (Low Risk)", 
                      "Tagged Image File Format", "5", "NO VALUE", "Low Risk", "Retain"],
                     ["dlg", "arl_acl", "arl_acl_acl328", "Tagged Image File Format 6 (Low Risk)", 
@@ -116,7 +116,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that the dataframe contains the correct information.
         result = [format_df.columns.to_list()] + format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
-                     "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan"],
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska (No Match)", "Matroska", "NO VALUE",
                      "NO VALUE", "No Match", "NO VALUE"],
                     ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska (No Match)", "Matroska", "NO VALUE",
