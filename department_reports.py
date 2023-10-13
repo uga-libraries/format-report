@@ -92,8 +92,8 @@ def csv_to_dataframe(csv_file):
 
     # Removes unwanted columns.
     # These are used for the ARCHive report but not department reports.
-    csv_df.drop(['Format Type', 'Format Standardized Name', 'Format Identification', 'Registry Name',
-                 'Registry Key', 'Format Note', 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Match_Type'],
+    csv_df.drop(['Format Type', 'Format Standardized Name', 'Registry Name', 'Registry Key', 'Format Note',
+                 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Match_Type'],
                 axis=1, inplace=True)
 
     # Replaces spaces in column names with underscores.
@@ -108,16 +108,17 @@ def csv_to_dataframe(csv_file):
 
     # Changes the order of the columns to group format information and risk information.
     # Otherwise, the PRONOM URL would be at the end.
-    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format', 'Format_Name', 'Format_Version', 'PRONOM_URL',
-                     f'{year}_NARA_Risk_Level', f'{year}_NARA_Proposed_Preservation_Plan']]
+    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format_Identification', 'Format', 'Format_Name', 'Format_Version',
+                     'PRONOM_URL', f'{year}_NARA_Risk_Level', f'{year}_NARA_Proposed_Preservation_Plan']]
 
     return csv_df
 
 
 def risk_change(current_df, previous_df):
     """
-    Calculates the type of change between the previous analysis and current analysis.
-    Returns an updated current dataframe, with columns for previous risk level and risk change.
+    Updates the current analysis dataframe with risk data from the previous analysis and
+    the type of change between the previous analysis and current analysis.
+    Returns the updated current dataframe.
     """
     # TODO
     return current_df
@@ -173,7 +174,7 @@ if __name__ == '__main__':
     current_format_df = csv_to_dataframe(current_format_csv)
     previous_format_df = csv_to_dataframe(previous_format_csv)
 
-    # Adds information about change in risk from previous analysis to the current.
+    # Adds information about change in risk from previous analysis to the current analysis data.
     current_format_df = risk_change(current_format_df, previous_format_df)
 
     # Calculates the directory that archive_formats_by_aip_csv is in.

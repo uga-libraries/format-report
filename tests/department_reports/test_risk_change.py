@@ -1,0 +1,53 @@
+"""
+Tests for the function risk_change(),
+which adds risk data from the previous analysis to the current analysis,
+calculates the type of change from the previous to the current,
+and returns the updated current dataframe.
+
+Reading CSV into dataframe with csv_to_dataframe() rather than making a dataframe within the test
+so that the input matches production exactly.
+"""
+
+import os
+import unittest
+from department_reports import csv_to_dataframe, risk_change
+
+
+class MyTestCase(unittest.TestCase):
+
+    def test_unchanged(self):
+        """
+        Test for when format risk is the same in previous and current.
+        """
+        # Reads test input into dataframes.
+        current_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2023-06.csv")
+        current_format_df = csv_to_dataframe(current_format_csv)
+        previous_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2021-06.csv")
+        previous_format_df = csv_to_dataframe(previous_format_csv)
+
+        # Runs the function being tested.
+        current_format_df = risk_change(current_format_df, previous_format_df)
+
+        # Tests that the updated current df contains the correction information.
+        result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
+        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
+                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
+                     "Low Risk", "Retain"],
+                    ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
+                     "Extensible Markup Language 1.0 (Low Risk)", "Extensible Markup Language", "1.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "Low Risk", "Retain"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Low Risk)",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                     "Low Risk", "Retain"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (Low Risk)",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                     "Low Risk", "Retain"],
+                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (No Match)", "Matroska",
+                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE"]]
+        self.assertEqual(result, expected, "Problem with test for risk unchanged")
+
+
+if __name__ == '__main__':
+    unittest.main()
