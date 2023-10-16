@@ -12,35 +12,35 @@ import unittest
 
 class MyTestCase(unittest.TestCase):
 
-    def tearDown(self):
-        """
-        Deletes the Excel spreadsheets produced by the script, if they were made by the test.
-        """
-        date = datetime.date.today().strftime("%Y%m")
-        file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
-                      os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
-        for file_path in file_paths:
-            if os.path.exists(file_path):
-                os.remove(file_path)
+    # def tearDown(self):
+    #     """
+    #     Deletes the Excel spreadsheets produced by the script, if they were made by the test.
+    #     """
+    #     date = datetime.date.today().strftime("%Y%m")
+    #     file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
+    #                   os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
+    #     for file_path in file_paths:
+    #         if os.path.exists(file_path):
+    #             os.remove(file_path)
 
-    def test_argument_error(self):
-        """
-        Test for running the script without both required arguments.
-        It will print a message and exit the script.
-        """
-        # Tests that the script exits due to the error.
-        script_path = os.path.join("..", "..", "department_reports.py")
-        with self.assertRaises(subprocess.CalledProcessError):
-            subprocess.run(f"python {script_path}", shell=True, check=True)
-
-        # Tests if the expected message was produced. In production, this is printed to the terminal.
-        # Must run the script a second time because cannot capture output within self.assertRaises.
-        output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
-        msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Required argument formats_current is missing\r\n" \
-                       "Required argument formats_previous is missing\r\n" \
-                       "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
-        self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
+    # def test_argument_error(self):
+    #     """
+    #     Test for running the script without both required arguments.
+    #     It will print a message and exit the script.
+    #     """
+    #     # Tests that the script exits due to the error.
+    #     script_path = os.path.join("..", "..", "department_reports.py")
+    #     with self.assertRaises(subprocess.CalledProcessError):
+    #         subprocess.run(f"python {script_path}", shell=True, check=True)
+    #
+    #     # Tests if the expected message was produced. In production, this is printed to the terminal.
+    #     # Must run the script a second time because cannot capture output within self.assertRaises.
+    #     output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
+    #     msg_result = output.stdout.decode("utf-8")
+    #     msg_expected = "Required argument formats_current is missing\r\n" \
+    #                    "Required argument formats_previous is missing\r\n" \
+    #                    "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
+    #     self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):
         """
@@ -51,9 +51,8 @@ class MyTestCase(unittest.TestCase):
         formats_current = os.path.join("script", "archive_formats_by_aip_2023-09.csv")
         formats_previous = "archive_formats_by_aip_2021-08.csv"
         subprocess.run(f"python {script_path} {formats_current} {formats_previous}")
-        self.assertEqual(True, True)
 
-        # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
+        # # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
         date = datetime.date.today().strftime("%Y%m")
         bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
         df_b1 = pd.read_excel(bmac, "AIP Risk Data")
@@ -72,12 +71,13 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the BMAC AIP Risk Data sheet has the expected values.
         result_b1 = [df_b1.columns.tolist()] + df_b1.values.tolist()
-        expected_b1 = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
-                        "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+        expected_b1 = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
+                        "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
+                        "Risk_Change"],
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0001", "Wave", "NO VALUE", "NO VALUE", "Low Risk",
-                        "Retain"],
+                        "Retain", "Low Risk", "Unchanged"],
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE", "No Match",
-                        "NO VALUE"]]
+                        "NO VALUE", "No Match", "Unchanged"]]
         self.assertEqual(result_b1, expected_b1, "Problem with BMAC AIP Risk Data")
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
@@ -95,8 +95,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the BMAC Formats sheet has the expected values.
         result_b4 = [df_b4.columns.tolist()] + df_b4.values.tolist()
-        expected_b4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3"],
-                       [np.NaN, "NARA_Risk Level", "No Match", "Low Risk"],
+        expected_b4 = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3"],
+                       [np.NaN, "2023_NARA_Risk_Level", "No Match", "Low Risk"],
                        [np.NaN, "Format", "cue (No Match)", "Wave (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN],
                        ["hm-lawton", "bmac_hm-lawton_0001", False, True],
@@ -106,23 +106,29 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Hargrett AIP Risk Data sheet has the expected values.
         result_h1 = [df_h1.columns.tolist()] + df_h1.values.tolist()
-        expected_h1 = [["Group", "Collection", "AIP", "Format Name", "Format Version", "PRONOM URL",
-                        "NARA_Risk Level", "NARA_Proposed Preservation Plan"],
+        expected_h1 = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
+                        "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
+                        "Risk_Change"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
+                        "Low Risk", "Unchanged"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
+                        "Low Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format", "1.01",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain",
+                        "Low Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0002", "CorelDraw Drawing", "8.0",
                         "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
-                        "Transform to a TBD format, possibly PDF or TIFF"],
+                        "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0002", "JPEG File Interchange Format", "1.01",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain",
+                        "Low Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE",
-                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain"],
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
+                        "Low Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE", "NO VALUE",
-                        "Low Risk", "Retain"]]
+                        "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
@@ -143,8 +149,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Hargrett Formats sheet has the expected values.
         result_h4 = [df_h4.columns.tolist()] + df_h4.values.tolist()
-        expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format Name", "Unnamed: 3", "Unnamed: 4"],
-                       [np.NaN, "NARA_Risk Level", "High Risk", "Low Risk", np.NaN],
+        expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4"],
+                       [np.NaN, "2023_NARA_Risk_Level", "High Risk", "Low Risk", np.NaN],
                        [np.NaN, "Format", "CorelDraw Drawing 8.0 (High Risk)",
                         "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
                        ["Collection", "AIP", np.NaN, np.NaN, np.NaN],

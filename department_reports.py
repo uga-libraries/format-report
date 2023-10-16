@@ -153,7 +153,8 @@ def risk_levels(dept_df, index_column):
     """
     # Calculates the number of formats at each risk level.
     # Including margins adds totals for each column and row.
-    risk = pd.pivot_table(dept_df, index=index_column, columns='NARA_Risk Level', values='Format',
+    current_risk_column = dept_df.columns.to_list()[7]
+    risk = pd.pivot_table(dept_df, index=index_column, columns=current_risk_column, values='Format',
                           margins=True, aggfunc=len, fill_value=0)
 
     # Renames the column of each row's totals from default All to Formats, to be more intuitive.
@@ -225,8 +226,10 @@ if __name__ == '__main__':
 
         # Calculates which formats are in each collection and AIP,
         # sorted first by risk level and then by format.
-        formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=['NARA_Risk Level', 'Format'],
-                                 values=['Format Name'], aggfunc=len, fill_value=0).astype(bool)
+        current_risk = df.columns.to_list()[7]
+        formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=[current_risk, 'Format'],
+                                 values=['Format_Name'], aggfunc=len, fill_value=0).astype(bool)
+        formats.sort_values([current_risk, 'Format'], ascending=[False, True], axis=1, inplace=True)
         df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report,
