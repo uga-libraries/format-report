@@ -12,35 +12,35 @@ import unittest
 
 class MyTestCase(unittest.TestCase):
 
-    # def tearDown(self):
-    #     """
-    #     Deletes the Excel spreadsheets produced by the script, if they were made by the test.
-    #     """
-    #     date = datetime.date.today().strftime("%Y%m")
-    #     file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
-    #                   os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
-    #     for file_path in file_paths:
-    #         if os.path.exists(file_path):
-    #             os.remove(file_path)
+    def tearDown(self):
+        """
+        Deletes the Excel spreadsheets produced by the script, if they were made by the test.
+        """
+        date = datetime.date.today().strftime("%Y%m")
+        file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
+                      os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
+        for file_path in file_paths:
+            if os.path.exists(file_path):
+                os.remove(file_path)
 
-    # def test_argument_error(self):
-    #     """
-    #     Test for running the script without both required arguments.
-    #     It will print a message and exit the script.
-    #     """
-    #     # Tests that the script exits due to the error.
-    #     script_path = os.path.join("..", "..", "department_reports.py")
-    #     with self.assertRaises(subprocess.CalledProcessError):
-    #         subprocess.run(f"python {script_path}", shell=True, check=True)
-    #
-    #     # Tests if the expected message was produced. In production, this is printed to the terminal.
-    #     # Must run the script a second time because cannot capture output within self.assertRaises.
-    #     output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
-    #     msg_result = output.stdout.decode("utf-8")
-    #     msg_expected = "Required argument formats_current is missing\r\n" \
-    #                    "Required argument formats_previous is missing\r\n" \
-    #                    "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
-    #     self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
+    def test_argument_error(self):
+        """
+        Test for running the script without both required arguments.
+        It will print a message and exit the script.
+        """
+        # Tests that the script exits due to the error.
+        script_path = os.path.join("..", "..", "department_reports.py")
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.run(f"python {script_path}", shell=True, check=True)
+
+        # Tests if the expected message was produced. In production, this is printed to the terminal.
+        # Must run the script a second time because cannot capture output within self.assertRaises.
+        output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
+        msg_result = output.stdout.decode("utf-8")
+        msg_expected = "Required argument formats_current is missing\r\n" \
+                       "Required argument formats_previous is missing\r\n" \
+                       "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
+        self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):
         """
