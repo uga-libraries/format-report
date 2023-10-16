@@ -120,19 +120,24 @@ def risk_change(current_df, previous_df):
     the type of change between the previous analysis and current analysis.
     Returns the updated current dataframe.
     """
+    # Gets the name of the NARA Risk Level column for each dataframe,
+    # which includes the year and so is different each time the analysis is run.
+    previous_risk = previous_df.columns.to_list()[8]
+    current_risk = current_df.columns.to_list()[8]
+
     # Adds previous risk data to the current, matching on the AIP and Format_Identification columns.
-    previous_columns = ['AIP', 'Format_Identification', '2021_NARA_Risk_Level']
+    previous_columns = ['AIP', 'Format_Identification', previous_risk]
     current_df = pd.merge(current_df, previous_df[previous_columns], how="left")
 
     # Removes the Format_Identification column, which was only needed to align previous with current.
     current_df.drop(['Format_Identification'], axis=1, inplace=True)
 
     # Adds a column to current with the type of change from previous to current.
-    conditions = [(current_df['2021_NARA_Risk_Level'] != "No Match") & (current_df['2021_NARA_Risk_Level'] > current_df['2023_NARA_Risk_Level']),
-                  current_df['2021_NARA_Risk_Level'] < current_df['2023_NARA_Risk_Level'],
-                  current_df['2021_NARA_Risk_Level'].isnull(),
-                  (current_df['2021_NARA_Risk_Level'] == "No Match") & (current_df['2023_NARA_Risk_Level'] != "No Match"),
-                  current_df['2021_NARA_Risk_Level'] == current_df['2023_NARA_Risk_Level']]
+    conditions = [(current_df[previous_risk] != "No Match") & (current_df[previous_risk] > current_df[current_risk]),
+                  current_df[previous_risk] < current_df[current_risk],
+                  current_df[previous_risk].isnull(),
+                  (current_df[previous_risk] == "No Match") & (current_df[current_risk] != "No Match"),
+                  current_df[previous_risk] == current_df[current_risk]]
     change_type = ["Decrease", "Increase", "New Format", "New Match", "Unchanged"]
     current_df['Risk_Change'] = np.select(conditions, change_type)
 
