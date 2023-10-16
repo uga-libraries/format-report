@@ -37,9 +37,9 @@ class MyTestCase(unittest.TestCase):
         # Must run the script a second time because cannot capture output within self.assertRaises.
         output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
-        msg_expected = "Required argument formats_current is missing\r\n" \
-                       "Required argument formats_previous is missing\r\n" \
-                       "Script usage: python path/department_reports.py formats_current formats_previous\r\n"
+        msg_expected = "Required argument current_formats_csv is missing\r\n" \
+                       "Required argument previous_formats_csv is missing\r\n" \
+                       "Script usage: python path/department_reports.py current_formats_csv previous_formats_csv\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_correct_input(self):

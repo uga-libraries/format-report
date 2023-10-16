@@ -1,7 +1,8 @@
 """
 Tests for the function csv_to_dataframe(),
-which reads the previous or current format CSV into a dataframe, handles encoding errors, does clean up,
-and returns the dataframe.
+which reads the previous or current archive_formats_by_aip_date.csv into a dataframe, 
+including error handling for encoding errors, and cleans up the data.
+Returns the dataframe.
 """
 
 import os
@@ -13,7 +14,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_encoding_error(self):
         """
-        Test for an archive_formats_by_aip CSV with an encoding error.
+        Test for a CSV with an encoding error.
         """
         # Runs the function being tested.
         # NOTE: the function prints an error message to the terminal if it is working correctly.
@@ -32,7 +33,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_multi_groups(self):
         """
-        Test for an archive_formats_by_aip CSV with multiple groups.
+        Test for a CSV with multiple groups.
         Some groups have one format and others have multiple formats.
         """
         # Runs the function being tested.
@@ -61,7 +62,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_puid_all(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and all formats have a PRONOM_URL.
+        Test for a CSV with one group and all formats have a PRONOM_URL.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-all_2023-08.csv")
@@ -84,7 +85,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_puid_mix(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and some formats have a PRONOM_URL.
+        Test for a CSV with one group and some formats have a PRONOM_URL.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-mix_2023-08.csv")
@@ -111,7 +112,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_puid_none(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and no formats have a PRONOM_URL.
+        Test for a CSV with one group and no formats have a PRONOM_URL.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-none_2023-08.csv")
@@ -129,7 +130,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_version_all(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and all formats have a version number.
+        Test for a CSV with one group and all formats have a version number.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-all_2023-08.csv")
@@ -152,7 +153,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_version_mix(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and some formats have a version number.
+        Test for a CSV with one group and some formats have a version number.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-mix_2023-08.csv")
@@ -175,7 +176,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_version_none(self):
         """
-        Test for an archive_formats_by_aip CSV with one group and no formats have a version number.
+        Test for a CSV with one group and no formats have a version number.
         """
         # Runs the function being tested.
         format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-none_2023-08.csv")

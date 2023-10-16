@@ -1,8 +1,8 @@
 """
 Tests for the function risk_change(),
-which adds risk data from the previous analysis to the current analysis,
-calculates the type of change from the previous to the current,
-and returns the updated current dataframe.
+which updates the current analysis dataframe with risk data from the previous analysis and
+the type of change between the previous analysis and current analysis.
+Returns the updated current dataframe.
 
 Reading CSV into dataframe with csv_to_dataframe() rather than making a dataframe within the test
 so that the input matches production exactly.
