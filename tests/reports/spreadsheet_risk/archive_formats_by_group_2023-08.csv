@@ -1,0 +1,9 @@
+Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,NARA_Risk Level,NARA_Match_Type
+A,1,10,T1,S1,id1,Low Risk,PUID
+A,2,20,T1,S1,id1,Low Risk,PUID
+B,2,20,T1,S2,id1,Low Risk,PUID
+B,2,20,T1,S3,id2,Low Risk,Name
+A,3,30,T2,S3,id3,Moderate Risk,Extension
+B,4,40,T1,S3,id4,High Risk,Extension
+A,5,50,T2,S3,id5,No Match,No NARA Match
+

@@ -202,6 +202,27 @@ def group_overlap(category, df_group):
     return groups_per_category
 
 
+def groupby_risk(df_group, groupby_list):
+    """Makes a dataframe with the number of file ids, size in GB, and format identifications
+    for each instance of the column or columns included in the groupby_list.
+    Returns the dataframe."""
+
+    # Calculates the totals.
+    # File IDs and Size (GB) are sums; Format Identification is the number of unique values.
+    # The index is reset so that the groupby_list columns are maintained as columns and don't become the index.
+    aggregation_methods = {'File_IDs': 'sum', 'Size (GB)': 'sum', 'Format Identification': 'nunique'}
+    df = df_group.groupby(groupby_list).agg(aggregation_methods).reset_index()
+
+    # Renames one of the columns, to reflect it being a total.
+    # The other column names worked equally well as labels for the individual or aggregate data.
+    df.rename(columns=({'Format Identification': 'Format Identifications'}), inplace=True)
+
+    # Rounds Size (GB) to 2 decimal places to make it easier to read.
+    df['Size (GB)'] = round(df['Size (GB)'], 2)
+
+    return df
+
+
 def one_category(category, totals, df_aip, df_group):
     """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
     and size in GB per each instance of the category, for example format type. Returns a dataframe. """
@@ -394,6 +415,32 @@ def spreadsheet_ranges(df_group, output_folder):
         format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
 
 
+def spreadsheet_risk(df_group, output_folder):
+    """
+    Calculates different measures of the amount at each of the four NARA risk levels,
+    No Match, High, Moderate, and Low,
+    and saves them to a spreadsheet named ARCHive-Formats-Analysis_Risk.xlsx.
+    """
+    # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
+    risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+    df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+
+    # Calculates the dataframe for each risk summary.
+    # The first three are the amount at each NARA risk level for different categories of data
+    # and the last is the match method between format identifications and NARA risk.
+    archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
+    dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
+    type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
+    match = groupby_risk(df_group, ['NARA_Match_Type'])
+
+    # Saves each dataframe as a separate sheet in an Excel spreadsheet.
+    with pd.ExcelWriter(os.path.join(output_folder, "ARCHive-Formats-Analysis_Risk.xlsx")) as results:
+        archive_risk.to_excel(results, sheet_name="ARCHive Risk Overview", index=False)
+        dept_risk.to_excel(results, sheet_name="Department Risk Overview", index=False)
+        type_risk.to_excel(results, sheet_name="Format Type Risk", index=False)
+        match.to_excel(results, sheet_name="NARA Match Types", index=False)
+
+
 if __name__ == '__main__':
 
     # Verifies the required argument is present and the path is valid.
@@ -428,3 +475,7 @@ if __name__ == '__main__':
     # Makes a spreadsheet in the folder with the ARCHive reports
     # with summaries of the number of instances within predetermined ranges of file id counts or size.
     spreadsheet_ranges(df_formats_by_group, report_folder)
+
+    # Makes a spreadsheet in the folder with the ARCHive reports
+    # with summaries of the amount of content at different NARA risk levels.
+    spreadsheet_risk(df_formats_by_group, report_folder)
