@@ -14,8 +14,9 @@ The numbers are inflated by files that have more than one possible format identi
 Before running this script, run update_standardization.py
 """
 
-# Usage: python path/merge_format_reports.py report_folder
-#     - report_folder contains the ARCHive group format reports. Script output is saved to this folder as well.
+# Usage: python path/merge_format_reports.py report_folder nara_csv
+#    - report_folder contains the ARCHive group format reports. Script output is saved to this folder as well.
+#    - nara_csv is the path to the NARA preservation action plans spreadsheet.
 
 import csv
 import datetime
@@ -504,7 +505,7 @@ if __name__ == '__main__':
     if len(errors_list) > 0:
         for error in errors_list:
             print(error)
-        print("Script usage: python path/merge_format_reports.py report_folder")
+        print("Script usage: python path/merge_format_reports.py report_folder nara_csv")
         sys.exit(1)
 
     # Increases the size of CSV fields to handle long AIP lists.
