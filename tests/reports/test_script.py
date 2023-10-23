@@ -4,9 +4,6 @@ which makes summaries of data from combined ARCHive format reports and the usage
 
 For input, tests use files in the reports folder of this script repo.
 """
-
-import datetime
-import numpy as np
 import os
 import pandas as pd
 import subprocess
@@ -19,9 +16,10 @@ class MyTestCase(unittest.TestCase):
         """
         Deletes the Excel spreadsheets produced by the script, if made by the test.
         """
-        file_paths = [os.path.join("correct_input", f"ARCHive-Formats-Analysis_Frequency.xlsx"),
-                      os.path.join("correct_input", f"ARCHive-Formats-Analysis_Group-Overlap.xlsx"),
-                      os.path.join("correct_input", f"ARCHive-Formats-Analysis_Ranges.xlsx")]
+        file_paths = [os.path.join("correct_input", "ARCHive-Formats-Analysis_Frequency.xlsx"),
+                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"),
+                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Ranges.xlsx"),
+                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Risk.xlsx")]
 
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -29,8 +27,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_correct_input(self):
         """
-        Test for running the script on a report_folder with all three expected reports,
-        which results in data in all sheets of all three Excel spreadsheets.
+        Test for running the script on a report_folder with all expected reports,
+        which results in data in all sheets of all the Excel spreadsheets.
         """
         # Runs the script.
         script_path = os.path.join("..", "..", "reports.py")
@@ -58,6 +56,13 @@ class MyTestCase(unittest.TestCase):
         df_10 = pd.read_excel(ranges, "Format ID Ranges")
         df_11 = pd.read_excel(ranges, "Format ID Sizes")
         ranges.close()
+
+        risk = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Risk.xlsx"))
+        df_12 = pd.read_excel(risk, "ARCHive Risk Overview")
+        df_13 = pd.read_excel(risk, "Department Risk Overview")
+        df_14 = pd.read_excel(risk, "Format Type Risk")
+        df_15 = pd.read_excel(risk, "NARA Match Types")
+        risk.close()
 
         # Tests if the Group Overview sheet has the expected values.
         result_1 = [df_1.columns.tolist()] + df_1.values.tolist()
@@ -172,6 +177,62 @@ class MyTestCase(unittest.TestCase):
                        ["0-9 GB", 5], ["10-99 GB", 2], ["100-499 GB", 1], ["500-999 GB", 1], ["1-9 TB", 2],
                        ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result_11, expected_11, "Problem with test for correct input, Format ID Sizes")
+
+        # Tests if the ARCHive Risk Overview sheet has the expected values.
+        result_12 = [df_12.columns.tolist()] + df_12.values.tolist()
+        expected_12 = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                       ["Low Risk", 269542, 2545.08, 8],
+                       ["Moderate Risk", 0, 0.0, 0],
+                       ["High Risk", 0, 0.0, 0],
+                       ["No Match", 6904, 327652.37, 4]]
+        self.assertEqual(result_12, expected_12, "Problem with test for correct input, ARCHive Risk Overview")
+
+        # Tests if the Department Risk Overview sheet has the expected values.
+        result_13 = [df_13.columns.tolist()] + df_13.values.tolist()
+        expected_13 = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                       ["bmac", "Low Risk", 0, 0.0, 0],
+                       ["bmac", "Moderate Risk", 0, 0.0, 0],
+                       ["bmac", "High Risk", 0, 0.0, 0],
+                       ["bmac", "No Match", 6607, 326822.42, 2],
+                       ["dlg", "Low Risk", 264253, 2539.21, 6],
+                       ["dlg", "Moderate Risk", 0, 0.0, 0],
+                       ["dlg", "High Risk", 0, 0.0, 0],
+                       ["dlg", "No Match", 79, 691.85, 2],
+                       ["hargrett", "Low Risk", 5289, 5.87, 5],
+                       ["hargrett", "Moderate Risk", 0, 0.0, 0],
+                       ["hargrett", "High Risk", 0, 0.0, 0],
+                       ["hargrett", "No Match", 218, 138.1, 1]]
+        self.assertEqual(result_13, expected_13, "Problem with test for correct input, Department Risk Overview")
+
+        # Tests if the Format Type Risk sheet has the expected values.
+        result_14 = [df_14.columns.tolist()] + df_14.values.tolist()
+        expected_14 = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                       ["audio", "Low Risk", 0, 0.0, 0],
+                       ["audio", "Moderate Risk", 0, 0.0, 0],
+                       ["audio", "High Risk", 0, 0.0, 0],
+                       ["audio", "No Match", 1240, 1093.53, 2],
+                       ["image", "Low Risk", 269542, 2545.08, 8],
+                       ["image", "Moderate Risk", 0, 0.0, 0],
+                       ["image", "High Risk", 0, 0.0, 0],
+                       ["image", "No Match", 0, 0.0, 0],
+                       ["video", "Low Risk", 0, 0.0, 0],
+                       ["video", "Moderate Risk", 0, 0.0, 0],
+                       ["video", "High Risk", 0, 0.0, 0],
+                       ["video", "No Match", 5446, 326420.74, 1],
+                       ["web_archive", "Low Risk", 0, 0.0, 0],
+                       ["web_archive", "Moderate Risk", 0, 0.0, 0],
+                       ["web_archive", "High Risk", 0, 0.0, 0],
+                       ["web_archive", "No Match", 218, 138.1, 1]]
+        self.assertEqual(result_14, expected_14, "Problem with test for correct input, Format Type Risk")
+
+        # Tests if the NARa Match Types sheet has the expected values.
+        result_15 = [df_15.columns.tolist()] + df_15.values.tolist()
+        expected_15 = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+                       ["Name (manual)", 71398, 1694.4, 2],
+                       ["No NARA Match", 6904, 327652.37, 4],
+                       ["PRONOM", 192904, 846.02, 2],
+                       ["PRONOM and Version", 5240, 4.67, 4]]
+        self.assertEqual(result_15, expected_15, "Problem with test for correct input, NARA Match Types")
 
     def test_missing_argument(self):
         """
