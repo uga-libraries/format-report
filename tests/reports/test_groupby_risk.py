@@ -168,6 +168,72 @@ class MyTestCase(unittest.TestCase):
                     ["hargrett", "No Match", 0, 0.0, 0]]
         self.assertEqual(result, expected, "Problem with the test for dept, three departments, overlap")
 
+    def test_match_multiple(self):
+        """
+        Test for when there are multiple NARA match types, each more than once.
+        Some format identifications are repeated.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-01.csv"))
+        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+
+        # Runs the function being tested.
+        match = groupby_risk(df_group, ['NARA_Match_Type'])
+
+        # Tests if match_risk has the expected values.
+        result = [match.columns.tolist()] + match.values.tolist()
+        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["Format Name", 60, 0.01, 2],
+                    ["No NARA Match", 399, 138.12, 6],
+                    ["PRONOM", 1487, 138.14, 8],
+                    ["PRONOM and Name", 229, 1.76, 4],
+                    ["PRONOM and Version", 8296, 6.69, 14]]
+        self.assertEqual(result, expected, "Problem with the test for multiple NARA match types")
+
+    def test_match_multiple_once(self):
+        """
+        Test for when there are multiple NARA match types, each only once.
+        All format identifications are unique.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-02.csv"))
+        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+
+        # Runs the function being tested.
+        match = groupby_risk(df_group, ['NARA_Match_Type'])
+
+        # Tests if match_risk has the expected values.
+        result = [match.columns.tolist()] + match.values.tolist()
+        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["Format Name", 48, 0.0, 1],
+                    ["PRONOM", 565, 0, 1],
+                    ["PRONOM and Name", 33, 0.47, 1]]
+        self.assertEqual(result, expected, "Problem with the test multiple NARA match types, each match once")
+
+    def test_match_one(self):
+        """
+        Test for when there is one NARA match type.
+        All format identifications are unique.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-03.csv"))
+        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+
+        # Runs the function being tested.
+        match = groupby_risk(df_group, ['NARA_Match_Type'])
+
+        # Tests if match_risk has the expected values.
+        result = [match.columns.tolist()] + match.values.tolist()
+        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["PRONOM and Version", 5123, 4.62, 4]]
+        self.assertEqual(result, expected, "Problem with the test for one match")
+
     def test_type_one(self):
         """
         Test for when there is one format type.
@@ -175,7 +241,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
         # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
-        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-01.csv"))
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-01.csv"))
         risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
         df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
 
@@ -198,7 +264,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
         # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
-        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-02.csv"))
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-02.csv"))
         risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
         df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
 
@@ -229,7 +295,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
         # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
-        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-03.csv"))
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-03.csv"))
         risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
         df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
 
