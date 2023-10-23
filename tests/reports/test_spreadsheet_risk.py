@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the dataframe used for function input.
         # For now, only including one field in df_group beyond what need for this analysis and data is fake.
-        df_formats_by_group = pd.read_csv(os.path.join("spreadsheet_risk", "archive_formats_by_group_2023-08.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("spreadsheet_risk", "archive_formats_by_group_2010-01.csv"))
 
         # Runs the function being tested.
         spreadsheet_risk(df_formats_by_group, "spreadsheet_risk")
@@ -42,45 +42,69 @@ class MyTestCase(unittest.TestCase):
         # Tests if the ARCHive Risk Overview sheet has the expected values.
         archive_result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
         archive_expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
-                            ["Low Risk", 7, 70, 2],
-                            ["Moderate Risk", 3, 30, 1],
-                            ["High Risk", 4, 40, 1],
-                            ["No Match", 5, 50, 1]]
+                            ["Low Risk", 4593, 479.83, 10],
+                            ["Moderate Risk", 37478, 605575.12, 11],
+                            ["High Risk", 168, 0.59, 6],
+                            ["No Match", 37, 0.01, 3]]
         self.assertEqual(archive_result, archive_expected, "Problem with the test for ARCHive Risk Overview")
 
         # Tests if the Department Risk Overview sheet has the expected values.
         dept_result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
         dept_expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
-                         ["A", "Low Risk", 3, 30, 1],
-                         ["A", "Moderate Risk", 3, 30, 1],
-                         ["A", "High Risk", 0, 0, 0],
-                         ["A", "No Match", 5, 50, 1],
-                         ["B", "Low Risk", 4, 40, 2],
-                         ["B", "Moderate Risk", 0, 0, 0],
-                         ["B", "High Risk", 4, 40, 1],
-                         ["B", "No Match", 0, 0, 0]]
+                         ["bmac", "Low Risk", 0, 0.0, 0],
+                         ["bmac", "Moderate Risk", 36516, 605573.45, 6],
+                         ["bmac", "High Risk", 0, 0.0, 0],
+                         ["bmac", "No Match", 0, 0.0, 0],
+                         ["dlg-magil", "Low Risk", 1832, 339.72, 3],
+                         ["dlg-magil", "Moderate Risk", 0, 0.0, 0],
+                         ["dlg-magil", "High Risk", 0, 0.0, 0],
+                         ["dlg-magil", "No Match", 0, 0.0, 0],
+                         ["hargrett", "Low Risk", 2761, 140.11, 8],
+                         ["hargrett", "Moderate Risk", 962, 1.67, 6],
+                         ["hargrett", "High Risk", 168, 0.59, 6],
+                         ["hargrett", "No Match", 37, 0.01, 3]]
         self.assertEqual(dept_result, dept_expected, "Problem with the test for Department Risk Overview")
 
         # Tests if the Format Type Risk sheet has the expected values.
         type_result = [type_risk.columns.tolist()] + type_risk.values.tolist()
         type_expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
-                         ["T1", "Low Risk", 7, 70, 2],
-                         ["T1", "Moderate Risk", 0, 0, 0],
-                         ["T1", "High Risk", 4, 40, 1],
-                         ["T1", "No Match", 0, 0, 0],
-                         ["T2", "Low Risk", 0, 0, 0],
-                         ["T2", "Moderate Risk", 3, 30, 1],
-                         ["T2", "High Risk", 0, 0, 0],
-                         ["T2", "No Match", 5, 50, 1]]
+                         ["application", "Low Risk", 0, 0.0, 0],
+                         ["application", "Moderate Risk", 47, 0.0, 3],
+                         ["application", "High Risk", 66, 0.04, 1],
+                         ["application", "No Match", 0, 0.0, 0],
+                         ["archive", "Low Risk", 218, 138.1, 1],
+                         ["archive", "Moderate Risk", 2, 0.0, 1],
+                         ["archive", "High Risk", 0, 0.0, 0],
+                         ["archive", "No Match", 0, 0.0, 0],
+                         ["audio", "Low Risk", 0, 0.0, 0],
+                         ["audio", "Moderate Risk", 1166, 1065.99, 1],
+                         ["audio", "High Risk", 0, 0.0, 0],
+                         ["audio", "No Match", 0, 0.0, 0],
+                         ["image", "Low Risk", 3790, 341.73, 7],
+                         ["image", "Moderate Risk", 935, 0.06, 2],
+                         ["image", "High Risk", 2, 0.01, 1],
+                         ["image", "No Match", 0, 0.0, 0],
+                         ["spreadsheet", "Low Risk", 0, 0.0, 0],
+                         ["spreadsheet", "Moderate Risk", 0, 0.0, 0],
+                         ["spreadsheet", "High Risk", 2, 0.0, 1],
+                         ["spreadsheet", "No Match", 0, 0.0, 0],
+                         ["text", "Low Risk", 581, 0.0, 1],
+                         ["text", "Moderate Risk", 0, 0.0, 0],
+                         ["text", "High Risk", 63, 0.0, 1],
+                         ["text", "No Match", 1, 0.0, 1],
+                         ["video", "Low Risk", 4, 0.0, 1],
+                         ["video", "Moderate Risk", 35328, 604509.06, 4],
+                         ["video", "High Risk", 35, 0.54, 2],
+                         ["video", "No Match", 36, 0.01, 2]]
         self.assertEqual(type_result, type_expected, "Problem with the test for Format Type Risk")
 
         # Tests if the NARA Match Types sheet has the expected values.
         match_result = [match.columns.tolist()] + match.values.tolist()
         match_expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
-                          ["Extension", 7, 70, 2],
-                          ["Name", 2, 20, 1],
-                          ["No NARA Match", 5, 50, 1],
-                          ["PUID", 5, 50, 1]]
+                          ["Manual (Test)", 37974, 605915.36, 15],
+                          ["No NARA Match", 37, 0.01, 3],
+                          ["PRONOM", 832, 138.12, 6],
+                          ["PRONOM and Version", 3433, 2.06, 6]]
         self.assertEqual(match_result, match_expected, "Problem with the test for NARA Match Types")
 
 
