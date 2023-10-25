@@ -145,7 +145,7 @@ def risk_change(current_df, previous_df):
                   (current_df[previous_risk] == "No Match") & (current_df[current_risk] != "No Match"),
                   current_df[previous_risk] == current_df[current_risk]]
     change_type = ["Decrease", "Increase", "New Format", "New Match", "Unchanged"]
-    current_df['Risk_Change'] = np.select(conditions, change_type)
+    current_df['Risk_Level_Change'] = np.select(conditions, change_type)
 
     return current_df
 

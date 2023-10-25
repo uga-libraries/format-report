@@ -73,7 +73,7 @@ class MyTestCase(unittest.TestCase):
         result_b1 = [df_b1.columns.tolist()] + df_b1.values.tolist()
         expected_b1 = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                         "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                        "Risk_Change"],
+                        "Risk_Level_Change"],
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0001", "Wave", "NO VALUE", "NO VALUE", "Low Risk",
                         "Retain", "Low Risk", "Unchanged"],
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE", "No Match",
@@ -108,7 +108,7 @@ class MyTestCase(unittest.TestCase):
         result_h1 = [df_h1.columns.tolist()] + df_h1.values.tolist()
         expected_h1 = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                         "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                        "Risk_Change"],
+                        "Risk_Level_Change"],
                        ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
                         "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
                         "Low Risk", "Unchanged"],

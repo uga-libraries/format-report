@@ -33,7 +33,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
                      "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Low Risk", "Retain", "High Risk", "Decrease"],
@@ -75,7 +75,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Moderate Risk)",
                      "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Moderate Risk", "Retain", "High Risk", "Decrease"],
@@ -109,7 +109,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Moderate Risk)",
                      "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Moderate Risk", "Retain", "Low Risk", "Increase"],
@@ -150,7 +150,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
                      "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Low Risk", "Retain", np.NaN, "New Format"],
@@ -185,7 +185,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Low Risk)",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "Low Risk", "Retain", "No Match", "New Match"],
@@ -216,7 +216,7 @@ class MyTestCase(unittest.TestCase):
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
         expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
-                     "Risk_Change"],
+                     "Risk_Level_Change"],
                     ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
                      "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Low Risk", "Retain", "Low Risk", "Unchanged"],
