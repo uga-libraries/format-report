@@ -223,11 +223,14 @@ if __name__ == '__main__':
 
         # Calculates the percentage of formats at each risk level for each collection.
         # Duplicates are removed so each format is counted once per collection instead of once per AIP.
-        df_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
-        collection_risk = risk_levels(df_dedup, 'Collection')
+        coll_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
+        collection_risk = risk_levels(coll_dedup, 'Collection')
 
         # Calculates the percentage of formats at each risk level for each AIP.
-        aip_risk = risk_levels(df, 'AIP')
+        # Duplicates are removed so a format is not counted twice, once with and once without a PUID,
+        # which happens in legacy format data before we started cleaning up doubles like this automatically.
+        aip_dedup = df.drop_duplicates(subset=['AIP', 'Format_Name', 'Format_Version'])
+        aip_risk = risk_levels(aip_dedup, 'AIP')
 
         # Calculates which formats are in each collection and AIP, sorted first by risk level and then by format.
         current_risk_column = df.columns.to_list()[7]

@@ -128,37 +128,71 @@ class MyTestCase(unittest.TestCase):
                         "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
                         "Low Risk", "Unchanged"],
                        ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE", "NO VALUE",
-                        "Low Risk", "Retain", "Low Risk", "Unchanged"]]
+                        "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0004", "CorelDraw Drawing", "8.0", "NO VALUE",
+                        "High Risk", "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0004", "CorelDraw Drawing", "8.0",
+                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
+                        "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0005", "CorelDraw Drawing", "8.0", "NO VALUE",
+                        "High Risk", "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0005", "CorelDraw Drawing", "8.0",
+                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
+                        "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0005", "JPEG File Interchange Format", "1.01",
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain", "Low Risk",
+                        "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0005", "JPEG File Interchange Format", "1.01",
+                        "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0006", "CorelDraw Drawing", "8.0", "NO VALUE",
+                        "High Risk", "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0006", "CorelDraw Drawing", "8.0",
+                        "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
+                        "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0006", "cue", "NO VALUE", "NO VALUE",
+                        "No Match", "NO VALUE", "No Match", "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0006", "JPEG File Interchange Format", "1.01",
+                        "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain", "Low Risk",
+                        "Unchanged"],
+                       ["hargrett", "harg-ms3786", "harg-ms3786er0006", "JPEG File Interchange Format", "1.01",
+                        "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_h2 = [df_h2.columns.tolist()] + df_h2.values.tolist()
         expected_h2 = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                       ["harg-0000", 1, 0, 0, 0, 100], ["harg-ms3786", 3, 0, 33.33, 0, 66.67]]
+                       ["harg-0000", 1, 0, 0, 0, 100],
+                       ["harg-ms3786", 4, 25, 25, 0, 50]]
         self.assertEqual(result_h2, expected_h2, "Problem with Hargrett Collection Risk Levels")
 
         # Tests if the Hargrett AIP Risk Levels sheet has the expected values.
         result_h3 = [df_h3.columns.tolist()] + df_h3.values.tolist()
         expected_h3 = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                       ["harg-0000-web-202007-0001", 1, 0, 0, 0, 100],
-                       ["harg-0000-web-202007-0002", 1, 0, 0, 0, 100],
-                       ["harg-ms3786er0001", 1, 0, 0, 0, 100],
-                       ["harg-ms3786er0002", 2, 0, 50, 0, 50],
-                       ["harg-ms3786er0003", 2, 0, 0, 0, 100]]
+                       ["harg-0000-web-202007-0001", 1, 0.0, 0.0, 0, 100.0],
+                       ["harg-0000-web-202007-0002", 1, 0.0, 0.0, 0, 100.0],
+                       ["harg-ms3786er0001", 1, 0.0, 0.0, 0, 100.0],
+                       ["harg-ms3786er0002", 2, 0.0, 50.0, 0, 50.0],
+                       ["harg-ms3786er0003", 1, 0.0, 0.0, 0, 100.0],
+                       ["harg-ms3786er0004", 1, 0.0, 100.0, 0, 0.0],
+                       ["harg-ms3786er0005", 2, 0.0, 50.0, 0, 50.0],
+                       ["harg-ms3786er0006", 3, 33.33, 33.33, 0, 33.33]]
         self.assertEqual(result_h3, expected_h3, "Problem with Hargrett AIP Risk Levels")
 
         # Tests if the Hargrett Formats sheet has the expected values.
         result_h4 = [df_h4.columns.tolist()] + df_h4.values.tolist()
-        expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4"],
-                       [np.NaN, "2023_NARA_Risk_Level", "High Risk", "Low Risk", np.NaN],
-                       [np.NaN, "Format", "CorelDraw Drawing 8.0 (High Risk)",
+        expected_h4 = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4", "Unnamed: 5"],
+                       [np.NaN, "2023_NARA_Risk_Level", "No Match", "High Risk", "Low Risk", np.NaN],
+                       [np.NaN, "Format", "cue (No Match)", "CorelDraw Drawing 8.0 (High Risk)",
                         "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
-                       ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
-                       ["harg-0000", "harg-0000-web-202007-0001", False, False, True],
-                       [np.NaN, "harg-0000-web-202007-0002", False, False, True],
-                       ["harg-ms3786", "harg-ms3786er0001", False, True, False],
-                       [np.NaN, "harg-ms3786er0002", True, True, False],
-                       [np.NaN, "harg-ms3786er0003", False, False, True]]
+                       ["Collection", "AIP", np.NaN, np.NaN, np.NaN, np.NaN],
+                       ["harg-0000", "harg-0000-web-202007-0001", False, False, False, True],
+                       [np.NaN, "harg-0000-web-202007-0002", False, False, False, True],
+                       ["harg-ms3786", "harg-ms3786er0001", False, False, True, False],
+                       [np.NaN, "harg-ms3786er0002", False, True, True, False],
+                       [np.NaN, "harg-ms3786er0003", False, False, False, True],
+                       [np.NaN, "harg-ms3786er0004", False, True, False, False],
+                       [np.NaN, "harg-ms3786er0005", False, True, True, False],
+                       [np.NaN, "harg-ms3786er0006", True, True, True, False]]
         self.assertEqual(result_h4, expected_h4, "Problem with Hargrett Formats")
 
 
