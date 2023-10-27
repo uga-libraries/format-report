@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_all(self):
         """
-        Test for when all five types of format risk change are present.
+        Test for when all six types of format risk change are present.
         """
         # Reads test input into dataframes.
         current_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2023-01.csv")
@@ -41,9 +41,9 @@ class MyTestCase(unittest.TestCase):
                      "Extensible Markup Language 1.0 (No Match)", "Extensible Markup Language", "1.0",
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", "NO VALUE", np.NaN,
                      "New Format"],
-                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (Low Risk)", "JPEG 2000 JP2",
-                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "Low Risk", "Retain",
-                     np.NaN, "New Format"],
+                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (No Match)", "JPEG 2000 JP2",
+                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", "NO VALUE",
+                     "Low Risk", "Unmatched"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Moderate Risk)",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "Moderate Risk", "Retain", "Low Risk", "Increase"],
@@ -95,6 +95,7 @@ class MyTestCase(unittest.TestCase):
         """
         Test for when format risk is higher in current than it is in previous.
         Includes all possible combinations of risk levels that increase.
+        It does not include any with current of No Match, which is the category Unmatched instead.
         """
         # Reads test input into dataframes.
         current_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2023-03.csv")
@@ -117,19 +118,12 @@ class MyTestCase(unittest.TestCase):
                      "Extensible Markup Language 1.0 (High Risk)", "Extensible Markup Language", "1.0",
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "High Risk", "Retain", "Low Risk",
                      "Increase"],
-                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (No Match)", "JPEG 2000 JP2",
-                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", "NO VALUE",
-                     "Low Risk", "Increase"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (High Risk)",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "High Risk", "Retain", "Moderate Risk", "Increase"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (High Risk)",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "High Risk", "Retain", "Moderate Risk", "Increase"],
-                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (No Match)", "Matroska",
-                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", "Moderate Risk", "Increase"],
-                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (No Match)", "Waveform Audio",
-                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", "High Risk", "Increase"]]
+                     "High Risk", "Retain", "Moderate Risk", "Increase"]]
         self.assertEqual(result, expected, "Problem with test for risk increase")
 
     def test_new_format(self):
@@ -197,6 +191,36 @@ class MyTestCase(unittest.TestCase):
                     ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (High Risk)", "Waveform Audio",
                      "NO VALUE", "NO VALUE", "High Risk", "Retain", "No Match", "New Match"]]
         self.assertEqual(result, expected, "Problem with test for risk new match")
+
+    def test_unmatched(self):
+        """
+        Test for when a format matched a NARA risk in previous and does not match in current.
+        Includes matching all three risk levels for match in previous.
+        """
+        # Reads test input into dataframes.
+        current_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2023-07.csv")
+        current_format_df = csv_to_dataframe(current_format_csv)
+        previous_format_csv = os.path.join("risk_change", "archive_formats_by_aip_2021-07.csv")
+        previous_format_df = csv_to_dataframe(previous_format_csv)
+
+        # Runs the function being tested.
+        current_format_df = risk_change(current_format_df, previous_format_df)
+
+        # Tests that the updated current df contains the correction information.
+        result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
+        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+                     "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
+                     "Risk_Level_Change"],
+                    ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
+                     "Extensible Markup Language 1.0 (No Match)", "Extensible Markup Language", "1.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", "NO VALUE",
+                     "Moderate Risk", "Unmatched"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (No Match)",
+                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                     "No Match", "NO VALUE", "Low Risk", 'Unmatched'],
+                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (No Match)", "Waveform Audio",
+                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", "High Risk", "Unmatched"]]
+        self.assertEqual(result, expected, "Problem with test for risk unmatched")
 
     def test_unchanged(self):
         """
