@@ -49,7 +49,7 @@ class MyTestCase(unittest.TestCase):
         # Runs the script.
         script_path = os.path.join("..", "..", "department_reports.py")
         formats_current = os.path.join("script", "archive_formats_by_aip_2023-09.csv")
-        formats_previous = "archive_formats_by_aip_2021-08.csv"
+        formats_previous = os.path.join("script", "archive_formats_by_aip_2021-08.csv")
         subprocess.run(f"python {script_path} {formats_current} {formats_previous}")
 
         # # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.

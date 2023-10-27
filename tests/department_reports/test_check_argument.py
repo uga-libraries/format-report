@@ -22,7 +22,7 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
         first_arg = os.path.join("check_arguments", "archive_formats_by_aip_2023-08.csv")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, first_arg, second_arg])
 
         # Tests that the value of current_formats_csv is correct.
@@ -31,7 +31,7 @@ class MyTestCase(unittest.TestCase):
                          "Problem with test for both arguments correct, current_formats_csv")
 
         # Tests that the value of previous_formats_csv is correct.
-        expected_previous = "archive_formats_by_aip_2021-08.csv"
+        expected_previous = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         self.assertEqual(previous_formats_csv, expected_previous,
                          "Problem with test for both arguments correct, previous_formats_csv")
 
@@ -72,7 +72,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, second_arg])
 
         # Tests that the value of errors_list is correct.
@@ -82,13 +82,13 @@ class MyTestCase(unittest.TestCase):
     def test_current_name_error(self):
         """
         Test for when the first required argument current_formats_csv is present and a valid path
-        but is not named correctly.
+        but is not named correctly. It is "by_group" instead of "by_aip".
         The other required argument, previous_formats_csv, is present and correct.
         """
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
         first_arg = os.path.join("check_arguments", "archive_formats_by_group_2023-08.csv")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, first_arg, second_arg])
 
         # Tests that the value of errors_list is correct.
@@ -104,7 +104,7 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
         first_arg = os.path.join("check_arguments", "archive_formats_by_aip_2023-08.xlsx")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, first_arg, second_arg])
 
         # Tests that the value of errors_list is correct.
@@ -120,7 +120,7 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
         first_arg = os.path.join("path_error", "name_error.csv")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, first_arg, second_arg])
 
         # Tests that the value of errors_list is correct.
@@ -137,7 +137,7 @@ class MyTestCase(unittest.TestCase):
         # Makes the variables used for function input and runs the function being tested.
         script_path = os.path.join(sys.path[1], "department_reports.py")
         first_arg = os.path.join("path_error", "archive_formats_by_aip_2023-08.csv")
-        second_arg = "archive_formats_by_aip_2021-08.csv"
+        second_arg = os.path.join("check_arguments", "archive_formats_by_aip_2021-08.csv")
         current_formats_csv, previous_formats_csv, errors_list = check_arguments([script_path, first_arg, second_arg])
 
         # Tests that the value of errors_list is correct.
@@ -161,7 +161,7 @@ class MyTestCase(unittest.TestCase):
     def test_previous_name_error(self):
         """
         Test for when the second required argument previous_formats_csv is present and a valid path
-        but is not named correctly.
+        but is not named correctly. It is "by_group" instead of "by_aip".
         The first required argument, current_formats_csv, is present and correct.
         """
         # Makes the variables used for function input and runs the function being tested.
