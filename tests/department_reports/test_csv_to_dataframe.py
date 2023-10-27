@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         # NOTE: the function prints an error message to the terminal if it is working correctly.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_encoding-error_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-01.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -37,7 +37,7 @@ class MyTestCase(unittest.TestCase):
         Some groups have one format and others have multiple formats.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_multiple_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-02.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -65,7 +65,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and all formats have a PRONOM_URL.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-all_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-03.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -88,7 +88,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and some formats have a PRONOM_URL.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-mix_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-04.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -115,7 +115,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and no formats have a PRONOM_URL.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_puid-none_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-05.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -133,7 +133,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and all formats have a version number.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-all_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-06.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -156,7 +156,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and some formats have a version number.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-mix_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-07.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
@@ -179,7 +179,7 @@ class MyTestCase(unittest.TestCase):
         Test for a CSV with one group and no formats have a version number.
         """
         # Runs the function being tested.
-        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_version-none_2023-08.csv")
+        format_csv = os.path.join("csv_to_dataframe", "archive_formats_by_aip_2023-08.csv")
         format_df = csv_to_dataframe(format_csv)
 
         # Tests that the dataframe contains the correct information.
