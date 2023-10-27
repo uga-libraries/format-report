@@ -56,6 +56,7 @@ class MyTestCase(unittest.TestCase):
         date = datetime.date.today().strftime("%Y%m")
         bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
         df_b1 = pd.read_excel(bmac, "AIP Risk Data")
+        df_b5 = pd.read_excel(bmac, "Department Risk Levels")
         df_b2 = pd.read_excel(bmac, "Collection Risk Levels")
         df_b3 = pd.read_excel(bmac, "AIP Risk Levels")
         df_b4 = pd.read_excel(bmac, "Formats")
@@ -64,6 +65,7 @@ class MyTestCase(unittest.TestCase):
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
         hargrett = pd.ExcelFile(os.path.join("script", f"hargrett_risk_report_{date}.xlsx"))
         df_h1 = pd.read_excel(hargrett, "AIP Risk Data")
+        df_h5 = pd.read_excel(hargrett, "Department Risk Levels")
         df_h2 = pd.read_excel(hargrett, "Collection Risk Levels")
         df_h3 = pd.read_excel(hargrett, "AIP Risk Levels")
         df_h4 = pd.read_excel(hargrett, "Formats")
@@ -79,6 +81,12 @@ class MyTestCase(unittest.TestCase):
                        ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE", "No Match",
                         "NO VALUE", "No Match", "Unchanged"]]
         self.assertEqual(result_b1, expected_b1, "Problem with BMAC AIP Risk Data")
+
+        # Tests if the BMAC Department Risk Levels sheet has the expected values.
+        result_b5 = [df_b5.columns.tolist()] + df_b5.values.tolist()
+        expected_b5 = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["bmac", 2, 50, 0, 0, 50]]
+        self.assertEqual(result_b5, expected_b5, "Problem with BMAC Department Risk Levels")
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
         result_b2 = [df_b2.columns.tolist()] + df_b2.values.tolist()
@@ -157,6 +165,12 @@ class MyTestCase(unittest.TestCase):
                        ["hargrett", "harg-ms3786", "harg-ms3786er0006", "JPEG File Interchange Format", "1.01",
                         "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         self.assertEqual(result_h1, expected_h1, "Problem with Hargrett AIP Risk Data")
+
+        # Tests if the Hargrett Department Risk Levels sheet has the expected values.
+        result_h5 = [df_h5.columns.tolist()] + df_h5.values.tolist()
+        expected_h5 = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                       ["hargrett", 4, 25, 25, 0, 50]]
+        self.assertEqual(result_h5, expected_h5, "Problem with Hargrett Department Risk Levels")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_h2 = [df_h2.columns.tolist()] + df_h2.values.tolist()

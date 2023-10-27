@@ -221,6 +221,11 @@ if __name__ == '__main__':
         df.reset_index(drop=True, inplace=True)
         dept = df.at[0, 'Group']
 
+        # Calculates the percentage of formats at each risk level for the department.
+        # Duplicates are removed so each format is counted once instead of once per AIP.
+        dept_dedup = df.drop_duplicates(subset=['Format'])
+        dept_risk = risk_levels(dept_dedup, 'Group')
+
         # Calculates the percentage of formats at each risk level for each collection.
         # Duplicates are removed so each format is counted once per collection instead of once per AIP.
         coll_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
@@ -244,6 +249,7 @@ if __name__ == '__main__':
         dept_report_path = os.path.join(output_folder, f"{dept}_risk_report_{date}.xlsx")
         with pd.ExcelWriter(dept_report_path) as dept_report:
             df.sort_values(['Collection', 'AIP']).to_excel(dept_report, sheet_name="AIP Risk Data", index=False)
+            dept_risk.to_excel(dept_report, sheet_name="Department Risk Levels")
             collection_risk.to_excel(dept_report, sheet_name="Collection Risk Levels")
             aip_risk.to_excel(dept_report, sheet_name="AIP Risk Levels")
             formats.to_excel(dept_report, sheet_name="Formats")
