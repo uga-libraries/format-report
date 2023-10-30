@@ -39,9 +39,9 @@ class MyTestCase(unittest.TestCase):
                      "High Risk", "Decrease"],
                     ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
                      "Extensible Markup Language", "1.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/101",
-                     "No Match", "NO VALUE", np.NaN, "New Format"],
+                     "No Match", np.NaN, np.NaN, "New Format"],
                     ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2", "NO VALUE",
-                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", np.NaN,
                      "Low Risk", "Unmatched"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "Moderate Risk", "Retain",
@@ -153,7 +153,7 @@ class MyTestCase(unittest.TestCase):
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain", np.NaN, "New Format"],
                     ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
-                     "No Match", "NO VALUE", np.NaN, "New Format"]]
+                     "No Match", np.NaN, np.NaN, "New Format"]]
         self.assertEqual(result, expected, "Problem with test for risk new match")
 
     def test_new_match(self):
@@ -207,13 +207,13 @@ class MyTestCase(unittest.TestCase):
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
                     ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival", "Extensible Markup Language", "1.0",
-                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", np.NaN,
                      "Moderate Risk", "Unmatched"],
                     ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
-                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "No Match", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "No Match", np.NaN,
                      "Low Risk", 'Unmatched'],
                     ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio", "NO VALUE", "NO VALUE",
-                     "No Match", "NO VALUE", "High Risk", "Unmatched"]]
+                     "No Match", np.NaN, "High Risk", "Unmatched"]]
         self.assertEqual(result, expected, "Problem with test for risk unmatched")
 
     def test_unchanged(self):
@@ -248,7 +248,7 @@ class MyTestCase(unittest.TestCase):
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain",
                      "High Risk", "Unchanged"],
                     ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
-                     "No Match", "NO VALUE", "No Match", "Unchanged"]]
+                     "No Match", np.NaN, "No Match", "Unchanged"]]
         self.assertEqual(result, expected, "Problem with test for risk unchanged")
 
 

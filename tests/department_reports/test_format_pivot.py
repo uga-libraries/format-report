@@ -6,6 +6,7 @@ Returns a dataframe.
 NARA risk levels in the data were assigned to get the testing variation needed and are not necessarily accurate.
 The Hargrett format identification information is accurate, other than a format may not be part of the specified AIP.
 """
+import numpy as np
 import pandas as pd
 import unittest
 from department_reports import formats_pivot
@@ -58,9 +59,9 @@ class MyTestCase(unittest.TestCase):
                 ["hargrett", "harg-ms3786", "harg-ms3786er0020", "MPEG video", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
                 ["hargrett", "harg-ms3786", "harg-ms3786er0020", "Quicktime video", "NO VALUE", "NO VALUE",
-                 "No Match", "Retain", "No Match", "Unchanged"],
+                 "No Match", np.NaN, "No Match", "Unchanged"],
                 ["hargrett", "harg-ms3786", "harg-ms3786er0020", "SWF", "NO VALUE", "NO VALUE",
-                 "No Match", "Retain", "No Match", "Unchanged"]]
+                 "No Match", np.NaN, "No Match", "Unchanged"]]
         df = make_df(rows)
 
         # Runs the function being tested.
@@ -97,7 +98,7 @@ class MyTestCase(unittest.TestCase):
                 ["hargrett", "harg-ms3770", "harg-ms3770er0002", "Plain text", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["hargrett", "harg-ms3786", "harg-ms3786er0007",  "NEF EXIF", "NO VALUE", "NO VALUE",
-                 "No Match", "Retain", "No Match", "Unchanged"]]
+                 "No Match", np.NaN, "No Match", "Unchanged"]]
         df = make_df(rows)
 
         # Runs the function being tested.
@@ -174,7 +175,7 @@ class MyTestCase(unittest.TestCase):
                 ["hargrett", "harg-ms3770", "harg-ms3770er0002", "Plain text", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["hargrett", "harg-ms3786", "harg-ms3786er0007", "NEF EXIF", "NO VALUE", "NO VALUE",
-                 "No Match", "Retain", "No Match", "Unchanged"]]
+                 "No Match", np.NaN, "No Match", "Unchanged"]]
         df = make_df(rows)
 
         # Runs the function being tested.

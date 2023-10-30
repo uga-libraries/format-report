@@ -4,7 +4,7 @@ which reads the previous or current archive_formats_by_aip_date.csv into a dataf
 including error handling for encoding errors, and cleans up the data.
 Returns the dataframe.
 """
-
+import numpy as np
 import os
 import unittest
 from department_reports import csv_to_dataframe
@@ -26,9 +26,9 @@ class MyTestCase(unittest.TestCase):
         expected = [["Group", "Collection", "AIP", "Format_Identification", "Format_Name", "Format_Version",
                      "PRONOM_URL", "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska|NO VALUE|NO VALUE",
-                     "Matroska", "NO VALUE", "NO VALUE", "No Match", "NO VALUE"],
+                     "Matroska", "NO VALUE", "NO VALUE", "No Match", np.NaN],
                     ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska|NO VALUE|NO VALUE",
-                     "Matroska", "NO VALUE", "NO VALUE", "No Match", "NO VALUE"]]
+                     "Matroska", "NO VALUE", "NO VALUE", "No Match", np.NaN]]
         self.assertEqual(result, expected, "Problem with test for encoding error")
 
     def test_multi_groups(self):
@@ -119,9 +119,9 @@ class MyTestCase(unittest.TestCase):
         expected = [["Group", "Collection", "AIP", "Format_Identification", "Format_Name", "Format_Version",
                      "PRONOM_URL", "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan"],
                     ["bmac", "peabody", "bmac_2000002pst-arch", "Matroska|NO VALUE|NO VALUE",
-                     "Matroska", "NO VALUE", "NO VALUE", "No Match", "NO VALUE"],
+                     "Matroska", "NO VALUE", "NO VALUE", "No Match", np.NaN],
                     ["bmac", "peabody", "bmac_2000023pst-arch", "Matroska|NO VALUE|NO VALUE",
-                     "Matroska", "NO VALUE", "NO VALUE", "No Match", "NO VALUE"]]
+                     "Matroska", "NO VALUE", "NO VALUE", "No Match", np.NaN]]
         self.assertEqual(result, expected, "Problem with test for PUID: none")
 
     def test_version_all(self):
@@ -187,7 +187,7 @@ class MyTestCase(unittest.TestCase):
                      "SWF", "NO VALUE", "NO VALUE", "Moderate Risk", "Retain"],
                     ["russell", "rbrl455", "rbrl-455-er-000069", "Quicken Data File|NO VALUE|x-fmt/213",
                      "Quicken Data File", "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/213",
-                     "No Match", "NO VALUE"]]
+                     "No Match", np.NaN]]
         self.assertEqual(result, expected, "Problem with test for version: none")
 
 

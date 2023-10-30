@@ -6,6 +6,7 @@ Returns a dataframe.
 Collections, AIP IDs, and NARA risk levels in the data were assigned to get the testing variation needed
 and are not necessarily accurate. The format identifications are all present in Russell holdings.
 """
+import numpy as np
 import pandas as pd
 import unittest
 from department_reports import risk_levels
@@ -42,7 +43,7 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX", "NO VALUE", "NO VALUE",
-                 "No Match", "", "No Match", "Unchanged"],
+                 "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG", "NO VALUE", "NO VALUE",
@@ -140,7 +141,7 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX", "NO VALUE", "NO VALUE",
-                 "No Match", "", "No Match", "Unchanged"],
+                 "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG", "NO VALUE", "NO VALUE",
@@ -209,15 +210,15 @@ class MyTestCase(unittest.TestCase):
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX", "NO VALUE",
-                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "FPX", "NO VALUE",
-                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000004", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-026", "rbrl-026-er-000001", "FPX", "NO VALUE",
-                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-026", "rbrl-026-er-000001", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         df = make_df(rows)
@@ -242,7 +243,7 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX", "NO VALUE", "NO VALUE",
-                 "No Match", "", "No Match", "Unchanged"],
+                 "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "ASF", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "dat", "NO VALUE", "NO VALUE",

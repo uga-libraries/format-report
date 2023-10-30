@@ -79,7 +79,7 @@ class MyTestCase(unittest.TestCase):
                               ["bmac", "hm-lawton", "bmac_hm-lawton_0001", "Wave", "NO VALUE", "NO VALUE",
                                "Low Risk", "Retain", "Low Risk", "Unchanged"],
                               ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE",
-                               "No Match", "NO VALUE", "No Match", "Unchanged"]]
+                               "No Match", np.NaN, "No Match", "Unchanged"]]
         self.assertEqual(result_bmac_data, expected_bmac_data, "Problem with BMAC AIP Risk Data")
 
         # Tests if the BMAC Department Risk Levels sheet has the expected values.
@@ -160,7 +160,7 @@ class MyTestCase(unittest.TestCase):
                                "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/292", "High Risk",
                                "Transform to a TBD format, possibly PDF or TIFF", "High Risk", "Unchanged"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0006", "cue", "NO VALUE", "NO VALUE",
-                               "No Match", "NO VALUE", "No Match", "Unchanged"],
+                               "No Match", np.NaN, "No Match", "Unchanged"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0006", "JPEG File Interchange Format",
                                "1.01", "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk", "Retain",
                                "Low Risk", "Unchanged"],
