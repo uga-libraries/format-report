@@ -69,7 +69,7 @@ class MyTestCase(unittest.TestCase):
                     ["rbrl-025-er-000003", 2, 0, 0, 50, 50]]
         self.assertEqual(result, expected, "Problem with test for AIP, all levels")
 
-    def test_aip_two_levels(self):
+    def test_aip_multiple_levels(self):
         """
         Test for AIP risk levels when two of the four NARA risk levels are present.
         One occurs once and the other occurs multiple times.
@@ -95,7 +95,41 @@ class MyTestCase(unittest.TestCase):
                     ["rbrl-025-er-000001", 1, 0, 100, 0, 0],
                     ["rbrl-025-er-000002", 2, 0, 0, 100, 0],
                     ["rbrl-025-er-000003", 1, 0, 0, 100, 0]]
-        self.assertEqual(result, expected, "Problem with test for AIP, two levels")
+        self.assertEqual(result, expected, "Problem with test for AIP, multiple levels")
+
+    def test_aip_remove_duplicates(self):
+        """
+        Test for AIP risk levels where some formats are duplicated in an AIP, once with the PUID and once without.
+        These should only be counted as one format per AIP.
+        """
+        # Makes a dataframe to use as test input.
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
+        df = make_df(rows)
+
+        # Runs the function being tested.
+        aip_risk = risk_levels(df, 'AIP')
+
+        # Tests that aip_risk contains the correct information.
+        aip_risk.reset_index(inplace=True)
+        result = [aip_risk.columns.tolist()] + aip_risk.values.tolist()
+        expected = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                    ["rbrl-025-er-000001", 1, 0, 0, 0, 100],
+                    ["rbrl-025-er-000002", 2, 0, 0, 0, 100],
+                    ["rbrl-025-er-000003", 2, 0, 0, 0, 100]]
+        self.assertEqual(result, expected, "Problem with test for AIP, remove duplicates")
 
     def test_collection_all_levels(self):
         """
@@ -135,7 +169,7 @@ class MyTestCase(unittest.TestCase):
                     ["rbrl-027", 2, 0, 0, 50, 50]]
         self.assertEqual(result, expected, "Problem with test for collection, all levels")
 
-    def test_collection_two_levels(self):
+    def test_collection_multiple_levels(self):
         """
         Test for collection risk levels when two of the four NARA risk levels are present.
         One occurs once and the other occurs multiple times.
@@ -162,7 +196,42 @@ class MyTestCase(unittest.TestCase):
         expected = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
                     ["rbrl-025", 4, 0, 25, 0, 75],
                     ["rbrl-027", 1, 0, 0, 0, 100]]
-        self.assertEqual(result, expected, "Problem with test for collection, two levels")
+        self.assertEqual(result, expected, "Problem with test for collection, multiple levels")
+
+    def test_collection_remove_duplicates(self):
+        """
+        Test for collection risk levels where some formats are duplicated in multiple AIPs.
+        These should only be counted as one format per collection.
+        """
+        # Makes a dataframe to use as test input.
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX (No Match)", "FPX", "NO VALUE",
+                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "FPX (No Match)", "FPX", "NO VALUE",
+                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000004", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "FPX (No Match)", "FPX", "NO VALUE",
+                 "NO VALUE", "No Match", "", "No Match", "Unchanged"],
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
+        df = make_df(rows)
+
+        # Runs the function being tested.
+        collection_risk = risk_levels(df, 'Collection')
+
+        # Tests that dept_risk contains the correct information.
+        collection_risk.reset_index(inplace=True)
+        result = [collection_risk.columns.tolist()] + collection_risk.values.tolist()
+        expected = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                    ["rbrl-025", 3, 33.33, 0.0, 0.0, 66.67],
+                    ["rbrl-026", 2, 50, 0, 0, 50]]
+        self.assertEqual(result, expected, "Problem with test for collection, remove duplicates")
 
     def test_dept_all_levels(self):
         """
@@ -196,7 +265,7 @@ class MyTestCase(unittest.TestCase):
                     ["russell", 7, 14.29, 14.29, 42.86, 28.57]]
         self.assertEqual(result, expected, "Problem with test for department, all levels")
 
-    def test_dept_two_levels(self):
+    def test_dept_multiple_levels(self):
         """
         Test for department risk levels when two of the four NARA risk levels are present.
         One occurs once and the other occurs multiple times.
@@ -220,7 +289,41 @@ class MyTestCase(unittest.TestCase):
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
         expected = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
                     ["russell", 4, 0, 0, 75, 25]]
-        self.assertEqual(result, expected, "Problem with test for department, two levels")
+        self.assertEqual(result, expected, "Problem with test for department, multiple levels")
+
+    def test_department_remove_duplicates(self):
+        """
+        Test for department risk levels where some formats are duplicated in multiple AIPs.
+        These should only be counted once.
+        """
+        # Makes a dataframe to use as test input.
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE",
+                 "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
+                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-028", "rbrl-028-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE",
+                 "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "ASF (Moderate Risk)", "ASF", "NO VALUE",
+                 "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
+        df = make_df(rows)
+
+        # Runs the function being tested.
+        dept_risk = risk_levels(df, 'Group')
+
+        # Tests that dept_risk contains the correct information.
+        dept_risk.reset_index(inplace=True)
+        result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
+        expected = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                    ["russell", 4, 0, 0, 50, 50]]
+        self.assertEqual(result, expected, "Problem with test for department, remove duplicates")
 
 
 if __name__ == '__main__':

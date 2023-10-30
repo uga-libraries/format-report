@@ -180,14 +180,22 @@ def risk_levels(dept_df, index_column):
     Calculates the percentage of formats at each risk level.
     Returns a dataframe.
     """
+    # Removes duplicate formats (based on name and version) from the dataframe
+    # within the unit of analysis (index_column).
+    # For example, with collections, a format should be counted once per collection.
+    # Even the AIP analysis is deduplicated because of formats listed with and without a PUID.
+    subset_list = [index_column] + ['Format_Name', 'Format_Version']
+    df_dedup = dept_df.drop_duplicates(subset=subset_list)
+
     # Calculates the number of formats at each risk level.
-    # Including margins adds totals for each column and row.
-    current_risk_column = dept_df.columns.to_list()[7]
-    risk = pd.pivot_table(dept_df, index=index_column, columns=current_risk_column, values='Format',
+    # Including margins=True adds totals for each column and row.
+    current_risk_column = df_dedup.columns.to_list()[7]
+    risk = pd.pivot_table(df_dedup, index=index_column, columns=current_risk_column, values='Format',
                           margins=True, aggfunc=len, fill_value=0)
 
     # Renames the column of each row's totals from default All to Formats, to be more intuitive.
-    # Removes the row of each column's totals, which also has the name All by default.
+    # Removes the row of each column's totals, which also has the name All,
+    # since it is inflated from formats being in multiple AIPs.
     risk.rename(columns={'All': 'Formats'}, inplace=True)
     risk.drop(['All'], axis='index', inplace=True)
 
@@ -245,21 +253,10 @@ if __name__ == '__main__':
         df.reset_index(drop=True, inplace=True)
         dept = df.at[0, 'Group']
 
-        # Calculates the percentage of formats at each risk level for the department.
-        # Duplicates are removed so each format is counted once instead of once per AIP.
-        dept_dedup = df.drop_duplicates(subset=['Format'])
-        dept_risk = risk_levels(dept_dedup, 'Group')
-
-        # Calculates the percentage of formats at each risk level for each collection.
-        # Duplicates are removed so each format is counted once per collection instead of once per AIP.
-        coll_dedup = df.drop_duplicates(subset=['Collection', 'Format'])
-        collection_risk = risk_levels(coll_dedup, 'Collection')
-
-        # Calculates the percentage of formats at each risk level for each AIP.
-        # Duplicates are removed so a format is not counted twice, once with and once without a PUID,
-        # which happens in legacy format data before we started cleaning up doubles like this automatically.
-        aip_dedup = df.drop_duplicates(subset=['AIP', 'Format_Name', 'Format_Version'])
-        aip_risk = risk_levels(aip_dedup, 'AIP')
+        # Calculates the percentage of formats at each risk level for the department, each collection, and each AIP.
+        dept_risk = risk_levels(df, 'Group')
+        collection_risk = risk_levels(df, 'Collection')
+        aip_risk = risk_levels(df, 'AIP')
 
         # Calculates which formats are in each collection and AIP, sorted first by risk level and then by format.
         formats = formats_pivot(df)
