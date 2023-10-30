@@ -140,6 +140,9 @@ def formats_pivot(current_df):
     # Orders the format columns first by risk (high to low) and then by format name.
     pivot.sort_values([current_risk_column, 'Format'], ascending=[False, True], axis=1, inplace=True)
 
+    # Removes the temporary Format column.
+    current_df.drop(['Format'], axis=1, inplace=True)
+
     return pivot
 
 
@@ -235,22 +238,15 @@ if __name__ == '__main__':
     # Adds the previous risk and the change in risk since the previous analysis to the current analysis data.
     current_format_df = risk_change(current_format_df, previous_format_df)
 
-    # Calculates the directory the current_formats_csv is in. Department reports will be saved here.
+    # Calculates variables used for naming and saving the department reports.
     output_folder = os.path.dirname(current_formats_csv)
-
-    # Calculates today's date, formatted YYYYMM, to include in the department report names.
     date = datetime.date.today().strftime("%Y%m")
 
-    # Splits the dataframe into a list of dataframes, with one dataframe per ARCHive group.
-    department_dfs = [d for _, d in current_format_df.groupby(['Group'])]
-
     # For each department, makes an Excel spreadsheet with the risk data and data summaries.
-    for df in department_dfs:
+    for dept in current_format_df['Group'].unique().tolist():
 
-        # Calculates the department, which is the value of the Group column in the first row.
-        # The index is reset or else the first row is not always 0 because of how the original dataframe is split.
-        df.reset_index(drop=True, inplace=True)
-        dept = df.at[0, 'Group']
+        # Makes a dataframe with the data for the department.
+        df = current_format_df[current_format_df['Group'] == dept].copy()
 
         # Calculates the percentage of formats at each risk level for the department, each collection, and each AIP.
         dept_risk = risk_levels(df, 'Group')
@@ -259,9 +255,6 @@ if __name__ == '__main__':
 
         # Calculates which formats are in each collection and AIP, sorted first by risk level and then by format.
         formats = formats_pivot(df)
-
-        # Removes a column from the dataframe that is used for deduplication but is not needed in the final report.
-        df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report,
         # in the same folder as the CSV with ARCHive format data (current_formats_csv).
