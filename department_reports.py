@@ -120,6 +120,30 @@ def csv_to_dataframe(csv_file):
     return csv_df
 
 
+def formats_pivot(current_df):
+    """
+    Makes a pivot table to indicate which formats are in each Collection and AIP.
+    Returns a dataframe with the information.
+    """
+    # Gets the name fo the NARA Risk Level column,
+    # which includes the year and so is different each time the analysis is run.
+    current_risk_column = current_df.columns.to_list()[7]
+
+    # Makes a pivot table with rows first by collection and then by AIP,
+    # and columns first by NARA risk level and then by Format.
+    # Format includes the format name, version, and NARA risk level.
+    # Risk level is included in Format, even though it is also a separate column, for readability.
+    # Initially, the table has the number of formats in each AIP, but this is converted to True/False
+    # since formats will always appear 0, 1, or 2 (legacy duplication from PUID and no PUID) in an AIP.
+    pivot = pd.pivot_table(current_df, index=['Collection', 'AIP'], columns=[current_risk_column, 'Format'],
+                           values=['Format_Name'], aggfunc=len, fill_value=0).astype(bool)
+
+    # Orders the format columns first by risk (high to low) and then by format name.
+    pivot.sort_values([current_risk_column, 'Format'], ascending=[False, True], axis=1, inplace=True)
+
+    return pivot
+
+
 def risk_change(current_df, previous_df):
     """
     Updates the current analysis dataframe with risk data from the previous analysis and
@@ -238,10 +262,9 @@ if __name__ == '__main__':
         aip_risk = risk_levels(aip_dedup, 'AIP')
 
         # Calculates which formats are in each collection and AIP, sorted first by risk level and then by format.
-        current_risk_column = df.columns.to_list()[7]
-        formats = pd.pivot_table(df, index=['Collection', 'AIP'], columns=[current_risk_column, 'Format'],
-                                 values=['Format_Name'], aggfunc=len, fill_value=0).astype(bool)
-        formats.sort_values([current_risk_column, 'Format'], ascending=[False, True], axis=1, inplace=True)
+        formats = formats_pivot(df)
+
+        # Removes a column from the dataframe that is used for deduplication but is not needed in the final report.
         df.drop(['Format'], axis=1, inplace=True)
 
         # Saves the results to the department risk report,
