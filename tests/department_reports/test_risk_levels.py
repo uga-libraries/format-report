@@ -17,8 +17,8 @@ def make_df(rows_list):
     Returns the dataframe.
     """
 
-    columns_list = ["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version",
-                    "PRONOM_URL", "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan",
+    columns_list = ["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
+                    "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan",
                     "2021_NARA_Risk_Level", "Risk_Level_Change"]
     df = pd.DataFrame(rows_list, columns=columns_list)
 
@@ -39,21 +39,21 @@ class MyTestCase(unittest.TestCase):
         Some occur once and others occur multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR (High Risk)", "ACR", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX (No Match)", "FPX", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX", "NO VALUE", "NO VALUE",
                  "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "Midi (High Risk)", "Midi", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "Midi", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "MPEG (Low Risk)", "MPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "MPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"]]
         df = make_df(rows)
 
@@ -75,13 +75,13 @@ class MyTestCase(unittest.TestCase):
         One occurs once and the other occurs multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR (High Risk)", "ACR", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "ASF (Moderate Risk)", "ASF", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "ASF", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"]]
         df = make_df(rows)
 
@@ -103,19 +103,19 @@ class MyTestCase(unittest.TestCase):
         These should only be counted as one format per AIP.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         df = make_df(rows)
 
@@ -137,23 +137,23 @@ class MyTestCase(unittest.TestCase):
         Some occur once and others occur multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR (High Risk)", "ACR", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX (No Match)", "FPX", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX", "NO VALUE", "NO VALUE",
                  "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "MOV (Low Risk)", "MOV", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "MOV", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "MPEG (Low Risk)", "MPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "MPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-027", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-027", "rbrl-026-er-000001", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-027", "rbrl-027-er-000002", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-027", "rbrl-027-er-000002", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"]]
         df = make_df(rows)
 
@@ -175,15 +175,15 @@ class MyTestCase(unittest.TestCase):
         One occurs once and the other occurs multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR (High Risk)", "ACR", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "MOV (Low Risk)", "MOV", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "MOV", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "MPEG (Low Risk)", "MPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "MPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-027", "rbrl-027-er-000002", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-027", "rbrl-027-er-000002", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"]]
         df = make_df(rows)
 
@@ -204,21 +204,21 @@ class MyTestCase(unittest.TestCase):
         These should only be counted as one format per collection.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX (No Match)", "FPX", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX", "NO VALUE",
                  "NO VALUE", "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "FPX (No Match)", "FPX", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "FPX", "NO VALUE",
                  "NO VALUE", "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000004", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-025", "rbrl-025-er-000004", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "FPX (No Match)", "FPX", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "FPX", "NO VALUE",
                  "NO VALUE", "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         df = make_df(rows)
 
@@ -239,19 +239,19 @@ class MyTestCase(unittest.TestCase):
         Some occur once and others occur multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR (High Risk)", "ACR", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "ACR", "NO VALUE", "NO VALUE",
                  "High Risk", "Retain", "High Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX (No Match)", "FPX", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "FPX", "NO VALUE", "NO VALUE",
                  "No Match", "", "No Match", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "ASF (Moderate Risk)", "ASF", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "ASF", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "dat (Low Risk)", "dat", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "dat", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "FLA (Moderate Risk)", 'FLA', "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "FLA", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"]]
         df = make_df(rows)
 
@@ -271,13 +271,13 @@ class MyTestCase(unittest.TestCase):
         One occurs once and the other occurs multiple times.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000002", "ASF (Moderate Risk)", "ASF", "NO VALUE", "NO VALUE",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000002", "ASF", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "FLA (Moderate Risk)", 'FLA', "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "FLA", "NO VALUE", "NO VALUE",
                  "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG (Low Risk)", "JPEG", "NO VALUE", "NO VALUE",
+                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG", "NO VALUE", "NO VALUE",
                  "Low Risk", "Retain", "No Match", "New Match"]]
         df = make_df(rows)
 
@@ -297,21 +297,21 @@ class MyTestCase(unittest.TestCase):
         These should only be counted once.
         """
         # Makes a dataframe to use as test input.
-        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+        rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE",
+                ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT", "NO VALUE",
                  "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG EXIF 7.1 (Low Risk)", "JPEG EXIF", "7.1",
+                ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG EXIF", "7.1",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-028", "rbrl-028-er-000001", "DOT (Moderate Risk)", "DOT", "NO VALUE",
+                ["russell", "rbrl-028", "rbrl-028-er-000001", "DOT", "NO VALUE",
                  "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-028", "rbrl-028-er-000002", "ASF (Moderate Risk)", "ASF", "NO VALUE",
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "ASF", "NO VALUE",
                  "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
-                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF 7.2 (Low Risk)", "JPEG EXIF", "7.2",
+                ["russell", "rbrl-028", "rbrl-028-er-000002", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
         df = make_df(rows)
 

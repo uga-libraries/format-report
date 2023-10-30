@@ -31,29 +31,28 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
-                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
-                     "Low Risk", "Retain", "High Risk", "Decrease"],
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format", "5.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353", "Low Risk", "Retain",
+                     "High Risk", "Decrease"],
                     ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
-                     "Extensible Markup Language 1.0 (No Match)", "Extensible Markup Language", "1.0",
-                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", "NO VALUE", np.NaN,
-                     "New Format"],
-                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (No Match)", "JPEG 2000 JP2",
-                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", "NO VALUE",
+                     "Extensible Markup Language", "1.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/101",
+                     "No Match", "NO VALUE", np.NaN, "New Format"],
+                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "No Match", "NO VALUE",
                      "Low Risk", "Unmatched"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Moderate Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (Moderate Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "Moderate Risk", "Retain", "Low Risk", "Increase"],
-                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (Moderate Risk)", "Matroska",
-                     "NO VALUE", "NO VALUE", "Moderate Risk", "Retain", "No Match", "New Match"],
-                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (Moderate Risk)", "Waveform Audio",
-                     "NO VALUE", "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"]]
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "Moderate Risk", "Retain",
+                     "Low Risk", "Increase"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "Moderate Risk", "Retain",
+                     "Low Risk", "Increase"],
+                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
+                     "Moderate Risk", "Retain", "No Match", "New Match"],
+                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio", "NO VALUE", "NO VALUE",
+                     "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"]]
         self.assertEqual(result, expected, "Problem with test for risk, all types")
 
     def test_decrease(self):
@@ -73,21 +72,20 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Moderate Risk)",
-                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format", "5.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Moderate Risk", "Retain", "High Risk", "Decrease"],
                     ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
-                     "Extensible Markup Language 1.0 (Low Risk)", "Extensible Markup Language", "1.0",
-                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "Low Risk", "Retain", "High Risk",
-                     "Decrease"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Low Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                     "Extensible Markup Language", "1.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/101",
+                     "Low Risk", "Retain", "High Risk", "Decrease"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "Low Risk", "Retain", "Moderate Risk", "Decrease"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (Low Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "Low Risk", "Retain", "Moderate Risk", "Decrease"]]
         self.assertEqual(result, expected, "Problem with test for risk decrease")
 
@@ -108,21 +106,20 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Moderate Risk)",
-                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format", "5.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Moderate Risk", "Retain", "Low Risk", "Increase"],
                     ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
-                     "Extensible Markup Language 1.0 (High Risk)", "Extensible Markup Language", "1.0",
-                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "High Risk", "Retain", "Low Risk",
-                     "Increase"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                     "Extensible Markup Language", "1.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/101",
+                     "High Risk", "Retain", "Low Risk", "Increase"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "High Risk", "Retain", "Moderate Risk", "Increase"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
                      "High Risk", "Retain", "Moderate Risk", "Increase"]]
         self.assertEqual(result, expected, "Problem with test for risk increase")
 
@@ -142,23 +139,21 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
-                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format", "5.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
                      "Low Risk", "Retain", np.NaN, "New Format"],
-                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (Moderate Risk)", "JPEG 2000 JP2",
-                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "Moderate Risk", "Retain",
+                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "Moderate Risk", "Retain",
                      np.NaN, "New Format"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "High Risk", "Retain", np.NaN, "New Format"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "High Risk", "Retain", np.NaN, "New Format"],
-                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (No Match)", "Matroska",
-                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", np.NaN, "New Format"]]
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain", np.NaN, "New Format"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain", np.NaN, "New Format"],
+                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE", np.NaN, "New Format"]]
         self.assertEqual(result, expected, "Problem with test for risk new match")
 
     def test_new_match(self):
@@ -177,19 +172,19 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (Low Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "Low Risk", "Retain", "No Match", "New Match"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (Low Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "Low Risk", "Retain", "No Match", "New Match"],
-                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (Moderate Risk)", "Matroska",
-                     "NO VALUE", "NO VALUE", "Moderate Risk", "Retain", "No Match", "New Match"],
-                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (High Risk)", "Waveform Audio",
-                     "NO VALUE", "NO VALUE", "High Risk", "Retain", "No Match", "New Match"]]
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "Low Risk", "Retain",
+                     "No Match", "New Match"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "Low Risk", "Retain",
+                     "No Match", "New Match"],
+                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
+                     "Moderate Risk", "Retain", "No Match", "New Match"],
+                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio", "NO VALUE", "NO VALUE",
+                     "High Risk", "Retain", "No Match", "New Match"]]
         self.assertEqual(result, expected, "Problem with test for risk new match")
 
     def test_unmatched(self):
@@ -208,18 +203,17 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival",
-                     "Extensible Markup Language 1.0 (No Match)", "Extensible Markup Language", "1.0",
+                    ["dlg", "dlg_ghn", "batch_gua_augweeklychronsent02_archival", "Extensible Markup Language", "1.0",
                      "https://www.nationalarchives.gov.uk/PRONOM/fmt/101", "No Match", "NO VALUE",
                      "Moderate Risk", "Unmatched"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (No Match)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "No Match", "NO VALUE", "Low Risk", 'Unmatched'],
-                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio (No Match)", "Waveform Audio",
-                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", "High Risk", "Unmatched"]]
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "No Match", "NO VALUE",
+                     "Low Risk", 'Unmatched'],
+                    ["dlg", "zhj_tecc", "zhj_tecc_rml-ohp-037", "Waveform Audio", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE", "High Risk", "Unmatched"]]
         self.assertEqual(result, expected, "Problem with test for risk unmatched")
 
     def test_unchanged(self):
@@ -238,23 +232,23 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the updated current df contains the correction information.
         result = [current_format_df.columns.to_list()] + current_format_df.values.tolist()
-        expected = [["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version", "PRONOM_URL",
+        expected = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
                      "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan", "2021_NARA_Risk_Level",
                      "Risk_Level_Change"],
-                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format 5.0 (Low Risk)",
-                     "Tagged Image File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM/fmt/353",
-                     "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2 (Moderate Risk)", "JPEG 2000 JP2",
-                     "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "Moderate Risk", "Retain",
+                    ["dlg", "arl_acl", "arl_acl_acl286", "Tagged Image File Format", "5.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/353", "Low Risk", "Retain",
+                     "Low Risk", "Unchanged"],
+                    ["dlg", "dlg_ghn", "batch_gua_palladium_archival", "JPEG 2000 JP2", "NO VALUE",
+                     "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/392", "Moderate Risk", "Retain",
                      "Moderate Risk", "Unchanged"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "High Risk", "Retain", "High Risk", "Unchanged"],
-                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format 1.02 (High Risk)",
-                     "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM/fmt/44",
-                     "High Risk", "Retain", "High Risk", "Unchanged"],
-                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska (No Match)", "Matroska",
-                     "NO VALUE", "NO VALUE", "No Match", "NO VALUE", "No Match", "Unchanged"]]
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20017", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain",
+                     "High Risk", "Unchanged"],
+                    ["dlg", "dlg_ww2", "dlg_ww2_cws20018", "JPEG File Interchange Format", "1.02",
+                     "https://www.nationalarchives.gov.uk/PRONOM/fmt/44", "High Risk", "Retain",
+                     "High Risk", "Unchanged"],
+                    ["dlg", "gawcl-sylv_wccent", "gawcl-sylv_wccent_film001", "Matroska", "NO VALUE", "NO VALUE",
+                     "No Match", "NO VALUE", "No Match", "Unchanged"]]
         self.assertEqual(result, expected, "Problem with test for risk unchanged")
 
 

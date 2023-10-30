@@ -78,12 +78,6 @@ def csv_to_dataframe(csv_file):
         print("The CSV was read by ignoring encoding errors, so those characters are omitted from the dataframe.")
         csv_df = pd.read_csv(csv_file, dtype=str, encoding_errors="ignore")
 
-    # Adds a column with combined format name, version (if has one), and NARA risk level.
-    # If there is no version, the column will have NO VALUE.
-    # Format is used for summaries but removed before the risk information is saved to the department report.
-    csv_df['Format'] = csv_df['Format Name'] + " " + csv_df['Format Version'] + " (" + csv_df['NARA_Risk Level'] + ")"
-    csv_df['Format'] = csv_df['Format'].str.replace(" NO VALUE", "")
-
     # Makes a new column (PRONOM URL) by combining Registry Name and Registry Key, if Registry Name is PRONOM.
     # If the registry is not PRONOM, the column will be given the value "NO VALUE" instead.
     # PRONOM is the only registry that our format data currently contains.
@@ -114,7 +108,7 @@ def csv_to_dataframe(csv_file):
 
     # Changes the order of the columns to group format information and risk information.
     # Otherwise, the PRONOM URL would be at the end.
-    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format_Identification', 'Format', 'Format_Name', 'Format_Version',
+    csv_df = csv_df[['Group', 'Collection', 'AIP', 'Format_Identification', 'Format_Name', 'Format_Version',
                      'PRONOM_URL', f'{year}_NARA_Risk_Level', f'{year}_NARA_Proposed_Preservation_Plan']]
 
     return csv_df
@@ -127,12 +121,17 @@ def formats_pivot(current_df):
     """
     # Gets the name fo the NARA Risk Level column,
     # which includes the year and so is different each time the analysis is run.
-    current_risk_column = current_df.columns.to_list()[7]
+    current_risk_column = current_df.columns.to_list()[6]
+
+    # Adds a column with combined format name, version (if has one), and NARA risk level.
+    # If there is no version, the column will have NO VALUE, which needs to be removed.
+    # Format is a temporary, for naming format columns for this pivot table.
+    # It includes the risk, even though that is also a separate row for this pivot table, for readability.
+    current_df['Format'] = current_df['Format_Name'] + " " + current_df['Format_Version'] + " (" + current_df[current_risk_column].astype(str) + ")"
+    current_df['Format'] = current_df['Format'].str.replace(" NO VALUE", "")
 
     # Makes a pivot table with rows first by collection and then by AIP,
     # and columns first by NARA risk level and then by Format.
-    # Format includes the format name, version, and NARA risk level.
-    # Risk level is included in Format, even though it is also a separate column, for readability.
     # Initially, the table has the number of formats in each AIP, but this is converted to True/False
     # since formats will always appear 0, 1, or 2 (legacy duplication from PUID and no PUID) in an AIP.
     pivot = pd.pivot_table(current_df, index=['Collection', 'AIP'], columns=[current_risk_column, 'Format'],
@@ -152,8 +151,8 @@ def risk_change(current_df, previous_df):
     """
     # Gets the name of the NARA Risk Level column for each dataframe,
     # which includes the year and so is different each time the analysis is run.
-    previous_risk = previous_df.columns.to_list()[8]
-    current_risk = current_df.columns.to_list()[8]
+    previous_risk = previous_df.columns.to_list()[7]
+    current_risk = current_df.columns.to_list()[7]
 
     # Adds previous risk data to the current, matching on the AIP and Format_Identification columns.
     previous_columns = ['AIP', 'Format_Identification', previous_risk]
@@ -189,8 +188,8 @@ def risk_levels(dept_df, index_column):
 
     # Calculates the number of formats at each risk level.
     # Including margins=True adds totals for each column and row.
-    current_risk_column = df_dedup.columns.to_list()[7]
-    risk = pd.pivot_table(df_dedup, index=index_column, columns=current_risk_column, values='Format',
+    current_risk_column = df_dedup.columns.to_list()[6]
+    risk = pd.pivot_table(df_dedup, index=index_column, columns=current_risk_column, values='Format_Name',
                           margins=True, aggfunc=len, fill_value=0)
 
     # Renames the column of each row's totals from default All to Formats, to be more intuitive.
