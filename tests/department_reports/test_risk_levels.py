@@ -20,8 +20,14 @@ def make_df(rows_list):
     columns_list = ["Group", "Collection", "AIP", "Format", "Format_Name", "Format_Version",
                     "PRONOM_URL", "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan",
                     "2021_NARA_Risk_Level", "Risk_Level_Change"]
-
     df = pd.DataFrame(rows_list, columns=columns_list)
+
+    # Makes the NARA Risk Level columns ordered categorical, so risk levels can be sorted.
+    # In production, this is done as part of csv_to_dataframe().
+    risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+    df['2023_NARA_Risk_Level'] = pd.Categorical(df['2023_NARA_Risk_Level'], risk_order, ordered=True)
+    df['2021_NARA_Risk_Level'] = pd.Categorical(df['2021_NARA_Risk_Level'], risk_order, ordered=True)
+
     return df
 
 
