@@ -63,7 +63,6 @@ A bar chart with the percentage of each collection's formats at each risk level.
 A histogram with the number of AIPs with the same number of formats.  
 1. From AIP Risk Data, copy the AIP, Format_Name, and Format_Version columns.
 2. Remove duplicates across all three columns.
-3. Sort by AIP. Is this necessary???
 4. Insert a pivot table with AIP as ROWS and Count of AIP as VALUES.
 5. Copy the pivot table and paste the values to be able to use as input for the histogram.
 6. Rename Row Labels to AIP ID and Count of AIP to Number of Formats.
@@ -71,12 +70,11 @@ A histogram with the number of AIPs with the same number of formats.
 8. Highlight the AIP ID and Number of Formats column labels and data rows.
 9. Insert a histogram (under Statistics Chart)
 10. Change the bin size
-    1. Click on chart and then the Plus to get “Chart Elements” 
-    2. Highlight axes to make the arrow appear 
-    3. Click on the arrow arrow and then More Axis Options 
-    4. Click on the bar chart icon and click Axis Options to get the Bins list 
-    5. Select a Bin width of a small number (2 or 3)
-11. Also in the Chart Elements, check data lebels to get counts per bing.
+    1. Click on the chart and then the Plus to get “Chart Elements” 
+    2. Mouse over Axes to make the arrow appear, click on it, and then click More Axis Options 
+    3. Click on the bar chart icon and click Axis Options to get the Bins list 
+    4. Select a Bin width of a small number (2 or 3)
+11. Also in the Chart Elements, check data labels to get counts per bin.
 12. Change the chart title to "Number of formats in an AIP"
 
 
