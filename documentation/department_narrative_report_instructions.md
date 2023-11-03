@@ -15,11 +15,15 @@ Use the example department report as a template for the new report.
 
 Update the date with the date that the ARCHive format report was downloaded for this analysis.
 
-Calculate the number of collections: TBD  
-Calculate the number of AIPs: TBD  
-Calculate the number of format versions: TBD  
-Calculate the number of formats: TBD  
-Calculate the range of versions for individual formats: TBD
+Use copies of columns from the AIP Risk Data to calculate the overview stats:
+- Number of collections: remove duplicates from the Collection column and get the row count.  
+- Number of AIPs: remove duplicates from the AIP column and get the row count.
+- Format counts 
+  - Number of versions: remove duplicates from the Format_Name and Format_Version columns and get the row count.
+  - Range of versions: sort the Format_Name column of the deduplicated list just created, 
+    get the subtotal of counts of Format_Name, and find the lowest and highest subtotal.
+  - Number of formats: remove duplicates from another copy of the Format_Name column and get the row count.  
+
 
 ### Risk Profile
 
