@@ -15,7 +15,7 @@ Use the example department report as a template for the new report.
 
 Update the date with the date that the ARCHive format report was downloaded for this analysis.
 
-Use copies of columns from the AIP Risk Data to calculate the overview stats:
+Use copies of columns from the AIP Risk Data sheet to calculate the overview stats:
 - Number of collections: remove duplicates from the Collection column and get the row count.  
 - Number of AIPs: remove duplicates from the AIP column and get the row count.
 - Format counts 
@@ -32,8 +32,8 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 2. Remove the percentage from the risk column labels.
 3. Highlight the four risk level column labels and data row.
 4. Insert a pie chart.
-5. Change the chart title to "Format Risk Profile"
-6. Use the quick layout (under Design) of percentage in slice and TOC on right
+5. Change the chart title to "Format Risk Profile".
+6. Use Quick Layout 1 (under Design) to label each slice with the risk level and percentage.
 
 ### Risk Change
 
