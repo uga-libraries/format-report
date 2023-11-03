@@ -1,4 +1,4 @@
-# Instructions for creating a department report
+# Instructions for creating a department narrative report
 
 ## Overview and Purpose
 
