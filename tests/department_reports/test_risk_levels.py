@@ -292,7 +292,7 @@ class MyTestCase(unittest.TestCase):
                     ["russell", 4, 0, 0, 75, 25]]
         self.assertEqual(result, expected, "Problem with test for department, multiple levels")
 
-    def test_department_remove_duplicates(self):
+    def test_dept_remove_duplicates(self):
         """
         Test for department risk levels where some formats are duplicated in multiple AIPs.
         These should only be counted once.
