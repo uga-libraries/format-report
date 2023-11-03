@@ -39,12 +39,14 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 
 A bar chart with the number of formats at each risk level from the previous analysis and current analysis, 
 and the number of formats only present in one of the two analyses.
-1. Copy the Department Risk Levels sheet from this analysis and the previous analysis. How should this look??? Where to get new format info???
-2. Remove the percentage from the risk column labels.
-3. Highlight ????
-4. Insert a clustered column chart.
-5. Change the chart title to "Format Risk Profile Change".
-6. Use Quick Layout 2.
+1. Copy the Department Risk Levels sheet from this analysis.
+2. Add the Department Risk Levels percentages from the previous analysis in the row above.
+3. Remove the percentage from the risk column labels.
+4. Highlight the risk column labels and data rows.
+5. Insert a clustered column chart.
+6. Change the chart title to "Format Risk Profile Change".
+7. Rename the series to the years.   
+8. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
 
 
 ### Risk by Collection
