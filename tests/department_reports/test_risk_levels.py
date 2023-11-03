@@ -107,17 +107,17 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.1",
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
-                ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "JPEG EXIF", "7.2",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.2",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"]]
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"]]
         df = make_df(rows)
 
         # Runs the function being tested.
@@ -127,9 +127,9 @@ class MyTestCase(unittest.TestCase):
         aip_risk.reset_index(inplace=True)
         result = [aip_risk.columns.tolist()] + aip_risk.values.tolist()
         expected = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                    ["rbrl-025-er-000001", 1, 0, 0, 0, 100],
-                    ["rbrl-025-er-000002", 2, 0, 0, 0, 100],
-                    ["rbrl-025-er-000003", 2, 0, 0, 0, 100]]
+                    ["rbrl-025-er-000001", 1, 0.0, 0.0, 0.0, 100.0],
+                    ["rbrl-025-er-000002", 2, 50.0, 0.0, 0.0, 50.0],
+                    ["rbrl-025-er-000003", 2, 100.0, 0.0, 0.0, 0.0]]
         self.assertEqual(result, expected, "Problem with test for AIP, remove duplicates")
 
     def test_collection_all_levels(self):
@@ -208,13 +208,13 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000002", "FPX", "NO VALUE",
                  "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "FPX", "NO VALUE",
                  "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000003", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000004", "JPEG EXIF", "7.2",
                  "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-026", "rbrl-026-er-000001", "FPX", "NO VALUE",
@@ -301,11 +301,11 @@ class MyTestCase(unittest.TestCase):
         rows = [["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
                  "https://www.nationalarchives.gov.uk/PRONOM/fmt/645", "Low Risk", "Retain", "Low Risk", "Unchanged"],
                 ["russell", "rbrl-025", "rbrl-025-er-000001", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-026", "rbrl-026-er-000001", "DOT", "NO VALUE",
                  "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
                 ["russell", "rbrl-027", "rbrl-027-er-000001", "JPEG EXIF", "7.1",
-                 "NO VALUE", "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                 "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
                 ["russell", "rbrl-028", "rbrl-028-er-000001", "DOT", "NO VALUE",
                  "NO VALUE", "Moderate Risk", "Retain", "Moderate Risk", "Unchanged"],
                 ["russell", "rbrl-028", "rbrl-028-er-000002", "ASF", "NO VALUE",

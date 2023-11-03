@@ -186,8 +186,11 @@ def risk_levels(dept_df, index_column):
     # within the unit of analysis (index_column).
     # For example, with collections, a format should be counted once per collection.
     # Even the AIP analysis is deduplicated because of formats listed with and without a PUID.
+    # If a format with and without a PUID present, the one with the PUID is kept during deduplication
+    # since the NARA match is most likely to be accurate. It is the last one after sorting,
+    # because the upper case "NO VALUE" for no PRONOM URL is sorted before the lowercase PRONOM URL.
     subset_list = [index_column] + ['Format_Name', 'Format_Version']
-    df_dedup = dept_df.drop_duplicates(subset=subset_list)
+    df_dedup = dept_df.sort_values('PRONOM_URL').drop_duplicates(subset=subset_list, keep='last')
 
     # Calculates the number of formats at each risk level.
     # Including margins=True adds totals for each column and row.
