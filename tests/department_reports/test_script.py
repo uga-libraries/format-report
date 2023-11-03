@@ -197,33 +197,33 @@ class MyTestCase(unittest.TestCase):
                               ["bmac", "hm-lawton", "bmac_hm-lawton_0001", "Wave", "NO VALUE", "NO VALUE",
                                "Low Risk", "Retain", "Low Risk", "Unchanged"],
                               ["bmac", "hm-lawton", "bmac_hm-lawton_0002", "cue", "NO VALUE", "NO VALUE",
-                               "No Match", np.NaN, "No Match", "Unchanged"]]
+                               "Moderate Risk", "Retain", "No Match", "New Match"]]
         self.assertEqual(result_bmac_data, expected_bmac_data, "Problem with BMAC AIP Risk Data")
 
         # Tests if the BMAC Department Risk Levels sheet has the expected values.
         result_bmac_dept = [df_bmac_dept.columns.tolist()] + df_bmac_dept.values.tolist()
         expected_bmac_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                              ["bmac", 2, 50, 0, 0, 50]]
+                              ["bmac", 2, 0, 0, 50, 50]]
         self.assertEqual(result_bmac_dept, expected_bmac_dept, "Problem with BMAC Department Risk Levels")
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
         result_bmac_coll = [df_bmac_coll.columns.tolist()] + df_bmac_coll.values.tolist()
         expected_bmac_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                              ["hm-lawton", 2, 50, 0, 0, 50]]
+                              ["hm-lawton", 2, 0, 0, 50, 50]]
         self.assertEqual(result_bmac_coll, expected_bmac_coll, "Problem with BMAC Collection Risk Levels")
 
         # Tests if the BMAC AIP Risk Levels sheet has the expected values.
         result_bmac_aip = [df_bmac_aip.columns.tolist()] + df_bmac_aip.values.tolist()
         expected_bmac_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
                              ["bmac_hm-lawton_0001", 1, 0, 0, 0, 100],
-                             ["bmac_hm-lawton_0002", 1, 100, 0, 0, 0]]
+                             ["bmac_hm-lawton_0002", 1, 0, 0, 100, 0]]
         self.assertEqual(result_bmac_aip, expected_bmac_aip, "Problem with BMAC AIP Risk Levels")
 
         # Tests if the BMAC Formats sheet has the expected values.
         result_bmac_format = [df_bmac_format.columns.tolist()] + df_bmac_format.values.tolist()
         expected_bmac_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3"],
-                                [np.NaN, "2023_NARA_Risk_Level", "No Match", "Low Risk"],
-                                [np.NaN, "Format", "cue (No Match)", "Wave (Low Risk)"],
+                                [np.NaN, "2023_NARA_Risk_Level", "Moderate Risk", "Low Risk"],
+                                [np.NaN, "Format", "cue (Moderate Risk)", "Wave (Low Risk)"],
                                 ["Collection", "AIP", np.NaN, np.NaN],
                                 ["hm-lawton", "bmac_hm-lawton_0001", False, True],
                                 [np.NaN, "bmac_hm-lawton_0002", True, False]]
@@ -235,11 +235,11 @@ class MyTestCase(unittest.TestCase):
                                "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan",
                                "2021_NARA_Risk_Level", "Risk_Level_Change"],
                               ["hargrett", "harg-0000", "harg-0000-web-202007-0001", "WARC", "NO VALUE",
-                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
-                               "Low Risk", "Unchanged"],
+                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Moderate Risk", "Retain",
+                               "Low Risk", "Increase"],
                               ["hargrett", "harg-0000", "harg-0000-web-202007-0002", "WARC", "NO VALUE",
-                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
-                               "Low Risk", "Unchanged"],
+                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Moderate Risk", "Retain",
+                               "Low Risk", "Increase"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0001", "JPEG File Interchange Format",
                                "1.01", "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk",
                                "Retain", "Low Risk", "Unchanged"],
@@ -250,10 +250,10 @@ class MyTestCase(unittest.TestCase):
                                "1.01", "https://www.nationalarchives.gov.uk/PRONOM/fmt/43", "Low Risk",
                                "Retain", "Low Risk", "Unchanged"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE",
-                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Low Risk", "Retain",
-                               "Low Risk", "Unchanged"],
+                               "https://www.nationalarchives.gov.uk/PRONOM/fmt/289", "Moderate Risk", "Retain",
+                               "Low Risk", "Increase"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0003", "WARC", "NO VALUE", "NO VALUE",
-                               "Low Risk", "Retain", "Low Risk", "Unchanged"],
+                               "Moderate Risk", "Retain", "Low Risk", "Increase"],
                               ["hargrett", "harg-ms3786", "harg-ms3786er0004", "CorelDraw Drawing", "8.0",
                                "NO VALUE", "High Risk", "Transform to a TBD format, possibly PDF or TIFF",
                                "High Risk", "Unchanged"],
@@ -289,24 +289,24 @@ class MyTestCase(unittest.TestCase):
         # Tests if the Hargrett Department Risk Levels sheet has the expected values.
         result_harg_dept = [df_harg_dept.columns.tolist()] + df_harg_dept.values.tolist()
         expected_harg_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                              ["hargrett", 4, 25, 25, 0, 50]]
+                              ["hargrett", 4, 25, 25, 25, 25]]
         self.assertEqual(result_harg_dept, expected_harg_dept, "Problem with Hargrett Department Risk Levels")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_harg_coll = [df_harg_coll.columns.tolist()] + df_harg_coll.values.tolist()
         expected_harg_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                              ["harg-0000", 1, 0, 0, 0, 100],
-                              ["harg-ms3786", 4, 25, 25, 0, 50]]
+                              ["harg-0000", 1, 0, 0, 100, 0],
+                              ["harg-ms3786", 4, 25, 25, 25, 25]]
         self.assertEqual(result_harg_coll, expected_harg_coll, "Problem with Hargrett Collection Risk Levels")
 
         # Tests if the Hargrett AIP Risk Levels sheet has the expected values.
         result_harg_aip = [df_harg_aip.columns.tolist()] + df_harg_aip.values.tolist()
         expected_harg_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
-                             ["harg-0000-web-202007-0001", 1, 0.0, 0.0, 0, 100.0],
-                             ["harg-0000-web-202007-0002", 1, 0.0, 0.0, 0, 100.0],
+                             ["harg-0000-web-202007-0001", 1, 0.0, 0.0, 100.0, 0.0],
+                             ["harg-0000-web-202007-0002", 1, 0.0, 0.0, 100.0, 0.0],
                              ["harg-ms3786er0001", 1, 0.0, 0.0, 0, 100.0],
                              ["harg-ms3786er0002", 2, 0.0, 50.0, 0, 50.0],
-                             ["harg-ms3786er0003", 1, 0.0, 0.0, 0, 100.0],
+                             ["harg-ms3786er0003", 1, 0.0, 0.0, 100.0, 0.0],
                              ["harg-ms3786er0004", 1, 0.0, 100.0, 0, 0.0],
                              ["harg-ms3786er0005", 2, 0.0, 50.0, 0, 50.0],
                              ["harg-ms3786er0006", 3, 33.33, 33.33, 0, 33.33]]
@@ -315,18 +315,18 @@ class MyTestCase(unittest.TestCase):
         # Tests if the Hargrett Formats sheet has the expected values.
         result_harg_format = [df_harg_format.columns.tolist()] + df_harg_format.values.tolist()
         expected_harg_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4", "Unnamed: 5"],
-                                [np.NaN, "2023_NARA_Risk_Level", "No Match", "High Risk", "Low Risk", np.NaN],
+                                [np.NaN, "2023_NARA_Risk_Level", "No Match", "High Risk", "Moderate Risk", "Low Risk"],
                                 [np.NaN, "Format", "cue (No Match)", "CorelDraw Drawing 8.0 (High Risk)",
-                                 "JPEG File Interchange Format 1.01 (Low Risk)", "WARC (Low Risk)"],
+                                 "WARC (Moderate Risk)", "JPEG File Interchange Format 1.01 (Low Risk)"],
                                 ["Collection", "AIP", np.NaN, np.NaN, np.NaN, np.NaN],
-                                ["harg-0000", "harg-0000-web-202007-0001", False, False, False, True],
-                                [np.NaN, "harg-0000-web-202007-0002", False, False, False, True],
-                                ["harg-ms3786", "harg-ms3786er0001", False, False, True, False],
-                                [np.NaN, "harg-ms3786er0002", False, True, True, False],
-                                [np.NaN, "harg-ms3786er0003", False, False, False, True],
+                                ["harg-0000", "harg-0000-web-202007-0001", False, False, True, False],
+                                [np.NaN, "harg-0000-web-202007-0002", False, False, True, False],
+                                ["harg-ms3786", "harg-ms3786er0001", False, False, False, True],
+                                [np.NaN, "harg-ms3786er0002", False, True, False, True],
+                                [np.NaN, "harg-ms3786er0003", False, False, True, False],
                                 [np.NaN, "harg-ms3786er0004", False, True, False, False],
-                                [np.NaN, "harg-ms3786er0005", False, True, True, False],
-                                [np.NaN, "harg-ms3786er0006", True, True, True, False]]
+                                [np.NaN, "harg-ms3786er0005", False, True, False, True],
+                                [np.NaN, "harg-ms3786er0006", True, True, False, True]]
         self.assertEqual(result_harg_format, expected_harg_format, "Problem with Hargrett Formats")
 
 
