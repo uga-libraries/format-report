@@ -4,13 +4,11 @@
 
 Create a summary and visualizations of the department's format data, prioritizing risk information.
 It orients the department to the information in the spreadsheet and highlights areas of higher risk. 
-The spreadsheet is created using ARCHive format data and the department_reports.py script.
-
 
 ## Analysis
 
 Use Excel and the data from the department report spreadsheet to make graphs of the data. 
-In some cases, the data must be summarized further.
+In some cases, the data must be edited first.
 Use the example department report as a template for the new report.
 
 ### Overview
