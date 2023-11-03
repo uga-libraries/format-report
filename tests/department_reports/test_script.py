@@ -17,7 +17,8 @@ class MyTestCase(unittest.TestCase):
         Deletes the Excel spreadsheets produced by the script, if they were made by the test.
         """
         date = datetime.date.today().strftime("%Y%m")
-        file_paths = [os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
+        file_paths = [os.path.join("script", f"dlg-magil_risk_report_{date}.xlsx"),
+                      os.path.join("script", f"bmac_risk_report_{date}.xlsx"),
                       os.path.join("script", f"hargrett_risk_report_{date}.xlsx")]
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -42,9 +43,126 @@ class MyTestCase(unittest.TestCase):
                        "Script usage: python path/department_reports.py current_formats_csv previous_formats_csv\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
-    def test_correct_input(self):
+    def test_one_department(self):
         """
-        Test for running the script on a valid archive_formats_by_aip CSV.
+        Test for running the script on valid archive_formats_by_aip CSVs with one department.
+        """
+        # Runs the script.
+        script_path = os.path.join("..", "..", "department_reports.py")
+        formats_current = os.path.join("script", "archive_formats_by_aip_2023-11.csv")
+        formats_previous = os.path.join("script", "archive_formats_by_aip_2021-11.csv")
+        subprocess.run(f"python {script_path} {formats_current} {formats_previous}")
+
+        # # Reads the DLG-MAGIL Excel file into pandas, and then each sheet into a separate dataframe.
+        date = datetime.date.today().strftime("%Y%m")
+        df = pd.ExcelFile(os.path.join("script", f"dlg-magil_risk_report_{date}.xlsx"))
+        df_data = pd.read_excel(df, "AIP Risk Data")
+        df_dept = pd.read_excel(df, "Department Risk Levels")
+        df_coll = pd.read_excel(df, "Collection Risk Levels")
+        df_aip = pd.read_excel(df, "AIP Risk Levels")
+        df_format = pd.read_excel(df, "Formats")
+        df.close()
+
+        # Tests if the DLG-MAGIL AIP Risk Data sheet has the expected values.
+        result_data = [df_data.columns.tolist()] + df_data.values.tolist()
+        expected_data = [["Group", "Collection", "AIP", "Format_Name", "Format_Version", "PRONOM_URL",
+                          "2023_NARA_Risk_Level", "2023_NARA_Proposed_Preservation_Plan",
+                          "2021_NARA_Risk_Level", "Risk_Level_Change"],
+                          ["dlg-magil", "dlg_sanb", "dlg_sanb_savannah-1884", "Tagged Image File Format", "6",
+                           "NO VALUE", "Low Risk", "Retain", np.NaN, "New Format"],
+                          ["dlg-magil", "dlg_sanb", "dlg_sanb_savannah-1888", "Tagged Image File Format", "6",
+                           "NO VALUE", "Low Risk", "Retain", np.NaN, "New Format"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1952", "Plain text", "NO VALUE",
+                           "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111", "Low Risk", "Retain",
+                           "Low Risk", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1952",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1962", "Plain text", "NO VALUE",
+                           "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111", "Low Risk", "Retain",
+                           "Low Risk", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1962",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1968", "Plain text", "NO VALUE",
+                           "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111", "Low Risk", "Retain",
+                           "Low Risk", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_appling-1968",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_atkinson-1939",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_atkinson-1947",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_bacon-1956-57",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_bacon-1962-63", "Plain text", "NO VALUE",
+                           "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111", "Low Risk", "Retain",
+                           "Low Risk", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_bacon-1962-63",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_bacon-1968", "Plain text", "NO VALUE",
+                           "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/111", "Low Risk", "Retain",
+                           "Low Risk", "Unchanged"],
+                          ["dlg-magil", "gyca_gaphind", "gyca_gaphind_bacon-1968",
+                           "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color",
+                           "5", "NO VALUE", "No Match", np.NaN, "No Match", "Unchanged"]]
+        self.assertEqual(result_data, expected_data, "Problem with DLG-MAGIL AIP Risk Data")
+
+        # Tests if the DLG-MAGIL Department Risk Levels sheet has the expected values.
+        result_dept = [df_dept.columns.tolist()] + df_dept.values.tolist()
+        expected_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                         ["dlg-magil", 3, 33.33, 0, 0, 66.67]]
+        self.assertEqual(result_dept, expected_dept, "Problem with DLG-MAGIL Department Risk Levels")
+
+        # Tests if the DLG-MAGIL Collection Risk Levels sheet has the expected values.
+        result_coll = [df_coll.columns.tolist()] + df_coll.values.tolist()
+        expected_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                         ["dlg_sanb", 1, 0, 0, 0, 100],
+                         ["gyca_gaphind", 2, 50, 0, 0, 50]]
+        self.assertEqual(result_coll, expected_coll, "Problem with DLG-MAGIL Collection Risk Levels")
+
+        # Tests if the DLG-MAGIL AIP Risk Levels sheet has the expected values.
+        result_aip = [df_aip.columns.tolist()] + df_aip.values.tolist()
+        expected_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+                        ["dlg_sanb_savannah-1884", 1, 0, 0, 0, 100],
+                        ["dlg_sanb_savannah-1888", 1, 0, 0, 0, 100],
+                        ["gyca_gaphind_appling-1952", 2, 50, 0, 0, 50],
+                        ["gyca_gaphind_appling-1962", 2, 50, 0, 0, 50],
+                        ["gyca_gaphind_appling-1968", 2, 50, 0, 0, 50],
+                        ["gyca_gaphind_atkinson-1939", 1, 100, 0, 0, 0],
+                        ["gyca_gaphind_atkinson-1947", 1, 100, 0, 0, 0],
+                        ["gyca_gaphind_bacon-1956-57", 1, 100, 0, 0, 0],
+                        ["gyca_gaphind_bacon-1962-63", 2, 50, 0, 0, 50],
+                        ["gyca_gaphind_bacon-1968", 2, 50, 0, 0, 50]]
+        self.assertEqual(result_aip, expected_aip, "Problem with DLG-MAGIL AIP Risk Levels")
+
+        # Tests if the DLG-MAGIL Formats sheet has the expected values.
+        result_format = [df_format.columns.tolist()] + df_format.values.tolist()
+        expected_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4"],
+                           [np.NaN, "2023_NARA_Risk_Level", "No Match", "Low Risk", np.NaN],
+                           [np.NaN, "Format", "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color 5 (No Match)",
+                            "Plain text (Low Risk)", "Tagged Image File Format 6 (Low Risk)"],
+                           ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
+                           ["dlg_sanb", "dlg_sanb_savannah-1884", False, False, True],
+                           [np.NaN, "dlg_sanb_savannah-1888", False, False, True],
+                           ["gyca_gaphind", "gyca_gaphind_appling-1952", True, True, False],
+                           [np.NaN, "gyca_gaphind_appling-1962", True, True, False],
+                           [np.NaN, "gyca_gaphind_appling-1968", True, True, False],
+                           [np.NaN, "gyca_gaphind_atkinson-1939", True, False, False],
+                           [np.NaN, "gyca_gaphind_atkinson-1947", True, False, False],
+                           [np.NaN, "gyca_gaphind_bacon-1956-57", True, False, False],
+                           [np.NaN, "gyca_gaphind_bacon-1962-63", True, True, False],
+                           [np.NaN, "gyca_gaphind_bacon-1968", True, True, False]]
+        self.assertEqual(result_format, expected_format, "Problem with DLG-MAGIL Formats")
+
+    def test_two_departments(self):
+        """
+        Test for running the script on valid archive_formats_by_aip CSVs with two departments.
         """
         # Runs the script.
         script_path = os.path.join("..", "..", "department_reports.py")
