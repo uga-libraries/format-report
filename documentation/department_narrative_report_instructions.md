@@ -38,8 +38,7 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 
 ### Risk Change
 
-A bar chart with the number of formats at each risk level from the previous analysis and current analysis, 
-and the number of formats only present in one of the two analyses.
+A bar chart with the number of formats at each risk level from the previous analysis and current analysis.
 1. Copy the Department Risk Levels sheet from this analysis.
 2. Add the Department Risk Levels percentages from the previous analysis in the row above.
 3. Remove the percentage from the risk column labels.
