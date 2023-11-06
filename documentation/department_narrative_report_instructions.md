@@ -42,12 +42,13 @@ and the number of formats only present in one of the two analyses.
 1. Copy the Department Risk Levels sheet from this analysis.
 2. Add the Department Risk Levels percentages from the previous analysis in the row above.
 3. Remove the percentage from the risk column labels.
-4. Highlight the risk column labels and data rows.
-5. Insert a clustered column chart.
-6. Change the chart title to "Format Risk Profile Change".
-7. Rename the series to the years.   
-8. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
-9. Update the number of formats only in one analysis in the sentence above the chart.  
+4. Convert the percentages to numbers (divide by 100, multiply by the number of formats, and round to a whole number).
+5. Highlight the risk column labels and data rows.
+6. Insert a clustered column chart.
+7. Change the chart title to "Format Risk Change".
+8. Rename the series to the years.   
+9. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
+10. Update the number of formats only in one analysis in the sentence above the chart.  
     a. Only in previous: the number of unique formats in AIP Risk Data with risk change of "Unmatched".  
     b. Only in current: the number of unique formats in AIP Risk Data with risk change of "New Format"
 
