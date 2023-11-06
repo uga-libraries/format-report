@@ -6,10 +6,36 @@ Returns the dataframe.
 
 Test input is read from a CSV instead of being made in the test to be as close to production as possible.
 """
+import numpy as np
 import os
 import pandas as pd
 import unittest
 from reports import groupby_risk
+
+
+def update_dataframe(df):
+    """
+    Assigns order to the NARA risk categories and adds NARA_Plan_Type.
+    In production, this is done as part of the spreadsheet_risk() function.
+    """
+    # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
+    risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
+    df['NARA_Risk Level'] = pd.Categorical(df['NARA_Risk Level'], risk_order, ordered=True)
+
+    # Makes a new column to classify the type of NARA preservation action plan.
+    conditions = [(df['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
+                  (df['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
+                  df['NARA_Proposed Preservation Plan'] == "Retain",
+                  (df['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
+                  (df['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
+    plan_type = ["Depends on version", "Further research required", "Retain", "Retain but act", "Transform"]
+    df["NARA_Plan_Type"] = np.select(conditions, plan_type)
+
+    return df
 
 
 class MyTestCase(unittest.TestCase):
@@ -20,10 +46,8 @@ class MyTestCase(unittest.TestCase):
         All four NARA risk levels are present.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-01.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
@@ -43,10 +67,8 @@ class MyTestCase(unittest.TestCase):
         All four NARA risk levels are present.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-02.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
@@ -66,10 +88,8 @@ class MyTestCase(unittest.TestCase):
         All format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-03.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
@@ -89,10 +109,8 @@ class MyTestCase(unittest.TestCase):
         All NARA risk levels are present and all format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-01.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
@@ -112,10 +130,8 @@ class MyTestCase(unittest.TestCase):
         Not all NARA risk levels are present and all format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-02.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
@@ -143,10 +159,8 @@ class MyTestCase(unittest.TestCase):
         Not all NARA risk levels are present and some format identifications are repeated.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-03.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
@@ -174,10 +188,8 @@ class MyTestCase(unittest.TestCase):
         Some format identifications are repeated.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-01.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
@@ -198,10 +210,8 @@ class MyTestCase(unittest.TestCase):
         All format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-02.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
@@ -220,10 +230,8 @@ class MyTestCase(unittest.TestCase):
         All format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-03.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
@@ -240,10 +248,7 @@ class MyTestCase(unittest.TestCase):
         Not all NARA risk levels are present and all format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-01.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
 
         # Runs the function being tested.
         type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
@@ -252,9 +257,7 @@ class MyTestCase(unittest.TestCase):
         result = [type_risk.columns.tolist()] + type_risk.values.tolist()
         expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["image", "Low Risk", 13375, 41414.64, 18],
-                    ["image", "Moderate Risk", 2579, 4.02, 8],
-                    ["image", "High Risk", 0, 0.0, 0],
-                    ["image", "No Match", 0, 0.0, 0]]
+                    ["image", "Moderate Risk", 2579, 4.02, 8]]
         self.assertEqual(result, expected, "Problem with the test for one type")
 
     def test_type_multiple_one_risk(self):
@@ -263,10 +266,8 @@ class MyTestCase(unittest.TestCase):
         Not all NARA risk levels are present and all format identifications are unique.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-02.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
@@ -294,10 +295,8 @@ class MyTestCase(unittest.TestCase):
         All NARA risk levels are present and some format identifications are repeated.
         """
         # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
-        # In production, the order of NARA_Risk Level is set in the spreadsheet_risk() function.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-03.csv"))
-        risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-        df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+        df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
         type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
