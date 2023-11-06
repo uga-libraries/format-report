@@ -24,8 +24,7 @@ Use copies of columns from the AIP Risk Data sheet to calculate the overview sta
   - Range of versions: sort the Format_Name column of the deduplicated list just created, 
     get the subtotal of counts of Format_Name, and find the lowest and highest subtotal.
   - Number of formats: remove duplicates from another copy of the Format_Name column and get the row count.  
-
-
+    
 ### Risk Profile
 
 A pie chart with the percentage of formats at each risk level for the entire department.
@@ -43,22 +42,21 @@ A bar chart with the number of formats at each risk level from the previous anal
 2. Add the Department Risk Levels percentages from the previous analysis in the row above.
 3. Remove the percentage from the risk column labels.
 4. Convert the percentages to numbers (divide by 100, multiply by the number of formats, and round to a whole number).
-5. Highlight the risk column labels and data rows.
-6. Insert a clustered column chart.
-7. Change the chart title to "Format Risk Change".
-8. Rename the series to the years.   
+5. Add a column with the year to the left of the risk columns. Do not give it a label.   
+6. Highlight the year column, risk column labels and data rows.
+7. Insert a clustered column chart.
+8. Change the chart title to "Format Risk Change".
 9. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
 10. Update the number of formats only in one analysis in the sentence above the chart.  
-    a. Only in previous: the number of unique formats in AIP Risk Data with risk change of "Unmatched".  
-    b. Only in current: the number of unique formats in AIP Risk Data with risk change of "New Format"
-
-
+    1. Only in previous: the number of unique formats in AIP Risk Data with risk change of "Unmatched".  
+    2. Only in current: the number of unique formats in AIP Risk Data with risk change of "New Format"
+    
 ### Risk by Collection
 
 A bar chart with the percentage of each collection's formats at each risk level.
-1. Make a copy of the Collection Risk Levels sheet.
-2. Remove the percentage from the risk column labels.
-3. Highlight the four risk level column labels and data rows.
+1. Make a copy of the Collection Risk Levels sheet without the Formats column.
+2. Remove the "Collection" column label, and the percent from the risk column labels.
+3. Highlight the collection column, four risk level column labels and data rows.
 4. Insert a stacked column chart.
 5. Change the chart title to "Risk by Collection"
 
@@ -77,10 +75,9 @@ A histogram with the number of AIPs with the same number of formats.
     1. Click on the chart and then the Plus to get “Chart Elements” 
     2. Mouse over Axes to make the arrow appear, click on it, and then click More Axis Options 
     3. Click on the bar chart icon and click Axis Options to get the Bins list 
-    4. Select a Bin width of a small number (2 or 3)
+    4. Select a Bin width of a small number (1-3)
 11. Also in the Chart Elements, check data labels to get counts per bin.
 12. Change the chart title to "Number of formats in an AIP"
-
 
 Also update the numbers in the second paragraph:
 * The total number of AIPs
