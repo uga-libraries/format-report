@@ -47,6 +47,9 @@ and the number of formats only present in one of the two analyses.
 6. Change the chart title to "Format Risk Profile Change".
 7. Rename the series to the years.   
 8. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
+9. Update the number of formats only in one analysis in the sentence above the chart.  
+    a. Only in previous: the number of unique formats in AIP Risk Data with risk change of "Unmatched".  
+    b. Only in current: the number of unique formats in AIP Risk Data with risk change of "New Format"
 
 
 ### Risk by Collection
