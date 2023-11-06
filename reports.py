@@ -23,6 +23,7 @@ Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Vide
 # Report folder should contain the usage report and both archive format reports.
 
 import csv
+import numpy as np
 import os
 import pandas as pd
 import sys
@@ -425,12 +426,26 @@ def spreadsheet_risk(df_group, output_folder):
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
     df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
 
+    # Makes a new column to classify the type of NARA preservation action plan.
+    conditions = [(df_group['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
+                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
+                  df_group['NARA_Proposed Preservation Plan'] == "Retain",
+                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
+                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
+                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
+    plan_type = ["Depends on version", "Further research required", "Retain", "Retain but act", "Transform"]
+    df_group["NARA_Plan_Type"] = np.select(conditions, plan_type)
+
     # Calculates the dataframe for each risk summary.
-    # The first three are the amount at each NARA risk level for different categories of data
+    # The first four are the amount at each NARA risk level for different categories of data
     # and the last is the match method between format identifications and NARA risk.
     archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
     dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
     type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
+    plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
     match = groupby_risk(df_group, ['NARA_Match_Type'])
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
@@ -438,6 +453,7 @@ def spreadsheet_risk(df_group, output_folder):
         archive_risk.to_excel(results, sheet_name="ARCHive Risk Overview", index=False)
         dept_risk.to_excel(results, sheet_name="Department Risk Overview", index=False)
         type_risk.to_excel(results, sheet_name="Format Type Risk", index=False)
+        plan_risk.to_excel(results, sheet_name="NARA Plan Type Risk", index=False)
         match.to_excel(results, sheet_name="NARA Match Types", index=False)
 
 
