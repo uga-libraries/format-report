@@ -10,6 +10,7 @@ It orients the department to the information in the spreadsheet and highlights a
 Use Excel and the data from the department report spreadsheet to make graphs of the data. 
 In some cases, the data must be edited first.
 Use the example department report as a template for the new report.
+When pasting a graph into the report document, right click and choose either "Embed Workbook" option. 
 
 ### Overview
 
