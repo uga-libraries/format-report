@@ -22,4 +22,7 @@ following the accessioning script https://github.com/uga-libraries/accessioning-
  
         python /path/reports.py report_folder
  
- 5. Manually match the formats in the Risk Analysis sheet in the Excel Workbook to the [National Archives Digital Preservation Framework](https://github.com/usnationalarchives/digital-preservation) and the [Library of Congress Recommended Formats Statement](https://www.loc.gov/preservation/resources/rfs/).
+ 5. Run the department_reports.py script to make an Excel workbook with analysis of each department's format data.
+Can skip step 4 to only generate department reports.
+
+        python path/department_reports.py archive_formats_by_aip_csv
