@@ -61,6 +61,7 @@ class MyTestCase(unittest.TestCase):
         df_risk = pd.read_excel(risk, "ARCHive Risk Overview")
         df_risk_dept = pd.read_excel(risk, "Department Risk Overview")
         df_risk_type = pd.read_excel(risk, "Format Type Risk")
+        df_plan_risk = pd.read_excel(risk, "NARA Plan Type Risk")
         df_match = pd.read_excel(risk, "NARA Match Types")
         risk.close()
 
@@ -253,7 +254,24 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(result_risk_type, expected_risk_type,
                          "Problem with test for correct input, Format Type Risk")
 
-        # Tests if the NARa Match Types sheet has the expected values.
+        # Tests if the NARA Plan Type Risk sheet has the expected values.
+        plan_result = [df_plan_risk.columns.tolist()] + df_plan_risk.values.tolist()
+        plan_expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                         ["Depends on version", "Low Risk", 170, 1.31, 1],
+                         ["Depends on version", "Moderate Risk", 0, 0.0, 0],
+                         ["Depends on version", "High Risk", 0, 0.0, 0],
+                         ["Depends on version", "No Match", 0, 0.0, 0],
+                         ["No plan", "Low Risk", 0, 0.0, 0],
+                         ["No plan", "Moderate Risk", 0, 0.0, 0],
+                         ["No plan", "High Risk", 0, 0.0, 0],
+                         ["No plan", "No Match", 6904, 327652.37, 4],
+                         ["Retain", "Low Risk", 269372, 2543.77, 7],
+                         ["Retain", "Moderate Risk", 0, 0.0, 0],
+                         ["Retain", "High Risk", 0, 0.0, 0],
+                         ["Retain", "No Match", 0, 0.0, 0]]
+        self.assertEqual(plan_result, plan_expected, "Problem with the test for NARA Plan Type Risk")
+
+        # Tests if the NARA Match Types sheet has the expected values.
         result_match = [df_match.columns.tolist()] + df_match.values.tolist()
         expected_match = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
                           ["Name (manual)", 71398, 1694.4, 2],
