@@ -26,8 +26,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['Electronic Mail Format', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'Electronic Mail Format',
                      'https://www.nationalarchives.gov.uk/pronom/fmt/278', 'Low Risk', 'Retain', 'Format Name'],
                     ['ROM Image', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'ROM Image', np.NaN, 'Moderate Risk',
@@ -50,8 +50,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['batch script', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'Batch Script',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/413', 'Moderate Risk', 'Retain', 'Format Name'],
                     ['Rom image', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'ROM Image', np.NaN, 'Moderate Risk',
@@ -74,8 +74,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['Lotus 1-2-3 Worksheet', '3.0', 'NO VALUE', 'NO VALUE', 'Lotus 1-2-3 Worksheet 3.0',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/115', 'Moderate Risk',
                      'Transform to CSV or XLSX', 'Format Name'],
@@ -100,8 +100,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['lotus 1-2-3 worksheet', '3.0', 'NO VALUE', 'NO VALUE', 'Lotus 1-2-3 Worksheet 3.0',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/115', 'Moderate Risk',
                      'Transform to CSV or XLSX', 'Format Name'],
@@ -125,8 +125,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['New Format', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'No Match', np.NaN, 'No Match', np.NaN,
                      'No NARA Match'],
                     ['Unknown Binary', 'NO VALUE', 'NO VALUE', 'NO VALUE', 'No Match', np.NaN,
@@ -148,8 +148,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['XHTML', '1.1', 'https://www.nationalarchives.gov.uk/PRONOM', 'fmt/103',
                      'eXtensible Hypertext Markup Language 1.1', 'https://www.nationalarchives.gov.uk/pronom/fmt/103',
                      'Low Risk', 'Retain', 'PRONOM and Version'],
@@ -179,8 +179,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['ESRI ArcInfo Interchange File Format', 'NO VALUE', 'https://www.nationalarchives.gov.uk/PRONOM',
                      'x-fmt/235', 'ESRI ArcInfo Interchange File Format',
                      'https://www.nationalarchives.gov.uk/pronom/x-fmt/235', 'Moderate Risk',
@@ -206,8 +206,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Tests that the value of the result is correct.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['Cascading Style Sheets', '2', 'https://www.nationalarchives.gov.uk/PRONOM', 'fmt/000',
                      'No Match', np.NaN, 'No Match', np.NaN, 'No NARA Match'],
                     ['Comma Separated Values', 'NO VALUE', 'https://www.nationalarchives.gov.uk/PRONOM', 'x-fmt/000',
@@ -227,8 +227,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['CorelDraw', 'NO VALUE', 'https://www.nationalarchives.gov.uk/PRONOM', 'x-fmt/31',
                      'CorelDraw Compressed Drawing', 'https://www.nationalarchives.gov.uk/pronom/x-fmt/31',
                      'High Risk', 'Transform to a TBD format, possibly PDF or TIFF', 'PRONOM'],
@@ -252,8 +252,8 @@ class MyTestCase(unittest.TestCase):
         result = [df_results.columns.tolist()] + df_results.values.tolist()
 
         # Creates a list with the expected result.
-        expected = [['Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'NARA_Format Name',
-                     'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'NARA_Format_Name',
+                     'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['CSS', '2.0', 'https://www.nationalarchives.gov.uk/PRONOM', 'x-fmt/224',
                      'Cascading Style Sheets 2.0', 'https://www.nationalarchives.gov.uk/pronom/x-fmt/224',
                      'Low Risk', 'Retain', 'PRONOM and Version'],
