@@ -2,13 +2,13 @@
 Test for the function archive_overview(),
 which summarizes group information.
 
-For input, the test uses files in the reports folder of this script repo.
+For input, the test uses files in the archive_reports folder of this script repo.
 """
 
 import os
 import pandas as pd
 import unittest
-from reports import archive_overview
+from archive_reports import archive_overview
 
 
 class MyTestCase(unittest.TestCase):

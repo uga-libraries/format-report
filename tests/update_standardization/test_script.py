@@ -1,9 +1,9 @@
 """
 Tests the entire script update_standardization.py,
-which compares all formats in the format reports to the standardize_formats.csv
+which compares all formats in the format archive_reports to the standardize_formats.csv
 and creates a file new_formats.txt if any are not in standardize_formats.csv.
 
-For input, tests use format reports that are in the update_standardization tests folder of this script repo.
+For input, tests use format archive_reports that are in the update_standardization tests folder of this script repo.
 """
 
 import os
@@ -44,8 +44,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_new_formats(self):
         """
-        Test for format reports that include formats which are not in standardize_formats.csv.
-        Two new formats (New AV 1 and New AV 2) are in both format reports.
+        Test for format archive_reports that include formats which are not in standardize_formats.csv.
+        Two new formats (New AV 1 and New AV 2) are in both format archive_reports.
         Two new formats (New AV 3 and New Text 1) are each in one format report.
         There is a new format at the beginning, middle, and end of each format report.
         """
@@ -66,7 +66,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_no_new_formats(self):
         """
-        Test for format reports where all formats are in standardize_formats.csv.
+        Test for format archive_reports where all formats are in standardize_formats.csv.
         """
         # Runs the script.
         script_path = os.path.join("..", "..", "update_standardization.py")

@@ -1,10 +1,10 @@
 """Calculates subtotals of collection, AIP, and file_id counts for different categories: groups, format types,
 format standardized names, format identifications, and combinations of those. File size subtotals will be added once
-that information is added to the ARCHive group format reports. The results are saved to Excel workbooks
+that information is added to the ARCHive group format archive_reports. The results are saved to Excel workbooks
 (Frequency, Group-Overlap, and Ranges) to use for analyzing formats in ARCHive.
 
 The script uses information from three sources, all CSVs. The usage report is downloaded from ARCHive. Both archive
-format reports are made from the ARCHive group format reports using the merge_format_reports script.
+format archive_reports are made from the ARCHive group format archive_reports using the merge_format_reports script.
     * usage report: the amount ingested (AIP count and size) for each group and each user in a group.
     * archive_formats_by_aip report: Organized by AIP and format. Has group, collection, aip id, and format information.
     * archive_formats_by_group report: Organized by group and format. Has group, file_id count, and format information.
@@ -19,8 +19,8 @@ Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Vide
 """
 
 # Before running this script, run update_standardization.py and merge_format_reports.py
-# Usage: python path/reports.py report_folder
-# Report folder should contain the usage report and both archive format reports.
+# Usage: python path/archive_reports.py report_folder
+# Report folder should contain the usage report and both archive format archive_reports.
 
 import csv
 import numpy as np
@@ -31,7 +31,7 @@ from update_standardization import check_argument
 
 
 def archive_overview(df_aip, df_group, usage):
-    """Uses the data from the usage report and both ARCHive format reports to calculate statistics for each group and
+    """Uses the data from the usage report and both ARCHive format archive_reports to calculate statistics for each group and
     the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
     and format identifications. Returns a dataframe. """
 
@@ -143,7 +143,7 @@ def format_id_frequency(totals, df_group):
 
 
 def get_report_paths(report_folder_path):
-    """Finds the path to the three reports used as script input.
+    """Finds the path to the three archive_reports used as script input.
     Returns the three paths and a list of any missing files."""
 
     # Makes variables to store the paths, if found.
@@ -225,7 +225,7 @@ def groupby_risk(df_group, groupby_list):
 
 
 def one_category(category, totals, df_aip, df_group):
-    """Uses the data from both ARCHive format reports to calculate subtotals of collection, AIP, and file_id counts
+    """Uses the data from both ARCHive format archive_reports to calculate subtotals of collection, AIP, and file_id counts
     and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
     # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
@@ -298,7 +298,7 @@ def size_in_tb(usage):
     """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
 
     # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
-    # which is used in both archive format reports and in ARCHive metadata generally.
+    # which is used in both archive format archive_reports and in ARCHive metadata generally.
     group_names = {"Brown Media Archives": "bmac", "Digital Library of Georgia": "dlg",
                    "DLG & Hargrett": "dlg-hargrett", "DLG & Map and Government Information Library": "dlg-magil",
                    "Hargrett Library": "hargrett", "Map and Government Information Library": "magil",
@@ -465,10 +465,10 @@ if __name__ == '__main__':
     report_folder, error_message = check_argument(sys.argv)
     if error_message:
         print(error_message)
-        print("Script usage: python path/reports.py report_folder")
+        print("Script usage: python path/archive_reports.py report_folder")
         sys.exit(1)
 
-    # Gets paths of the three reports to be analyzed, which are in report_folder.
+    # Gets paths of the three archive_reports to be analyzed, which are in report_folder.
     # If any were not found (missing is not empty), prints the missing one(s) and exits the script.
     formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder)
     if len(missing) > 0:
@@ -477,22 +477,22 @@ if __name__ == '__main__':
         print("Please add the missing report(s) to the report folder and run this script again.")
         sys.exit(1)
 
-    # Makes dataframes from both ARCHive format reports.
+    # Makes dataframes from both ARCHive format archive_reports.
     df_formats_by_aip = pd.read_csv(formats_by_aip_report)
     df_formats_by_group = pd.read_csv(formats_by_group_report)
 
-    # Makes a spreadsheet in the folder with the ARCHive reports
+    # Makes a spreadsheet in the folder with the ARCHive archive_reports
     # with summaries based on counts and percentages of collection, AIP, file ids, and/or size.
     spreadsheet_frequency(df_formats_by_aip, df_formats_by_group, usage_report, report_folder)
 
-    # Makes a spreadsheet in the folder with the ARCHive reports
+    # Makes a spreadsheet in the folder with the ARCHive archive_reports
     # with summaries of group overlap for each instance of format type, format name, and format id.
     spreadsheet_group_overlap(df_formats_by_group, report_folder)
 
-    # Makes a spreadsheet in the folder with the ARCHive reports
+    # Makes a spreadsheet in the folder with the ARCHive archive_reports
     # with summaries of the number of instances within predetermined ranges of file id counts or size.
     spreadsheet_ranges(df_formats_by_group, report_folder)
 
-    # Makes a spreadsheet in the folder with the ARCHive reports
+    # Makes a spreadsheet in the folder with the ARCHive archive_reports
     # with summaries of the amount of content at different NARA risk levels.
     spreadsheet_risk(df_formats_by_group, report_folder)

@@ -4,7 +4,7 @@ which gets all the format names from every format report in the report_folder,
 matches the names to standardize_format.csv, and returns a dictionary
 with the format name as the key and if found or missing as the value.
 
-For input, tests use format reports that are in the update_standardization tests folder of this script repo.
+For input, tests use format archive_reports that are in the update_standardization tests folder of this script repo.
 """
 
 import unittest
@@ -15,7 +15,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_blank_row(self):
         """
-        Test for when the format reports include a blank row at the end of the CSV.
+        Test for when the format archive_reports include a blank row at the end of the CSV.
         The function will skip those rows.
         """
         # Runs the function being tested.
@@ -32,8 +32,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_not_a_report(self):
         """
-        Test for a format_reports folder that includes files which are not format reports.
-        The function will skip those files and only read ones that are format reports.
+        Test for a format_reports folder that includes files which are not format archive_reports.
+        The function will skip those files and only read ones that are format archive_reports.
         """
         # Runs the function being tested.
         formats_checked = format_check("reports_not_a_report")
@@ -62,7 +62,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_three_reports(self):
         """
-        Test for a format_reports folder that contains three format reports.
+        Test for a format_reports folder that contains three format archive_reports.
         """
         # Runs the function being tested.
         formats_checked = format_check("reports_three")
@@ -76,7 +76,7 @@ class MyTestCase(unittest.TestCase):
                     "Tagged Image File Format": "Found",
                     "TIFF": "Found",
                     "cue": "Found"}
-        self.assertEqual(formats_checked, expected, "Problem with three reports test")
+        self.assertEqual(formats_checked, expected, "Problem with three archive_reports test")
 
 
 if __name__ == '__main__':

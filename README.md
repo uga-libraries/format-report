@@ -30,7 +30,7 @@
 
 5. Run the reports.py script to make an Excel workbook with analysis of the format data.
 
-       python /path/reports.py report_folder
+       python /path/archive_reports.py report_folder
 
 
 6. Run the department_reports.py script to make an Excel workbook with analysis of each department's format data.

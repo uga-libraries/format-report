@@ -1,8 +1,8 @@
 """
-Tests the entire script reports.py,
-which makes summaries of data from combined ARCHive format reports and the usage report.
+Tests the entire script archive_reports.py,
+which makes summaries of data from combined ARCHive format archive_reports and the usage report.
 
-For input, tests use files in the reports folder of this script repo.
+For input, tests use files in the archive_reports folder of this script repo.
 """
 import os
 import pandas as pd
@@ -27,11 +27,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_script(self):
         """
-        Test for running the script on a report_folder with all expected reports,
+        Test for running the script on a report_folder with all expected archive_reports,
         which results in data in all sheets of all the Excel spreadsheets.
         """
         # Runs the script.
-        script_path = os.path.join("..", "..", "reports.py")
+        script_path = os.path.join("..", "..", "archive_reports.py")
         subprocess.run(f"python {script_path} script", shell=True)
 
         # Reads each Excel file into pandas, and then each sheet into a separate dataframe.
@@ -286,7 +286,7 @@ class MyTestCase(unittest.TestCase):
         It will print a message and exit the script.
         """
         # Runs the script without the required argument and tests that the script exits.
-        script_path = os.path.join("..", "..", "reports.py")
+        script_path = os.path.join("..", "..", "archive_reports.py")
         with self.assertRaises(subprocess.CalledProcessError):
             subprocess.run(f"python {script_path}", shell=True, check=True)
 
@@ -295,16 +295,16 @@ class MyTestCase(unittest.TestCase):
         output = subprocess.run(f"python {script_path}", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
         msg_expected = "Required argument report_folder is missing\r\n" \
-                       "Script usage: python path/reports.py report_folder\r\n"
+                       "Script usage: python path/archive_reports.py report_folder\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for missing argument, message")
 
     def test_missing_input(self):
         """
-        Test for running the script on a report_folder without the expected reports.
+        Test for running the script on a report_folder without the expected archive_reports.
         It will print a message and exit the script.
         """
-        # Runs the script with a report_folder that does not have the required reports and tests that the script exits.
-        script_path = os.path.join("..", "..", "reports.py")
+        # Runs the script with a report_folder that does not have the required archive_reports and tests that the script exits.
+        script_path = os.path.join("..", "..", "archive_reports.py")
         report_folder = os.path.join("get_report_paths", "missing_input_all")
         with self.assertRaises(subprocess.CalledProcessError):
             subprocess.run(f"python {script_path} {report_folder}", shell=True, check=True)

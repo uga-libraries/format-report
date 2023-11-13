@@ -2,13 +2,13 @@
 Test for the function format_id_frequency(),
 which calculates the number and percentage of files and size for each format id.
 
-For input, the test uses a file in the reports folder of this script repo.
+For input, the test uses a file in the archive_reports folder of this script repo.
 """
 
 import os
 import pandas as pd
 import unittest
-from reports import format_id_frequency
+from archive_reports import format_id_frequency
 
 
 class MyTestCase(unittest.TestCase):

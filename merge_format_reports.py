@@ -1,4 +1,4 @@
-"""Combines the ARCHive format reports, which are one CSV per group, into single CSVs for analysis.
+"""Combines the ARCHive format archive_reports, which are one CSV per group, into single CSVs for analysis.
 
 One CSV (archive_formats_by_aip_YYYYMM.csv) is organized by AIP and then by format identification. 
 It includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
@@ -15,7 +15,7 @@ Before running this script, run update_standardization.py
 """
 
 # Usage: python path/merge_format_reports.py report_folder nara_csv
-#    - report_folder contains the ARCHive group format reports. Script output is saved to this folder as well.
+#    - report_folder contains the ARCHive group format archive_reports. Script output is saved to this folder as well.
 #    - nara_csv is the path to the NARA preservation action plans spreadsheet.
 
 import csv
@@ -403,7 +403,7 @@ def read_report(report_path):
         for row in report_info:
             aip_row_list, group_row = read_row(row, archive_group)
 
-            # Adds the data to the reports.
+            # Adds the data to the archive_reports.
             # group_row is a list; aip_row_list is a list of lists, although it may only contain one list.
             aip_csv_rows.extend(aip_row_list)
             group_csv_rows.append(group_row)
@@ -522,7 +522,7 @@ if __name__ == '__main__':
         except OverflowError:
             sys.maxsize = int(sys.maxsize / 10)
 
-    # Makes the paths for the two CSVs files for the script output, in the reports folder.
+    # Makes the paths for the two CSVs files for the script output, in the archive_reports folder.
     today = datetime.datetime.now().strftime("%Y-%m")
     aip_csv = os.path.join(report_folder, f"archive_formats_by_aip_{today}.csv")
     group_csv = os.path.join(report_folder, f"archive_formats_by_group_{today}.csv")

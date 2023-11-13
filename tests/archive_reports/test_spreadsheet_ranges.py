@@ -6,7 +6,7 @@ within predetermined ranges of file id counts or size.
 import os
 import pandas as pd
 import unittest
-from reports import spreadsheet_ranges
+from archive_reports import spreadsheet_ranges
 
 
 class MyTestCase(unittest.TestCase):

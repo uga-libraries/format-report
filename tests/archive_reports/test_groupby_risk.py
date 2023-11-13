@@ -10,7 +10,7 @@ import numpy as np
 import os
 import pandas as pd
 import unittest
-from reports import groupby_risk
+from archive_reports import groupby_risk
 
 
 def update_dataframe(df):

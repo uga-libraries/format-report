@@ -3,14 +3,14 @@ Test for the function size_in_tb(),
 which finds the group sizes in the usage report
 and returns a dataframe with the sizes for each group, converted to TB.
 
-For input, tests use files in the reports folder of this script repo.
+For input, tests use files in the archive_reports folder of this script repo.
 The names of the input CSV does not follow the naming convention used in production
 so that the variations can be saved to the same folder in the repo for easier organization.
 """
 
 import os
 import unittest
-from reports import size_in_tb
+from archive_reports import size_in_tb
 
 
 class MyTestCase(unittest.TestCase):

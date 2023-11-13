@@ -1,7 +1,7 @@
 """
 Converts the merged ARCHive format report organized by AIP (archive_formats_by_aip_date.csv)
-into risk reports for individual departments.
-The department reports are Excel spreadsheets and are saved the same folder as the format report.
+into risk archive_reports for individual departments.
+The department archive_reports are Excel spreadsheets and are saved the same folder as the format report.
 
 Information included:
     * A list of AIPs with format identifications, risk levels, and risk change since the last analysis
@@ -90,7 +90,7 @@ def csv_to_dataframe(csv_file):
     csv_df['NARA_Risk_Level'] = pd.Categorical(csv_df['NARA_Risk_Level'], risk_order, ordered=True)
 
     # Removes unwanted columns.
-    # These are used for the ARCHive report but not department reports.
+    # These are used for the ARCHive report but not department archive_reports.
     csv_df.drop(['Format_Type', 'Format_Standardized_Name', 'Registry_Name', 'Registry_Key', 'Format_Note',
                  'NARA_Format_Name', 'NARA_PRONOM_URL', 'NARA_Match_Type'],
                 axis=1, inplace=True)
@@ -241,7 +241,7 @@ if __name__ == '__main__':
     # Adds the previous risk and the change in risk since the previous analysis to the current analysis data.
     current_format_df = risk_change(current_format_df, previous_format_df)
 
-    # Calculates variables used for naming and saving the department reports.
+    # Calculates variables used for naming and saving the department archive_reports.
     output_folder = os.path.dirname(current_formats_csv)
     date = datetime.date.today().strftime("%Y%m")
 

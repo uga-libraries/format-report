@@ -10,7 +10,7 @@ so that the variations can be saved to the same folder in the repo for easier or
 import os
 import pandas as pd
 import unittest
-from reports import one_category
+from archive_reports import one_category
 
 
 class MyTestCase(unittest.TestCase):

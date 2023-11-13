@@ -3,7 +3,7 @@ Test for the function size_ranges(),
 which calculates the number of instances of a category
 with sizes within seven specified ranges.
 
-For input, tests use files in the reports folder of this script repo.
+For input, tests use files in the archive_reports folder of this script repo.
 The names of the input CSVs do not follow the naming convention used in production
 so that the variations can be saved to the same folder in the repo for easier organization.
 """
@@ -11,7 +11,7 @@ so that the variations can be saved to the same folder in the repo for easier or
 import os
 import pandas as pd
 import unittest
-from reports import size_ranges
+from archive_reports import size_ranges
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,13 +1,13 @@
 """
-Makes a list of any formats from the ARCHive group format reports that are new since the last format analysis and
+Makes a list of any formats from the ARCHive group format archive_reports that are new since the last format analysis and
 therefore are not yet in standardize_formats.csv, the spreadsheet which has the format standardized name and format
 type for every format name within the UGA Libraries' digital preservation system (ARCHive).
 These new formats need to be added to standardize_formats.csv before merging and analyzing the
-ARCHive group format reports.
+ARCHive group format archive_reports.
 """
 
 # Usage: python path/update_standardization.py report_folder
-#    - report_folder is the path to the folder with the ARCHive group format reports (required)
+#    - report_folder is the path to the folder with the ARCHive group format archive_reports (required)
 
 import csv
 import os
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         except OverflowError:
             sys.maxsize = int(sys.maxsize / 10)
 
-    # Makes a dictionary with a unique set of formats from the format reports as the key
+    # Makes a dictionary with a unique set of formats from the format archive_reports as the key
     # and 'Found' or 'Missing' for the value to indicate if it is in the standardize_formats.csv.
     formats_checked = format_check(report_folder)
 

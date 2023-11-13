@@ -1,21 +1,21 @@
 """
 Tests for the function get_report_paths(),
-which finds and returns the path for all three reports used for script input,
-as well as a list of any reports that are missing.
+which finds and returns the path for all three archive_reports used for script input,
+as well as a list of any archive_reports that are missing.
 
 # For input, tests use report folders in the repo for this script.
 """
 
 import os
 import unittest
-from reports import get_report_paths
+from archive_reports import get_report_paths
 
 
 class MyTestCase(unittest.TestCase):
 
     def test_all_present(self):
         """
-        Test for when all three expected reports are present in the reports folder.
+        Test for when all three expected archive_reports are present in the archive_reports folder.
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "all_present")
@@ -39,7 +39,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_missing_all(self):
         """
-        Test for when all three expected reports are missing from the reports folder.
+        Test for when all three expected archive_reports are missing from the archive_reports folder.
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_input_all")
@@ -47,11 +47,11 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the value of missing is correct.
         expected = ["archive_formats_by_aip.csv", "archive_formats_by_group.csv", "usage_report.csv"]
-        self.assertEqual(missing, expected, "Problem with test for missing all reports")
+        self.assertEqual(missing, expected, "Problem with test for missing all archive_reports")
 
     def test_missing_formats_by_aip(self):
         """
-        Test for when the formats_by_aip report is missing from the reports folder.
+        Test for when the formats_by_aip report is missing from the archive_reports folder.
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_formats_by_aip")
@@ -63,7 +63,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_missing_formats_by_group(self):
         """
-        Test for when the formats_by_group report is missing from the reports folder.
+        Test for when the formats_by_group report is missing from the archive_reports folder.
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_formats_by_group")
@@ -75,7 +75,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_missing_usage(self):
         """
-        Test for when the usage report is missing from the reports folder.
+        Test for when the usage report is missing from the archive_reports folder.
         """
         # Runs the function being tested.
         report_folder_path = os.path.join("get_report_paths", "missing_usage")

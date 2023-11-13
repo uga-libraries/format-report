@@ -5,7 +5,7 @@ which makes a spreadsheet with the amount of content at each NARA risk level.
 import os
 import pandas as pd
 import unittest
-from reports import spreadsheet_risk
+from archive_reports import spreadsheet_risk
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,9 +1,9 @@
 """
 Tests the entire script merge_format_reports.py,
-which combines ARCHive group format reports and data in standardize_formats.csv
+which combines ARCHive group format archive_reports and data in standardize_formats.csv
 to make a spreadsheet organized by group/format and another organized by AIP/format.
 
-For input, tests use format reports that are in the merge_format_reports folder of this script repo.
+For input, tests use format archive_reports that are in the merge_format_reports folder of this script repo.
 """
 
 import csv
@@ -145,7 +145,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_three_reports(self):
         """
-        Test for a report_folder that contains three ARCHive format reports.
+        Test for a report_folder that contains three ARCHive format archive_reports.
         Also contains a usage report.
         """
         # Runs the script.
@@ -193,7 +193,7 @@ class MyTestCase(unittest.TestCase):
                     ["bmac", "hm-lawton", "bmac_hm-lawton_0022", "application", "Cue Sheet",
                      "cue|NO VALUE|NO VALUE", "cue", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", "",
                      "No Match", "", "No NARA Match"]]
-        self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_aip.csv")
+        self.assertEqual(result, expected, "Problem with three archive_reports, archive_formats_by_aip.csv")
 
         # Tests if archive_formats_by_group.csv has the expected values.
         result = csv_to_list(os.path.join("reports_three", f"archive_formats_by_group_{self.today}.csv"))
@@ -223,7 +223,7 @@ class MyTestCase(unittest.TestCase):
                     ["bmac", "26", "0.005", "application", "Cue Sheet", "cue|NO VALUE|NO VALUE", "cue",
                      "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", "", "No Match", "",
                      "No NARA Match"]]
-        self.assertEqual(result, expected, "Problem with three reports, archive_formats_by_group.csv")
+        self.assertEqual(result, expected, "Problem with three archive_reports, archive_formats_by_group.csv")
 
 
 if __name__ == '__main__':

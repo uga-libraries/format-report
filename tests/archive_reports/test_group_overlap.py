@@ -8,7 +8,7 @@ For input, tests use report folders in the repo for this script.
 import os
 import pandas as pd
 import unittest
-from reports import group_overlap
+from archive_reports import group_overlap
 
 
 class MyTestCase(unittest.TestCase):

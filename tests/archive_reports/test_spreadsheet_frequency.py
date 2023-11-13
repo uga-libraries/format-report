@@ -6,7 +6,7 @@ for group, format type, format standardized name, and format id.
 import os
 import pandas as pd
 import unittest
-from reports import spreadsheet_frequency
+from archive_reports import spreadsheet_frequency
 
 
 class MyTestCase(unittest.TestCase):
