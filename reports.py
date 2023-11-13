@@ -401,12 +401,12 @@ def spreadsheet_ranges(df_group, output_folder):
     ARCHive-Formats Analysis_Ranges.xlsx.
     """
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
-    format_name_ranges = file_count_ranges("Format Standardized Name", df_group)
-    format_name_sizes = size_ranges("Format Standardized Name", df_group)
+    format_name_ranges = file_count_ranges('Format_Standardized_Name', df_group)
+    format_name_sizes = size_ranges('Format_Standardized_Name', df_group)
 
     # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
-    format_id_ranges = file_count_ranges("Format Identification", df_group)
-    format_id_sizes = size_ranges("Format Identification", df_group)
+    format_id_ranges = file_count_ranges('Format_Identification', df_group)
+    format_id_sizes = size_ranges('Format_Identification', df_group)
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Ranges.xlsx")) as results:
