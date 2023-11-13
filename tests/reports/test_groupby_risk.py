@@ -46,7 +46,7 @@ class MyTestCase(unittest.TestCase):
         Test for when some format identifications are repeated.
         All four NARA risk levels are present.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-01.csv"))
         df_group = update_dataframe(df_group)
 
@@ -67,7 +67,7 @@ class MyTestCase(unittest.TestCase):
         Test for when all format identifications are unique.
         All four NARA risk levels are present.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-02.csv"))
         df_group = update_dataframe(df_group)
 
@@ -88,7 +88,7 @@ class MyTestCase(unittest.TestCase):
         Test for when two of the four NARA risk levels are present.
         All format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2010-03.csv"))
         df_group = update_dataframe(df_group)
 
@@ -109,7 +109,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there is one department (group).
         All NARA risk levels are present and all format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-01.csv"))
         df_group = update_dataframe(df_group)
 
@@ -130,7 +130,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are three departments (groups) and no format is in more than one department.
         Not all NARA risk levels are present and all format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-02.csv"))
         df_group = update_dataframe(df_group)
 
@@ -159,7 +159,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are three departments (groups) and some formats are in more than one department.
         Not all NARA risk levels are present and some format identifications are repeated.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2011-03.csv"))
         df_group = update_dataframe(df_group)
 
@@ -188,7 +188,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are multiple NARA match types, each more than once.
         Some format identifications are repeated.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-01.csv"))
         df_group = update_dataframe(df_group)
 
@@ -210,7 +210,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are multiple NARA match types, each only once.
         All format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-02.csv"))
         df_group = update_dataframe(df_group)
 
@@ -230,7 +230,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there is one NARA match type.
         All format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2012-03.csv"))
         df_group = update_dataframe(df_group)
 
@@ -248,7 +248,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are multiple NARA plan types, each more than once.
         Some format identifications are repeated.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-01.csv"))
         df_group = update_dataframe(df_group)
 
@@ -285,7 +285,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are all NARA plan types, each only once.
         All format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-02.csv"))
         df_group = update_dataframe(df_group)
 
@@ -326,7 +326,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there is one NARA plan type.
         All format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-03.csv"))
         df_group = update_dataframe(df_group)
 
@@ -347,7 +347,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there is one format type.
         Not all NARA risk levels are present and all format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-01.csv"))
 
         # Runs the function being tested.
@@ -365,7 +365,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are multiple types, and each type has one risk level.
         Not all NARA risk levels are present and all format identifications are unique.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-02.csv"))
         df_group = update_dataframe(df_group)
 
@@ -394,7 +394,7 @@ class MyTestCase(unittest.TestCase):
         Test for when there are multiple types, and types have more than one risk level.
         All NARA risk levels are present and some format identifications are repeated.
         """
-        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        # Makes the dataframe used for the function input.
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-03.csv"))
         df_group = update_dataframe(df_group)
 
