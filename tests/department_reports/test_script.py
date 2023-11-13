@@ -56,10 +56,10 @@ class MyTestCase(unittest.TestCase):
         # # Reads the DLG-MAGIL Excel file into pandas, and then each sheet into a separate dataframe.
         date = datetime.date.today().strftime("%Y%m")
         df = pd.ExcelFile(os.path.join("script", f"dlg-magil_risk_report_{date}.xlsx"))
-        df_data = pd.read_excel(df, "AIP Risk Data")
-        df_dept = pd.read_excel(df, "Department Risk Levels")
-        df_coll = pd.read_excel(df, "Collection Risk Levels")
-        df_aip = pd.read_excel(df, "AIP Risk Levels")
+        df_data = pd.read_excel(df, "AIP_Risk_Data")
+        df_dept = pd.read_excel(df, "Department_Risk_Levels")
+        df_coll = pd.read_excel(df, "Collection_Risk_Levels")
+        df_aip = pd.read_excel(df, "AIP_Risk_Levels")
         df_format = pd.read_excel(df, "Formats")
         df.close()
 
@@ -173,19 +173,19 @@ class MyTestCase(unittest.TestCase):
         # # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
         date = datetime.date.today().strftime("%Y%m")
         bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
-        df_bmac_data = pd.read_excel(bmac, "AIP Risk Data")
-        df_bmac_dept = pd.read_excel(bmac, "Department Risk Levels")
-        df_bmac_coll = pd.read_excel(bmac, "Collection Risk Levels")
-        df_bmac_aip = pd.read_excel(bmac, "AIP Risk Levels")
+        df_bmac_data = pd.read_excel(bmac, "AIP_Risk_Data")
+        df_bmac_dept = pd.read_excel(bmac, "Department_Risk_Levels")
+        df_bmac_coll = pd.read_excel(bmac, "Collection_Risk_Levels")
+        df_bmac_aip = pd.read_excel(bmac, "AIP_Risk_Levels")
         df_bmac_format = pd.read_excel(bmac, "Formats")
         bmac.close()
 
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
         hargrett = pd.ExcelFile(os.path.join("script", f"hargrett_risk_report_{date}.xlsx"))
-        df_harg_data = pd.read_excel(hargrett, "AIP Risk Data")
-        df_harg_dept = pd.read_excel(hargrett, "Department Risk Levels")
-        df_harg_coll = pd.read_excel(hargrett, "Collection Risk Levels")
-        df_harg_aip = pd.read_excel(hargrett, "AIP Risk Levels")
+        df_harg_data = pd.read_excel(hargrett, "AIP_Risk_Data")
+        df_harg_dept = pd.read_excel(hargrett, "Department_Risk_Levels")
+        df_harg_coll = pd.read_excel(hargrett, "Collection_Risk_Levels")
+        df_harg_aip = pd.read_excel(hargrett, "AIP_Risk_Levels")
         df_harg_format = pd.read_excel(hargrett, "Formats")
         hargrett.close()
 
