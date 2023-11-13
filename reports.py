@@ -379,13 +379,13 @@ def spreadsheet_group_overlap(df_group, output_folder):
     ARCHive-Formats Analysis_Group_Overlap.xlsx.
     """
     # Makes a dataframe with the number of groups and list of groups that have each format type.
-    groups_per_type = group_overlap("Format Type", df_group)
+    groups_per_type = group_overlap('Format_Type', df_group)
 
     # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-    groups_per_name = group_overlap("Format Standardized Name", df_group)
+    groups_per_name = group_overlap('Format_Standardized_Name', df_group)
 
     # Makes a dataframe with the number of groups and list of groups that have each format identification.
-    groups_per_id = group_overlap("Format Identification", df_group)
+    groups_per_id = group_overlap('Format_Identification', df_group)
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Group-Overlap.xlsx")) as results:

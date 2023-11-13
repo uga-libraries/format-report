@@ -40,7 +40,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Type sheet has the expected values.
         result_1 = [df_1.columns.tolist()] + df_1.values.tolist()
-        expected_1 = [["Format Type", "Groups", "Group List"],
+        expected_1 = [["Format_Type", "Groups", "Group_List"],
                       ["image", 4, "bmac, dlg, dlg-hargrett, dlg-magil"],
                       ["structured_text", 3, "dlg, hargrett, russell"],
                       ["design", 1, "russell"],
@@ -49,7 +49,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Name sheet has the expected values.
         result_2 = [df_2.columns.tolist()] + df_2.values.tolist()
-        expected_2 = [["Format Standardized Name", "Groups", "Group List"],
+        expected_2 = [["Format_Standardized_Name", "Groups", "Group_List"],
                       ["HTML", 3, "dlg, hargrett, russell"],
                       ["TIFF", 3, "dlg, dlg-hargrett, dlg-magil"],
                       ["Adobe Illustrator", 1, "russell"],
@@ -59,7 +59,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Format ID sheet has the expected values.
         result_3 = [df_3.columns.tolist()] + df_3.values.tolist()
-        expected_3 = [["Format Identification", "Groups", "Group List"],
+        expected_3 = [["Format_Identification", "Groups", "Group_List"],
                       ["Tagged Image File Format|5.0|fmt/353", 3, "dlg, dlg-hargrett, dlg-magil"],
                       ["Hypertext Markup Language|NO VALUE|NO VALUE", 2, "dlg, russell"],
                       ["Adobe Illustrator|5.0 / 5.5|fmt/420", 1, "russell"],
