@@ -229,37 +229,37 @@ def one_category(category, totals, df_aip, df_group):
     and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
     # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
-    collections = df_aip.groupby(category)["Collection"].nunique()
-    aips = df_aip.groupby(category)["AIP"].nunique()
-    files = df_group.groupby(category)["File_IDs"].sum()
-    size = df_group.groupby(category)["Size (GB)"].sum()
+    collections = df_aip.groupby(category)['Collection'].nunique()
+    aips = df_aip.groupby(category)['AIP'].nunique()
+    files = df_group.groupby(category)['File_IDs'].sum()
+    size = df_group.groupby(category)['Size_GB'].sum()
 
     # Creates a series for the percentage of each count type and size for each instance of the category.
     # The percentage is rounded to two decimal places.
     # Also renames the series to be more descriptive.
 
-    collections_percent = (collections / totals["Collections"]) * 100
+    collections_percent = (collections / totals['Collections']) * 100
     collections_percent = round(collections_percent, 2)
-    collections_percent = collections_percent.rename("Collections Percentage")
+    collections_percent = collections_percent.rename('Collections_Percentage')
 
-    aips_percent = (aips / totals["AIPs"]) * 100
+    aips_percent = (aips / totals['AIPs']) * 100
     aips_percent = round(aips_percent, 2)
-    aips_percent = aips_percent.rename("AIPs Percentage")
+    aips_percent = aips_percent.rename('AIPs_Percentage')
 
-    files_percent = (files / totals["Files"]) * 100
+    files_percent = (files / totals['Files']) * 100
     files_percent = round(files_percent, 2)
-    files_percent = files_percent.rename("File_IDs Percentage")
+    files_percent = files_percent.rename('File_IDs_Percentage')
 
-    size_percent = (size / totals["Size"]) * 100
+    size_percent = (size / totals['Size']) * 100
     size_percent = round(size_percent, 2)
-    size_percent = size_percent.rename("Size (GB) Percentage")
+    size_percent = size_percent.rename('Size_GB_Percentage')
 
     # Combines all the count and percentage series into a single dataframe.
     result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent, size, size_percent],
                        axis=1)
 
     # Renames Collection and AIP columns to plural to be more descriptive.
-    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+    result = result.rename({'Collection': 'Collections', 'AIP': 'AIPs'}, axis=1)
 
     # Returns the dataframe. Row index is the category and columns are Collections, Collections Percentage, AIPs,
     # AIPs Percentage, File_IDs, File_IDs Percentage.
