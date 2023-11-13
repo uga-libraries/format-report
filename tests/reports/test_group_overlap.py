@@ -21,11 +21,11 @@ class MyTestCase(unittest.TestCase):
         df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-01.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        groups_per_id = group_overlap("Format Identification", df_formats_by_group)
+        groups_per_id = group_overlap('Format_Identification', df_formats_by_group)
         result = [groups_per_id.columns.tolist()] + groups_per_id.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Groups", "Group List"],
+        expected = [["Groups", "Group_List"],
                     ["Matroska|NO VALUE|NO VALUE", 3, "bmac, dlg, hargrett"],
                     ["JPEG File Interchange Format|1|fmt/42", 2, "dlg, hargrett"],
                     ["JPEG 2000 JP2|NO VALUE|x-fmt/392", 1, "dlg"],
@@ -40,11 +40,11 @@ class MyTestCase(unittest.TestCase):
         df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-02.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        groups_per_name = group_overlap("Format Standardized Name", df_formats_by_group)
+        groups_per_name = group_overlap('Format_Standardized_Name', df_formats_by_group)
         result = [groups_per_name.columns.tolist()] + groups_per_name.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Groups", "Group List"],
+        expected = [["Groups", "Group_List"],
                     ["TIFF", 3, "bmac, dlg, hargrett"],
                     ["Matroska", 2, "bmac, dlg"],
                     ["JP2", 1, "dlg"]]
@@ -58,11 +58,11 @@ class MyTestCase(unittest.TestCase):
         df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-03.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        groups_per_type = group_overlap("Format Type", df_formats_by_group)
+        groups_per_type = group_overlap('Format_Type', df_formats_by_group)
         result = [groups_per_type.columns.tolist()] + groups_per_type.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Groups", "Group List"],
+        expected = [["Groups", "Group_List"],
                     ["image", 3, "bmac, dlg, hargrett"],
                     ["audio", 2, "bmac, dlg"],
                     ["video", 2, "bmac, dlg"],

@@ -180,12 +180,12 @@ def group_overlap(category, df_group):
 
     # Makes a series with a list of group names for each instance of the category.
 
-    groups_list = df_group.groupby(df_group[category])["Group"].unique()
-    groups_list = groups_list.rename("Group List")
+    groups_list = df_group.groupby(df_group[category])['Group'].unique()
+    groups_list = groups_list.rename('Group_List')
 
     # Makes a series with the number of groups for each instance of the category.
     groups_count = groups_list.str.len()
-    groups_count = groups_count.rename("Groups")
+    groups_count = groups_count.rename('Groups')
 
     # Converts the list from a list to a comma-separated string for easier readability in Excel.
     # Wait to do this until after groups_count so that the count is correct.
@@ -197,7 +197,7 @@ def group_overlap(category, df_group):
 
     # Sorts the values by the number of groups, largest to smallest.
     # The primary use for this data is to see what the most groups have in common.
-    groups_per_category = groups_per_category.sort_values(by="Groups", ascending=False)
+    groups_per_category = groups_per_category.sort_values(by='Groups', ascending=False)
 
     # Returns the dataframe. Row index is the category and columns are Groups, Group List.
     return groups_per_category
