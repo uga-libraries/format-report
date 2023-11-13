@@ -24,11 +24,11 @@ class MyTestCase(unittest.TestCase):
         df_formats_by_group = pd.read_csv(os.path.join("size_ranges", "archive_formats_by_group_2004-01.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_id_sizes = size_ranges("Format Identification", df_formats_by_group)
+        format_id_sizes = size_ranges('Format_Identification', df_formats_by_group)
         result = [format_id_sizes.columns.tolist()] + format_id_sizes.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Total Size (Format Identification)"],
+        expected = [["Total Size (Format_Identification)"],
                     ["0-9 GB", 3], ["10-99 GB", 1], ["100-499 GB", 0], ["500-999 GB", 1],
                     ["1-9 TB", 2], ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result, expected, "Problem with test for format id ranges")
@@ -41,11 +41,11 @@ class MyTestCase(unittest.TestCase):
         df_formats_by_group = pd.read_csv(os.path.join("size_ranges", "archive_formats_by_group_2004-02.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_name_sizes = size_ranges("Format Standardized Name", df_formats_by_group)
+        format_name_sizes = size_ranges('Format_Standardized_Name', df_formats_by_group)
         result = [format_name_sizes.columns.tolist()] + format_name_sizes.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Total Size (Format Standardized Name)"],
+        expected = [["Total Size (Format_Standardized_Name)"],
                     ["0-9 GB", 1], ["10-99 GB", 1], ["100-499 GB", 1], ["500-999 GB", 3],
                     ["1-9 TB", 0], ["10-49 TB", 0], ["50+ TB", 1]]
         self.assertEqual(result, expected, "Problem with test for format name ranges")

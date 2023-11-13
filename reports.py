@@ -271,7 +271,7 @@ def size_ranges(category, df_group):
     within each range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
 
     # Makes a series with the total size for each instance of the category, regardless of group.
-    df_cat = df_group.groupby(df_group[category])["Size (GB)"].sum()
+    df_cat = df_group.groupby(df_group[category])['Size_GB'].sum()
 
     # Makes series with the subset of the archive_formats_by_group report data with the specified numbers of file_ids.
     tier_one = df_cat[(df_cat < 10)]
