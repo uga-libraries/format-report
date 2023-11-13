@@ -20,17 +20,17 @@ class MyTestCase(unittest.TestCase):
         Test for making the format standardized name subtotals.
         """
         # Makes the variables used for function input.
-        totals_dict = {"Collections": 7, "AIPs": 11, "Files": 2545, "Size": 6100}
+        totals_dict = {'Collections': 7, 'AIPs': 11, 'Files': 2545, 'Size': 6100}
         df_formats_by_aip = pd.read_csv(os.path.join("one_category", "archive_formats_by_aip_2003-01.csv"))
         df_formats_by_group = pd.read_csv(os.path.join("one_category", "archive_formats_by_group_2003-01.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_names = one_category("Format Standardized Name", totals_dict, df_formats_by_aip, df_formats_by_group)
+        format_names = one_category('Format_Standardized_Name', totals_dict, df_formats_by_aip, df_formats_by_group)
         result = [format_names.columns.tolist()] + format_names.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Collections", "Collections Percentage", "AIPs", "AIPs Percentage", "File_IDs",
-                     "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected = [["Collections", "Collections_Percentage", "AIPs", "AIPs_Percentage", "File_IDs",
+                     "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                     ["JP2", 1, 14.29, 2, 18.18, 190, 7.47, 776.817, 12.73],
                     ["JPEG", 1, 14.29, 2, 18.18, 340, 13.36, 40.898, 0.67],
                     ["Matroska", 2, 28.57, 2, 18.18, 555, 21.81, 3919.702, 64.26],
@@ -44,17 +44,17 @@ class MyTestCase(unittest.TestCase):
         Test for making the format type subtotals.
         """
         # Makes the variables used for function input.
-        totals_dict = {"Collections": 7, "AIPs": 11, "Files": 2545, "Size": 6100}
+        totals_dict = {'Collections': 7, 'AIPs': 11, 'Files': 2545, 'Size': 6100}
         df_formats_by_aip = pd.read_csv(os.path.join("one_category", "archive_formats_by_aip_2003-02.csv"))
         df_formats_by_group = pd.read_csv(os.path.join("one_category", "archive_formats_by_group_2003-02.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
-        format_types = one_category("Format Type", totals_dict, df_formats_by_aip, df_formats_by_group)
+        format_types = one_category('Format_Type', totals_dict, df_formats_by_aip, df_formats_by_group)
         result = [format_types.columns.tolist()] + format_types.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["Collections", "Collections Percentage", "AIPs", "AIPs Percentage", "File_IDs",
-                     "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected = [["Collections", "Collections_Percentage", "AIPs", "AIPs_Percentage", "File_IDs",
+                     "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                      ["audio", 1, 14.29, 1, 9.09, 80, 3.14, 290.147, 4.76],
                      ["image", 3, 42.86, 7, 63.64, 1690, 66.40, 1692.2540000000001, 27.74],
                      ["video", 2, 28.57, 2, 18.18, 555, 21.81, 3919.702, 64.26],

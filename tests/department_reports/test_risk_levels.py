@@ -64,7 +64,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that aip_risk contains the correct information.
         aip_risk.reset_index(inplace=True)
         result = [aip_risk.columns.tolist()] + aip_risk.values.tolist()
-        expected = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025-er-000001", 1, 0, 100, 0, 0],
                     ["rbrl-025-er-000002", 5, 20, 20, 20, 40],
                     ["rbrl-025-er-000003", 2, 0, 0, 50, 50]]
@@ -92,7 +92,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that aip_risk contains the correct information.
         aip_risk.reset_index(inplace=True)
         result = [aip_risk.columns.tolist()] + aip_risk.values.tolist()
-        expected = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025-er-000001", 1, 0, 100, 0, 0],
                     ["rbrl-025-er-000002", 2, 0, 0, 100, 0],
                     ["rbrl-025-er-000003", 1, 0, 0, 100, 0]]
@@ -126,7 +126,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that aip_risk contains the correct information.
         aip_risk.reset_index(inplace=True)
         result = [aip_risk.columns.tolist()] + aip_risk.values.tolist()
-        expected = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025-er-000001", 1, 0.0, 0.0, 0.0, 100.0],
                     ["rbrl-025-er-000002", 2, 50.0, 0.0, 0.0, 50.0],
                     ["rbrl-025-er-000003", 2, 100.0, 0.0, 0.0, 0.0]]
@@ -164,7 +164,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that collection_risk contains the correct information.
         collection_risk.reset_index(inplace=True)
         result = [collection_risk.columns.tolist()] + collection_risk.values.tolist()
-        expected = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025", 6, 16.67, 16.67, 16.67, 50],
                     ["rbrl-026", 1, 0, 0, 100, 0],
                     ["rbrl-027", 2, 0, 0, 50, 50]]
@@ -194,7 +194,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that dept_risk contains the correct information.
         collection_risk.reset_index(inplace=True)
         result = [collection_risk.columns.tolist()] + collection_risk.values.tolist()
-        expected = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025", 4, 0, 25, 0, 75],
                     ["rbrl-027", 1, 0, 0, 0, 100]]
         self.assertEqual(result, expected, "Problem with test for collection, multiple levels")
@@ -229,7 +229,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that dept_risk contains the correct information.
         collection_risk.reset_index(inplace=True)
         result = [collection_risk.columns.tolist()] + collection_risk.values.tolist()
-        expected = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["rbrl-025", 3, 33.33, 0.0, 0.0, 66.67],
                     ["rbrl-026", 2, 50, 0, 0, 50]]
         self.assertEqual(result, expected, "Problem with test for collection, remove duplicates")
@@ -262,7 +262,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that dept_risk contains the correct information.
         dept_risk.reset_index(inplace=True)
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["russell", 7, 14.29, 14.29, 42.86, 28.57]]
         self.assertEqual(result, expected, "Problem with test for department, all levels")
 
@@ -288,7 +288,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that dept_risk contains the correct information.
         dept_risk.reset_index(inplace=True)
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["russell", 4, 0, 0, 75, 25]]
         self.assertEqual(result, expected, "Problem with test for department, multiple levels")
 
@@ -322,7 +322,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that dept_risk contains the correct information.
         dept_risk.reset_index(inplace=True)
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                     ["russell", 4, 0, 0, 50, 50]]
         self.assertEqual(result, expected, "Problem with test for department, remove duplicates")
 

@@ -1,4 +1,4 @@
-Group,Collection,AIP,Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note,NARA_Format Name,NARA_PRONOM URL,NARA_Risk Level,NARA_Proposed Preservation Plan,NARA_Match_Type
+Group,Collection,AIP,Format_Type,Format_Standardized_Name,Format_Identification,Format_Name,Format_Version,Registry_Name,Registry_Key,Format_Note,NARA_Format_Name,NARA_PRONOM_URL,NARA_Risk_Level,NARA_Proposed_Preservation_Plan,NARA_Match_Type
 dlg,zhj_tecc,zhj_tecc_rml-ohp-001,audio,Waveform Audio,Waveform Audio|NO VALUE|NO VALUE,Waveform Audio,NO VALUE,NO VALUE,NO VALUE,NO VALUE,No Match,,No Match,,No NARA Match
 dlg,zhj_tecc,zhj_tecc_rml-ohp-002a,audio,Waveform Audio,Waveform Audio|NO VALUE|NO VALUE,Waveform Audio,NO VALUE,NO VALUE,NO VALUE,NO VALUE,No Match,,No Match,,No NARA Match
 dlg,zhj_tecc,zhj_tecc_rml-ohp-002b,audio,Waveform Audio,Waveform Audio|NO VALUE|NO VALUE,Waveform Audio,NO VALUE,NO VALUE,NO VALUE,NO VALUE,No Match,,No Match,,No NARA Match

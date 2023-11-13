@@ -40,49 +40,49 @@ def archive_overview(df_aip, df_group, usage):
 
     # Gets the size (in GB) from the dataframe to show the difference between unique (from usage)
     # and inflated by multiple identifications for individual files.
-    size_inflated = round(df_group.groupby("Group")["Size (GB)"].sum(), 2)
+    size_inflated = round(df_group.groupby('Group')['Size_GB'].sum(), 2)
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
     # Additionally, dlg-hargrett collections in ARCHive that are part of turningpoint are counted as dlg.
-    collections_by_group = df_aip.groupby("Group")["Collection"].nunique()
+    collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
     # Gets the number of AIPs per group from the archive_formats_by_aip report.
     # Not using data from usage report since each version of an AIP is counted separately.
-    aips_by_group = df_aip.groupby("Group")["AIP"].nunique()
+    aips_by_group = df_aip.groupby('Group')['AIP'].nunique()
 
     # Gets the number of format types per group from the archive_formats_by_aip report.
-    types_by_group = df_aip.groupby("Group")["Format Type"].nunique()
+    types_by_group = df_aip.groupby('Group')['Format_Type'].nunique()
 
     # Gets the number of file_ids per group from the archive_formats_by_group report.
     # These numbers are inflated by files with more than one format identification.
-    files_by_group = df_group.groupby("Group")["File_IDs"].sum()
+    files_by_group = df_group.groupby('Group')['File_IDs'].sum()
 
     # Gets the number of format standardized names per group from the archive_formats_by_aip report.
-    formats_by_group = df_aip.groupby("Group")["Format Standardized Name"].nunique()
+    formats_by_group = df_aip.groupby('Group')['Format_Standardized_Name'].nunique()
 
     # Gets the number of format identifications per group from the archive_formats_by_group report.
-    format_ids_by_group = df_group.groupby("Group")["Format Identification"].nunique()
+    format_ids_by_group = df_group.groupby('Group')['Format_Identification'].nunique()
 
     # Combines the series with all the counts into a single dataframe.
     group_stats = pd.concat([size_by_group, size_inflated, collections_by_group, aips_by_group, files_by_group,
                              types_by_group, formats_by_group, format_ids_by_group], axis=1)
 
     # Renames the dataframe columns to be more descriptive.
-    rename = {"Size": "Size (TB)", "Size (GB)": "Size (GB) Inflated", "Collection": "Collections", "AIP": "AIPs",
-              "Format Type": "Format Types", "Format Standardized Name": "Format Standardized Names",
-              "Format Identification": "Format Identifications"}
+    rename = {"Size": "Size_TB", "Size_GB": "Size_GB_Inflated", "Collection": "Collections", "AIP": "AIPs",
+              "Format_Type": "Format_Types", "Format_Standardized_Name": "Format_Standardized_Names",
+              "Format_Identification": "Format_Identifications"}
     group_stats = group_stats.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
     group_stats = group_stats.fillna(0)
 
     # Adds the column totals as a row in the dataframe.
-    group_stats.loc["total"] = [group_stats["Size (TB)"].sum(), group_stats["Size (GB) Inflated"].sum(),
-                                group_stats["Collections"].sum(), group_stats["AIPs"].sum(),
-                                group_stats["File_IDs"].sum(), df_group["Format Type"].nunique(),
-                                df_group["Format Standardized Name"].nunique(),
-                                df_group["Format Identification"].nunique()]
+    group_stats.loc["total"] = [group_stats['Size_TB'].sum(), group_stats['Size_GB_Inflated'].sum(),
+                                group_stats['Collections'].sum(), group_stats['AIPs'].sum(),
+                                group_stats['File_IDs'].sum(), df_group['Format_Type'].nunique(),
+                                df_group['Format_Standardized_Name'].nunique(),
+                                df_group['Format_Identification'].nunique()]
 
     # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
     # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
@@ -94,7 +94,7 @@ def file_count_ranges(category, df_group):
     within each range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
 
     # Makes a series with the number of file_ids for each instance of the category, regardless  of group.
-    df_cat = df_group.groupby(df_group[category])["File_IDs"].sum()
+    df_cat = df_group.groupby(df_group[category])['File_IDs'].sum()
 
     # Makes series with the subset of the archive_formats_by_group report data with the specified numbers of file_ids.
     ones = df_cat[(df_cat < 10)]
@@ -123,20 +123,20 @@ def format_id_frequency(totals, df_group):
     interest are the most common formats. """
 
     # Make series for file_id counts and file_id percentages.
-    format_count = df_group.groupby(df_group["Format Identification"])["File_IDs"].sum()
-    format_percentage = (format_count / totals["Files"]) * 100
+    format_count = df_group.groupby(df_group['Format_Identification'])['File_IDs'].sum()
+    format_percentage = (format_count / totals['Files']) * 100
     format_percentage = round(format_percentage, 2)
-    format_percentage = format_percentage.rename("File_IDs Percentage")
+    format_percentage = format_percentage.rename('File_IDs_Percentage')
 
     # Make series for total size and size percentages.
-    size = df_group.groupby(df_group["Format Identification"])["Size (GB)"].sum()
-    size_percentage = (size / totals["Size"]) * 100
+    size = df_group.groupby(df_group['Format_Identification'])['Size_GB'].sum()
+    size_percentage = (size / totals['Size']) * 100
     size_percentage = round(size_percentage, 2)
-    size_percentage = size_percentage.rename("Size (GB) Percentage")
+    size_percentage = size_percentage.rename('Size_GB_Percentage')
 
     # Combine all the series into a single dataframe and sort largest to smallest by file_ids.
     format_ids = pd.concat([format_count, format_percentage, size, size_percentage], axis=1)
-    format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
+    format_ids = format_ids.sort_values(by='File_IDs', ascending=False)
 
     # Returns the dataframe. Row index is the file_ids and columns are the four frequency measures.
     return format_ids
@@ -180,12 +180,12 @@ def group_overlap(category, df_group):
 
     # Makes a series with a list of group names for each instance of the category.
 
-    groups_list = df_group.groupby(df_group[category])["Group"].unique()
-    groups_list = groups_list.rename("Group List")
+    groups_list = df_group.groupby(df_group[category])['Group'].unique()
+    groups_list = groups_list.rename('Group_List')
 
     # Makes a series with the number of groups for each instance of the category.
     groups_count = groups_list.str.len()
-    groups_count = groups_count.rename("Groups")
+    groups_count = groups_count.rename('Groups')
 
     # Converts the list from a list to a comma-separated string for easier readability in Excel.
     # Wait to do this until after groups_count so that the count is correct.
@@ -197,7 +197,7 @@ def group_overlap(category, df_group):
 
     # Sorts the values by the number of groups, largest to smallest.
     # The primary use for this data is to see what the most groups have in common.
-    groups_per_category = groups_per_category.sort_values(by="Groups", ascending=False)
+    groups_per_category = groups_per_category.sort_values(by='Groups', ascending=False)
 
     # Returns the dataframe. Row index is the category and columns are Groups, Group List.
     return groups_per_category
@@ -211,15 +211,15 @@ def groupby_risk(df_group, groupby_list):
     # Calculates the totals.
     # File IDs and Size (GB) are sums; Format Identification is the number of unique values.
     # The index is reset so that the groupby_list columns are maintained as columns and don't become the index.
-    aggregation_methods = {'File_IDs': 'sum', 'Size (GB)': 'sum', 'Format Identification': 'nunique'}
+    aggregation_methods = {'File_IDs': 'sum', 'Size_GB': 'sum', 'Format_Identification': 'nunique'}
     df = df_group.groupby(groupby_list).agg(aggregation_methods).reset_index()
 
     # Renames one of the columns, to reflect it being a total.
     # The other column names worked equally well as labels for the individual or aggregate data.
-    df.rename(columns=({'Format Identification': 'Format Identifications'}), inplace=True)
+    df.rename(columns=({'Format_Identification': 'Format_Identifications'}), inplace=True)
 
     # Rounds Size (GB) to 2 decimal places to make it easier to read.
-    df['Size (GB)'] = round(df['Size (GB)'], 2)
+    df['Size_GB'] = round(df['Size_GB'], 2)
 
     return df
 
@@ -229,37 +229,37 @@ def one_category(category, totals, df_aip, df_group):
     and size in GB per each instance of the category, for example format type. Returns a dataframe. """
 
     # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
-    collections = df_aip.groupby(category)["Collection"].nunique()
-    aips = df_aip.groupby(category)["AIP"].nunique()
-    files = df_group.groupby(category)["File_IDs"].sum()
-    size = df_group.groupby(category)["Size (GB)"].sum()
+    collections = df_aip.groupby(category)['Collection'].nunique()
+    aips = df_aip.groupby(category)['AIP'].nunique()
+    files = df_group.groupby(category)['File_IDs'].sum()
+    size = df_group.groupby(category)['Size_GB'].sum()
 
     # Creates a series for the percentage of each count type and size for each instance of the category.
     # The percentage is rounded to two decimal places.
     # Also renames the series to be more descriptive.
 
-    collections_percent = (collections / totals["Collections"]) * 100
+    collections_percent = (collections / totals['Collections']) * 100
     collections_percent = round(collections_percent, 2)
-    collections_percent = collections_percent.rename("Collections Percentage")
+    collections_percent = collections_percent.rename('Collections_Percentage')
 
-    aips_percent = (aips / totals["AIPs"]) * 100
+    aips_percent = (aips / totals['AIPs']) * 100
     aips_percent = round(aips_percent, 2)
-    aips_percent = aips_percent.rename("AIPs Percentage")
+    aips_percent = aips_percent.rename('AIPs_Percentage')
 
-    files_percent = (files / totals["Files"]) * 100
+    files_percent = (files / totals['Files']) * 100
     files_percent = round(files_percent, 2)
-    files_percent = files_percent.rename("File_IDs Percentage")
+    files_percent = files_percent.rename('File_IDs_Percentage')
 
-    size_percent = (size / totals["Size"]) * 100
+    size_percent = (size / totals['Size']) * 100
     size_percent = round(size_percent, 2)
-    size_percent = size_percent.rename("Size (GB) Percentage")
+    size_percent = size_percent.rename('Size_GB_Percentage')
 
     # Combines all the count and percentage series into a single dataframe.
     result = pd.concat([collections, collections_percent, aips, aips_percent, files, files_percent, size, size_percent],
                        axis=1)
 
     # Renames Collection and AIP columns to plural to be more descriptive.
-    result = result.rename({"Collection": "Collections", "AIP": "AIPs"}, axis=1)
+    result = result.rename({'Collection': 'Collections', 'AIP': 'AIPs'}, axis=1)
 
     # Returns the dataframe. Row index is the category and columns are Collections, Collections Percentage, AIPs,
     # AIPs Percentage, File_IDs, File_IDs Percentage.
@@ -271,7 +271,7 @@ def size_ranges(category, df_group):
     within each range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
 
     # Makes a series with the total size for each instance of the category, regardless of group.
-    df_cat = df_group.groupby(df_group[category])["Size (GB)"].sum()
+    df_cat = df_group.groupby(df_group[category])['Size_GB'].sum()
 
     # Makes series with the subset of the archive_formats_by_group report data with the specified numbers of file_ids.
     tier_one = df_cat[(df_cat < 10)]
@@ -350,26 +350,26 @@ def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
     # Saves totals to a dictionary for calculating percentages in other dataframes.
     # Use these totals each time so collection and AIP counts aren't inflated by multiple identifications.
     # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
-    totals_dict = {"Collections": overview["Collections"]["total"],
-                   "AIPs": overview["AIPs"]["total"],
-                   "Files": overview["File_IDs"]["total"],
-                   "Size": overview["Size (GB) Inflated"]["total"]}
+    totals_dict = {'Collections': overview['Collections']['total'],
+                   'AIPs': overview['AIPs']['total'],
+                   'Files': overview['File_IDs']['total'],
+                   'Size': overview['Size_GB_Inflated']['total']}
 
     # Makes the format type summary (collection, AIP, file_id, and size counts and percentages).
-    format_types = one_category("Format Type", totals_dict, df_aip, df_group)
+    format_types = one_category("Format_Type", totals_dict, df_aip, df_group)
 
     # Makes the format standardized name summary (collection, AIP, file_id, and size counts and percentages).
-    format_names = one_category("Format Standardized Name", totals_dict, df_aip, df_group)
+    format_names = one_category("Format_Standardized_Name", totals_dict, df_aip, df_group)
 
     # Makes a format identifications summary (file_id and size count and percentage).
     format_ids = format_id_frequency(totals_dict, df_group)
 
     # Saves each summary as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Frequency.xlsx")) as results:
-        overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
-        format_types.to_excel(results, sheet_name="Format Types")
-        format_names.to_excel(results, sheet_name="Format Names")
-        format_ids.to_excel(results, sheet_name="Format IDs")
+        overview.to_excel(results, sheet_name="Group_Overview", index_label="Group")
+        format_types.to_excel(results, sheet_name="Format_Types")
+        format_names.to_excel(results, sheet_name="Format_Names")
+        format_ids.to_excel(results, sheet_name="Format_IDs")
 
 
 def spreadsheet_group_overlap(df_group, output_folder):
@@ -379,19 +379,19 @@ def spreadsheet_group_overlap(df_group, output_folder):
     ARCHive-Formats Analysis_Group_Overlap.xlsx.
     """
     # Makes a dataframe with the number of groups and list of groups that have each format type.
-    groups_per_type = group_overlap("Format Type", df_group)
+    groups_per_type = group_overlap('Format_Type', df_group)
 
     # Makes a dataframe with the number of groups and list of groups that have each format standardized name.
-    groups_per_name = group_overlap("Format Standardized Name", df_group)
+    groups_per_name = group_overlap('Format_Standardized_Name', df_group)
 
     # Makes a dataframe with the number of groups and list of groups that have each format identification.
-    groups_per_id = group_overlap("Format Identification", df_group)
+    groups_per_id = group_overlap('Format_Identification', df_group)
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Group-Overlap.xlsx")) as results:
-        groups_per_type.to_excel(results, sheet_name="Groups per Type")
-        groups_per_name.to_excel(results, sheet_name="Groups per Name")
-        groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+        groups_per_type.to_excel(results, sheet_name="Groups_per_Type")
+        groups_per_name.to_excel(results, sheet_name="Groups_per_Name")
+        groups_per_id.to_excel(results, sheet_name="Groups_per_Format_ID")
 
 
 def spreadsheet_ranges(df_group, output_folder):
@@ -401,19 +401,19 @@ def spreadsheet_ranges(df_group, output_folder):
     ARCHive-Formats Analysis_Ranges.xlsx.
     """
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
-    format_name_ranges = file_count_ranges("Format Standardized Name", df_group)
-    format_name_sizes = size_ranges("Format Standardized Name", df_group)
+    format_name_ranges = file_count_ranges('Format_Standardized_Name', df_group)
+    format_name_sizes = size_ranges('Format_Standardized_Name', df_group)
 
     # Makes dataframes with the number of format identifications within different ranges of file_id counts and sizes.
-    format_id_ranges = file_count_ranges("Format Identification", df_group)
-    format_id_sizes = size_ranges("Format Identification", df_group)
+    format_id_ranges = file_count_ranges('Format_Identification', df_group)
+    format_id_sizes = size_ranges('Format_Identification', df_group)
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Ranges.xlsx")) as results:
-        format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
-        format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
-        format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
+        format_name_ranges.to_excel(results, sheet_name="Format_Name_Ranges", index_label="File_ID Count Range")
+        format_name_sizes.to_excel(results, sheet_name="Format_Name_Sizes", index_label="Size Range")
+        format_id_ranges.to_excel(results, sheet_name="Format_ID_Ranges", index_label="File_ID Count Range")
+        format_id_sizes.to_excel(results, sheet_name="Format_ID_Sizes", index_label="Size Range")
 
 
 def spreadsheet_risk(df_group, output_folder):
@@ -424,38 +424,38 @@ def spreadsheet_risk(df_group, output_folder):
     """
     # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-    df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+    df_group['NARA_Risk_Level'] = pd.Categorical(df_group['NARA_Risk_Level'], risk_order, ordered=True)
 
     # Makes a new column to classify the type of NARA preservation action plan.
-    conditions = [(df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
-                  df_group['NARA_Proposed Preservation Plan'].isnull(),
-                  df_group['NARA_Proposed Preservation Plan'] == "Retain",
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
+    conditions = [(df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Depends on version")),
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Further research is required")),
+                  df_group['NARA_Proposed_Preservation_Plan'].isnull(),
+                  df_group['NARA_Proposed_Preservation_Plan'] == "Retain",
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Retain ")),
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Transform"))]
     plan_type = ["Depends on version", "Further research required", "No plan", "Retain", "Retain but act", "Transform"]
     df_group["NARA_Plan_Type"] = np.select(conditions, plan_type)
 
     # Calculates the dataframe for each risk summary.
     # The first four are the amount at each NARA risk level for different categories of data
     # and the last is the match method between format identifications and NARA risk.
-    archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
-    dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
-    type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
-    plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+    archive_risk = groupby_risk(df_group, ['NARA_Risk_Level'])
+    dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk_Level'])
+    type_risk = groupby_risk(df_group, ['Format_Type', 'NARA_Risk_Level'])
+    plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk_Level'])
     match = groupby_risk(df_group, ['NARA_Match_Type'])
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, "ARCHive-Formats-Analysis_Risk.xlsx")) as results:
-        archive_risk.to_excel(results, sheet_name="ARCHive Risk Overview", index=False)
-        dept_risk.to_excel(results, sheet_name="Department Risk Overview", index=False)
-        type_risk.to_excel(results, sheet_name="Format Type Risk", index=False)
-        plan_risk.to_excel(results, sheet_name="NARA Plan Type Risk", index=False)
-        match.to_excel(results, sheet_name="NARA Match Types", index=False)
+        archive_risk.to_excel(results, sheet_name="ARCHive_Risk_Overview", index=False)
+        dept_risk.to_excel(results, sheet_name="Department_Risk_Overview", index=False)
+        type_risk.to_excel(results, sheet_name="Format_Type_Risk", index=False)
+        plan_risk.to_excel(results, sheet_name="NARA_Plan_Type_Risk", index=False)
+        match.to_excel(results, sheet_name="NARA_Match_Types", index=False)
 
 
 if __name__ == '__main__':

@@ -33,16 +33,16 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_risk", "ARCHive-Formats-Analysis_Risk.xlsx"))
-        archive_risk = pd.read_excel(result, "ARCHive Risk Overview")
-        dept_risk = pd.read_excel(result, "Department Risk Overview")
-        type_risk = pd.read_excel(result, "Format Type Risk")
-        plan_risk = pd.read_excel(result, "NARA Plan Type Risk")
-        match = pd.read_excel(result, "NARA Match Types")
+        archive_risk = pd.read_excel(result, "ARCHive_Risk_Overview")
+        dept_risk = pd.read_excel(result, "Department_Risk_Overview")
+        type_risk = pd.read_excel(result, "Format_Type_Risk")
+        plan_risk = pd.read_excel(result, "NARA_Plan_Type_Risk")
+        match = pd.read_excel(result, "NARA_Match_Types")
         result.close()
 
         # Tests if the ARCHive Risk Overview sheet has the expected values.
         archive_result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
-        archive_expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        archive_expected = [["NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                             ["Low Risk", 4593, 479.83, 10],
                             ["Moderate Risk", 37478, 605575.12, 11],
                             ["High Risk", 168, 0.59, 6],
@@ -51,7 +51,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Department Risk Overview sheet has the expected values.
         dept_result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        dept_expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        dept_expected = [["Group", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                          ["bmac", "Low Risk", 0, 0.0, 0],
                          ["bmac", "Moderate Risk", 36516, 605573.45, 6],
                          ["bmac", "High Risk", 0, 0.0, 0],
@@ -68,7 +68,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Type Risk sheet has the expected values.
         type_result = [type_risk.columns.tolist()] + type_risk.values.tolist()
-        type_expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        type_expected = [["Format_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                          ["application", "Low Risk", 0, 0.0, 0],
                          ["application", "Moderate Risk", 47, 0.0, 3],
                          ["application", "High Risk", 66, 0.04, 1],
@@ -101,7 +101,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the NARA Plan Type Risk sheet has the expected values.
         plan_result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
-        plan_expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        plan_expected = [["NARA_Plan_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                          ["Further research required", "Low Risk", 1267, 339.72, 2],
                          ["Further research required", "Moderate Risk", 36539, 605575.06, 7],
                          ["Further research required", "High Risk", 168, 0.59, 6],
@@ -126,7 +126,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the NARA Match Types sheet has the expected values.
         match_result = [match.columns.tolist()] + match.values.tolist()
-        match_expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+        match_expected = [["NARA_Match_Type", "File_IDs", "Size_GB", "Format_Identifications"],
                           ["Manual (Test)", 37974, 605915.36, 15],
                           ["No NARA Match", 37, 0.01, 3],
                           ["PRONOM", 832, 138.12, 6],

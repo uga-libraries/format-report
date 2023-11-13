@@ -38,9 +38,9 @@ class MyTestCase(unittest.TestCase):
         result = [df.columns.tolist()] + df.values.tolist()
 
         # Tests that the CSV produced by the function has the correct values.
-        expected = [['Group', 'Collection', 'AIP', 'Format Type', 'Format Standardized Name', 'Format Identification',
-                     'Format Name', 'Format Version', 'Registry Name', 'Registry Key', 'Format Note',
-                     'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Risk Level', 'NARA_Proposed Preservation Plan',
+        expected = [['Group', 'Collection', 'AIP', 'Format_Type', 'Format_Standardized_Name', 'Format_Identification',
+                     'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key', 'Format_Note',
+                     'NARA_Format_Name', 'NARA_PRONOM_URL', 'NARA_Risk_Level', 'NARA_Proposed_Preservation_Plan',
                      'NARA_Match_Type'],
                     ['hargrett', 'harg-ms3786', 'harg-ms3786er0006', 'structured_text', 'HTML', 'HTML|5.1|fmt/96',
                      'HTML', '5.1', 'https://www.nationalarchives.gov.uk/PRONOM', 'fmt/96', 'NO VALUE',
@@ -118,10 +118,10 @@ class MyTestCase(unittest.TestCase):
         result = [df.columns.tolist()] + df.values.tolist()
 
         # Tests that the CSV produced by the function has the correct values.
-        expected = [['Group', 'File_IDs', 'Size (GB)', 'Format Type', 'Format Standardized Name',
-                     'Format Identification', 'Format Name', 'Format Version', 'Registry Name', 'Registry Key',
-                     'Format Note', 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Risk Level',
-                     'NARA_Proposed Preservation Plan', 'NARA_Match_Type'],
+        expected = [['Group', 'File_IDs', 'Size_GB', 'Format_Type', 'Format_Standardized_Name',
+                     'Format_Identification', 'Format_Name', 'Format_Version', 'Registry_Name', 'Registry_Key',
+                     'Format_Note', 'NARA_Format_Name', 'NARA_PRONOM_URL', 'NARA_Risk_Level',
+                     'NARA_Proposed_Preservation_Plan', 'NARA_Match_Type'],
                     ['hargrett', 57, 0.02, 'structured_text', 'HTML', 'HTML|5.1|fmt/96', 'HTML', '5.1',
                      'https://www.nationalarchives.gov.uk/PRONOM', 'fmt/96', 'NO VALUE',
                      'Hypertext Markup Language 5.1', 'https://www.nationalarchives.gov.uk/pronom/fmt/96', 'Low Risk',

@@ -233,6 +233,11 @@ def csv_to_dataframe(csv_file):
         print("The CSV was read by ignoring encoding errors, so those characters are omitted from the dataframe.")
         df = pd.read_csv(csv_file, dtype=str, encoding_errors="ignore")
 
+    # Replaces any spaces in column names with underscores, and removes any parentheses.
+    df.columns = df.columns.str.replace(" ", "_")
+    df.columns = df.columns.str.replace("(", "")
+    df.columns = df.columns.str.replace(")", "")
+
     # Adds a prefix to the NARA dataframe columns so the source of the data is clear when the data is combined.
     if "NARA" in csv_file:
         df = df.add_prefix("NARA_")
@@ -252,30 +257,30 @@ def match_nara_risk(df_format, df_nara):
     # PART ONE: ADD TEMPORARY COLUMNS TO BOTH DATAFRAMES FOR BETTER MATCHING
 
     # Formats ARCHive version as a string to avoid type errors during merging.
-    df_format["version_string"] = df_format["Format Version"].astype(str)
+    df_format['version_string'] = df_format['Format_Version'].astype(str)
 
     # Combines ARCHive format name and version, since NARA has that information in one column.
     # Removes " nan" from the combined column, which happens if there is no version.
-    df_format["name_version"] = df_format["Format Name"].str.lower() + " " + df_format["version_string"]
-    df_format["name_version"] = df_format["name_version"].str.replace("\sNO VALUE$", "")
+    df_format['name_version'] = df_format['Format_Name'].str.lower() + " " + df_format['version_string']
+    df_format['name_version'] = df_format['name_version'].str.replace("\sNO VALUE$", "")
 
     # Combines ARCHive registry name and registry key to make a PUID (PRONOM URI) that matches NARA's PUID formatting.
     # If the registry is not PRONOM (the only registry we use for NARA comparison), assigns "NO VALUE".
-    df_format["puid"] = np.where(df_format["Registry Name"] == "https://www.nationalarchives.gov.uk/PRONOM",
-                                 "https://www.nationalarchives.gov.uk/pronom/" + df_format["Registry Key"],
+    df_format['puid'] = np.where(df_format['Registry_Name'] == "https://www.nationalarchives.gov.uk/PRONOM",
+                                 "https://www.nationalarchives.gov.uk/pronom/" + df_format['Registry_Key'],
                                  "NO VALUE")
 
     # Makes ARCHive and NARA format names lowercase for case-insensitive matching.
-    df_format["name_lower"] = df_format["Format Name"].str.lower()
-    df_nara["nara_format_lower"] = df_nara["NARA_Format Name"].str.lower()
+    df_format['name_lower'] = df_format['Format_Name'].str.lower()
+    df_nara['nara_format_lower'] = df_nara['NARA_Format_Name'].str.lower()
 
     # Makes a column with the NARA version, since ARCHive has that in a separate column.
     # The version is assumed to be anything after the last space in the format name, the most common pattern.
     # For ones that don't actually end in a version, it gets the last word, which does not interfere with matching.
-    df_nara["nara_version"] = df_nara["NARA_Format Name"].str.split(" ").str[-1]
+    df_nara['nara_version'] = df_nara['NARA_Format_Name'].str.split(" ").str[-1]
 
     # List of relevant columns in the NARA dataframe.
-    nara_columns = ["NARA_Format Name", "NARA_PRONOM URL", "NARA_Risk Level", "NARA_Proposed Preservation Plan",
+    nara_columns = ["NARA_Format_Name", "NARA_PRONOM_URL", "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan",
                     "nara_format_lower", "nara_version"]
 
     # For each matching technique, it makes a dataframe by merging NARA into ARCHive based on one or two columns
@@ -295,51 +300,51 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part two matches:
 
     # ARCHive identifications that have a PUID.
-    df_format_puid = df_format[df_format["puid"] != "NO VALUE"].copy()
+    df_format_puid = df_format[df_format['puid'] != "NO VALUE"].copy()
 
     # NARA identifications that do not have a PUID.
-    df_nara_no_puid = df_nara[df_nara["NARA_PRONOM URL"].isnull()]
+    df_nara_no_puid = df_nara[df_nara['NARA_PRONOM_URL'].isnull()]
 
     # Technique 1: PRONOM Identifier and Format Version are both a match.
-    df_merge = pd.merge(df_format_puid, df_nara[nara_columns], left_on=["puid", "version_string"],
-                        right_on=["NARA_PRONOM URL", "nara_version"], how="left")
-    df_result = df_merge[df_merge["NARA_Risk Level"].notnull()].copy()
+    df_merge = pd.merge(df_format_puid, df_nara[nara_columns], left_on=['puid', 'version_string'],
+                        right_on=['NARA_PRONOM_URL', 'nara_version'], how="left")
+    df_result = df_merge[df_merge['NARA_Risk_Level'].notnull()].copy()
     df_result = df_result.assign(NARA_Match_Type="PRONOM and Version")
-    df_unmatched = df_merge[df_merge["NARA_Risk Level"].isnull()].copy()
+    df_unmatched = df_merge[df_merge['NARA_Risk_Level'].isnull()].copy()
     df_unmatched.drop(nara_columns, inplace=True, axis=1)
 
     # Technique 2: PRONOM Identifier and Format Name are both a match.
-    df_merge = pd.merge(df_unmatched, df_nara[nara_columns], left_on=["puid", "Format Name"],
-                        right_on=["NARA_PRONOM URL", "NARA_Format Name"], how="left")
-    df_matched = df_merge[df_merge["NARA_Risk Level"].notnull()].copy()
+    df_merge = pd.merge(df_unmatched, df_nara[nara_columns], left_on=['puid', 'Format_Name'],
+                        right_on=['NARA_PRONOM_URL', 'NARA_Format_Name'], how="left")
+    df_matched = df_merge[df_merge['NARA_Risk_Level'].notnull()].copy()
     df_matched = df_matched.assign(NARA_Match_Type="PRONOM and Name")
     df_result = pd.concat([df_result, df_matched], ignore_index=True)
-    df_unmatched = df_merge[df_merge["NARA_Risk Level"].isnull()].copy()
+    df_unmatched = df_merge[df_merge['NARA_Risk_Level'].isnull()].copy()
     df_unmatched.drop(nara_columns, inplace=True, axis=1)
 
     # Technique 3: PRONOM Identifier is a match.
-    df_merge = pd.merge(df_unmatched, df_nara[nara_columns], left_on="puid", right_on="NARA_PRONOM URL", how="left")
-    df_matched = df_merge[df_merge["NARA_Risk Level"].notnull()].copy()
+    df_merge = pd.merge(df_unmatched, df_nara[nara_columns], left_on='puid', right_on='NARA_PRONOM_URL', how="left")
+    df_matched = df_merge[df_merge['NARA_Risk_Level'].notnull()].copy()
     df_matched = df_matched.assign(NARA_Match_Type="PRONOM")
     df_result = pd.concat([df_result, df_matched], ignore_index=True)
-    df_unmatched = df_merge[df_merge["NARA_Risk Level"].isnull()].copy()
+    df_unmatched = df_merge[df_merge['NARA_Risk_Level'].isnull()].copy()
     df_unmatched.drop(nara_columns, inplace=True, axis=1)
 
     # Technique 4: Format Name, and Format Version if it has one, are both a match.
     # This only works if the NARA Format Name is structured name[SPACE]version.
-    df_merge = pd.merge(df_unmatched, df_nara_no_puid[nara_columns], left_on="name_version",
-                        right_on="nara_format_lower", how="left")
-    df_matched = df_merge[df_merge["NARA_Risk Level"].notnull()].copy()
+    df_merge = pd.merge(df_unmatched, df_nara_no_puid[nara_columns], left_on='name_version',
+                        right_on='nara_format_lower', how="left")
+    df_matched = df_merge[df_merge['NARA_Risk_Level'].notnull()].copy()
     df_matched = df_matched.assign(NARA_Match_Type="Format Name")
     df_result = pd.concat([df_result, df_matched], ignore_index=True)
-    df_unmatched = df_merge[df_merge["NARA_Risk Level"].isnull()].copy()
+    df_unmatched = df_merge[df_merge['NARA_Risk_Level'].isnull()].copy()
     df_unmatched.drop(nara_columns, inplace=True, axis=1)
 
     # Adds default text for risk and match type for any that are still unmatched.
     df_unmatched = df_unmatched.copy()
-    df_unmatched["NARA_Format Name"] = "No Match"
-    df_unmatched["NARA_Risk Level"] = "No Match"
-    df_unmatched["NARA_Match_Type"] = "No NARA Match"
+    df_unmatched['NARA_Format_Name'] = "No Match"
+    df_unmatched['NARA_Risk_Level'] = "No Match"
+    df_unmatched['NARA_Match_Type'] = "No NARA Match"
     df_result = pd.concat([df_result, df_unmatched], ignore_index=True)
 
     # PART THREE: FORMAT IDENTIFICATIONS THAT DO NOT HAVE A PUID
@@ -348,22 +353,22 @@ def match_nara_risk(df_format, df_nara):
     # Makes dataframes needed for part three matches:
 
     # FITS identifications that have no PUID.
-    df_format_no_puid = df_format[df_format["puid"] == "NO VALUE"].copy()
+    df_format_no_puid = df_format[df_format['puid'] == "NO VALUE"].copy()
 
     # Technique 4 (repeated with different format DF): Format Name, and Format Version if it has one, are both a match.
     # This only works if the NARA Format Name is structured name[SPACE]version.
-    df_merge = pd.merge(df_format_no_puid, df_nara[nara_columns], left_on="name_version",
-                        right_on="nara_format_lower", how="left")
-    df_matched = df_merge[df_merge["NARA_Risk Level"].notnull()].copy()
+    df_merge = pd.merge(df_format_no_puid, df_nara[nara_columns], left_on='name_version',
+                        right_on='nara_format_lower', how="left")
+    df_matched = df_merge[df_merge['NARA_Risk_Level'].notnull()].copy()
     df_matched = df_matched.assign(NARA_Match_Type="Format Name")
     df_result = pd.concat([df_result, df_matched], ignore_index=True)
-    df_unmatched = df_merge[df_merge["NARA_Risk Level"].isnull()].copy()
+    df_unmatched = df_merge[df_merge['NARA_Risk_Level'].isnull()].copy()
     df_unmatched.drop(nara_columns, inplace=True, axis=1)
 
     # Adds default text for risk and match type for any that are still unmatched.
-    df_unmatched["NARA_Format Name"] = "No Match"
-    df_unmatched["NARA_Risk Level"] = "No Match"
-    df_unmatched["NARA_Match_Type"] = "No NARA Match"
+    df_unmatched['NARA_Format_Name'] = "No Match"
+    df_unmatched['NARA_Risk_Level'] = "No Match"
+    df_unmatched['NARA_Match_Type'] = "No NARA Match"
     df_result = pd.concat([df_result, df_unmatched], ignore_index=True)
 
     # PART FOUR: CLEAN UP AND RETURN FINAL DATAFRAME
@@ -449,12 +454,12 @@ def save_to_csv(csv_path, rows):
     """
 
     # Headers for the two different CSVs created by this script.
-    aip_header = ["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
-                  "Format Identification", "Format Name", "Format Version", "Registry Name",
-                  "Registry Key", "Format Note"]
-    group_header = ["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                    "Format Identification", "Format Name", "Format Version", "Registry Name",
-                    "Registry Key", "Format Note"]
+    aip_header = ["Group", "Collection", "AIP", "Format_Type", "Format_Standardized_Name",
+                  "Format_Identification", "Format_Name", "Format_Version", "Registry_Name",
+                  "Registry_Key", "Format_Note"]
+    group_header = ["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name",
+                    "Format_Identification", "Format_Name", "Format_Version", "Registry_Name",
+                    "Registry_Key", "Format_Note"]
 
     # If rows is "group_csv_header" or "aip_csv_header", saves the correct header to the CSV.
     # Otherwise, saves the rows to the CSV.

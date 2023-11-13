@@ -20,8 +20,8 @@ class MyTestCase(unittest.TestCase):
         result = [df.columns.to_list()] + df.values.tolist()
 
         # Tests that the resulting dataframe contains the correct information.
-        expected = [["Group", "Collection", "AIP", "Format Type", "Format Standardized Name", "Format Identification",
-                     "Format Name", "Format Version", "Registry Name", "Registry Key", "Format Note"],
+        expected = [["Group", "Collection", "AIP", "Format_Type", "Format_Standardized_Name", "Format_Identification",
+                     "Format_Name", "Format_Version", "Registry_Name", "Registry_Key", "Format_Note"],
                     ["dlg", "dlg_vsbg", "dlg_vsbg_jaj001", "image", "DNG", "Digital Negative|NO VALUE|fmt/436",
                      "Digital Negative", "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/436",
                      "NO VALUE"],
@@ -41,9 +41,9 @@ class MyTestCase(unittest.TestCase):
         result = [df.columns.to_list()] + df.values.tolist()
 
         # Tests that the result dataframe contains the correct information.
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
+        expected = [["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name",
+                     "Format_Identification", "Format_Name", "Format_Version", "Registry_Name", "Registry_Key",
+                     "Format_Note"],
                     ["dlg", "300", "20", "image", "DNG", "Digital Negative|NO VALUE|fmt/436", "Digital Negative",
                      "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/436", "NO VALUE"],
                     ["hargrett", "90", "0.04", "structured_text", "HTML", "HTML|1.0|fmt/102", "HTML", "1.0",
@@ -65,10 +65,10 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the columns in the dataframe, which were renamed by the function, are correct.
         result_columns = df.columns.to_list()
-        expected_columns = ["NARA_Format Name", "NARA_File Extension(s)", "NARA_PRONOM URL", "NARA_Risk Level",
-                            "NARA_Preservation Action", "NARA_Proposed Preservation Plan",
-                            "NARA_Description and Justification",
-                            "NARA_Preferred Processing and Transformation Tool(s)"]
+        expected_columns = ["NARA_Format_Name", "NARA_File_Extensions", "NARA_PRONOM_URL", "NARA_Risk_Level",
+                            "NARA_Preservation_Action", "NARA_Proposed_Preservation_Plan",
+                            "NARA_Description_and_Justification",
+                            "NARA_Preferred_Processing_and_Transformation_Tools"]
         self.assertEqual(result_columns, expected_columns, "Problem with NARA, column names")
 
     def test_encoding_error(self):
@@ -82,9 +82,9 @@ class MyTestCase(unittest.TestCase):
         result = [df.columns.to_list()] + df.values.tolist()
 
         # Tests that the result dataframe contains the correct information.
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name", "Registry Key",
-                     "Format Note"],
+        expected = [["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name",
+                     "Format_Identification", "Format_Name", "Format_Version", "Registry_Name", "Registry_Key",
+                     "Format_Note"],
                     ["dlg", "300", "20", "image", "DNG", "Digital Negative|NO VALUE|fmt/436", "Digital Negative",
                      "NO VALUE", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/436", "NO VALUE"],
                     ["hargrett", "90", "0.04", "structured_text", "HTML", "HTML|1.0|fmt/102", "HTML", "1.0",

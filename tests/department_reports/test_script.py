@@ -56,10 +56,10 @@ class MyTestCase(unittest.TestCase):
         # # Reads the DLG-MAGIL Excel file into pandas, and then each sheet into a separate dataframe.
         date = datetime.date.today().strftime("%Y%m")
         df = pd.ExcelFile(os.path.join("script", f"dlg-magil_risk_report_{date}.xlsx"))
-        df_data = pd.read_excel(df, "AIP Risk Data")
-        df_dept = pd.read_excel(df, "Department Risk Levels")
-        df_coll = pd.read_excel(df, "Collection Risk Levels")
-        df_aip = pd.read_excel(df, "AIP Risk Levels")
+        df_data = pd.read_excel(df, "AIP_Risk_Data")
+        df_dept = pd.read_excel(df, "Department_Risk_Levels")
+        df_coll = pd.read_excel(df, "Collection_Risk_Levels")
+        df_aip = pd.read_excel(df, "AIP_Risk_Levels")
         df_format = pd.read_excel(df, "Formats")
         df.close()
 
@@ -115,20 +115,20 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the DLG-MAGIL Department Risk Levels sheet has the expected values.
         result_dept = [df_dept.columns.tolist()] + df_dept.values.tolist()
-        expected_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_dept = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                          ["dlg-magil", 3, 33.33, 0, 0, 66.67]]
         self.assertEqual(result_dept, expected_dept, "Problem with DLG-MAGIL Department Risk Levels")
 
         # Tests if the DLG-MAGIL Collection Risk Levels sheet has the expected values.
         result_coll = [df_coll.columns.tolist()] + df_coll.values.tolist()
-        expected_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_coll = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                          ["dlg_sanb", 1, 0, 0, 0, 100],
                          ["gyca_gaphind", 2, 50, 0, 0, 50]]
         self.assertEqual(result_coll, expected_coll, "Problem with DLG-MAGIL Collection Risk Levels")
 
         # Tests if the DLG-MAGIL AIP Risk Levels sheet has the expected values.
         result_aip = [df_aip.columns.tolist()] + df_aip.values.tolist()
-        expected_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_aip = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                         ["dlg_sanb_savannah-1884", 1, 0, 0, 0, 100],
                         ["dlg_sanb_savannah-1888", 1, 0, 0, 0, 100],
                         ["gyca_gaphind_appling-1952", 2, 50, 0, 0, 50],
@@ -173,19 +173,19 @@ class MyTestCase(unittest.TestCase):
         # # Reads the BMAC Excel file into pandas, and then each sheet into a separate dataframe.
         date = datetime.date.today().strftime("%Y%m")
         bmac = pd.ExcelFile(os.path.join("script", f"bmac_risk_report_{date}.xlsx"))
-        df_bmac_data = pd.read_excel(bmac, "AIP Risk Data")
-        df_bmac_dept = pd.read_excel(bmac, "Department Risk Levels")
-        df_bmac_coll = pd.read_excel(bmac, "Collection Risk Levels")
-        df_bmac_aip = pd.read_excel(bmac, "AIP Risk Levels")
+        df_bmac_data = pd.read_excel(bmac, "AIP_Risk_Data")
+        df_bmac_dept = pd.read_excel(bmac, "Department_Risk_Levels")
+        df_bmac_coll = pd.read_excel(bmac, "Collection_Risk_Levels")
+        df_bmac_aip = pd.read_excel(bmac, "AIP_Risk_Levels")
         df_bmac_format = pd.read_excel(bmac, "Formats")
         bmac.close()
 
         # Reads the Hargrett Excel file into pandas, and then each sheet into a separate dataframe.
         hargrett = pd.ExcelFile(os.path.join("script", f"hargrett_risk_report_{date}.xlsx"))
-        df_harg_data = pd.read_excel(hargrett, "AIP Risk Data")
-        df_harg_dept = pd.read_excel(hargrett, "Department Risk Levels")
-        df_harg_coll = pd.read_excel(hargrett, "Collection Risk Levels")
-        df_harg_aip = pd.read_excel(hargrett, "AIP Risk Levels")
+        df_harg_data = pd.read_excel(hargrett, "AIP_Risk_Data")
+        df_harg_dept = pd.read_excel(hargrett, "Department_Risk_Levels")
+        df_harg_coll = pd.read_excel(hargrett, "Collection_Risk_Levels")
+        df_harg_aip = pd.read_excel(hargrett, "AIP_Risk_Levels")
         df_harg_format = pd.read_excel(hargrett, "Formats")
         hargrett.close()
 
@@ -202,19 +202,19 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the BMAC Department Risk Levels sheet has the expected values.
         result_bmac_dept = [df_bmac_dept.columns.tolist()] + df_bmac_dept.values.tolist()
-        expected_bmac_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_bmac_dept = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                               ["bmac", 2, 0, 0, 50, 50]]
         self.assertEqual(result_bmac_dept, expected_bmac_dept, "Problem with BMAC Department Risk Levels")
 
         # Tests if the BMAC Collection Risk Levels sheet has the expected values.
         result_bmac_coll = [df_bmac_coll.columns.tolist()] + df_bmac_coll.values.tolist()
-        expected_bmac_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_bmac_coll = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                               ["hm-lawton", 2, 0, 0, 50, 50]]
         self.assertEqual(result_bmac_coll, expected_bmac_coll, "Problem with BMAC Collection Risk Levels")
 
         # Tests if the BMAC AIP Risk Levels sheet has the expected values.
         result_bmac_aip = [df_bmac_aip.columns.tolist()] + df_bmac_aip.values.tolist()
-        expected_bmac_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_bmac_aip = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                              ["bmac_hm-lawton_0001", 1, 0, 0, 0, 100],
                              ["bmac_hm-lawton_0002", 1, 0, 0, 100, 0]]
         self.assertEqual(result_bmac_aip, expected_bmac_aip, "Problem with BMAC AIP Risk Levels")
@@ -288,20 +288,20 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Hargrett Department Risk Levels sheet has the expected values.
         result_harg_dept = [df_harg_dept.columns.tolist()] + df_harg_dept.values.tolist()
-        expected_harg_dept = [["Group", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_harg_dept = [["Group", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                               ["hargrett", 4, 25, 25, 25, 25]]
         self.assertEqual(result_harg_dept, expected_harg_dept, "Problem with Hargrett Department Risk Levels")
 
         # Tests if the Hargrett Collection Risk Levels sheet has the expected values.
         result_harg_coll = [df_harg_coll.columns.tolist()] + df_harg_coll.values.tolist()
-        expected_harg_coll = [["Collection", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_harg_coll = [["Collection", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                               ["harg-0000", 1, 0, 0, 100, 0],
                               ["harg-ms3786", 4, 25, 25, 25, 25]]
         self.assertEqual(result_harg_coll, expected_harg_coll, "Problem with Hargrett Collection Risk Levels")
 
         # Tests if the Hargrett AIP Risk Levels sheet has the expected values.
         result_harg_aip = [df_harg_aip.columns.tolist()] + df_harg_aip.values.tolist()
-        expected_harg_aip = [["AIP", "Formats", "No Match %", "High Risk %", "Moderate Risk %", "Low Risk %"],
+        expected_harg_aip = [["AIP", "Formats", "No_Match_%", "High_Risk_%", "Moderate_Risk_%", "Low_Risk_%"],
                              ["harg-0000-web-202007-0001", 1, 0.0, 0.0, 100.0, 0.0],
                              ["harg-0000-web-202007-0002", 1, 0.0, 0.0, 100.0, 0.0],
                              ["harg-ms3786er0001", 1, 0.0, 0.0, 0, 100.0],

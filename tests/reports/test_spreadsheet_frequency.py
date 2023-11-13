@@ -34,16 +34,16 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_frequency", "ARCHive-Formats-Analysis_Frequency.xlsx"))
-        df_1 = pd.read_excel(result, "Group Overview")
-        df_2 = pd.read_excel(result, "Format Types")
-        df_3 = pd.read_excel(result, "Format Names")
-        df_4 = pd.read_excel(result, "Format IDs")
+        df_1 = pd.read_excel(result, "Group_Overview")
+        df_2 = pd.read_excel(result, "Format_Types")
+        df_3 = pd.read_excel(result, "Format_Names")
+        df_4 = pd.read_excel(result, "Format_IDs")
         result.close()
 
         # Tests if the Group Overview sheet has the expected values.
         result_1 = [df_1.columns.tolist()] + df_1.values.tolist()
-        expected_1 = [["Group", "Size (TB)", "Size (GB) Inflated", "Collections", "AIPs", "File_IDs", "Format Types",
-                       "Format Standardized Names", "Format Identifications"],
+        expected_1 = [["Group", "Size_TB", "Size_GB_Inflated", "Collections", "AIPs", "File_IDs", "Format_Types",
+                       "Format_Standardized_Names", "Format_Identifications"],
                       ["dlg", 10.6, 29.15, 1, 78, 78, 1, 1, 1],
                       ["hargrett", 0.15, 0.01, 2, 7, 231, 2, 2, 5],
                       ["russell", 35.8, 30.65, 29, 230, 22951, 4, 6, 15],
@@ -52,8 +52,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Types sheet has the expected values.
         result_2 = [df_2.columns.tolist()] + df_2.values.tolist()
-        expected_2 = [["Format Type", "Collections", "Collections Percentage", "AIPs", "AIPs Percentage", "File_IDs",
-                       "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected_2 = [["Format_Type", "Collections", "Collections_Percentage", "AIPs", "AIPs_Percentage", "File_IDs",
+                       "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                       ["archive", 13, 40.62, 47, 14.92, 292, 1.26, 2.057, 3.44],
                       ["audio", 19, 59.38, 163, 51.75, 854, 3.67, 53.499, 89.45],
                       ["database", 8, 25.00, 31, 9.84, 66, 0.28, 0.33, 0.55],
@@ -62,8 +62,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Names sheet has the expected values.
         result_3 = [df_3.columns.tolist()] + df_3.values.tolist()
-        expected_3 = [["Format Standardized Name", "Collections", "Collections Percentage", "AIPs", "AIPs Percentage",
-                       "File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected_3 = [["Format_Standardized_Name", "Collections", "Collections_Percentage", "AIPs", "AIPs_Percentage",
+                       "File_IDs", "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                       ["MS DOS Compression format (KWAJ variant)", 1, 3.12, 1, 0.32, 53, 0.23, 0.001, 0.0],
                       ["Microsoft Access Database", 8, 25.0, 31, 9.84, 66, 0.28, 0.33, 0.55],
                       ["Microsoft Word", 10, 31.25, 97, 30.79, 22048, 94.79, 3.924, 6.56],
@@ -74,8 +74,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format IDs sheet has the expected values.
         result_4 = [df_4.columns.tolist()] + df_4.values.tolist()
-        expected_4 = [["Format Identification", "File_IDs", "File_IDs Percentage", "Size (GB)",
-                       "Size (GB) Percentage"],
+        expected_4 = [["Format_Identification", "File_IDs", "File_IDs_Percentage", "Size_GB",
+                       "Size_GB_Percentage"],
                       ["Microsoft Word Binary File Format|97-2003|fmt/40", 14677, 63.10, 2.552, 4.27],
                       ["Microsoft Word Binary File Format|NO VALUE|NO VALUE", 6987, 30.04, 1.369, 2.29],
                       ["Waveform Audio|NO VALUE|fmt/141", 407, 1.75, 20.717, 34.64],

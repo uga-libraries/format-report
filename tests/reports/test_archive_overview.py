@@ -28,8 +28,8 @@ class MyTestCase(unittest.TestCase):
         result = [overview.columns.tolist()] + overview.reset_index().values.tolist()
 
         # Tests if overview has the expected values.
-        expected = [["Size (TB)", "Size (GB) Inflated", "Collections", "AIPs", "File_IDs", "Format Types",
-                     "Format Standardized Names", "Format Identifications"],
+        expected = [["Size_TB", "Size_GB_Inflated", "Collections", "AIPs", "File_IDs", "Format_Types",
+                     "Format_Standardized_Names", "Format_Identifications"],
                     ["bmac", 554.0, 326822.42, 1.0, 20.0, 6607.0, 2.0, 2.0, 2.0],
                     ["dlg", 10.6, 3231.06, 9.0, 29.0, 264332.0, 3.0, 5.0, 8.0],
                     ["hargrett", 0.15, 143.97, 2.0, 47.0, 5507.0, 2.0, 3.0, 6.0],

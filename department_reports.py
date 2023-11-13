@@ -81,18 +81,18 @@ def csv_to_dataframe(csv_file):
     # Makes a new column (PRONOM URL) by combining Registry Name and Registry Key, if Registry Name is PRONOM.
     # If the registry is not PRONOM, the column will be given the value "NO VALUE" instead.
     # PRONOM is the only registry that our format data currently contains.
-    csv_df['PRONOM URL'] = np.where(csv_df['Registry Name'] == "https://www.nationalarchives.gov.uk/PRONOM",
-                                    csv_df['Registry Name'] + "/" + csv_df['Registry Key'], "NO VALUE")
+    csv_df['PRONOM_URL'] = np.where(csv_df['Registry_Name'] == "https://www.nationalarchives.gov.uk/PRONOM",
+                                    csv_df['Registry_Name'] + "/" + csv_df['Registry_Key'], "NO VALUE")
 
     # Makes the NARA_Risk Level column ordered categorical,
     # so risk levels can be compared and sorted.
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-    csv_df['NARA_Risk Level'] = pd.Categorical(csv_df['NARA_Risk Level'], risk_order, ordered=True)
+    csv_df['NARA_Risk_Level'] = pd.Categorical(csv_df['NARA_Risk_Level'], risk_order, ordered=True)
 
     # Removes unwanted columns.
     # These are used for the ARCHive report but not department reports.
-    csv_df.drop(['Format Type', 'Format Standardized Name', 'Registry Name', 'Registry Key', 'Format Note',
-                 'NARA_Format Name', 'NARA_PRONOM URL', 'NARA_Match_Type'],
+    csv_df.drop(['Format_Type', 'Format_Standardized_Name', 'Registry_Name', 'Registry_Key', 'Format_Note',
+                 'NARA_Format_Name', 'NARA_PRONOM_URL', 'NARA_Match_Type'],
                 axis=1, inplace=True)
 
     # Replaces spaces in column names with underscores.
@@ -212,10 +212,10 @@ def risk_levels(dept_df, index_column):
 
     # Calculates the percentage of formats at each risk level for each row, rounded to 2 decimal places.
     # Columns are in order from high-low risk.
-    risk['No Match %'] = round(risk['No Match'] / risk['Formats'] * 100, 2)
-    risk['High Risk %'] = round(risk['High Risk'] / risk['Formats'] * 100, 2)
-    risk['Moderate Risk %'] = round(risk['Moderate Risk'] / risk['Formats'] * 100, 2)
-    risk['Low Risk %'] = round(risk['Low Risk'] / risk['Formats'] * 100, 2)
+    risk['No_Match_%'] = round(risk['No Match'] / risk['Formats'] * 100, 2)
+    risk['High_Risk_%'] = round(risk['High Risk'] / risk['Formats'] * 100, 2)
+    risk['Moderate_Risk_%'] = round(risk['Moderate Risk'] / risk['Formats'] * 100, 2)
+    risk['Low_Risk_%'] = round(risk['Low Risk'] / risk['Formats'] * 100, 2)
 
     # Removes the columns with format counts, now that the percentages are calculated.
     risk.drop(['No Match', 'High Risk', 'Moderate Risk', 'Low Risk'], axis=1, inplace=True)
@@ -263,8 +263,8 @@ if __name__ == '__main__':
         # in the same folder as the CSV with ARCHive format data (current_formats_csv).
         dept_report_path = os.path.join(output_folder, f"{dept}_risk_report_{date}.xlsx")
         with pd.ExcelWriter(dept_report_path) as dept_report:
-            df.sort_values(['Collection', 'AIP']).to_excel(dept_report, sheet_name="AIP Risk Data", index=False)
-            dept_risk.to_excel(dept_report, sheet_name="Department Risk Levels")
-            collection_risk.to_excel(dept_report, sheet_name="Collection Risk Levels")
-            aip_risk.to_excel(dept_report, sheet_name="AIP Risk Levels")
+            df.sort_values(['Collection', 'AIP']).to_excel(dept_report, sheet_name="AIP_Risk_Data", index=False)
+            dept_risk.to_excel(dept_report, sheet_name="Department_Risk_Levels")
+            collection_risk.to_excel(dept_report, sheet_name="Collection_Risk_Levels")
+            aip_risk.to_excel(dept_report, sheet_name="AIP_Risk_Levels")
             formats.to_excel(dept_report, sheet_name="Formats")

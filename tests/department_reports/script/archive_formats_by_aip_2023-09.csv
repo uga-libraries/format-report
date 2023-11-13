@@ -1,4 +1,4 @@
-Group,Collection,AIP,Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note,NARA_Format Name,NARA_PRONOM URL,NARA_Risk Level,NARA_Proposed Preservation Plan,NARA_Match_Type
+Group,Collection,AIP,Format_Type,Format_Standardized_Name,Format_Identification,Format_Name,Format_Version,Registry_Name,Registry_Key,Format_Note,NARA_Format_Name,NARA_PRONOM_URL,NARA_Risk_Level,NARA_Proposed_Preservation_Plan,NARA_Match_Type
 bmac,hm-lawton,bmac_hm-lawton_0001,audio,WAVE,Wave|NO VALUE|NO VALUE,Wave,NO VALUE,NO VALUE,NO VALUE,NO VALUE,Waveform Audio File Format (WAVE) 3 versions,Multiple,Low Risk,Retain,Format Name (manual)
 bmac,hm-lawton,bmac_hm-lawton_0002,application,Cue Sheet,cue|NO VALUE|NO VALUE,cue,NO VALUE,NO VALUE,NO VALUE,NO VALUE,For Testing,,Moderate Risk,Retain,For Testing (manual)
 hargrett,harg-0000,harg-0000-web-202007-0001,web_archive,WARC,WARC|NO VALUE|fmt/289,WARC,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,fmt/289,NO VALUE,Web ARCHive (WARC) 2 versions,Multiple,Moderate Risk,Retain,Format Name (manual)

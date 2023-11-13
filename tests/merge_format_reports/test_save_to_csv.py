@@ -46,9 +46,9 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the content of the CSV contains the correct information.
         result = csv_to_list("archive_formats_by_group_2023-08.csv")
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name",
-                     "Registry Key", "Format Note"],
+        expected = [["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name",
+                     "Format_Identification", "Format_Name", "Format_Version", "Registry_Name",
+                     "Registry_Key", "Format_Note"],
                     ["hargrett", "1474", "2.001", "image", "JPEG", "JPEG File Interchange Format|1.02|fmt/44",
                      "JPEG File Interchange Format", "1.02", "https://www.nationalarchives.gov.uk/PRONOM",
                      "fmt/44", "NO VALUE"],
@@ -65,9 +65,9 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the content of the CSV contains the correct information.
         result = csv_to_list("archive_formats_by_aip_2023-08.csv")
-        expected = [["Group", "Collection", "AIP", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name",
-                     "Registry Key", "Format Note"]]
+        expected = [["Group", "Collection", "AIP", "Format_Type", "Format_Standardized_Name",
+                     "Format_Identification", "Format_Name", "Format_Version", "Registry_Name",
+                     "Registry_Key", "Format_Note"]]
         self.assertEqual(result, expected, "Problem with test for aip header")
 
     def test_group_header(self):
@@ -79,9 +79,9 @@ class MyTestCase(unittest.TestCase):
 
         # Tests that the content of the CSV contains the correct information.
         result = csv_to_list("archive_formats_by_group_2023-08.csv")
-        expected = [["Group", "File_IDs", "Size (GB)", "Format Type", "Format Standardized Name",
-                     "Format Identification", "Format Name", "Format Version", "Registry Name",
-                     "Registry Key", "Format Note"]]
+        expected = [["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name",
+                     "Format_Identification", "Format_Name", "Format_Version", "Registry_Name",
+                     "Registry_Key", "Format_Note"]]
         self.assertEqual(result, expected, "Problem with test for group header")
 
     def test_one_row(self):
