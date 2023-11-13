@@ -67,8 +67,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Group Overview sheet has the expected values.
         result_overview = [df_overview.columns.tolist()] + df_overview.values.tolist()
-        expected_overview = [["Group", "Size (TB)", "Size (GB) Inflated", "Collections", "AIPs", "File_IDs",
-                              "Format Types", "Format Standardized Names", "Format Identifications"],
+        expected_overview = [["Group", "Size_TB", "Size_GB_Inflated", "Collections", "AIPs", "File_IDs",
+                              "Format_Types", "Format_Standardized_Names", "Format_Identifications"],
                              ["bmac", 554, 326822.42, 1, 20, 6607, 2, 2, 2],
                              ["dlg", 10.6, 3231.06, 9, 29, 264332, 3, 5, 8],
                              ["hargrett", 0.15, 143.97, 2, 47, 5507, 2, 3, 6],
@@ -77,8 +77,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Types sheet has the expected values.
         result_type = [df_type.columns.tolist()] + df_type.values.tolist()
-        expected_type = [["Format Type", "Collections", "Collections Percentage", "AIPs", "AIPs Percentage",
-                          "File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected_type = [["Format_Type", "Collections", "Collections_Percentage", "AIPs", "AIPs_Percentage",
+                          "File_IDs", "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                          ["audio", 2, 16.67, 15, 15.62, 1240, 0.45, 1093.53, 0.33],
                          ["image", 8, 66.67, 40, 41.67, 269542, 97.5, 2545.081, 0.77],
                          ["video", 2, 16.67, 11, 11.46, 5446, 1.97, 326420.736, 98.86],
@@ -87,8 +87,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Names sheet has the expected values.
         result_name = [df_name.columns.tolist()] + df_name.values.tolist()
-        expected_name = [["Format Standardized Name", "Collections", "Collections Percentage", "AIPs",
-                          "AIPs Percentage", "File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected_name = [["Format_Standardized_Name", "Collections", "Collections_Percentage", "AIPs",
+                          "AIPs_Percentage", "File_IDs", "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                          ["JP2", 1, 8.33, 5, 5.21, 190092, 68.76, 776.817, 0.24],
                          ["JPEG", 4, 33.33, 24, 25.0, 5240, 1.9, 4.665999999999999, 0.0],
                          ["Matroska", 2, 16.67, 11, 11.46, 5446, 1.97, 326420.736, 98.86],
@@ -100,8 +100,8 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format ID sheet has the expected values.
         result_id = [df_id.columns.tolist()] + df_id.values.tolist()
-        expected_id = [["Format Identification", "File_IDs", "File_IDs Percentage", "Size (GB)",
-                        "Size (GB) Percentage"],
+        expected_id = [["Format_Identification", "File_IDs", "File_IDs_Percentage", "Size_GB",
+                        "Size_GB_Percentage"],
                        ["JPEG 2000 JP2|NO VALUE|x-fmt/392", 190092, 68.76, 776.817, 0.24],
                        ["Tagged Image File Format|5|NO VALUE", 71228, 25.77, 1693.088, 0.51],
                        ["Matroska|NO VALUE|NO VALUE", 5446, 1.97, 326420.736, 98.86],
@@ -118,7 +118,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Type sheet has the expected values.
         result_group_type = [df_group_type.columns.tolist()] + df_group_type.values.tolist()
-        expected_group_type = [["Format Type", "Groups", "Group List"],
+        expected_group_type = [["Format_Type", "Groups", "Group_List"],
                                ["audio", 2, "bmac, dlg"],
                                ["image", 2, "dlg, hargrett"],
                                ["video", 2, "bmac, dlg"],
@@ -128,7 +128,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Name sheet has the expected values.
         result_group_name = [df_group_name.columns.tolist()] + df_group_name.values.tolist()
-        expected_group_name = [["Format Standardized Name", "Groups", "Group List"],
+        expected_group_name = [["Format_Standardized_Name", "Groups", "Group_List"],
                                ["JPEG", 2, "hargrett, dlg"],
                                ["Matroska", 2, "bmac, dlg"],
                                ["TIFF", 2, "dlg, hargrett"],
@@ -141,7 +141,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Groups per Format ID sheet has the expected values.
         result_group_id = [df_group_id.columns.tolist()] + df_group_id.values.tolist()
-        expected_group_id = [["Format Identification", "Groups", "Group List"],
+        expected_group_id = [["Format_Identification", "Groups", "Group_List"],
                              ["JPEG File Interchange Format|1.02|fmt/44", 2, "dlg, hargrett"],
                              ["JPEG File Interchange Format|1|fmt/42", 2, "dlg, hargrett"],
                              ["Matroska|NO VALUE|NO VALUE", 2, "bmac, dlg"],
@@ -159,7 +159,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Name Ranges sheet has the expected values.
         result_name_range = [df_name_range.columns.tolist()] + df_name_range.values.tolist()
-        expected_name_range = [["File_ID Count Range", "Number of Formats (Format Standardized Name)"],
+        expected_name_range = [["File_ID Count Range", "Number of Formats (Format_Standardized_Name)"],
                                ["1-9", 0],
                                ["10-99", 1],
                                ["100-999", 1],
@@ -171,7 +171,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Name Sizes sheet has the expected values.
         result_name_size = [df_name_size.columns.tolist()] + df_name_size.values.tolist()
-        expected_name_size = [["Size Range", "Total Size (Format Standardized Name)"],
+        expected_name_size = [["Size Range", "Total Size (Format_Standardized_Name)"],
                               ["0-9 GB", 1],
                               ["10-99 GB", 1],
                               ["100-499 GB", 1],
@@ -184,7 +184,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format ID Ranges sheet has the expected values.
         result_id_range = [df_id_range.columns.tolist()] + df_id_range.values.tolist()
-        expected_id_range = [["File_ID Count Range", "Number of Formats (Format Identification)"],
+        expected_id_range = [["File_ID Count Range", "Number of Formats (Format_Identification)"],
                              ["1-9", 0],
                              ["10-99", 1],
                              ["100-999", 3],
@@ -195,7 +195,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format ID Sizes sheet has the expected values.
         result_id_size = [df_id_size.columns.tolist()] + df_id_size.values.tolist()
-        expected_id_size = [["Size Range", "Total Size (Format Identification)"],
+        expected_id_size = [["Size Range", "Total Size (Format_Identification)"],
                             ["0-9 GB", 5],
                             ["10-99 GB", 2],
                             ["100-499 GB", 1],
@@ -207,7 +207,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the ARCHive Risk Overview sheet has the expected values.
         result_risk = [df_risk.columns.tolist()] + df_risk.values.tolist()
-        expected_risk = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected_risk = [["NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                          ["Low Risk", 269542, 2545.08, 8],
                          ["Moderate Risk", 0, 0.0, 0],
                          ["High Risk", 0, 0.0, 0],
@@ -216,7 +216,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Department Risk Overview sheet has the expected values.
         result_risk_dept = [df_risk_dept.columns.tolist()] + df_risk_dept.values.tolist()
-        expected_risk_dept = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected_risk_dept = [["Group", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                               ["bmac", "Low Risk", 0, 0.0, 0],
                               ["bmac", "Moderate Risk", 0, 0.0, 0],
                               ["bmac", "High Risk", 0, 0.0, 0],
@@ -234,7 +234,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Format Type Risk sheet has the expected values.
         result_risk_type = [df_risk_type.columns.tolist()] + df_risk_type.values.tolist()
-        expected_risk_type = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected_risk_type = [["Format_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                               ["audio", "Low Risk", 0, 0.0, 0],
                               ["audio", "Moderate Risk", 0, 0.0, 0],
                               ["audio", "High Risk", 0, 0.0, 0],
@@ -256,7 +256,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the NARA Plan Type Risk sheet has the expected values.
         plan_result = [df_plan_risk.columns.tolist()] + df_plan_risk.values.tolist()
-        plan_expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        plan_expected = [["NARA_Plan_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                          ["Depends on version", "Low Risk", 170, 1.31, 1],
                          ["Depends on version", "Moderate Risk", 0, 0.0, 0],
                          ["Depends on version", "High Risk", 0, 0.0, 0],
@@ -273,7 +273,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the NARA Match Types sheet has the expected values.
         result_match = [df_match.columns.tolist()] + df_match.values.tolist()
-        expected_match = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected_match = [["NARA_Match_Type", "File_IDs", "Size_GB", "Format_Identifications"],
                           ["Name (manual)", 71398, 1694.4, 2],
                           ["No NARA Match", 6904, 327652.37, 4],
                           ["PRONOM", 192904, 846.02, 2],
