@@ -27,12 +27,13 @@ def update_dataframe(df):
                   (df['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
                   (df['NARA_Proposed Preservation Plan'].notnull()) &
                   (df['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
+                  df['NARA_Proposed Preservation Plan'].isnull(),
                   df['NARA_Proposed Preservation Plan'] == "Retain",
                   (df['NARA_Proposed Preservation Plan'].notnull()) &
                   (df['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
                   (df['NARA_Proposed Preservation Plan'].notnull()) &
                   (df['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
-    plan_type = ["Depends on version", "Further research required", "Retain", "Retain but act", "Transform"]
+    plan_type = ["Depends on version", "Further research required", "No plan", "Retain", "Retain but act", "Transform"]
     df["NARA_Plan_Type"] = np.select(conditions, plan_type)
 
     return df
@@ -98,9 +99,9 @@ class MyTestCase(unittest.TestCase):
         result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
         expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["Low Risk", 9285, 41548.58, 18],
-                    ["Moderate Risk", 0, 0, 0],
+                    ["Moderate Risk", 0, 0.0, 0],
                     ["High Risk", 191, 0.01, 6],
-                    ["No Match", 0, 0, 0]]
+                    ["No Match", 0, 0.0, 0]]
         self.assertEqual(result, expected, "Problem with test for ARCHive, some NARA risk levels")
 
     def test_dept_one(self):
@@ -140,15 +141,15 @@ class MyTestCase(unittest.TestCase):
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
         expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["bmac", "Low Risk", 122, 39775.16, 1],
-                    ["bmac", "Moderate Risk", 0, 0, 0],
-                    ["bmac", "High Risk", 0, 0, 0],
-                    ["bmac", "No Match", 0, 0, 0],
+                    ["bmac", "Moderate Risk", 0, 0.0, 0],
+                    ["bmac", "High Risk", 0, 0.0, 0],
+                    ["bmac", "No Match", 0, 0.0, 0],
                     ["dlg-magil", "Low Risk", 5854, 1629.09, 4],
-                    ["dlg-magil", "Moderate Risk", 0, 0, 0],
-                    ["dlg-magil", "High Risk", 0, 0, 0],
-                    ["dlg-magil", "No Match", 0, 0, 0],
+                    ["dlg-magil", "Moderate Risk", 0, 0.0, 0],
+                    ["dlg-magil", "High Risk", 0, 0.0, 0],
+                    ["dlg-magil", "No Match", 0, 0.0, 0],
                     ["hargrett", "Low Risk", 1873, 140.22, 11],
-                    ["hargrett", "Moderate Risk", 0, 0, 0],
+                    ["hargrett", "Moderate Risk", 0, 0.0, 0],
                     ["hargrett", "High Risk", 19, 0, 1],
                     ["hargrett", "No Match", 399, 138.12, 6]]
         self.assertEqual(result, expected, "Problem with the test for dept, three departments, no overlap")
@@ -194,7 +195,7 @@ class MyTestCase(unittest.TestCase):
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
 
-        # Tests if match_risk has the expected values.
+        # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
         expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["Format Name", 60, 0.01, 2],
@@ -216,7 +217,7 @@ class MyTestCase(unittest.TestCase):
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
 
-        # Tests if match_risk has the expected values.
+        # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
         expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["Format Name", 48, 0.0, 1],
@@ -236,11 +237,110 @@ class MyTestCase(unittest.TestCase):
         # Runs the function being tested.
         match = groupby_risk(df_group, ['NARA_Match_Type'])
 
-        # Tests if match_risk has the expected values.
+        # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
         expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
                     ["PRONOM and Version", 5123, 4.62, 4]]
         self.assertEqual(result, expected, "Problem with the test for one match")
+
+    def test_plan_multiple(self):
+        """
+        Test for when there are multiple NARA plan types, each more than once.
+        Some format identifications are repeated.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-01.csv"))
+        df_group = update_dataframe(df_group)
+
+        # Runs the function being tested.
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+
+        # Tests if plan_risk has the expected values.
+        result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
+        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["Further research required", "Low Risk", 168, 2.0, 1],
+                    ["Further research required", "Moderate Risk", 0, 0.0, 0],
+                    ["Further research required", "High Risk", 4041, 1289.38, 1],
+                    ["Further research required", "No Match", 0, 0.0, 0],
+                    ["No plan", "Low Risk", 0, 0.0, 0],
+                    ["No plan", "Moderate Risk", 0, 0.0, 0],
+                    ["No plan", "High Risk", 0, 0.0, 0],
+                    ["No plan", "No Match", 384, 139.35, 2],
+                    ["Retain", "Low Risk", 2742, 1.97, 6],
+                    ["Retain", "Moderate Risk", 300, 0.49, 3],
+                    ["Retain", "High Risk", 0, 0.0, 0],
+                    ["Retain", "No Match", 0, 0.0, 0],
+                    ["Retain but act", "Low Risk", 1483, 477.06, 1],
+                    ["Retain but act", "Moderate Risk", 0, 0.0, 0],
+                    ["Retain but act", "High Risk", 0, 0.0, 0],
+                    ["Retain but act", "No Match", 0, 0.0, 0],
+                    ["Transform", "Low Risk", 0, 0.0, 0],
+                    ["Transform", "Moderate Risk", 731, 340.25, 2],
+                    ["Transform", "High Risk", 0, 0.0, 0],
+                    ["Transform", "No Match", 0, 0.0, 0]]
+        self.assertEqual(result, expected, "Problem with the test for multiple NARA plan types")
+
+    def test_plan_multiple_once(self):
+        """
+        Test for when there are all NARA plan types, each only once.
+        All format identifications are unique.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-02.csv"))
+        df_group = update_dataframe(df_group)
+
+        # Runs the function being tested.
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+
+        # Tests if plan_risk has the expected values.
+        result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
+        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["Depends on version", "Low Risk", 166, 1.25, 1],
+                    ["Depends on version", "Moderate Risk", 0, 0.0, 0],
+                    ["Depends on version", "High Risk", 0, 0.0, 0],
+                    ["Depends on version", "No Match", 0, 0.0, 0],
+                    ["Further research required", "Low Risk", 2812, 69.2, 1],
+                    ["Further research required", "Moderate Risk", 0, 0.0, 0],
+                    ["Further research required", "High Risk", 0, 0.0, 0],
+                    ["Further research required", "No Match", 0, 0.0, 0],
+                    ["No plan", "Low Risk", 0, 0.0, 0],
+                    ["No plan", "Moderate Risk", 0, 0.0, 0],
+                    ["No plan", "High Risk", 0, 0.0, 0],
+                    ["No plan", "No Match", 218, 138.1, 1],
+                    ["Retain", "Low Risk", 1946, 1.9, 1],
+                    ["Retain", "Moderate Risk", 0, 0.0, 0],
+                    ["Retain", "High Risk", 0, 0.0, 0],
+                    ["Retain", "No Match", 0, 0.0, 0],
+                    ["Retain but act", "Low Risk", 1322, 0.69, 1],
+                    ["Retain but act", "Moderate Risk", 0, 0.0, 0],
+                    ["Retain but act", "High Risk", 0, 0.0, 0],
+                    ["Retain but act", "No Match", 0, 0.0, 0],
+                    ["Transform", "Low Risk", 1474, 2.0, 1],
+                    ["Transform", "Moderate Risk", 0, 0.0, 0],
+                    ["Transform", "High Risk", 0, 0.0, 0],
+                    ["Transform", "No Match", 0, 0.0, 0]]
+        self.assertEqual(result, expected, "Problem with the test multiple NARA plan types, each plan once")
+
+    def test_plan_one(self):
+        """
+        Test for when there is one NARA plan type.
+        All format identifications are unique.
+        """
+        # Makes the dataframe used for the function input and sets the order of NARA_Risk Level.
+        df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2014-03.csv"))
+        df_group = update_dataframe(df_group)
+
+        # Runs the function being tested.
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+
+        # Tests if plan_risk has the expected values.
+        result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
+        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                    ["Retain", "Low Risk", 5589, 6.2, 5],
+                    ["Retain", "Moderate Risk", 622, 0.0, 3],
+                    ["Retain", "High Risk", 381, 0.04, 1],
+                    ["Retain", "No Match", 0, 0.0, 0]]
+        self.assertEqual(result, expected, "Problem with the test for one NARA plan type")
 
     def test_type_one(self):
         """

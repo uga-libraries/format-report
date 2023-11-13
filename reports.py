@@ -431,12 +431,13 @@ def spreadsheet_risk(df_group, output_folder):
                   (df_group['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
                   (df_group['NARA_Proposed Preservation Plan'].notnull()) &
                   (df_group['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
+                  df_group['NARA_Proposed Preservation Plan'].isnull(),
                   df_group['NARA_Proposed Preservation Plan'] == "Retain",
                   (df_group['NARA_Proposed Preservation Plan'].notnull()) &
                   (df_group['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
                   (df_group['NARA_Proposed Preservation Plan'].notnull()) &
                   (df_group['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
-    plan_type = ["Depends on version", "Further research required", "Retain", "Retain but act", "Transform"]
+    plan_type = ["Depends on version", "Further research required", 'No plan", '"Retain", "Retain but act", "Transform"]
     df_group["NARA_Plan_Type"] = np.select(conditions, plan_type)
 
     # Calculates the dataframe for each risk summary.
