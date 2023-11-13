@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
         Test for group overlap of format identifications.
         """
         # Makes the variable used for function input.
-        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_id.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-01.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_id = group_overlap("Format Identification", df_formats_by_group)
@@ -37,7 +37,7 @@ class MyTestCase(unittest.TestCase):
         Test for group overlap of format standardized names.
         """
         # Makes the variable used for function input.
-        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_name.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-02.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_name = group_overlap("Format Standardized Name", df_formats_by_group)
@@ -55,7 +55,7 @@ class MyTestCase(unittest.TestCase):
         Test for group overlap of format type.
         """
         # Makes the variable used for function input.
-        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_type.csv"))
+        df_formats_by_group = pd.read_csv(os.path.join("group_overlap", "archive_formats_by_group_2001-03.csv"))
 
         # Runs the function being tested and converts the output into a list for easier comparison.
         groups_per_type = group_overlap("Format Type", df_formats_by_group)

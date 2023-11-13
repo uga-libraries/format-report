@@ -61,7 +61,7 @@ class MyTestCase(unittest.TestCase):
         output = subprocess.run(f"python {self.script_path} reports_one", shell=True, stdout=subprocess.PIPE)
         msg_result = output.stdout.decode("utf-8")
         msg_expected = "Required argument nara_csv is missing\r\n" \
-                       "Script usage: python path/merge_format_reports.py report_folder\r\n"
+                       "Script usage: python path/merge_format_reports.py report_folder nara_csv\r\n"
         self.assertEqual(msg_result, msg_expected, "Problem with test for error argument, message")
 
     def test_one_report(self):

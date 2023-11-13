@@ -1,0 +1,4 @@
+Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note,NARA_Format Name,NARA_PRONOM URL,NARA_Risk Level,NARA_Proposed Preservation Plan,NARA_Match_Type
+hargrett,33,0.471,video,MPEG,MPEG-1 Program Stream|NO VALUE|x-fmt/385,MPEG-1 Program Stream,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/385,NO VALUE,MPEG-1 Program Stream,https://www.nationalarchives.gov.uk/pronom/x-fmt/385,Low Risk,Retain,PRONOM and Name
+dlg-magil,565,0,text,Plain Text File,Plain text|NO VALUE|x-fmt/111,Plain text,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/111,NO VALUE,Plain Text,https://www.nationalarchives.gov.uk/pronom/x-fmt/111,Low Risk,Retain,PRONOM
+hargrett,48,0.001,text,Plain Text File,Plain text|NO VALUE|NO VALUE,Plain text,NO VALUE,NO VALUE,NO VALUE,NO VALUE,Plain Text,https://www.nationalarchives.gov.uk/pronom/x-fmt/111,Low Risk,Retain,Format Name
