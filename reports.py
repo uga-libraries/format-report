@@ -40,49 +40,49 @@ def archive_overview(df_aip, df_group, usage):
 
     # Gets the size (in GB) from the dataframe to show the difference between unique (from usage)
     # and inflated by multiple identifications for individual files.
-    size_inflated = round(df_group.groupby("Group")["Size (GB)"].sum(), 2)
+    size_inflated = round(df_group.groupby('Group')['Size_GB'].sum(), 2)
 
     # Gets the number of collections per group from the archive_formats_by_aip report.
     # Only counts collections with AIPs, which may result in a difference between this count and the ARCHive interface.
     # Additionally, dlg-hargrett collections in ARCHive that are part of turningpoint are counted as dlg.
-    collections_by_group = df_aip.groupby("Group")["Collection"].nunique()
+    collections_by_group = df_aip.groupby('Group')['Collection'].nunique()
 
     # Gets the number of AIPs per group from the archive_formats_by_aip report.
     # Not using data from usage report since each version of an AIP is counted separately.
-    aips_by_group = df_aip.groupby("Group")["AIP"].nunique()
+    aips_by_group = df_aip.groupby('Group')['AIP'].nunique()
 
     # Gets the number of format types per group from the archive_formats_by_aip report.
-    types_by_group = df_aip.groupby("Group")["Format Type"].nunique()
+    types_by_group = df_aip.groupby('Group')['Format_Type'].nunique()
 
     # Gets the number of file_ids per group from the archive_formats_by_group report.
     # These numbers are inflated by files with more than one format identification.
-    files_by_group = df_group.groupby("Group")["File_IDs"].sum()
+    files_by_group = df_group.groupby('Group')['File_IDs'].sum()
 
     # Gets the number of format standardized names per group from the archive_formats_by_aip report.
-    formats_by_group = df_aip.groupby("Group")["Format Standardized Name"].nunique()
+    formats_by_group = df_aip.groupby('Group')['Format_Standardized_Name'].nunique()
 
     # Gets the number of format identifications per group from the archive_formats_by_group report.
-    format_ids_by_group = df_group.groupby("Group")["Format Identification"].nunique()
+    format_ids_by_group = df_group.groupby('Group')['Format_Identification'].nunique()
 
     # Combines the series with all the counts into a single dataframe.
     group_stats = pd.concat([size_by_group, size_inflated, collections_by_group, aips_by_group, files_by_group,
                              types_by_group, formats_by_group, format_ids_by_group], axis=1)
 
     # Renames the dataframe columns to be more descriptive.
-    rename = {"Size": "Size (TB)", "Size (GB)": "Size (GB) Inflated", "Collection": "Collections", "AIP": "AIPs",
-              "Format Type": "Format Types", "Format Standardized Name": "Format Standardized Names",
-              "Format Identification": "Format Identifications"}
+    rename = {"Size": "Size_TB", "Size_GB": "Size_GB_Inflated", "Collection": "Collections", "AIP": "AIPs",
+              "Format_Type": "Format_Types", "Format_Standardized_Name": "Format_Standardized_Names",
+              "Format_Identification": "Format_Identifications"}
     group_stats = group_stats.rename(columns=rename)
 
     # Replace cells without values (one group has no files yet) with 0.
     group_stats = group_stats.fillna(0)
 
     # Adds the column totals as a row in the dataframe.
-    group_stats.loc["total"] = [group_stats["Size (TB)"].sum(), group_stats["Size (GB) Inflated"].sum(),
-                                group_stats["Collections"].sum(), group_stats["AIPs"].sum(),
-                                group_stats["File_IDs"].sum(), df_group["Format Type"].nunique(),
-                                df_group["Format Standardized Name"].nunique(),
-                                df_group["Format Identification"].nunique()]
+    group_stats.loc["total"] = [group_stats['Size_TB'].sum(), group_stats['Size_GB_Inflated'].sum(),
+                                group_stats['Collections'].sum(), group_stats['AIPs'].sum(),
+                                group_stats['File_IDs'].sum(), df_group['Format_Type'].nunique(),
+                                df_group['Format_Standardized_Name'].nunique(),
+                                df_group['Format_Identification'].nunique()]
 
     # Returns the information in a dataframe. Row index is the group_code and columns are Size (TB), Collections,
     # AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
