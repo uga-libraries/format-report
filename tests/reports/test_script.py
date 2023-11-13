@@ -16,48 +16,48 @@ class MyTestCase(unittest.TestCase):
         """
         Deletes the Excel spreadsheets produced by the script, if made by the test.
         """
-        file_paths = [os.path.join("correct_input", "ARCHive-Formats-Analysis_Frequency.xlsx"),
-                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"),
-                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Ranges.xlsx"),
-                      os.path.join("correct_input", "ARCHive-Formats-Analysis_Risk.xlsx")]
+        file_paths = [os.path.join("script", "ARCHive-Formats-Analysis_Frequency.xlsx"),
+                      os.path.join("script", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"),
+                      os.path.join("script", "ARCHive-Formats-Analysis_Ranges.xlsx"),
+                      os.path.join("script", "ARCHive-Formats-Analysis_Risk.xlsx")]
 
         for file_path in file_paths:
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    def test_correct_input(self):
+    def test_script(self):
         """
         Test for running the script on a report_folder with all expected reports,
         which results in data in all sheets of all the Excel spreadsheets.
         """
         # Runs the script.
         script_path = os.path.join("..", "..", "reports.py")
-        subprocess.run(f"python {script_path} correct_input", shell=True)
+        subprocess.run(f"python {script_path} script", shell=True)
 
         # Reads each Excel file into pandas, and then each sheet into a separate dataframe.
         # Reading everything into dataframes at once so the Excel files can be closed,
         # allowing them to be deleted even if there are errors during the tests.
-        frequency = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Frequency.xlsx"))
+        frequency = pd.ExcelFile(os.path.join("script", "ARCHive-Formats-Analysis_Frequency.xlsx"))
         df_overview = pd.read_excel(frequency, "Group Overview")
         df_type = pd.read_excel(frequency, "Format Types")
         df_name = pd.read_excel(frequency, "Format Names")
         df_id = pd.read_excel(frequency, "Format IDs")
         frequency.close()
 
-        overlap = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"))
+        overlap = pd.ExcelFile(os.path.join("script", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"))
         df_group_type = pd.read_excel(overlap, "Groups per Type")
         df_group_name = pd.read_excel(overlap, "Groups per Name")
         df_group_id = pd.read_excel(overlap, "Groups per Format ID")
         overlap.close()
 
-        ranges = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Ranges.xlsx"))
+        ranges = pd.ExcelFile(os.path.join("script", "ARCHive-Formats-Analysis_Ranges.xlsx"))
         df_name_range = pd.read_excel(ranges, "Format Name Ranges")
         df_name_size = pd.read_excel(ranges, "Format Name Sizes")
         df_id_range = pd.read_excel(ranges, "Format ID Ranges")
         df_id_size = pd.read_excel(ranges, "Format ID Sizes")
         ranges.close()
 
-        risk = pd.ExcelFile(os.path.join("correct_input", "ARCHive-Formats-Analysis_Risk.xlsx"))
+        risk = pd.ExcelFile(os.path.join("script", "ARCHive-Formats-Analysis_Risk.xlsx"))
         df_risk = pd.read_excel(risk, "ARCHive Risk Overview")
         df_risk_dept = pd.read_excel(risk, "Department Risk Overview")
         df_risk_type = pd.read_excel(risk, "Format Type Risk")
