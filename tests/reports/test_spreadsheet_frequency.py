@@ -34,10 +34,10 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_frequency", "ARCHive-Formats-Analysis_Frequency.xlsx"))
-        df_1 = pd.read_excel(result, "Group Overview")
-        df_2 = pd.read_excel(result, "Format Types")
-        df_3 = pd.read_excel(result, "Format Names")
-        df_4 = pd.read_excel(result, "Format IDs")
+        df_1 = pd.read_excel(result, "Group_Overview")
+        df_2 = pd.read_excel(result, "Format_Types")
+        df_3 = pd.read_excel(result, "Format_Names")
+        df_4 = pd.read_excel(result, "Format_IDs")
         result.close()
 
         # Tests if the Group Overview sheet has the expected values.

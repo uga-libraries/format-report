@@ -33,11 +33,11 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_risk", "ARCHive-Formats-Analysis_Risk.xlsx"))
-        archive_risk = pd.read_excel(result, "ARCHive Risk Overview")
-        dept_risk = pd.read_excel(result, "Department Risk Overview")
-        type_risk = pd.read_excel(result, "Format Type Risk")
-        plan_risk = pd.read_excel(result, "NARA Plan Type Risk")
-        match = pd.read_excel(result, "NARA Match Types")
+        archive_risk = pd.read_excel(result, "ARCHive_Risk_Overview")
+        dept_risk = pd.read_excel(result, "Department_Risk_Overview")
+        type_risk = pd.read_excel(result, "Format_Type_Risk")
+        plan_risk = pd.read_excel(result, "NARA_Plan_Type_Risk")
+        match = pd.read_excel(result, "NARA_Match_Types")
         result.close()
 
         # Tests if the ARCHive Risk Overview sheet has the expected values.

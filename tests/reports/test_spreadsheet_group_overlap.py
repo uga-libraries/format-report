@@ -33,9 +33,9 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_group_overlap", "ARCHive-Formats-Analysis_Group-Overlap.xlsx"))
-        df_1 = pd.read_excel(result, "Groups per Type")
-        df_2 = pd.read_excel(result, "Groups per Name")
-        df_3 = pd.read_excel(result, "Groups per Format ID")
+        df_1 = pd.read_excel(result, "Groups_per_Type")
+        df_2 = pd.read_excel(result, "Groups_per_Name")
+        df_3 = pd.read_excel(result, "Groups_per_Format_ID")
         result.close()
 
         # Tests if the Groups per Type sheet has the expected values.

@@ -366,10 +366,10 @@ def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
 
     # Saves each summary as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Frequency.xlsx")) as results:
-        overview.to_excel(results, sheet_name="Group Overview", index_label="Group")
-        format_types.to_excel(results, sheet_name="Format Types")
-        format_names.to_excel(results, sheet_name="Format Names")
-        format_ids.to_excel(results, sheet_name="Format IDs")
+        overview.to_excel(results, sheet_name="Group_Overview", index_label="Group")
+        format_types.to_excel(results, sheet_name="Format_Types")
+        format_names.to_excel(results, sheet_name="Format_Names")
+        format_ids.to_excel(results, sheet_name="Format_IDs")
 
 
 def spreadsheet_group_overlap(df_group, output_folder):
@@ -389,9 +389,9 @@ def spreadsheet_group_overlap(df_group, output_folder):
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Group-Overlap.xlsx")) as results:
-        groups_per_type.to_excel(results, sheet_name="Groups per Type")
-        groups_per_name.to_excel(results, sheet_name="Groups per Name")
-        groups_per_id.to_excel(results, sheet_name="Groups per Format ID")
+        groups_per_type.to_excel(results, sheet_name="Groups_per_Type")
+        groups_per_name.to_excel(results, sheet_name="Groups_per_Name")
+        groups_per_id.to_excel(results, sheet_name="Groups_per_Format_ID")
 
 
 def spreadsheet_ranges(df_group, output_folder):
@@ -410,10 +410,10 @@ def spreadsheet_ranges(df_group, output_folder):
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, f"ARCHive-Formats-Analysis_Ranges.xlsx")) as results:
-        format_name_ranges.to_excel(results, sheet_name="Format Name Ranges", index_label="File_ID Count Range")
-        format_name_sizes.to_excel(results, sheet_name="Format Name Sizes", index_label="Size Range")
-        format_id_ranges.to_excel(results, sheet_name="Format ID Ranges", index_label="File_ID Count Range")
-        format_id_sizes.to_excel(results, sheet_name="Format ID Sizes", index_label="Size Range")
+        format_name_ranges.to_excel(results, sheet_name="Format_Name_Ranges", index_label="File_ID Count Range")
+        format_name_sizes.to_excel(results, sheet_name="Format_Name_Sizes", index_label="Size Range")
+        format_id_ranges.to_excel(results, sheet_name="Format_ID_Ranges", index_label="File_ID Count Range")
+        format_id_sizes.to_excel(results, sheet_name="Format_ID_Sizes", index_label="Size Range")
 
 
 def spreadsheet_risk(df_group, output_folder):
@@ -451,11 +451,11 @@ def spreadsheet_risk(df_group, output_folder):
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
     with pd.ExcelWriter(os.path.join(output_folder, "ARCHive-Formats-Analysis_Risk.xlsx")) as results:
-        archive_risk.to_excel(results, sheet_name="ARCHive Risk Overview", index=False)
-        dept_risk.to_excel(results, sheet_name="Department Risk Overview", index=False)
-        type_risk.to_excel(results, sheet_name="Format Type Risk", index=False)
-        plan_risk.to_excel(results, sheet_name="NARA Plan Type Risk", index=False)
-        match.to_excel(results, sheet_name="NARA Match Types", index=False)
+        archive_risk.to_excel(results, sheet_name="ARCHive_Risk_Overview", index=False)
+        dept_risk.to_excel(results, sheet_name="Department_Risk_Overview", index=False)
+        type_risk.to_excel(results, sheet_name="Format_Type_Risk", index=False)
+        plan_risk.to_excel(results, sheet_name="NARA_Plan_Type_Risk", index=False)
+        match.to_excel(results, sheet_name="NARA_Match_Types", index=False)
 
 
 if __name__ == '__main__':

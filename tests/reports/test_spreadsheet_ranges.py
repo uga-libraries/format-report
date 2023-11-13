@@ -32,10 +32,10 @@ class MyTestCase(unittest.TestCase):
         # Reading all the sheets at once so the Excel file can be closed,
         # allowing it to be deleted even if there are errors during the tests.
         result = pd.ExcelFile(os.path.join("spreadsheet_ranges", "ARCHive-Formats-Analysis_Ranges.xlsx"))
-        df_1 = pd.read_excel(result, "Format Name Ranges")
-        df_2 = pd.read_excel(result, "Format Name Sizes")
-        df_3 = pd.read_excel(result, "Format ID Ranges")
-        df_4 = pd.read_excel(result, "Format ID Sizes")
+        df_1 = pd.read_excel(result, "Format_Name_Ranges")
+        df_2 = pd.read_excel(result, "Format_Name_Sizes")
+        df_3 = pd.read_excel(result, "Format_ID_Ranges")
+        df_4 = pd.read_excel(result, "Format_ID_Sizes")
         result.close()
 
         # Tests if the Format Name Ranges sheet has the expected values.
