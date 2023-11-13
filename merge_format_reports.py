@@ -233,8 +233,10 @@ def csv_to_dataframe(csv_file):
         print("The CSV was read by ignoring encoding errors, so those characters are omitted from the dataframe.")
         df = pd.read_csv(csv_file, dtype=str, encoding_errors="ignore")
 
-    # Replaces any spaces in column names with underscores.
+    # Replaces any spaces in column names with underscores, and removes any parentheses.
     df.columns = df.columns.str.replace(" ", "_")
+    df.columns = df.columns.str.replace("(", "")
+    df.columns = df.columns.str.replace(")", "")
 
     # Adds a prefix to the NARA dataframe columns so the source of the data is clear when the data is combined.
     if "NARA" in csv_file:
