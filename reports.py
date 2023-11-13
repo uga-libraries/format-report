@@ -424,29 +424,29 @@ def spreadsheet_risk(df_group, output_folder):
     """
     # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-    df_group['NARA_Risk Level'] = pd.Categorical(df_group['NARA_Risk Level'], risk_order, ordered=True)
+    df_group['NARA_Risk_Level'] = pd.Categorical(df_group['NARA_Risk_Level'], risk_order, ordered=True)
 
     # Makes a new column to classify the type of NARA preservation action plan.
-    conditions = [(df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
-                  df_group['NARA_Proposed Preservation Plan'].isnull(),
-                  df_group['NARA_Proposed Preservation Plan'] == "Retain",
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
-                  (df_group['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df_group['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
+    conditions = [(df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Depends on version")),
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Further research is required")),
+                  df_group['NARA_Proposed_Preservation_Plan'].isnull(),
+                  df_group['NARA_Proposed_Preservation_Plan'] == "Retain",
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Retain ")),
+                  (df_group['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df_group['NARA_Proposed_Preservation_Plan'].str.startswith("Transform"))]
     plan_type = ["Depends on version", "Further research required", "No plan", "Retain", "Retain but act", "Transform"]
     df_group["NARA_Plan_Type"] = np.select(conditions, plan_type)
 
     # Calculates the dataframe for each risk summary.
     # The first four are the amount at each NARA risk level for different categories of data
     # and the last is the match method between format identifications and NARA risk.
-    archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
-    dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
-    type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
-    plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+    archive_risk = groupby_risk(df_group, ['NARA_Risk_Level'])
+    dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk_Level'])
+    type_risk = groupby_risk(df_group, ['Format_Type', 'NARA_Risk_Level'])
+    plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk_Level'])
     match = groupby_risk(df_group, ['NARA_Match_Type'])
 
     # Saves each dataframe as a separate sheet in an Excel spreadsheet.
