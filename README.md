@@ -33,6 +33,11 @@ following the accessioning script https://github.com/uga-libraries/accessioning-
 
 
 5. Run the reports.py script to make an Excel workbook with analysis of the format data.
- 
+
        python /path/reports.py report_folder
 
+
+6. Run the department_reports.py script to make an Excel workbook with analysis of each department's format data.
+Can skip step 5 to only generate department reports.
+
+       python path/department_reports.py archive_formats_by_aip_csv

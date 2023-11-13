@@ -1,0 +1,4 @@
+Group,Collection,AIP,Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note,NARA_Format Name,NARA_PRONOM URL,NARA_Risk Level,NARA_Proposed Preservation Plan,NARA_Match_Type
+russell,rbrl459,rbrl-459-er-000072,spreadsheet,Lotus 1-2-3,Lotus 1-2-3 wk4 document data|NO VALUE|NO VALUE,Lotus 1-2-3 wk4 document data,NO VALUE,NO VALUE,NO VALUE,NO VALUE,Lotus 1-2-3 Worksheet 4.0,https://www.nationalarchives.gov.uk/pronom/x-fmt/116,Moderate Risk,Transform to CSV or XLSX,Format Name (Manual)
+russell,rbrl377,rbrl-377-er-000001,image,Macromedia Flash,SWF|NO VALUE|NO VALUE,SWF,NO VALUE,NO VALUE,NO VALUE,NO VALUE,Macromedia Flash unspecified version,,Moderate Risk,Retain,Format Name (Manual)
+russell,rbrl455,rbrl-455-er-000069,database,Quicken,Quicken Data File|NO VALUE|x-fmt/213,Quicken Data File,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/213,NO VALUE,No Match,,No Match,,No NARA Match
