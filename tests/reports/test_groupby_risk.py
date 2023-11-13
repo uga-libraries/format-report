@@ -20,19 +20,19 @@ def update_dataframe(df):
     """
     # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
-    df['NARA_Risk Level'] = pd.Categorical(df['NARA_Risk Level'], risk_order, ordered=True)
+    df['NARA_Risk_Level'] = pd.Categorical(df['NARA_Risk_Level'], risk_order, ordered=True)
 
     # Makes a new column to classify the type of NARA preservation action plan.
-    conditions = [(df['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df['NARA_Proposed Preservation Plan'].str.startswith("Depends on version")),
-                  (df['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df['NARA_Proposed Preservation Plan'].str.startswith("Further research is required")),
-                  df['NARA_Proposed Preservation Plan'].isnull(),
-                  df['NARA_Proposed Preservation Plan'] == "Retain",
-                  (df['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df['NARA_Proposed Preservation Plan'].str.startswith("Retain ")),
-                  (df['NARA_Proposed Preservation Plan'].notnull()) &
-                  (df['NARA_Proposed Preservation Plan'].str.startswith("Transform"))]
+    conditions = [(df['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df['NARA_Proposed_Preservation_Plan'].str.startswith("Depends on version")),
+                  (df['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df['NARA_Proposed_Preservation_Plan'].str.startswith("Further research is required")),
+                  df['NARA_Proposed_Preservation_Plan'].isnull(),
+                  df['NARA_Proposed_Preservation_Plan'] == "Retain",
+                  (df['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df['NARA_Proposed_Preservation_Plan'].str.startswith("Retain ")),
+                  (df['NARA_Proposed_Preservation_Plan'].notnull()) &
+                  (df['NARA_Proposed_Preservation_Plan'].str.startswith("Transform"))]
     plan_type = ["Depends on version", "Further research required", "No plan", "Retain", "Retain but act", "Transform"]
     df["NARA_Plan_Type"] = np.select(conditions, plan_type)
 
@@ -51,11 +51,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
+        archive_risk = groupby_risk(df_group, ['NARA_Risk_Level'])
 
         # Tests if archive_risk has the expected values.
         result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
-        expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Low Risk", 3507, 39915.92, 8],
                     ["Moderate Risk", 29822, 257532.89, 5],
                     ["High Risk", 343, 140.25, 7],
@@ -72,11 +72,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
+        archive_risk = groupby_risk(df_group, ['NARA_Risk_Level'])
 
         # Tests if archive_risk has the expected values.
         result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
-        expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Low Risk", 5859, 41406.76, 7],
                     ["Moderate Risk", 35487, 604509.15, 10],
                     ["High Risk", 1964, 140.74, 10],
@@ -93,11 +93,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        archive_risk = groupby_risk(df_group, ['NARA_Risk Level'])
+        archive_risk = groupby_risk(df_group, ['NARA_Risk_Level'])
 
         # Tests if archive_risk has the expected values.
         result = [archive_risk.columns.tolist()] + archive_risk.values.tolist()
-        expected = [["NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Low Risk", 9285, 41548.58, 18],
                     ["Moderate Risk", 0, 0.0, 0],
                     ["High Risk", 191, 0.01, 6],
@@ -114,11 +114,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
+        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk_Level'])
 
         # Tests if dept_risk has the expected values.
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Group", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["hargrett", "Low Risk", 1327, 0.82, 4],
                     ["hargrett", "Moderate Risk", 949, 0.14, 5],
                     ["hargrett", "High Risk", 19, 0, 1],
@@ -135,11 +135,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
+        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk_Level'])
 
         # Tests if dept_risk has the expected values.
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Group", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["bmac", "Low Risk", 122, 39775.16, 1],
                     ["bmac", "Moderate Risk", 0, 0.0, 0],
                     ["bmac", "High Risk", 0, 0.0, 0],
@@ -164,11 +164,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk Level'])
+        dept_risk = groupby_risk(df_group, ['Group', 'NARA_Risk_Level'])
 
         # Tests if dept_risk has the expected values.
         result = [dept_risk.columns.tolist()] + dept_risk.values.tolist()
-        expected = [["Group", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Group", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["bmac", "Low Risk", 122, 39775.16, 1],
                     ["bmac", "Moderate Risk", 30235, 262809.42, 4],
                     ["bmac", "High Risk", 0, 0.0, 0],
@@ -197,7 +197,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
-        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Match_Type", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Format Name", 60, 0.01, 2],
                     ["No NARA Match", 399, 138.12, 6],
                     ["PRONOM", 1487, 138.14, 8],
@@ -219,7 +219,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
-        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Match_Type", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Format Name", 48, 0.0, 1],
                     ["PRONOM", 565, 0, 1],
                     ["PRONOM and Name", 33, 0.47, 1]]
@@ -239,7 +239,7 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if match has the expected values.
         result = [match.columns.tolist()] + match.values.tolist()
-        expected = [["NARA_Match_Type", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Match_Type", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["PRONOM and Version", 5123, 4.62, 4]]
         self.assertEqual(result, expected, "Problem with the test for one match")
 
@@ -253,11 +253,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk_Level'])
 
         # Tests if plan_risk has the expected values.
         result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
-        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Plan_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Further research required", "Low Risk", 168, 2.0, 1],
                     ["Further research required", "Moderate Risk", 0, 0.0, 0],
                     ["Further research required", "High Risk", 4041, 1289.38, 1],
@@ -290,11 +290,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk_Level'])
 
         # Tests if plan_risk has the expected values.
         result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
-        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Plan_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Depends on version", "Low Risk", 166, 1.25, 1],
                     ["Depends on version", "Moderate Risk", 0, 0.0, 0],
                     ["Depends on version", "High Risk", 0, 0.0, 0],
@@ -331,11 +331,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk Level'])
+        plan_risk = groupby_risk(df_group, ['NARA_Plan_Type', 'NARA_Risk_Level'])
 
         # Tests if plan_risk has the expected values.
         result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
-        expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["NARA_Plan_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["Retain", "Low Risk", 5589, 6.2, 5],
                     ["Retain", "Moderate Risk", 622, 0.0, 3],
                     ["Retain", "High Risk", 381, 0.04, 1],
@@ -351,11 +351,11 @@ class MyTestCase(unittest.TestCase):
         df_group = pd.read_csv(os.path.join("groupby_risk", "archive_formats_by_group_2013-01.csv"))
 
         # Runs the function being tested.
-        type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
+        type_risk = groupby_risk(df_group, ['Format_Type', 'NARA_Risk_Level'])
 
         # Tests if type_risk has the expected values.
         result = [type_risk.columns.tolist()] + type_risk.values.tolist()
-        expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Format_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["image", "Low Risk", 13375, 41414.64, 18],
                     ["image", "Moderate Risk", 2579, 4.02, 8]]
         self.assertEqual(result, expected, "Problem with the test for one type")
@@ -370,11 +370,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
+        type_risk = groupby_risk(df_group, ['Format_Type', 'NARA_Risk_Level'])
 
         # Tests if type_risk has the expected values.
         result = [type_risk.columns.tolist()] + type_risk.values.tolist()
-        expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Format_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["application", "Low Risk", 0, 0.0, 0],
                     ["application", "Moderate Risk", 0, 0.0, 0],
                     ["application", "High Risk", 141, 0.04, 5],
@@ -399,11 +399,11 @@ class MyTestCase(unittest.TestCase):
         df_group = update_dataframe(df_group)
 
         # Runs the function being tested.
-        type_risk = groupby_risk(df_group, ['Format Type', 'NARA_Risk Level'])
+        type_risk = groupby_risk(df_group, ['Format_Type', 'NARA_Risk_Level'])
 
         # Tests if type_risk has the expected values.
         result = [type_risk.columns.tolist()] + type_risk.values.tolist()
-        expected = [["Format Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+        expected = [["Format_Type", "NARA_Risk_Level", "File_IDs", "Size_GB", "Format_Identifications"],
                     ["audio", "Low Risk", 0, 0.0, 0],
                     ["audio", "Moderate Risk", 0, 0.0, 0],
                     ["audio", "High Risk", 1166, 1065.99, 1],

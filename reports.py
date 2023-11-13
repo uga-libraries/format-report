@@ -211,15 +211,15 @@ def groupby_risk(df_group, groupby_list):
     # Calculates the totals.
     # File IDs and Size (GB) are sums; Format Identification is the number of unique values.
     # The index is reset so that the groupby_list columns are maintained as columns and don't become the index.
-    aggregation_methods = {'File_IDs': 'sum', 'Size (GB)': 'sum', 'Format Identification': 'nunique'}
+    aggregation_methods = {'File_IDs': 'sum', 'Size_GB': 'sum', 'Format_Identification': 'nunique'}
     df = df_group.groupby(groupby_list).agg(aggregation_methods).reset_index()
 
     # Renames one of the columns, to reflect it being a total.
     # The other column names worked equally well as labels for the individual or aggregate data.
-    df.rename(columns=({'Format Identification': 'Format Identifications'}), inplace=True)
+    df.rename(columns=({'Format_Identification': 'Format_Identifications'}), inplace=True)
 
     # Rounds Size (GB) to 2 decimal places to make it easier to read.
-    df['Size (GB)'] = round(df['Size (GB)'], 2)
+    df['Size_GB'] = round(df['Size_GB'], 2)
 
     return df
 
