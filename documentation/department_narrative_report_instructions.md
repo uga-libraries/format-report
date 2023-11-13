@@ -16,7 +16,7 @@ When pasting a graph into the report document, right click and choose either "Em
 
 Update the date with the date that the ARCHive format report was downloaded for this analysis.
 
-Use copies of columns from the AIP Risk Data sheet to calculate the overview stats:
+Use copies of columns from the AIP_Risk_Data sheet to calculate the overview stats:
 - Number of collections: remove duplicates from the Collection column and get the row count.  
 - Number of AIPs: remove duplicates from the AIP column and get the row count.
 - Format counts 
@@ -28,7 +28,7 @@ Use copies of columns from the AIP Risk Data sheet to calculate the overview sta
 ### Risk Profile
 
 A pie chart with the percentage of formats at each risk level for the entire department.
-1. Make a copy of the Department Risk Levels sheet.
+1. Make a copy of the Department_Risk_Levels sheet.
 2. Remove the percentage from the risk column labels.
 3. Highlight the four risk level column labels and data row.
 4. Insert a pie chart.
@@ -38,8 +38,8 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 ### Risk Change
 
 A bar chart with the number of formats at each risk level from the previous analysis and current analysis.
-1. Copy the Department Risk Levels sheet from this analysis.
-2. Add the Department Risk Levels percentages from the previous analysis in the row above.
+1. Copy the Department_Risk_Levels sheet from this analysis.
+2. Add the Department_Risk_Levels percentages from the previous analysis in the row above.
 3. Remove the percentage from the risk column labels.
 4. Convert the percentages to numbers (divide by 100, multiply by the number of formats, and round to a whole number).
 5. Add a column with the year to the left of the risk columns. Do not give it a label.   
@@ -48,13 +48,13 @@ A bar chart with the number of formats at each risk level from the previous anal
 8. Change the chart title to "Format Risk Change".
 9. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
 10. Update the number of formats only in one analysis in the sentence above the chart.  
-    1. Only in previous: the number of unique formats in AIP Risk Data with risk change of "Unmatched".  
-    2. Only in current: the number of unique formats in AIP Risk Data with risk change of "New Format"
+    1. Only in previous: the number of unique formats in AIP_Risk_Data with risk change of "Unmatched".  
+    2. Only in current: the number of unique formats in AIP_Risk_Data with risk change of "New Format"
     
 ### Risk by Collection
 
 A bar chart with the percentage of each collection's formats at each risk level.
-1. Make a copy of the Collection Risk Levels sheet without the Formats column.
+1. Make a copy of the Collection_Risk_Levels sheet without the Formats column.
 2. Remove the "Collection" column label, and the percent from the risk column labels.
 3. Highlight the collection column, four risk level column labels and data rows.
 4. Insert a stacked column chart.
@@ -63,7 +63,7 @@ A bar chart with the percentage of each collection's formats at each risk level.
 ### AIP Format Variation
 
 A histogram with the number of AIPs with the same number of formats.  
-1. From AIP Risk Data, copy the AIP, Format_Name, and Format_Version columns.
+1. From AIP_Risk_Data, copy the AIP, Format_Name, and Format_Version columns.
 2. Remove duplicates across all three columns.
 4. Insert a pivot table with AIP as ROWS and Count of AIP as VALUES.
 5. Copy the pivot table and paste the values to be able to use as input for the histogram.
