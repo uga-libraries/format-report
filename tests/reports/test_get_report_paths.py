@@ -18,18 +18,19 @@ class MyTestCase(unittest.TestCase):
         Test for when all three expected reports are present in the reports folder.
         """
         # Runs the function being tested.
-        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths("correct_input")
+        report_folder_path = os.path.join("get_report_paths", "all_present")
+        formats_by_aip_report, formats_by_group_report, usage_report, missing = get_report_paths(report_folder_path)
 
         # Tests that the value of formats_by_aip_report is correct.
-        expected = os.path.join("correct_input", "archive_formats_by_aip_2023-08.csv")
+        expected = os.path.join("get_report_paths", "all_present", "archive_formats_by_aip_2023-08.csv")
         self.assertEqual(formats_by_aip_report, expected, "Problem with test for all present, formats_by_aip")
 
         # Tests that the value of formats_by_group_report is correct.
-        expected = os.path.join("correct_input", "archive_formats_by_group_2023-08.csv")
+        expected = os.path.join("get_report_paths", "all_present", "archive_formats_by_group_2023-08.csv")
         self.assertEqual(formats_by_group_report, expected, "Problem with test for all present, formats")
 
         # Tests that the value of usage_report is correct.
-        expected = os.path.join("correct_input", "usage_report_20171101_20211101.csv")
+        expected = os.path.join("get_report_paths", "all_present", "usage_report_20171101_20211101.csv")
         self.assertEqual(usage_report, expected, "Problem with test for all present, usage")
 
         # Tests that the value of missing is correct.
