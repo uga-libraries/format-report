@@ -36,6 +36,7 @@ class MyTestCase(unittest.TestCase):
         archive_risk = pd.read_excel(result, "ARCHive Risk Overview")
         dept_risk = pd.read_excel(result, "Department Risk Overview")
         type_risk = pd.read_excel(result, "Format Type Risk")
+        plan_risk = pd.read_excel(result, "NARA Plan Type Risk")
         match = pd.read_excel(result, "NARA Match Types")
         result.close()
 
@@ -97,6 +98,31 @@ class MyTestCase(unittest.TestCase):
                          ["video", "High Risk", 35, 0.54, 2],
                          ["video", "No Match", 36, 0.01, 2]]
         self.assertEqual(type_result, type_expected, "Problem with the test for Format Type Risk")
+
+        # Tests if the NARA Plan Type Risk sheet has the expected values.
+        plan_result = [plan_risk.columns.tolist()] + plan_risk.values.tolist()
+        plan_expected = [["NARA_Plan_Type", "NARA_Risk Level", "File_IDs", "Size (GB)", "Format Identifications"],
+                         ["Further research required", "Low Risk", 1267, 339.72, 2],
+                         ["Further research required", "Moderate Risk", 36539, 605575.06, 7],
+                         ["Further research required", "High Risk", 168, 0.59, 6],
+                         ["Further research required", "No Match", 0, 0.0, 0],
+                         ["No plan", "Low Risk", 0, 0.0, 0],
+                         ["No plan", "Moderate Risk", 0, 0.0, 0],
+                         ["No plan", "High Risk", 0, 0.0, 0],
+                         ["No plan", "No Match", 37, 0.01, 3],
+                         ["Retain", "Low Risk", 3104, 2.01, 6],
+                         ["Retain", "Moderate Risk", 6, 0.0, 2],
+                         ["Retain", "High Risk", 0, 0.0, 0],
+                         ["Retain", "No Match", 0, 0.0, 0],
+                         ["Retain but act", "Low Risk", 218, 138.1, 1],
+                         ["Retain but act", "Moderate Risk", 2, 0.0, 1],
+                         ["Retain but act", "High Risk", 0, 0.0, 0],
+                         ["Retain but act", "No Match", 0, 0.0, 0],
+                         ["Transform", "Low Risk", 4, 0.0, 1],
+                         ["Transform", "Moderate Risk", 931, 0.06, 1],
+                         ["Transform", "High Risk", 0, 0.0, 0],
+                         ["Transform", "No Match", 0, 0.0, 0]]
+        self.assertEqual(plan_result, plan_expected, "Problem with the test for NARA PLan Type Risk")
 
         # Tests if the NARA Match Types sheet has the expected values.
         match_result = [match.columns.tolist()] + match.values.tolist()
