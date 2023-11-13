@@ -123,20 +123,20 @@ def format_id_frequency(totals, df_group):
     interest are the most common formats. """
 
     # Make series for file_id counts and file_id percentages.
-    format_count = df_group.groupby(df_group["Format Identification"])["File_IDs"].sum()
-    format_percentage = (format_count / totals["Files"]) * 100
+    format_count = df_group.groupby(df_group['Format_Identification'])['File_IDs'].sum()
+    format_percentage = (format_count / totals['Files']) * 100
     format_percentage = round(format_percentage, 2)
-    format_percentage = format_percentage.rename("File_IDs Percentage")
+    format_percentage = format_percentage.rename('File_IDs_Percentage')
 
     # Make series for total size and size percentages.
-    size = df_group.groupby(df_group["Format Identification"])["Size (GB)"].sum()
-    size_percentage = (size / totals["Size"]) * 100
+    size = df_group.groupby(df_group['Format_Identification'])['Size_GB'].sum()
+    size_percentage = (size / totals['Size']) * 100
     size_percentage = round(size_percentage, 2)
-    size_percentage = size_percentage.rename("Size (GB) Percentage")
+    size_percentage = size_percentage.rename('Size_GB_Percentage')
 
     # Combine all the series into a single dataframe and sort largest to smallest by file_ids.
     format_ids = pd.concat([format_count, format_percentage, size, size_percentage], axis=1)
-    format_ids = format_ids.sort_values(by="File_IDs", ascending=False)
+    format_ids = format_ids.sort_values(by='File_IDs', ascending=False)
 
     # Returns the dataframe. Row index is the file_ids and columns are the four frequency measures.
     return format_ids

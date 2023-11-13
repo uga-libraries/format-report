@@ -27,7 +27,7 @@ class MyTestCase(unittest.TestCase):
         result = [format_ids.columns.tolist()] + format_ids.reset_index().values.tolist()
 
         # Tests if the function output has the expected values.
-        expected = [["File_IDs", "File_IDs Percentage", "Size (GB)", "Size (GB) Percentage"],
+        expected = [["File_IDs", "File_IDs_Percentage", "Size_GB", "Size_GB_Percentage"],
                     ["Tagged Image File Format|6|fmt/353", 735, 32.10, 1540.2, 46.29],
                     ["Matroska|NO VALUE|NO VALUE", 645, 28.17, 1487.702, 44.72],
                     ["JPEG EXIF|2.1|x-fmt/390", 195, 8.52, 130.0, 3.91]]
