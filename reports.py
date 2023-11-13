@@ -350,16 +350,16 @@ def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
     # Saves totals to a dictionary for calculating percentages in other dataframes.
     # Use these totals each time so collection and AIP counts aren't inflated by multiple identifications.
     # Counts for file and size are inflated because don't have file name in the data and therefore can't deduplicate.
-    totals_dict = {"Collections": overview["Collections"]["total"],
-                   "AIPs": overview["AIPs"]["total"],
-                   "Files": overview["File_IDs"]["total"],
-                   "Size": overview["Size (GB) Inflated"]["total"]}
+    totals_dict = {'Collections': overview['Collections']['total'],
+                   'AIPs': overview['AIPs']['total'],
+                   'Files': overview['File_IDs']['total'],
+                   'Size': overview['Size_GB_Inflated']['total']}
 
     # Makes the format type summary (collection, AIP, file_id, and size counts and percentages).
-    format_types = one_category("Format Type", totals_dict, df_aip, df_group)
+    format_types = one_category("Format_Type", totals_dict, df_aip, df_group)
 
     # Makes the format standardized name summary (collection, AIP, file_id, and size counts and percentages).
-    format_names = one_category("Format Standardized Name", totals_dict, df_aip, df_group)
+    format_names = one_category("Format_Standardized_Name", totals_dict, df_aip, df_group)
 
     # Makes a format identifications summary (file_id and size count and percentage).
     format_ids = format_id_frequency(totals_dict, df_group)
