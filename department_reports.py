@@ -212,10 +212,10 @@ def risk_levels(dept_df, index_column):
 
     # Calculates the percentage of formats at each risk level for each row, rounded to 2 decimal places.
     # Columns are in order from high-low risk.
-    risk['No Match %'] = round(risk['No Match'] / risk['Formats'] * 100, 2)
-    risk['High Risk %'] = round(risk['High Risk'] / risk['Formats'] * 100, 2)
-    risk['Moderate Risk %'] = round(risk['Moderate Risk'] / risk['Formats'] * 100, 2)
-    risk['Low Risk %'] = round(risk['Low Risk'] / risk['Formats'] * 100, 2)
+    risk['No_Match_%'] = round(risk['No Match'] / risk['Formats'] * 100, 2)
+    risk['High_Risk_%'] = round(risk['High Risk'] / risk['Formats'] * 100, 2)
+    risk['Moderate_Risk_%'] = round(risk['Moderate Risk'] / risk['Formats'] * 100, 2)
+    risk['Low_Risk_%'] = round(risk['Low Risk'] / risk['Formats'] * 100, 2)
 
     # Removes the columns with format counts, now that the percentages are calculated.
     risk.drop(['No Match', 'High Risk', 'Moderate Risk', 'Low Risk'], axis=1, inplace=True)
