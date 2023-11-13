@@ -1,4 +1,4 @@
-Group,File_IDs,Size (GB),Format Type,Format Standardized Name,Format Identification,Format Name,Format Version,Registry Name,Registry Key,Format Note
+Group,File_IDs,Size_GB,Format_Type,Format_Standardized_Name,Format_Identification,Format_Name,Format_Version,Registry_Name,Registry_Key,Format_Note
 dlg,581,69.2,design,CorelDraw Compressed Drawing,CorelDraw Compressed Drawing|NO VALUE|x-fmt/31,CorelDraw Compressed Drawing,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,x-fmt/31,NO VALUE
 dlg,300,20,image,DNG,Digital Negative|NO VALUE|fmt/436,Digital Negative,NO VALUE,https://www.nationalarchives.gov.uk/PRONOM,fmt/436,NO VALUE
 dlg,1,662.702,application,Unknown Binary,Unknown Binary|NO VALUE|NO VALUE,Unknown Binary,NO VALUE,NO VALUE,NO VALUE,NO VALUE
