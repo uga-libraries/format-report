@@ -1,6 +1,7 @@
  # ARCHive Format Analysis Workflow
  
 ## Overview and Purpose
+
 The Head of Digital Stewardship analyzes the formats in ARCHive every two years 
 to monitor for preservation risks based on format.
 The data is summarized across all our holdings and, starting in 2023, for each department.
@@ -8,6 +9,7 @@ The [NARA Digital Preservation Plan spreadsheet](https://github.com/usnationalar
 is used to assign risks to our formats.
 
 ## Data Gathering
+
 Data is exported from ARCHive on or around November 1, at a time that no new content is being ingested into the system.
 
 1. Create a folder in DCWG Teams [ARCHive > Format Analysis] named with the year for all documentation.
@@ -32,6 +34,7 @@ and save it to the folder for this year's Format Analysis (but not in archive_re
 5. Download a copy of all the data to your local machine to run the scripts for the next steps.
 
 ## Format Standardization
+
 In this step, find new formats since the last analysis and add them to the standardization spreadsheet.
 
 Each format in ARCHive is assigned a format type and format name to better reveal trends.
@@ -51,6 +54,7 @@ and record that in the appropriate columns of standardize_formats.csv.
 4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 ## Combine Department Data
+
 In this step, combine format data from all the ARCHive groups into one spreadsheet,
 and add collections, standardized format type and name, and NARA preservation information.
 
