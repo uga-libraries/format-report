@@ -3,6 +3,9 @@
 Use these guidelines for assigning format types and format standardized names to new formats encountered in our holdings. 
 Add these to standardize_formats.csv in this repo.
 
+If there is already another version of a format in standardize_formats.csv, 
+use the same format type and format standardized name.
+
 
 ## Format Type
 Format type starts with MIME type categories, with additional types added where more nuance is needed for meaningful results. 
