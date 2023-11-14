@@ -75,5 +75,17 @@ When adding a match, in the NARA_Match_Type column use the same categories as th
 3. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
 
 ## Create ARCHive Reports
+
+In this step, make summaries of the merged format reports, and use those summaries to create a narrative report.
+
+1. Run the archive_reports.py script to generate four Excel spreadsheets with different types of summaries.
+The script has one argument, report_folder, which is the path to archive_reports. Script outputs:
+   - ARCHive-Formats-Analysis_Frequency.xlsx
+   - ARCHive-Formats-Analysis_Group-Overlap.xlsx
+   - ARCHive-Formats-Analysis_Ranges.xlsx
+   - ARCHive-Formats-Analysis_Risk.xlsx
+
+
+2. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
  
 ## Create Department Reports
