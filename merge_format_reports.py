@@ -59,7 +59,7 @@ def collection_from_aip(aip_id, group):
             if aip_id[5].isdigit():
                 return "peabody"
 
-            # The next three address errors with how the AIP ID was made.
+            # The next four address errors with how the AIP ID was made.
             elif aip_id.startswith("har-ms"):
                 coll_regex = re.match("(^har-ms[0-9]+)_", aip_id)
                 return coll_regex.group(1)
@@ -69,6 +69,9 @@ def collection_from_aip(aip_id, group):
 
             elif aip_id.startswith("bmac_wrdw_"):
                 return "wrdw-video"
+
+            elif aip_id.startswith("bmac_wsbn3"):
+                return "wsbn"
 
             # AIPs for this collection can start bmac_walb or bmac_walb-video
             elif aip_id.startswith("bmac_walb"):
