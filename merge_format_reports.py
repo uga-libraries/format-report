@@ -122,6 +122,10 @@ def collection_from_aip(aip_id, group):
             elif aip_id.startswith("batch_gu"):
                 return "dlg_ghn"
 
+            # Collection with dash as the delimiter instead of underscore.
+            elif aip_id.startswith("ugalaw_lspc"):
+                return "ugalaw_lspc"
+
             else:
                 coll_regex = re.match("^([a-z0-9-]*_[a-z0-9-]*)_", aip_id)
                 return coll_regex.group(1)
