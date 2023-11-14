@@ -53,6 +53,24 @@ and record that in the appropriate columns of standardize_formats.csv.
 4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 ## Combine Department Data
+In this step, combine format data from all the ARCHive groups into one spreadsheet,
+and add collections, standardized format type and name, and NARA preservation information.
+
+1. Run the merge_format_reports.py script to generate two spreadsheets with combined format data.
+The script has two arguments, report_folder, which is the path to archive_reports,
+and nara_csv, which is the path to NARA's Digital Preservation Plan Spreadsheet. Script outputs:
+   - archive_formats_by_aip_YYYYMM.csv has collection information
+   - archive_formats_by_group_YYYYMM.csv has file counts and size in GB
+   - Both reports have format information and NARA preservation information.
+
+
+2. Review the NARA matches. 
+If there were multiple possible matches to a single format, delete ones that do match as well.
+If there was no automatic match to NARA due to differences in spelling and abbreviations, add the match.
+When adding a match, in the NARA_Match_Type column use the same categories as the script but add (Manual) to the end.
+
+
+3. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
 
 ## Create ARCHive Reports 
  
