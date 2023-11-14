@@ -37,6 +37,13 @@ class MyTestCase(unittest.TestCase):
         collection_id = collection_from_aip("bmac_wrdw_0007", "bmac")
         self.assertEqual(collection_id, "wrdw-video", "Problem with bmac: wrdw")
 
+    def test_bmac_wsbn_three(self):
+        """
+        Test for an AIP ID that matches the pattern: starts with bmac_wsbn3
+        """
+        collection_id = collection_from_aip("bmac_wsbn39015", "bmac")
+        self.assertEqual(collection_id, "wsbn", "Problem with bmac: wsbn3")
+
     def test_bmac_walb(self):
         """
         Test for an AIP ID that matches the pattern: starts with bmac_walb
@@ -137,6 +144,13 @@ class MyTestCase(unittest.TestCase):
         """
         collection_id = collection_from_aip("batch_gua_athensgazette_archival", "dlg")
         self.assertEqual(collection_id, "dlg_ghn", "Problem with dlg: batch_gu")
+
+    def test_dlg_ugalaw(self):
+        """
+        Tests for an AIP ID that matches the pattern: starts with ugalaw_lspc
+        """
+        collection_id = collection_from_aip("ugalaw_lspc-fy21-22subgrant", "dlg")
+        self.assertEqual(collection_id, "ugalaw_lspc", "Problem with dlg: ugalaw")
 
     def test_dlg_general1(self):
         """
