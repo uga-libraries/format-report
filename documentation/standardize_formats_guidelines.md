@@ -11,25 +11,25 @@ and [digipres.org](https://www.digipres.org/formats/mime-types/).
  
 Types used (* indicates an official MIME type):
 
-| Type            |Explanation|
-|:----------------|:----|
-| application*    | Formats for computing components, e.g. fonts, filesystem data, user data.|
-| archive         | Packaging formats, e.g. Microsoft Cabinet, ZIP.|
-| audio*          ||
-| database        ||
-| design          | Formats for visual design, e.g. Adobe InDesign, CorelDraw.|
-| executables     | Scripts and source code.|
-| geographic_data ||
-| image*          ||
-| message*        | Email and other communication formats.|
-| model*          | Formats for 3D modeling.|
-| multipart*      | Format with multiple components. Only one we have (as of 11/2020) is AppleDouble Resource Fork.|
-| presentation    | Slides and other formats for supporting presentations.|
-| spreadsheet     | Spreadsheet software only. Plain tabular data (e.g. CSV, tab-delimited) are in text.
-| structured text | Marked up or tagged text, e.g. HTML, XML.|
-| text*           | Includes plain text formats, word processing formats, and PDF.|
-| video*          ||
-| web_archive     | Formats specific for capturing entire websites, e.g. WARC. Formats typically used for creating websites (e.g. CSS, HTML) are in structured text since their preservation needs are more similar to that type and some of these formats have other uses in addition to websites.|
+| Type            | Explanation                                                                                                                                                                                                                                                                     |
+|:----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| application*    | Formats for computing components, e.g. fonts, filesystem data, user data.                                                                                                                                                                                                       |
+| archive         | Packaging formats, e.g. Microsoft Cabinet, ZIP.                                                                                                                                                                                                                                 |
+| audio*          ||                                                                                                                                                                                                                                                                                 |
+| database        ||                                                                                                                                                                                                                                                                                 |
+| design          | Formats for visual design, e.g. Adobe InDesign, CorelDraw.                                                                                                                                                                                                                      |
+| executables     | Scripts and source code.                                                                                                                                                                                                                                                        |
+| geographic_data ||                                                                                                                                                                                                                                                                                 |
+| image*          ||                                                                                                                                                                                                                                                                                 |
+| message*        | Email and other communication formats.                                                                                                                                                                                                                                          |
+| model*          | Formats for 3D modeling.                                                                                                                                                                                                                                                        |
+| multipart*      | Format with multiple components. Only one we have (as of 11/2020) is AppleDouble Resource Fork.                                                                                                                                                                                 |
+| presentation    | Slides and other formats for supporting presentations.                                                                                                                                                                                                                          |
+| spreadsheet     | Spreadsheet software only. Plain tabular data (e.g. CSV, tab-delimited) are in text.                                                                                                                                                                                            |
+| structured text | Marked up or tagged text, e.g. HTML, XML.                                                                                                                                                                                                                                       |
+| text*           | Includes plain text formats, word processing formats, and PDF.                                                                                                                                                                                                                  |
+| video*          ||                                                                                                                                                                                                                                                                                 |
+| web_archive     | Formats specific for capturing entire websites, e.g. WARC. Formats typically used for creating websites (e.g. CSS, HTML) are in structured text since their preservation needs are more similar to that type and some of these formats have other uses in addition to websites. |
 
 In cases where a format is assigned to multiple MIME types, choose one:
 * If application or something else, pick something else.
