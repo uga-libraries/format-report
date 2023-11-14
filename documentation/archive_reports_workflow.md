@@ -53,6 +53,10 @@ and record that in the appropriate columns of standardize_formats.csv.
 
 4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
+
+5. Move new_formats.txt to the Format Analysis folder in Teams for this year.
+It can be deleted at the end of the analysis, but is can be useful during the process to review which formats are new.
+
 ## Combine Department Data
 
 In this step, combine format data from all the ARCHive groups into one spreadsheet,
