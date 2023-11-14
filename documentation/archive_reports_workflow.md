@@ -40,21 +40,26 @@ In this step, find new formats since the last analysis and add them to the stand
 Each format in ARCHive is assigned a format type and format name to better reveal trends.
 Format type is based on MIME type and format name is based on PRONOM, with local rules to make them more useful.
 
-1. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules.
+1. Make a new branch in the format-report repo for changes needed to work with this data.
+This can include adding information for new formats and AIP ID structures, 
+and fixing things that new data variations break.
+
+
+2. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules.
 The script has one argument, report_folder, which is the path to archive_reports on your local machine.
 
 
-2. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
+3. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
 
 
-3. Use the [guidelines for standardizing formats](standardize_formats_guidelines.md) to assign a type and name to each format
+4. Use the [guidelines for standardizing formats](standardize_formats_guidelines.md) to assign a type and name to each format
 and record that in the appropriate columns of standardize_formats.csv.
 
 
-4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
+5. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 
-5. Move new_formats.txt to the Format Analysis folder in Teams for this year.
+6. Move new_formats.txt to the Format Analysis folder in Teams for this year.
 It can be deleted at the end of the analysis, but is can be useful during the process to review which formats are new.
 
 ## Combine Department Data
