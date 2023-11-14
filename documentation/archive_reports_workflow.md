@@ -89,3 +89,12 @@ The script has one argument, report_folder, which is the path to archive_reports
 2. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
  
 ## Create Department Reports
+
+In this step, make format risk summaries of the merged format reports for each department (ARCHive group).
+
+1. Run the department_reports.py script to generate one Excel spreadsheet per department. 
+The script has two arguments, current_formats_csv, which is the path to the by_aip merged report from this year,
+and previous_formats_csv, which is the path to the by_aip merged report from a previous year.
+
+
+2. Make a narrative report for each department using the [Department Narrative Report Instructions](department_narrative_report_instructions.md).
