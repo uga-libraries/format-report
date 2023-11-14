@@ -32,6 +32,25 @@ and save it to the folder for this year's Format Analysis (but not in archive_re
 5. Download a copy of all the data to your local machine to run the scripts for the next steps.
 
 ## Format Standardization
+In this step, find new formats since the last analysis and add them to the standardization spreadsheet.
+
+Each format in ARCHive is assigned a format type and format name to better reveal trends.
+Format type is based on MIME type and format name is based on PRONOM, with local rules to make them more useful.
+
+1. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules.
+The script has one argument, report_folder, which is the path to archive_reports on your local machine. 
+To run the script via the command line:   
+`python update_standardization.py report_folder`
+
+
+2. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
+
+
+3. Use the [guidelines for standardizing formats](standardize_formats_guidelines.md) to assign a type and name to each format
+and record that in the appropriate columns of standardize_formats.csv.
+
+
+4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 ## Combine Department Data
 
