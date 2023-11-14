@@ -393,7 +393,7 @@ def read_report(report_path):
     regex = re.match(".*file_formats_(.*).csv", report_path)
     archive_group = regex.group(1)
 
-    with open(report_path, "r") as open_report:
+    with open(report_path, "r", encoding="utf-8") as open_report:
         report_info = csv.reader(open_report)
 
         # Skips the header.
