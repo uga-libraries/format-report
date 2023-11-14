@@ -1,7 +1,7 @@
 ﻿# Standardization Guidelines
 
 Use these guidelines for assigning format types and format standardized names to new formats encountered in our holdings. 
-Add these to [standardize_formats.csv](standardize_formats.csv).
+Add these to standardize_formats.csv in this repo.
 
 
 ## Format Type
