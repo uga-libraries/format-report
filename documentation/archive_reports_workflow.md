@@ -38,9 +38,7 @@ Each format in ARCHive is assigned a format type and format name to better revea
 Format type is based on MIME type and format name is based on PRONOM, with local rules to make them more useful.
 
 1. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules.
-The script has one argument, report_folder, which is the path to archive_reports on your local machine. 
-To run the script via the command line:   
-`python update_standardization.py report_folder`
+The script has one argument, report_folder, which is the path to archive_reports on your local machine.
 
 
 2. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
@@ -72,6 +70,6 @@ When adding a match, in the NARA_Match_Type column use the same categories as th
 
 3. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
 
-## Create ARCHive Reports 
+## Create ARCHive Reports
  
 ## Create Department Reports
