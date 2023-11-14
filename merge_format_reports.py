@@ -241,9 +241,13 @@ def csv_to_dataframe(csv_file):
     df.columns = df.columns.str.replace("(", "")
     df.columns = df.columns.str.replace(")", "")
 
-    # Adds a prefix to the NARA dataframe columns so the source of the data is clear when the data is combined.
+    # Adds a prefix to the NARA dataframe columns that don't already start with NARA
+    # so the source of the data is clear when the data is combined.
     if "NARA" in csv_file:
-        df = df.add_prefix("NARA_")
+        df.rename(columns={"Format_Name": "NARA_Format_Name",
+                           "File_Extensions": "NARA_File_Extensions",
+                           "PRONOM_URL": "NARA_PRONOM_URL",
+                           "Description_and_Justification": "NARA_Description_and_Justification"}, inplace=True)
 
     return df
 
