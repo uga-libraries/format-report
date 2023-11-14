@@ -51,7 +51,7 @@ def format_check(report_folder_path):
             continue
 
         # Reads the data from each ARCHive group format report, which is a CSV with a header row.
-        with open(os.path.join(report_folder_path, format_report)) as formats:
+        with open(os.path.join(report_folder_path, format_report), encoding="utf-8") as formats:
             read_formats = csv.reader(formats)
             next(read_formats)
 
