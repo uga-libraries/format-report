@@ -188,6 +188,8 @@ Interleaf Document,Interleaf Document,design
 Internet Explorer cache file version Ver 3.2,Internet Explorer cache file,application
 Internet Explorer cache file version Ver 5.2,Internet Explorer cache file,application
 ISO 9660 CD-ROM filesystem data,ISO 9660 CD-ROM filesystem data,application
+"ISO Media, MPEG v4 system, 3GPP JVT AVC",ISO Media,video
+"ISO Media, MPEG v4 system, iTunes AVC-LC",ISO Media,video
 "ISO Media, MPEG v4 system, version 1",ISO Media,video
 Java Archive Format,Java Archive Format,archive
 JavaScript file,JavaScript file,executable
@@ -321,6 +323,7 @@ ms-windows metafont .wmf,MS Windows metafont,application
 Musical Instrument Digital Interface,Musical Instrument Digital Interface,audio
 MXF,MXF,video
 NEF EXIF,NEF EXIF,image
+news or mail text,News or mail,message
 "news or mail, ASCII text, with CRLF line terminators",News or mail,message
 "news or mail, ASCII text, with no line terminators",News or mail,message
 "news or mail, ASCII text, with very long lines, with CRLF line terminators",News or mail,message
@@ -378,6 +381,7 @@ PKCS #7 Crytographic message file,PKCS #7 Crytographic Message File,message
 pkf,PKF,application
 Plain text,Plain Text File,text
 PLIST,PLIST,application
+PNG EXIF,PNG,image
 Portable Document Format,PDF,text
 Portable Network Graphics,PNG,image
 Postscript,PostScript,design
@@ -413,11 +417,13 @@ StuffIt Archive,StuffIt Archive File,archive
 SWF,Macromedia Flash,image
 Tagged Image File Format,TIFF,image
 Tagged Image File Format for Electronic Photography (TIFF/EP),TIFF,image
+Tagged Image File Format for Image Technology (TIFF/IT),TIFF,image
 Text Configuration file,Text Configuration file,application
 Thumbs DB file,Thumbs DB file,application
 tid,AVCHD Thumbnail Index File,video
 TIFF,TIFF,image
 TIFF Baseline bilevel (Class B),TIFF,image
+TIFF Baseline GeoTIFF 1.0,TIFF,image
 TIFF Baseline palette-color (Class P),TIFF,image
 TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color,TIFF,image
 TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: grayscale and white,TIFF,image
@@ -437,6 +443,19 @@ Verity Collection Index Descriptor File,Verity Collection,application
 VISX image file,VisX Image Format,image
 VOB,Video Object File,video
 WARC,WARC,web_archive
+WARC Archive version 1.0\015,WARC,web_archive
+WARC Archive version 1.0\015grams\@Ò\177B®,WARC,web_archive
+WARC Archive version 1.0\015grams\\034;Â,WARC,web_archive
+WARC Archive version 1.0\015grams\¿‚:óXŠ,WARC,web_archive
+WARC Archive version 1.0\015grams\”0þ¿J?,WARC,web_archive
+WARC Archive version 1.0\015grams\§ÂwKs¶,WARC,web_archive
+WARC Archive version 1.0\015grams\½Šß0JŽ,WARC,web_archive
+WARC Archive version 1.0\015grams\DWºY¬À,WARC,web_archive
+WARC Archive version 1.0\015grams\ê%ÔèÒd,WARC,web_archive
+WARC Archive version 1.0\015grams\é\0266Š‹,WARC,web_archive
+"WARC Archive version 1.0\015grams\õ""ÐÔJŒ",WARC,web_archive
+WARC Archive version 1.0\015grams\ŽP~¬ºà,WARC,web_archive
+wav,Waveform Audio,audio
 Wave,WAVE,audio
 Waveform Audio,Waveform Audio,audio
 Web Open Font Format,Web Open Font Format,application
