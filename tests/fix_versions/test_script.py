@@ -17,7 +17,8 @@ class MyTestCase(unittest.TestCase):
         """
         Deletes the updated CSVs produced by the test, if made.
         """
-        paths = [os.path.join("script", "archive_formats_by_aip_2023-11.csv")]
+        paths = [os.path.join("script", "archive_formats_by_aip_2023-11.csv"),
+                 os.path.join("script", "archive_formats_by_group_2023-11.csv")]
         for path in paths:
             if os.path.exists(path):
                 os.remove(path)
@@ -100,6 +101,79 @@ class MyTestCase(unittest.TestCase):
                      "https://www.nationalarchives.gov.uk/PRONOM", "fmt/134", "NO VALUE", "MPEG-1 Audio Layer 3",
                      "https://www.nationalarchives.gov.uk/pronom/fmt/134", "Low Risk", "Transform to BWF", "PRONOM"]]
         self.assertEqual(result, expected, "Problem with test for by_aip CSV")
+
+    def test_by_group(self):
+        """
+        Test for running the script with correct input for a "by_group" CSV.
+        """
+        # Makes a copy of the CSV for this test, since the test will edit the CSV.
+        csv_original = os.path.join("script", "archive_formats_by_group.csv")
+        csv_test = os.path.join("script", "archive_formats_by_group_2023-11.csv")
+        shutil.copy(csv_original, csv_test)
+
+        # Runs the script
+        script_path = os.path.join("..", "..", "fix_versions.py")
+        subprocess.run(f"python {script_path} {csv_test}", shell=True)
+
+        # Tests that the updated test CSV has the expected values.
+        df = pd.read_csv(csv_test)
+        result = [df.columns.tolist()] + df.values.tolist()
+        expected = [["Group", "File_IDs", "Size_GB", "Format_Type", "Format_Standardized_Name", "Format_Identification",
+                     "Format_Name", "Format_Version", "Registry_Name", "Registry_Key", "Format_Note",
+                     "NARA_Format_Name", "NARA_PRONOM_URL", "NARA_Risk_Level", "NARA_Proposed_Preservation_Plan",
+                     "NARA_Match_Type"],
+                    ["hargrett", 63, 0.005, "text", "Microsoft Word",
+                     "Microsoft Word Binary File Format|97-2003|fmt/40", "Microsoft Word Binary File Format",
+                     "97-2003", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "NO VALUE",
+                     "Microsoft Word for Windows 97-2003", "https://www.nationalarchives.gov.uk/pronom/fmt/40",
+                     "Moderate Risk", "Retain", "PRONOM and Version"],
+                    ["hargrett", 55, 0.001, "text", "Microsoft Word", "Microsoft Word Binary File Format|5.0|x-fmt/65",
+                     "Microsoft Word Binary File Format", "5.0", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "x-fmt/65", "NO VALUE", "Microsoft Word for Macintosh 5.0",
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/65", "Moderate Risk", "Transform to ODT",
+                     "PRONOM and Version"],
+                    ["hargrett", 931, 0.06, "image", "BMP", "Windows Bitmap|3.0|fmt/116", "Windows Bitmap", "3.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/116", "NO VALUE", "Windows Bitmap 3.0",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/116", "Moderate Risk", "Transform to TIFF",
+                     "PRONOM and Version"],
+                    ["hargrett", 330, 0.347, "image", "JPEG", "JPEG EXIF|2.0|x-fmt/398", "JPEG EXIF", "2.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM", "x-fmt/398", "NO VALUE",
+                     "Exchangeable Image File Format Compressed 2.0",
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/398", "Low Risk", "Retain",
+                     "PRONOM and Version"],
+                    ["russell", 188, 0.003, "text", "WordPerfect", "Wordperfect Secondary File|5.1/5.2|x-fmt/43",
+                     "Wordperfect Secondary File", "5.1/5.2", "https://www.nationalarchives.gov.uk/PRONOM",
+                     "x-fmt/43", "NO VALUE", "WordPerfect Secondary File 5.1/5.2",
+                     "https://www.nationalarchives.gov.uk/pronom/x-fmt/43", "Moderate Risk", "Transform to ODT",
+                     "PRONOM and Version"],
+                    ["hargrett", 38, 0.14, "image", "JPEG", "JPEG EXIF|10.0|fmt/645", "JPEG EXIF", "10.0",
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/645", "NO VALUE",
+                     "Exchangeable Image File Format Compressed 2.21",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/645", "Low Risk", "Retain", "PRONOM"],
+                    ["hargrett", 12, 0.033, "image", "JPEG", "JPEG EXIF|9.10|fmt/645", "JPEG EXIF", "9.10",
+                     "https://www.nationalarchives.gov.uk/PRONOM", "fmt/645", "NO VALUE",
+                     "Exchangeable Image File Format Compressed 2.21",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/645", "Low Risk", "Retain", "PRONOM"],
+                    ["russell", 99, 0.015, "text", "Microsoft Word",
+                     "Microsoft Word Binary File Format|99022200|fmt/40", "Microsoft Word Binary File Format",
+                     "99022200", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/40", "NO VALUE",
+                     "Microsoft Word Backup File, version 97-onwards",
+                     "https://www.nationalarchives.gov.uk/pronom/fmt/40", "Moderate Risk",
+                     "Depends on version, transform to Word or PDF", "PRONOM"],
+                    ["russell", 115, 0.159, "design", "Adobe Illustrator", "Adobe Illustrator|1.2 0|fmt/423",
+                     "Adobe Illustrator", "1.2 0", "https://www.nationalarchives.gov.uk/PRONOM", "fmt/423", "NO VALUE",
+                     "Adobe Illustrator 7.0", "https://www.nationalarchives.gov.uk/pronom/fmt/423", "Moderate Risk",
+                     "Transform to PDF", "PRONOM"],
+                    ["hargrett", 2, 0.0, "image", "JPEG", "JPEG EXIF|1.00|NO VALUE", "JPEG EXIF", "1.00", "NO VALUE",
+                     "NO VALUE", "NO VALUE", "No Match", np.nan, "No Match", np.nan, "No NARA Match"],
+                    ["magil", 1, 0.908, "web_archive", "WARC",
+                     "WARC Archive version 1.0\\015grams\@\\177B|NO VALUE|NO VALUE",
+                     "WARC Archive version 1.0\\015grams\@\\177B", "NO VALUE", "NO VALUE", "NO VALUE", "NO VALUE",
+                     "No Match", np.nan, "No Match", np.nan, "No NARA Match"],
+                    ["russell", 796, 0.01, "structured_text", "HTML", "HTML Transitional|HTML 4.0|NO VALUE",
+                     "HTML Transitional", "HTML 4.0", "NO VALUE", "NO VALUE", "NO VALUE", "No Match", np.nan,
+                     "No Match", np.nan, "No NARA Match"]]
+        self.assertEqual(result, expected, "Problem with test for by_group CSV")
 
 
 if __name__ == '__main__':
