@@ -49,3 +49,9 @@ if __name__ == '__main__':
     if error_msg:
         print(error_msg)
         sys.exit(1)
+
+    # Replaces the values in the Format_Version column with the version information
+    # in the Format_Identification column (formatted name|version|PUID).
+    df = pd.read_csv(csv_path)
+    df['Format_Version'] = df['Format_Identification'].str.split('|').str[1]
+    df.to_csv(csv_path, index=False)
