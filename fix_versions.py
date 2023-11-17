@@ -29,7 +29,10 @@ def check_argument(argument_list):
         path = argument_list[1]
         # Verifies that the argument path is valid.
         if os.path.exists(path):
-            pass
+            # Verifies that the argument is a file that matches the expected naming conventions.
+            filename = os.path.basename(path)
+            if not(filename.startswith("archive_formats_by") and filename.endswith(".csv")):
+                error = f"CSV path '{path}' is not an expected merged ARCHive format report."
         else:
             error = f"CSV path '{path}' does not exist"
     else:
