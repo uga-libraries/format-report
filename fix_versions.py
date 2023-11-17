@@ -39,3 +39,13 @@ def check_argument(argument_list):
         error = "Required argument csv_path is missing"
 
     return path, error
+
+
+if __name__ == '__main__':
+
+    # Verifies the required argument is present and correct.
+    # If there was an error, prints the error and exits the script.
+    csv_path, error_msg = check_argument(sys.argv)
+    if error_msg:
+        print(error_msg)
+        sys.exit(1)
