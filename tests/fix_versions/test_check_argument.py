@@ -41,6 +41,21 @@ class MyTestCase(unittest.TestCase):
         expected_msg = "Required argument csv_path is missing"
         self.assertEqual(error_msg, expected_msg, "Problem with test for missing argument, error_msg")
 
+    def test_path_error(self):
+        """
+        Test for when the required argument is present but the path is not valid.
+        """
+        # Runs the function being tested.
+        test_csv = os.path.join("path_error", "archive_formats_by_group_2023-11.csv")
+        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+
+        # Tests that the value of csv_path is correct.
+        self.assertEqual(csv_path, test_csv, "Problem with test for path error, csv_path")
+
+        # Tests that the value of error_msg is correct.
+        expected_msg = f"CSV path '{test_csv}' does not exist"
+        self.assertEqual(error_msg, expected_msg, "Problem with test for path error, error_msg")
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -27,6 +27,11 @@ def check_argument(argument_list):
     # Verifies that the required argument (csv_path) is present.
     if len(argument_list) > 1:
         path = argument_list[1]
+        # Verifies that the argument path is valid.
+        if os.path.exists(path):
+            pass
+        else:
+            error = f"CSV path '{path}' does not exist"
     else:
         error = "Required argument csv_path is missing"
 
