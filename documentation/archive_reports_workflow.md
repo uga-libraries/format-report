@@ -75,13 +75,17 @@ and nara_csv, which is the path to NARA's Digital Preservation Plan Spreadsheet.
    - Both reports have format information and NARA preservation information.
 
 
-2. Review the NARA matches. 
+2. Review the NARA matches in Excel. 
 If there were multiple possible matches to a single format, delete ones that do match as well.
 If there was no automatic match to NARA due to differences in spelling and abbreviations, add the match.
 When adding a match, in the NARA_Match_Type column use the same categories as the script but add (Manual) to the end.
 
 
-3. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
+3. Run the fix_version.py script to fix the version numbers from opening the CSVs in Excel.
+It removes the zero from the end of versions that look like numbers, for example 1.10 not HTML 4.0.
+
+
+4. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
 
 ## Create ARCHive Reports
 
