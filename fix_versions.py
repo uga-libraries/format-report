@@ -54,4 +54,9 @@ if __name__ == '__main__':
     # in the Format_Identification column (formatted name|version|PUID).
     df = pd.read_csv(csv_path, dtype="string")
     df['Format_Version'] = df['Format_Identification'].str.split('|').str[1]
+
+    # Removes blank rows introduced by Excel.
+    df = df.dropna(how="all")
+
+    # Updates the CSV.
     df.to_csv(csv_path, index=False)

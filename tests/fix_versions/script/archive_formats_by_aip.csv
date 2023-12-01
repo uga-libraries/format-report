@@ -8,3 +8,8 @@ dlg,arl_awc,arl_awc_awc171,image,JPEG,JPEG File Interchange Format|1.01|fmt/43,J
 dlg,gbru_bcd,gbru_bcd_gbru-bcd-1890,text,PDF,PDF/A|1b|fmt/354,PDF/A,1b,https://www.nationalarchives.gov.uk/PRONOM,fmt/354,NO VALUE,Portable Document Format/Archiving (PDF/A-1b) basic,https://www.nationalarchives.gov.uk/pronom/fmt/354,Low Risk,Retain,PRONOM
 dlg,gcfa_gtaa,gcfa_gtaa_gtaa00-11-taa-a-cass-01,audio,Waveform Audio,Waveform Audio|1 PCM Encoding|fmt/704,Waveform Audio,1 PCM Encoding,https://www.nationalarchives.gov.uk/PRONOM,fmt/704,NO VALUE,Waveform Audio File Format (WAVE) with LPCM Audio,,Low Risk,Retain,Manual (Approximate)
 dlg,gcfa_gtaa,gcfa_gtaa_gtaa15-04-1-01,audio,MPEG,MPEG 1/2 Audio Layer 3|1|fmt/134,MPEG 1/2 Audio Layer 3,1,https://www.nationalarchives.gov.uk/PRONOM,fmt/134,NO VALUE,MPEG-1 Audio Layer 3,https://www.nationalarchives.gov.uk/pronom/fmt/134,Low Risk,Transform to BWF,PRONOM
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
