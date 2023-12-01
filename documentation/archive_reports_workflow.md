@@ -85,7 +85,9 @@ When adding a match, in the NARA_Match_Type column use the same categories as th
 It removes the zero from the end of versions that look like numbers, for example 1.10 not HTML 4.0.
 
 
-4. Save a copy of both spreadsheets to the Format Analysis folder in Teams for this year.
+4. Save a copy of both versions of both spreadsheets to the Format Analysis folder in Teams for this year. 
+   The CSV is the authoritative version, because version numbers are correct. Do not open it in Excel. 
+   The Excel version is for additional manual analysis, but note that the version number may be incorrect.
 
 ## Create ARCHive Reports
 
