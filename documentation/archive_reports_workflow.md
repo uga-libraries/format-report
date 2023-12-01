@@ -85,7 +85,8 @@ and add collections, standardized format type and name, and NARA preservation in
    It removes the zero from the end of versions that look like numbers, for example 1.10 not HTML 4.0.
 
 
-4. Save a copy of both versions of both spreadsheets to the Format Analysis folder in Teams for this year. 
+4. Save a copy of both versions of both spreadsheets to the Format Analysis folder in Teams for this year,
+   in a folder named archive_reports_merged. 
    The CSV is the authoritative version, because version numbers are correct. Do not open it in Excel. 
    The Excel version is for additional manual analysis, but note that the version number may be incorrect.
 
@@ -113,7 +114,11 @@ In this step, make summaries of the merged format reports, and use those summari
    - Freeze the top row (column headers) if there are more rows than can be viewed on a normal computer monitor.
 
 
-4. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
+4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a foldernamed "ARCHive Format Report".
+
+
+5. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
+   Save it in the ARCHive Format Report folder.
  
 ## Create Department Reports
 
