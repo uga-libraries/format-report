@@ -101,7 +101,12 @@ In this step, make summaries of the merged format reports, and use those summari
    - ARCHive-Formats-Analysis_Risk.xlsx
 
 
-2. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
+2. Verify the contents of the report look reasonable. 
+   All sheets should have data, images and video should be the most common formats, 
+   departments with born-digital will have more formats and more at higher risk, etc. 
+
+
+3. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
  
 ## Create Department Reports
 
