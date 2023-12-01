@@ -143,21 +143,13 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the DLG-MAGIL Formats sheet has the expected values.
         result_format = [df_format.columns.tolist()] + df_format.values.tolist()
-        expected_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4"],
-                           [np.NaN, "2023_NARA_Risk_Level", "No Match", "Low Risk", np.NaN],
-                           [np.NaN, "Format", "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color 5 (No Match)",
-                            "Plain text (Low Risk)", "Tagged Image File Format 6 (Low Risk)"],
-                           ["Collection", "AIP", np.NaN, np.NaN, np.NaN],
-                           ["dlg_sanb", "dlg_sanb_savannah-1884", False, False, True],
-                           [np.NaN, "dlg_sanb_savannah-1888", False, False, True],
-                           ["gyca_gaphind", "gyca_gaphind_appling-1952", True, True, False],
-                           [np.NaN, "gyca_gaphind_appling-1962", True, True, False],
-                           [np.NaN, "gyca_gaphind_appling-1968", True, True, False],
-                           [np.NaN, "gyca_gaphind_atkinson-1939", True, False, False],
-                           [np.NaN, "gyca_gaphind_atkinson-1947", True, False, False],
-                           [np.NaN, "gyca_gaphind_bacon-1956-57", True, False, False],
-                           [np.NaN, "gyca_gaphind_bacon-1962-63", True, True, False],
-                           [np.NaN, "gyca_gaphind_bacon-1968", True, True, False]]
+        expected_format = [["Unnamed: 0", "Format_Name", "Unnamed: 2", "Unnamed: 3"],
+                           ["2023_NARA_Risk_Level", "No Match", "Low Risk", np.NaN],
+                           ["Format", "TIFF DLF Benchmark for Faithful Digital Reproductions of Monographs and Serials: color (No Match)",
+                            "Plain text (Low Risk)", "Tagged Image File Format (Low Risk)"],
+                           ["Collection", np.NaN, np.NaN, np.NaN],
+                           ["dlg_sanb", False, False, True],
+                           ["gyca_gaphind", True, True, False]]
         self.assertEqual(result_format, expected_format, "Problem with DLG-MAGIL Formats")
 
     def test_two_departments(self):
@@ -221,12 +213,11 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the BMAC Formats sheet has the expected values.
         result_bmac_format = [df_bmac_format.columns.tolist()] + df_bmac_format.values.tolist()
-        expected_bmac_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3"],
-                                [np.NaN, "2023_NARA_Risk_Level", "Moderate Risk", "Low Risk"],
-                                [np.NaN, "Format", "cue (Moderate Risk)", "Wave (Low Risk)"],
-                                ["Collection", "AIP", np.NaN, np.NaN],
-                                ["hm-lawton", "bmac_hm-lawton_0001", False, True],
-                                [np.NaN, "bmac_hm-lawton_0002", True, False]]
+        expected_bmac_format = [["Unnamed: 0", "Format_Name", "Unnamed: 2"],
+                                ["2023_NARA_Risk_Level", "Moderate Risk", "Low Risk"],
+                                ["Format", "cue (Moderate Risk)", "Wave (Low Risk)"],
+                                ["Collection", np.NaN, np.NaN],
+                                ["hm-lawton", True, True]]
         self.assertEqual(result_bmac_format, expected_bmac_format, "Problem with BMAC Formats")
 
         # Tests if the Hargrett AIP Risk Data sheet has the expected values.
@@ -314,19 +305,13 @@ class MyTestCase(unittest.TestCase):
 
         # Tests if the Hargrett Formats sheet has the expected values.
         result_harg_format = [df_harg_format.columns.tolist()] + df_harg_format.values.tolist()
-        expected_harg_format = [["Unnamed: 0", "Unnamed: 1", "Format_Name", "Unnamed: 3", "Unnamed: 4", "Unnamed: 5"],
-                                [np.NaN, "2023_NARA_Risk_Level", "No Match", "High Risk", "Moderate Risk", "Low Risk"],
-                                [np.NaN, "Format", "cue (No Match)", "CorelDraw Drawing 8.0 (High Risk)",
-                                 "WARC (Moderate Risk)", "JPEG File Interchange Format 1.01 (Low Risk)"],
-                                ["Collection", "AIP", np.NaN, np.NaN, np.NaN, np.NaN],
-                                ["harg-0000", "harg-0000-web-202007-0001", False, False, True, False],
-                                [np.NaN, "harg-0000-web-202007-0002", False, False, True, False],
-                                ["harg-ms3786", "harg-ms3786er0001", False, False, False, True],
-                                [np.NaN, "harg-ms3786er0002", False, True, False, True],
-                                [np.NaN, "harg-ms3786er0003", False, False, True, False],
-                                [np.NaN, "harg-ms3786er0004", False, True, False, False],
-                                [np.NaN, "harg-ms3786er0005", False, True, False, True],
-                                [np.NaN, "harg-ms3786er0006", True, True, False, True]]
+        expected_harg_format = [["Unnamed: 0", "Format_Name", "Unnamed: 2", "Unnamed: 3", "Unnamed: 4"],
+                                ["2023_NARA_Risk_Level", "No Match", "High Risk", "Moderate Risk", "Low Risk"],
+                                ["Format", "cue (No Match)", "CorelDraw Drawing (High Risk)",
+                                 "WARC (Moderate Risk)", "JPEG File Interchange Format (Low Risk)"],
+                                ["Collection", np.NaN, np.NaN, np.NaN, np.NaN],
+                                ["harg-0000", False, False, True, False],
+                                ["harg-ms3786", True, True, True, True]]
         self.assertEqual(result_harg_format, expected_harg_format, "Problem with Hargrett Formats")
 
 
