@@ -106,7 +106,14 @@ In this step, make summaries of the merged format reports, and use those summari
    departments with born-digital will have more formats and more at higher risk, etc. 
 
 
-3. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
+3. Reformat each sheet in each report to make them easier to read.
+   In future years, consider changing what is bold and what has cell outlines as well.
+   - Expand columns to show all the data.
+   - Left justify all columns.
+   - Freeze the top row (column headers) if there are more rows than can be viewed on a normal computer monitor.
+
+
+4. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
  
 ## Create Department Reports
 
