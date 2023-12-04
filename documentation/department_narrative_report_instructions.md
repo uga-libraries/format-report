@@ -91,6 +91,10 @@ A histogram with the number of AIPs with the same number of formats.
 11. Also in the Chart Elements, check data labels to get counts per bin.
 12. Change the chart title to "Number of formats in an AIP"
 
+If there is too little variation for the histogram to make sense 
+(e.g., the 1 format column is so big that no others are visible), 
+insert a table with the number of AIPs with each number of formats instead.
+
 Also update the numbers in the second paragraph:
 * The total number of AIPs
 * The number and percentage of AIPs in the lowest bin
