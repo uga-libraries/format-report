@@ -61,11 +61,16 @@ Instead, indicate there was no change in risk between the two years, and the num
 ### Risk by Collection
 
 A bar chart with the percentage of each collection's formats at each risk level.
-1. Make a copy of the Collection_Risk_Levels sheet without the Formats column.
+1. Make a copy of the Collection_Risk_Levels sheet without the Formats column or any risk level not in any collection.
 2. Remove the "Collection" column label, and the percent from the risk column labels.
-3. Highlight the collection column, four risk level column labels and data rows.
-4. Insert a stacked column chart.
-5. Change the chart title to "Risk by Collection"
+3. Sort each risk column Largest to Smallest, starting with Low risk and working up to No Match,
+   so the collections are in order from most to least risk.
+4. Highlight the collection column, four risk level column labels and data rows.
+5. Insert a 100% stacked column chart.
+6. Change the chart title to "Risk by Collection" 
+7. Change the colors to match Risk Profile (no stays blue, high = red, moderate = orange, low = green) 
+   by clicking on any bar of that level and changing the fill. 
+8. Delete the collection ids if there are too many for all bars to be labeled.
 
 ### AIP Format Variation
 
