@@ -93,7 +93,7 @@ A histogram with the number of AIPs with the same number of formats.
 
 If there is too little variation for the histogram to make sense 
 (e.g., the 1 format column is so big that no others are visible), 
-insert a table with the number of AIPs with each number of formats instead.
+insert a table or bar chart with the number of AIPs with each number of formats instead.
 
 Also update the numbers in the second paragraph:
 * The total number of AIPs
