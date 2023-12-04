@@ -28,12 +28,16 @@ Use copies of columns from the AIP_Risk_Data sheet to calculate the overview sta
 ### Risk Profile
 
 A pie chart with the percentage of formats at each risk level for the entire department.
-1. Make a copy of the Department_Risk_Levels sheet.
+1. Make a copy of the Department_Risk_Levels sheet and remove any columns with 0%.
 2. Remove the percentage from the risk column labels.
 3. Highlight the four risk level column labels and data row.
 4. Insert a pie chart.
-5. Change the chart title to "Format Risk Profile".
+5. Change the chart title to "Format Risk Profile" and make it bold.
 6. Use Quick Layout 1 (under Design) to label each slice with the risk level and percentage.
+7. Adjust labels. Use font size 11, label position center, font color white.
+8. Adjust colors by clicking on each slice and changing fill. High = red, moderate = orange, low = green. 
+   Leave no match blue.
+9. Reduce the white space around the chart, adjusting the label boxes if text gets cut off. 
 
 ### Risk Change
 
