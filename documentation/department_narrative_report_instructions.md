@@ -53,7 +53,10 @@ A bar chart with the number of formats at each risk level from the previous anal
 9. Use Quick Layout 2 (under Design) to label each bar with the percentage and add a legend.
 10. Update the number of formats only in one analysis in the sentence above the chart.  
     1. Only in previous: the number of unique formats in AIP_Risk_Data with risk change of "Unmatched".  
-    2. Only in current: the number of unique formats in AIP_Risk_Data with risk change of "New Format"
+    2. Only in current: the number of unique formats in AIP_Risk_Data with risk change of "New Format".
+
+If there was no change, do not make the bar chart.
+Instead, indicate there was no change in risk between the two years, and the number of formats at each risk level.
     
 ### Risk by Collection
 
