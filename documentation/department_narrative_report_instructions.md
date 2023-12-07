@@ -51,6 +51,9 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 5. Insert a pie chart.
 6. Change the chart title to "Format Risk Profile". 
 
+Also add a list of formats that are No_Match and High_Risk, 
+or summarize the main categories of formats if there are too many to list.
+
 ### Risk Change
 
 A bar chart with the number of formats at each risk level from the previous analysis and current analysis.
@@ -70,6 +73,8 @@ A bar chart with the number of formats at each risk level from the previous anal
 
 If there was no change, do not make the bar chart.
 Instead, indicate there was no change in risk between the two years, and the number of formats at each risk level.
+
+Also add a summary of the new formats and formats that increased in risk.
     
 ### Risk by Collection
 
