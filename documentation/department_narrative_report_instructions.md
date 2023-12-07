@@ -14,6 +14,19 @@ Use the example department report as a template for the new report.
 For the biannual ARCHive format analysis, the department spreadsheets will be in the Teams folder for this year's Format Analysis, 
 in the "Department Format Reports" folder. Save the narrative reports here as well. 
 
+## Formatting Guide
+
+In all visualizations, use these guidelines for a more readable result.
+
+- Title: bold and change font to black. Move the box closer to the image if there is too much white space.
+- All other font: size 11, black (if on white background) or white (if on pie chart)
+- Colors for levels:
+   - No_Match: Blue
+   - High_Risk: Dark Red
+   - Moderate_Risk: Orange
+   - Low_Risk: Green
+- Crop the image after pasting it into the narrative report to remove extra white space. 
+
 ### Overview
 
 Update the date with the date that the ARCHive format report was downloaded for this analysis.
@@ -34,12 +47,7 @@ A pie chart with the percentage of formats at each risk level for the entire dep
 2. Remove the percentage from the risk column labels.
 3. Highlight the four risk level column labels and data row.
 4. Insert a pie chart.
-5. Change the chart title to "Format Risk Profile" and make it bold.
-6. Use Quick Layout 1 (under Design) to label each slice with the risk level and percentage.
-7. Adjust labels. Use font size 11, label position center, font color white.
-8. Adjust colors by clicking on each slice and changing fill. High = red, moderate = orange, low = green. 
-   Leave no match blue.
-9. Reduce the white space around the chart, adjusting the label boxes if text gets cut off. 
+5. Change the chart title to "Format Risk Profile". 
 
 ### Risk Change
 
@@ -70,9 +78,7 @@ A bar chart with the percentage of each collection's formats at each risk level.
 4. Highlight the collection column, four risk level column labels and data rows.
 5. Insert a 100% stacked column chart.
 6. Change the chart title to "Risk by Collection" 
-7. Change the colors to match Risk Profile (no stays blue, high = red, moderate = orange, low = green) 
-   by clicking on any bar of that level and changing the fill. 
-8. Delete the collection ids if there are too many for all bars to be labeled.
+7. Delete the collection ids if there are too many for all bars to be labeled.
 
 ### AIP Format Variation
 
