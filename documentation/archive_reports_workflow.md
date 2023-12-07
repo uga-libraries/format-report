@@ -125,8 +125,11 @@ In this step, make summaries of the merged format reports, and use those summari
 In this step, make format risk summaries of the merged format reports for each department (ARCHive group).
 
 1. Run the department_reports.py script to generate one Excel spreadsheet per department. 
-The script has two arguments, current_formats_csv, which is the path to the by_aip merged report from this year,
-and previous_formats_csv, which is the path to the by_aip merged report from a previous year.
+   The script has two arguments, current_formats_csv, which is the path to the by_aip merged report from this year,
+   and previous_formats_csv, which is the path to the by_aip merged report from a previous year.
 
 
-2. Make a narrative report for each department using the [Department Narrative Report Instructions](department_narrative_report_instructions.md).
+2. Save the spreadsheets to a folder named "Department Format Reports" in the Teams folder for this year's Format Analysis.
+
+
+3. Make a narrative report for each department using the [Department Narrative Report Instructions](department_narrative_report_instructions.md).
