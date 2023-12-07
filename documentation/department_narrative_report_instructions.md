@@ -43,18 +43,21 @@ Use copies of columns from the AIP_Risk_Data sheet to calculate the overview sta
 ### Risk Profile
 
 A pie chart with the percentage of formats at each risk level for the entire department.
-1. Make a copy of the Department_Risk_Levels sheet and remove any columns with 0%.
-2. Remove the percentage from the risk column labels.
-3. Highlight the four risk level column labels and data row.
-4. Insert a pie chart.
-5. Change the chart title to "Format Risk Profile". 
+
+1. Make a copy of the Department_Risk_Levels sheet
+2. Remove any columns with 0%.
+3. Remove the percentage ("_%") from the risk column labels.
+4. Highlight the four risk level column labels and data row.
+5. Insert a pie chart.
+6. Change the chart title to "Format Risk Profile". 
 
 ### Risk Change
 
 A bar chart with the number of formats at each risk level from the previous analysis and current analysis.
-1. Copy the Department_Risk_Levels sheet from this analysis.
+
+1. Make a copy of the Department_Risk_Levels sheet.
 2. Add the Department_Risk_Levels percentages from the previous analysis in the row above.
-3. Remove the percentage from the risk column labels.
+3. Remove the percentage ("_%")from the risk column labels.
 4. Convert the percentages to numbers (divide by 100, multiply by the number of formats, and round to a whole number).
 5. Add a column with the year to the left of the risk columns. Do not give it a label.   
 6. Highlight the year column, risk column labels and data rows.
@@ -71,33 +74,34 @@ Instead, indicate there was no change in risk between the two years, and the num
 ### Risk by Collection
 
 A bar chart with the percentage of each collection's formats at each risk level.
-1. Make a copy of the Collection_Risk_Levels sheet without the Formats column or any risk level not in any collection.
-2. Remove the "Collection" column label, and the percent from the risk column labels.
-3. Sort each risk column Largest to Smallest, starting with Low risk and working up to No Match,
+
+1. Make a copy of the Collection_Risk_Levels sheet
+2. Delete the Formats column.
+3. Remove the "Collection" column label, and the percent ("_%") from the risk column labels.
+4. Sort each risk column Largest to Smallest, starting with Low risk and working up to No Match,
    so the collections are in order from most to least risk.
-4. Highlight the collection column, four risk level column labels and data rows.
-5. Insert a 100% stacked column chart.
-6. Change the chart title to "Risk by Collection" 
-7. Delete the collection ids if there are too many for all bars to be labeled.
+5. Highlight the collection column, four risk level column labels and data rows.
+6. Insert a 100% stacked column chart.
+7. Change the chart title to "Risk by Collection" 
+8. Delete the collection ids if there are too many for all bars to be labeled.
 
 ### AIP Format Variation
 
-A histogram with the number of AIPs with the same number of formats.  
+A histogram with the number of AIPs with the same number of formats.
+
 1. From AIP_Risk_Data, copy the AIP, Format_Name, and Format_Version columns.
 2. Remove duplicates across all three columns.
-4. Insert a pivot table with AIP as ROWS and Count of AIP as VALUES.
-5. Copy the pivot table and paste the values to be able to use as input for the histogram.
-6. Rename Row Labels to AIP ID and Count of AIP to Number of Formats.
-7. Sort Number of Formats, smallest to largest.
-8. Highlight the AIP ID and Number of Formats column labels and data rows.
-9. Insert a histogram (under Statistics Chart)
-10. Change the bin size
-    1. Click on the chart and then the Plus to get “Chart Elements” 
-    2. Mouse over Axes to make the arrow appear, click on it, and then click More Axis Options 
-    3. Click on the bar chart icon and click Axis Options to get the Bins list 
-    4. Select a Bin width of a small number (1-3)
-11. Also in the Chart Elements, check data labels to get counts per bin.
-12. Change the chart title to "Number of formats in an AIP"
+3. Insert a pivot table with AIP as ROWS and Count of AIP as VALUES.
+4. Copy the pivot table and paste the values to be able to use as input for the histogram.
+5. Highlight the AIP ID and Number of Formats column labels and data rows.
+6. Insert a histogram (under Statistics Chart).
+7. Change the bin size.
+    1. Click on the chart and then the Plus to get “Chart Elements”. 
+    2. Mouse over Axes to make the arrow appear, click on it, and then click More Axis Options. 
+    3. Click on the bar chart icon and click Axis Options to get the Bins list. 
+    4. Select a Bin width of a small number (1-3).
+8. Also in the Chart Elements, check data labels to get counts per bin.
+9. Change the chart title to "Number of formats in an AIP"
 
 If there is too little variation for the histogram to make sense 
 (e.g., the 1 format column is so big that no others are visible), 
