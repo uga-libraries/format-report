@@ -72,3 +72,18 @@ Make the pie charts. For all three, use data from "Group_Overview" in the Freque
 
 Update the statistics within the narrative portion of the text and compare to the previous analysis report.
 
+### Format Type
+
+Use data from "Format_Types" in the Frequency spreadsheet.
+
+1. Make a table in the report with 6 columns and 4 rows.
+2. In the first column, put "Collections", "AIPs", "File IDs", and "Size".
+3. In Format_Types, for each of the frequency measures (Collections, AIPs, File_IDs, Size_GB):
+   1. Sort the column in Format_Types largest to smallest.
+   2. Put the five most frequent types in the row for that frequency measure.
+   3. Add the count in parentheses after each type in the table.
+   
+Also update the number and list of format types, from standardize_formats.csv,
+summarize the most common types based on all the measures,
+and compare the results to the previous analysis report.
+
