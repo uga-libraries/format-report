@@ -47,7 +47,7 @@ There are no visuals in this section.
 Update the statistics and common format information within the paragraphs using the data sources listed below,
 and use the previous analysis report to evaluate the change since last time.
 
-- Number of TB and file format ids in ARCHive: "Group_Overview" in Frequency spreadsheet
+- Number of TB and files in ARCHive: "Group_Overview" in Frequency spreadsheet
 - Most common format types: "Format_Types" in Frequency spreadsheet
 - Most common format standardized names: "Format_Names" in Frequency spreadsheet
 - Formats at high risk: TBD [currently only in the Department reports]
@@ -74,7 +74,7 @@ Make the pie charts. For all three, use data from "Group_Overview" in the Freque
 
 1. Highlight the Group and AIPs columns (skipping the "total" row) and insert a pie chart.
 2. Highlight the Group and Size_TB columns (skipping the "total" row) and insert a pie chart.
-3. Highlight the Group and Format_Identifications (skipping the "total" row) and insert a pie chart.
+3. Highlight the Group and Files (skipping the "total" row) and insert a pie chart.
 4. Reformat the pie charts following the Formatting Guide (above).
 5. Paste the pie charts into the report.
 
@@ -85,8 +85,8 @@ Update the statistics within the narrative portion of the text and compare to th
 Use data from "Format_Types" in the Frequency spreadsheet.
 
 1. Make a table in the report with 6 columns and 4 rows.
-2. In the first column, put "Collections", "AIPs", "File IDs", and "Size".
-3. In Format_Types, for each of the frequency measures (Collections, AIPs, File_IDs, Size_GB):
+2. In the first column, put "Collections", "AIPs", "Files", and "Size".
+3. In Format_Types, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
    1. Sort the column in Format_Types largest to smallest.
    2. Put the five most frequent types in the row for that frequency measure.
    3. Add the count in parentheses after each type in the table.
@@ -100,8 +100,8 @@ and compare the results to the previous analysis report.
 Use data from "Format_Names" in the Frequency spreadsheet to make the table.
 
 1. Make a table in the report with 6 columns and 4 rows.
-2. In the first column, put "Collections", "AIPs", "File IDs", and "Size".
-3. In Format_Names, for each of the frequency measures (Collections, AIPs, File_IDs, Size_GB):
+2. In the first column, put "Collections", "AIPs", "Files", and "Size".
+3. In Format_Names, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
    1. Sort the column in Format_Names largest to smallest.
    2. Put the five most frequent names in the row for that frequency measure.
    3. Add the count in parentheses after each name in the table.
@@ -113,8 +113,8 @@ and compare the results to the previous analysis report.
 Make the graphs.
 
 1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
-2. Rename the title to "Number of File IDs per Standardized Format Name".
-3. Rename the x axis to "Number of File IDs".
+2. Rename the title to "Number of Files per Standardized Format Name".
+3. Rename the x axis to "Number of Files".
 4. Label the y axis "Number of Formats".
 5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x axis.
 6. Reformat the graphs following the Formatting Guide (above).
@@ -139,10 +139,10 @@ and the number from the previous analysis report.
 Make the table.
 
 1. Use the data in "Format_IDs" in the Frequency spreadsheet.
-2. If it isn't already, sort the column File_IDs largest to smallest.
+2. If it isn't already, sort the column Files largest to smallest.
 3. Decide on the smallest number to include. Aim for 10 or fewer formats, and a number where there is a bigger gap between it and the next smallest 
    compared to the gaps between the larger numbers. It was 70,000 in 2021 and 2023.
-4. Copy the Format_Identification and File_IDs columns to the report, leaving them sorted by File_IDs.
+4. Copy the Format_Identification and Files columns to the report, leaving them sorted by Files.
 
 Also update the number and percentage of format identifications that appear fewer than 10 times,
 which is the smallest range in "Format_ID_Ranges", and compare the results to the previous analysis report.
