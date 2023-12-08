@@ -171,3 +171,17 @@ Make the pie charts. Use the data in each of the three tabs in the Group-Overlap
 
 Also update the number and percentage of each tab held by two or more groups,
 list or summarize the ones that overlap, and compare the results to the previous analysis report.
+
+### Format Risk
+
+TBD: update now that all formats have risk and there are additional summaries.
+
+Make pie charts of the risk based on the number of files, size, and formats ("ARCHive_Risk_Overview" in the Risk spreadsheet).
+Make a bar graph of the risk from previous year(s) compared to now. Decide on which measure; do not do all three.
+Do something with if NARA recommends to transform or retain?
+Do something with which types are the most at risk?
+Summarize the formats that are high risk.
+Summarize the formats that did not match.
+Summarize the formats with increased risk.
+
+Also update the percentage of formats at each NARA risk level and compare the results to the previous analysis report.
