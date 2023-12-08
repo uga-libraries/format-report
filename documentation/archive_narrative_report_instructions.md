@@ -160,3 +160,14 @@ Make the table.
 2. Sort the column Size_GB largest to smallest.
 3. Copy the Format_Identification and Size_GB columns to the report, leaving them sorted by Size_GB.
 
+### Group Overlap
+
+Make the pie charts. Use the data in each of the three tabs in the Group-Overlap spreadsheet to make a different pie chart.
+
+1. Make a unique list of the values in the Groups column.
+2. Use countif to calculate the number of times each Group value is present.
+3. Highlight the resulting table and insert a pie chart.
+4. Reformat following the Formatting Guide (above).
+
+Also update the number and percentage of each tab held by two or more groups,
+list or summarize the ones that overlap, and compare the results to the previous analysis report.
