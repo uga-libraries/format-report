@@ -57,10 +57,11 @@ Make the table.
 1. Copy the data from "Group_Overview" in the Frequency spreadsheet.
 2. Delete the Size_GB_Inflated column.
 3. Remove the underscores in the column names.
-4. Give the first row (column  names) a blue background.
+4. Give the first row (column names) a blue background.
 5. Put outlines around all cells.
 6. Add a blank row before the total row.
-7. Resize columns to fit.
+7. Resize columns to a width of 0.9" and then adjust if needed to fit.
+8. Reformat the numbers to use commas.
 
 Make the pie charts. For all three, use data from "Group_Overview" in the Frequency spreadsheet.
 
