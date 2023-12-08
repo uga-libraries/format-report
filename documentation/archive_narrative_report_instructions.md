@@ -107,10 +107,56 @@ Make the graphs.
 1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of File IDs per Standardized Format Name".
 3. Rename the x axis to "Number of File IDs".
-4. Label the y axis "Number of Formats.
+4. Label the y axis "Number of Formats".
 5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x axis.
 6. Reformat the graphs following the Formatting Guide (above).
 
 Also update the number and percentage of formats with less than 10 files or 10 GB,
 which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
 To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
+
+### Format Identification by File Count
+
+Make the graph.
+
+1. Highlight the data in "Format_ID_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
+2. Rename the title to "Number of Files per Unique Format".
+3. Rename the X axis to "Number of Files".
+4. Label the y axis "Number of Formats".
+5. Reformat following the Formatting Guide (above).
+
+Also update the total number of format identification in ARCHive currently, from "Group_Overview" in the Frequency spreadsheet,
+and the number from the previous analysis report.
+
+Make the table.
+
+1. Use the data in "Format_IDs" in the Frequency spreadsheet.
+2. If it isn't already, sort the column File_IDs largest to smallest.
+3. Decide on the smallest number to include. Aim for 10 or fewer formats, and a number where there is a bigger gap between it and the next smallest 
+   compared to the gaps between the larger numbers. It was 70,000 in 2021 and 2023.
+4. Copy the Format_Identification and File_IDs columns to the report, leaving them sorted by File_IDs.
+
+Also update the number and percentage of format identifications that appear fewer than 10 times,
+which is the smallest range in "Format_ID_Ranges", and compare the results to the previous analysis report.
+To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
+
+### Format Identification by Size
+
+Make the graph.
+
+1. Highlight the data in "Format_ID_Sizes" in the Ranges spreadsheet and insert a Clustered Column graph.
+2. Rename the title to "Size per Unique Format".
+3. Remove the label on the X axis.
+4. Label the y axis "Number of Formats".
+5. Reformat following the Formatting Guide (above).
+
+Also update the number and percentage of format identifications that have fewer than 10 GB, which is the smallest range in "Format_ID_Sizes", 
+and the number and percentage with more than 10 TB, which combines the two largest ranges in "Format_ID_Sizes".
+To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
+
+Make the table.
+
+1. Use the data in "Format_IDs" in the Frequency spreadsheet.
+2. Sort the column Size_GB largest to smallest.
+3. Copy the Format_Identification and Size_GB columns to the report, leaving them sorted by Size_GB.
+
