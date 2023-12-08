@@ -49,3 +49,26 @@ and use the previous analysis report to evaluate the change since last time.
 
 There are no visuals in this section.
 Update the number of types and standardized names from the standardize_formats.csv
+
+### ARCHive Overview
+
+Make the table.
+
+1. Copy the data from "Group_Overview" in the Frequency spreadsheet.
+2. Delete the Size_GB_Inflated column.
+3. Remove the underscores in the column names.
+4. Give the first row (column  names) a blue background.
+5. Put outlines around all cells.
+6. Add a blank row before the total row.
+7. Resize columns to fit.
+
+Make the pie charts. For all three, use data from "Group_Overview" in the Frequency spreadsheet.
+
+1. Highlight the Group and AIPs columns (skipping the "total" row) and insert a pie chart.
+2. Highlight the Group and Size_TB columns (skipping the "total" row) and insert a pie chart.
+3. Highlight the Group and Format_Identifications (skipping the "total" row) and insert a pie chart.
+4. Reformat the pie charts following the Formatting Guide (above).
+5. Paste the pie charts into the report.
+
+Update the statistics within the narrative portion of the text and compare to the previous analysis report.
+
