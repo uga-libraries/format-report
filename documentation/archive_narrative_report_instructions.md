@@ -87,3 +87,30 @@ Also update the number and list of format types, from standardize_formats.csv,
 summarize the most common types based on all the measures,
 and compare the results to the previous analysis report.
 
+### Format Standardized Name
+
+Use data from "Format_Names" in the Frequency spreadsheet to make the table.
+
+1. Make a table in the report with 6 columns and 4 rows.
+2. In the first column, put "Collections", "AIPs", "File IDs", and "Size".
+3. In Format_Names, for each of the frequency measures (Collections, AIPs, File_IDs, Size_GB):
+   1. Sort the column in Format_Names largest to smallest.
+   2. Put the five most frequent names in the row for that frequency measure.
+   3. Add the count in parentheses after each name in the table.
+   
+Also update the number of format standardized names, from standardize_formats.csv,
+summarize the most common names based on all the measures,
+and compare the results to the previous analysis report.
+
+Make the graphs.
+
+1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
+2. Rename the title to "Number of File IDs per Standardized Format Name".
+3. Rename the x axis to "Number of File IDs".
+4. Label the y axis "Number of Formats.
+5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x axis.
+6. Reformat the graphs following the Formatting Guide (above).
+
+Also update the number and percentage of formats with less than 10 files or 10 GB,
+which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
+To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
