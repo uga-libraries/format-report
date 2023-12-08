@@ -27,6 +27,13 @@ In all visualizations, use these guidelines for a more readable result.
    - Size 11
    - Black (if on white background) or white (if on a colored background)
 
+- Pie Chart
+   - If they fit, use Quick Layout 1 to add value and percentage data labels.
+   - If labels don't fit, use a legend on the left.
+   - Reduce the space between the pie and the legend.
+   - If there are multiple pie charts with the same legend, only have the legend on the first one.
+   - Adjust the colors if there is not enough contrast.
+
 - Crop the image after pasting it into the narrative report to remove extra white space. 
 
 ## Analysis
