@@ -44,3 +44,8 @@ and use the previous analysis report to evaluate the change since last time.
 - Most common format types: "Format_Types" in Frequency spreadsheet
 - Most common format standardized names: "Format_Names" in Frequency spreadsheet
 - Formats at high risk: TBD [currently only in the Department reports]
+
+### Background and Method
+
+There are no visuals in this section.
+Update the number of types and standardized names from the standardize_formats.csv
