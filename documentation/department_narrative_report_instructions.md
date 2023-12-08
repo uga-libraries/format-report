@@ -5,7 +5,7 @@
 Create a summary and visualizations of the department's format data, prioritizing risk information.
 It orients the department to the information in the spreadsheet and highlights areas of higher risk. 
 
-## Analysis
+## Data Source
 
 Use Excel and the data from the department report spreadsheet to make graphs of the data. 
 In some cases, the data must be edited first.
@@ -26,6 +26,8 @@ In all visualizations, use these guidelines for a more readable result.
    - Moderate_Risk: Orange
    - Low_Risk: Green
 - Crop the image after pasting it into the narrative report to remove extra white space. 
+
+## Analysis
 
 ### Overview
 
