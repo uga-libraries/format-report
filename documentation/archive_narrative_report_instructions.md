@@ -28,3 +28,19 @@ In all visualizations, use these guidelines for a more readable result.
    - Black (if on white background) or white (if on a colored background)
 
 - Crop the image after pasting it into the narrative report to remove extra white space. 
+
+## Analysis
+
+In addition to the section-specific instructions below,
+review the entire report for any contextual information that has changed.
+
+### Report Summary
+
+There are no visuals in this section.
+Update the statistics and common format information within the paragraphs using the data sources listed below,
+and use the previous analysis report to evaluate the change since last time.
+
+- Number of TB and file format ids in ARCHive: "Group_Overview" in Frequency spreadsheet
+- Most common format types: "Format_Types" in Frequency spreadsheet
+- Most common format standardized names: "Format_Names" in Frequency spreadsheet
+- Formats at high risk: TBD [currently only in the Department reports]
