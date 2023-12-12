@@ -130,7 +130,7 @@ Make the graphs.
 
 Also update the number and percentage of formats with less than 10 files or 10 GB,
 which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
-To calculate the percentage, use the total number of format standardized names from the intro of in this section.
+To calculate the percentage, use the total number of format standardized names from the intro of this section.
 
 ### Format Identification by File Count
 
@@ -138,9 +138,7 @@ Make the graph.
 
 1. Highlight the data in "Format_ID_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of Files per Unique Format".
-3. Rename the x-axis to "Number of Files".
-4. Label the y-axis "Number of Formats".
-5. Reformat following the Formatting Guide (above).
+3. Reformat following the Formatting Guide (above).
 
 Also update the total number of format identification in ARCHive currently, from "Group_Overview" in the Frequency spreadsheet,
 and the number from the previous analysis report.
@@ -163,9 +161,7 @@ Make the graph.
 
 1. Highlight the data in "Format_ID_Sizes" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Size per Unique Format".
-3. Remove the label on the X axis.
-4. Label the y-axis "Number of Formats".
-5. Reformat following the Formatting Guide (above).
+3. Reformat following the Formatting Guide (above).
 
 Also update the number and percentage of format identifications that have fewer than 10 GB, which is the smallest range in "Format_ID_Sizes", 
 and the number and percentage with more than 10 TB, which combines the two largest ranges in "Format_ID_Sizes".
