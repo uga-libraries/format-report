@@ -132,7 +132,7 @@ Make the graphs.
 
 Also update the number and percentage of formats with less than 10 files or 10 GB,
 which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
-To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
+To calculate the percentage, use the total number of format standardized names from the intro of in this section.
 
 ### Format Identification by File Count
 
