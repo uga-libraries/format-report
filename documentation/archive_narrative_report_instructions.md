@@ -118,9 +118,9 @@ Make the graphs.
 
 1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of Files per Standardized Format Name".
-3. Rename the x axis to "Number of Files".
-4. Label the y axis "Number of Formats".
-5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x axis.
+3. Rename the x-axis to "Number of Files".
+4. Label the y-axis "Number of Formats".
+5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x-axis.
 6. Reformat the graphs following the Formatting Guide (above).
 
 Also update the number and percentage of formats with less than 10 files or 10 GB,
@@ -133,8 +133,8 @@ Make the graph.
 
 1. Highlight the data in "Format_ID_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of Files per Unique Format".
-3. Rename the X axis to "Number of Files".
-4. Label the y axis "Number of Formats".
+3. Rename the x-axis to "Number of Files".
+4. Label the y-axis "Number of Formats".
 5. Reformat following the Formatting Guide (above).
 
 Also update the total number of format identification in ARCHive currently, from "Group_Overview" in the Frequency spreadsheet,
@@ -159,7 +159,7 @@ Make the graph.
 1. Highlight the data in "Format_ID_Sizes" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Size per Unique Format".
 3. Remove the label on the X axis.
-4. Label the y axis "Number of Formats".
+4. Label the y-axis "Number of Formats".
 5. Reformat following the Formatting Guide (above).
 
 Also update the number and percentage of format identifications that have fewer than 10 GB, which is the smallest range in "Format_ID_Sizes", 
