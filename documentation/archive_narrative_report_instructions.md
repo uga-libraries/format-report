@@ -184,9 +184,11 @@ Make the table.
 Make the pie charts. Use the data in each of the three tabs in the Group-Overlap spreadsheet to make a different pie chart.
 
 1. Make a unique list of the values in the Groups column.
-2. Use countif to calculate the number of times each Group value is present.
-3. Highlight the resulting table and insert a pie chart.
-4. Reformat following the Formatting Guide (above).
+2. Use countif to calculate the number of times each Group value is present and paste as values.
+3. Sort the number of groups from smallest to largest.
+4. Replace the number of groups with words (e.g., One instead of 1).
+5. Highlight the resulting table and insert a pie chart.
+6. Reformat following the Formatting Guide (above).
 
 Also update the number and percentage of each tab held by two or more groups,
 list or summarize the ones that overlap, and compare the results to the previous analysis report.
