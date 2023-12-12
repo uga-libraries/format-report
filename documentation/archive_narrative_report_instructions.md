@@ -93,7 +93,7 @@ Use data from "Format_Types" in the Frequency spreadsheet.
 3. In Format_Types, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
    1. Sort the column in Format_Types largest to smallest.
    2. Put the five most frequent types in the row for that frequency measure.
-   3. Add the count in parentheses after each type in the table.
+   3. Add the count in parentheses after each type in the table. For size, convert to TB if over 1,000 GB.
    
 Also update the number and list of format types, from standardize_formats.csv,
 summarize the most common types based on all the measures,
@@ -108,7 +108,7 @@ Use data from "Format_Names" in the Frequency spreadsheet to make the table.
 3. In Format_Names, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
    1. Sort the column in Format_Names largest to smallest.
    2. Put the five most frequent names in the row for that frequency measure.
-   3. Add the count in parentheses after each name in the table.
+   3. Add the count in parentheses after each name in the table. For size, convert to TB if over 1,000 GB.
    
 Also update the number of format standardized names, from standardize_formats.csv,
 summarize the most common names based on all the measures,
