@@ -61,7 +61,7 @@ and use the previous analysis report to evaluate the change since last time.
 - Number of TB and files in ARCHive: "Group_Overview" in Frequency spreadsheet
 - Most common format types: "Format_Types" in Frequency spreadsheet
 - Most common format standardized names: "Format_Names" in Frequency spreadsheet
-- Formats at high risk: TBD [currently only in the Department reports]
+- Formats at high risk: Department reports
 
 ### Background and Method
 
@@ -125,10 +125,8 @@ Make the graphs.
 
 1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of Files per Standardized Format Name".
-3. Rename the x-axis to "Number of Files".
-4. Label the y-axis "Number of Formats".
-5. Repeat steps 1-5 using "Format_Name_Sizes", with the title "Size per Standardized Format Name" and no label on the x-axis.
-6. Reformat the graphs following the Formatting Guide (above).
+3. Repeat steps 1-2 using "Format_Name_Sizes" and the title "Size per Standardized Format Name".
+4. Reformat the graphs following the Formatting Guide (above).
 
 Also update the number and percentage of formats with less than 10 files or 10 GB,
 which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
