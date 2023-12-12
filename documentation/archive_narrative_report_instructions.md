@@ -149,7 +149,7 @@ Make the table.
 2. If it isn't already, sort the column Files largest to smallest.
 3. Decide on the smallest number to include. Aim for 10 or fewer formats, and a number where there is a bigger gap between it and the next smallest 
    compared to the gaps between the larger numbers. It was 70,000 in 2021 and 2023.
-4. Copy the Format_Identification and Files columns to the report, leaving them sorted by Files.
+4. Copy those Format_Identification and Files columns to the report, leaving them sorted by Files.
 5. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
 
 Also update the number and percentage of format identifications that appear fewer than 10 times,
@@ -172,8 +172,10 @@ Make the table.
 
 1. Use the data in "Format_IDs" in the Frequency spreadsheet.
 2. Sort the column Size_GB largest to smallest.
-3. Copy the Format_Identification and Size_GB columns to the report, leaving them sorted by Size_GB.
-4. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
+3. Make a new column dividing Size_GB by 1000 to be Size (TB).
+4. Decide on the smallest number to include. Ain for 10 or fewer formats. The last 2 analyses used 10 TB.
+5. Copy those Format_Identification and Size (TB) columns to the report, leaving them sorted by size.
+6. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
 
 ### Group Overlap
 
