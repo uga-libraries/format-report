@@ -33,8 +33,12 @@ In all visualizations, use these guidelines for a more readable result.
    - Reduce the space between the pie and the legend.
    - If there are multiple pie charts with the same legend, only have the legend on the first one.
    - Adjust the colors if there is not enough contrast.
+   - Crop the image after pasting charts into the narrative report to remove extra white space. 
 
-- Crop the image after pasting it into the narrative report to remove extra white space. 
+- Table
+  - Header row or column is bold and fill with a light color.
+  - Resize column widths to be relatively even, but it is ok to have some a little wider to limit text wrapping.
+  - Title in bold and centered over the table to explain what it is
 
 ## Analysis
 
