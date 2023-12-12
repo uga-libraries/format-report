@@ -27,6 +27,13 @@ In all visualizations, use these guidelines for a more readable result.
    - Size 11
    - Black (if on white background) or white (if on a colored background)
 
+- Bar Graph
+  - Always include a title
+  - Include x-axis and/or y-axis labels if it is not clear from other data
+  - Include data labels
+  - Widen the graph so that the text stays horizontal (rather than angling)
+  - Widen the bars by decrease gap width to 75%
+
 - Pie Chart
    - If they fit, use Quick Layout 1 to add value and percentage data labels.
    - If labels don't fit, use a legend on the left.
