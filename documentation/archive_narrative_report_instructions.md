@@ -190,8 +190,7 @@ Make the pie charts. Use the data in each of the three tabs in the Group-Overlap
 5. Highlight the resulting table and insert a pie chart.
 6. Reformat following the Formatting Guide (above).
 
-Also update the number and percentage of each tab held by two or more groups,
-list or summarize the ones that overlap, and compare the results to the previous analysis report.
+Also update the number and percentage held by two or more groups.
 
 ### Format Risk
 
