@@ -70,7 +70,7 @@ class MyTestCase(unittest.TestCase):
         # Tests that formats contains the correct information.
         formats.reset_index(inplace=True)
         result = [formats.columns.tolist()] + formats.values.tolist()
-        expected = [[("Collection", "", ""), ("AIP", "", ""),
+        expected = [[("Collection", "", ""),
                      ("Format_Name", "No Match", "Quicktime video (No Match)"),
                      ("Format_Name", "No Match", "SWF (No Match)"),
                      ("Format_Name", "High Risk", "GZIP Format (High Risk)"),
@@ -79,10 +79,10 @@ class MyTestCase(unittest.TestCase):
                      ("Format_Name", "Moderate Risk", "xml (Moderate Risk)"),
                      ("Format_Name", "Low Risk", "Plain text (Low Risk)"),
                      ("Format_Name", "Low Risk", "TIFF EXIF (Low Risk)")],
-                    ["har-ua20-002", "har-ua20-002_0002_metadata", False, False, False, False, False, True, True, False],
-                    ["harg-0000", "harg-0000-web-202007-0002", False, False, True, False, False, False, False, True],
-                    ["harg-ms3770", "harg-ms3770er0002", False, False, False, True, True, False, True, False],
-                    ["harg-ms3786", "harg-ms3786er0020", True, True, False, True, True, False, False, False]]
+                    ["har-ua20-002", False, False, False, False, False, True, True, False],
+                    ["harg-0000", False, False, True, False, False, False, False, True],
+                    ["harg-ms3770", False, False, False, True, True, False, True, False],
+                    ["harg-ms3786", True, True, False, True, True, False, False, False]]
         self.assertEqual(result, expected, "Problem with test for one AIP, multiple formats")
 
     def test_aip_one(self):
@@ -107,15 +107,15 @@ class MyTestCase(unittest.TestCase):
         # Tests that formats contains the correct information.
         formats.reset_index(inplace=True)
         result = [formats.columns.tolist()] + formats.values.tolist()
-        expected = [[("Collection", "", ""), ("AIP", "", ""),
+        expected = [[("Collection", "", ""),
                      ("Format_Name", "No Match", "NEF EXIF (No Match)"),
                      ("Format_Name", "High Risk", "GZIP Format (High Risk)"),
                      ("Format_Name", "Moderate Risk", "xml (Moderate Risk)"),
                      ("Format_Name", "Low Risk", "Plain text (Low Risk)")],
-                    ["har-ua20-002", "har-ua20-002_0001_metadata", False, False, True, False],
-                    ["harg-0000", "harg-0000-web-202007-0001", False, True, False, False],
-                    ["harg-ms3770", "harg-ms3770er0002", False, False, False, True],
-                    ["harg-ms3786", "harg-ms3786er0007", True, False, False, False]]
+                    ["har-ua20-002", False, False, True, False],
+                    ["harg-0000", False, True, False, False],
+                    ["harg-ms3770", False, False, False, True],
+                    ["harg-ms3786", True, False, False, False]]
         self.assertEqual(result, expected, "Problem with test for one AIP, one format")
 
     def test_aips_multiple(self):
@@ -150,16 +150,14 @@ class MyTestCase(unittest.TestCase):
         # Tests that formats contains the correct information.
         formats.reset_index(inplace=True)
         result = [formats.columns.tolist()] + formats.values.tolist()
-        expected = [[("Collection", "", ""), ("AIP", "", ""),
+        expected = [[("Collection", "", ""),
                      ("Format_Name", "Moderate Risk", "MPEG video (Moderate Risk)"),
                      ("Format_Name", "Moderate Risk", "xml (Moderate Risk)"),
-                     ("Format_Name", "Low Risk", "JPEG EXIF 1.2 (Low Risk)"),
+                     ("Format_Name", "Low Risk", "JPEG EXIF (Low Risk)"),
                      ("Format_Name", "Low Risk", "Plain text (Low Risk)"),
                      ("Format_Name", "Low Risk", "TIFF EXIF (Low Risk)")],
-                    ["harg-ms3770", "harg-ms3770er0001", False, False, True, True, False],
-                    ["harg-ms3770", "harg-ms3770er0002", False, True, False, True, False],
-                    ["harg-ms3796", "harg-ms3796er0007", True, True, False, False, False],
-                    ["harg-ms3796", "harg-ms3796er0025", False, False, True, True, True]]
+                    ["harg-ms3770", False, True, True, True, False],
+                    ["harg-ms3796", True, True, True, True, True]]
         self.assertEqual(result, expected, "Problem with test for multiple AIPs, multiple formats")
 
     def test_aips_one(self):
@@ -184,15 +182,13 @@ class MyTestCase(unittest.TestCase):
         # Tests that formats contains the correct information.
         formats.reset_index(inplace=True)
         result = [formats.columns.tolist()] + formats.values.tolist()
-        expected = [[("Collection", "", ""), ("AIP", "", ""),
+        expected = [[("Collection", "", ""),
                      ("Format_Name", "No Match", "NEF EXIF (No Match)"),
                      ("Format_Name", "High Risk", "GZIP Format (High Risk)"),
                      ("Format_Name", "Moderate Risk", "xml (Moderate Risk)"),
                      ("Format_Name", "Low Risk", "Plain text (Low Risk)")],
-                    ["harg-ms3770", "harg-ms3770er0001", False, True, False, False],
-                    ["harg-ms3770", "harg-ms3770er0002", False, False, False, True],
-                    ["harg-ms3786", "harg-ms3786er0007", True, False, False, False],
-                    ["harg-ms3786", "harg-ms3786er0012", False, False, True, False]]
+                    ["harg-ms3770", False, True, False, True],
+                    ["harg-ms3786", True, False, True, False]]
         self.assertEqual(result, expected, "Problem with test for multiple AIPs, one format")
 
     def test_puid_duplicates(self):
@@ -221,12 +217,11 @@ class MyTestCase(unittest.TestCase):
         # Tests that formats contains the correct information.
         formats.reset_index(inplace=True)
         result = [formats.columns.tolist()] + formats.values.tolist()
-        expected = [[("Collection", "", ""), ("AIP", "", ""),
+        expected = [[("Collection", "", ""),
                      ("Format_Name", "High Risk", "GZIP Format (High Risk)"),
                      ("Format_Name", "Low Risk", "Plain text (Low Risk)")],
-                    ["harg-0000", "harg-0000-web-202007-0001", True, False],
-                    ["harg-ms3786", "harg-ms3786er0004", False, True],
-                    ["harg-ms3786", "harg-ms3786er0024", False, True]]
+                    ["harg-0000", True, False],
+                    ["harg-ms3786", False, True]]
         self.assertEqual(result, expected, "Problem with test for PUID duplicates")
 
 

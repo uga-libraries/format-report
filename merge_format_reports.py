@@ -59,7 +59,7 @@ def collection_from_aip(aip_id, group):
             if aip_id[5].isdigit():
                 return "peabody"
 
-            # The next three address errors with how the AIP ID was made.
+            # The next four address errors with how the AIP ID was made.
             elif aip_id.startswith("har-ms"):
                 coll_regex = re.match("(^har-ms[0-9]+)_", aip_id)
                 return coll_regex.group(1)
@@ -69,6 +69,9 @@ def collection_from_aip(aip_id, group):
 
             elif aip_id.startswith("bmac_wrdw_"):
                 return "wrdw-video"
+
+            elif aip_id.startswith("bmac_wsbn3"):
+                return "wsbn"
 
             # AIPs for this collection can start bmac_walb or bmac_walb-video
             elif aip_id.startswith("bmac_walb"):
@@ -118,6 +121,10 @@ def collection_from_aip(aip_id, group):
             # Georgia Historic Newspapers. Have seen batch_gua_ and batch_gu_
             elif aip_id.startswith("batch_gu"):
                 return "dlg_ghn"
+
+            # Collection with dash as the delimiter instead of underscore.
+            elif aip_id.startswith("ugalaw_lspc"):
+                return "ugalaw_lspc"
 
             else:
                 coll_regex = re.match("^([a-z0-9-]*_[a-z0-9-]*)_", aip_id)
@@ -238,9 +245,13 @@ def csv_to_dataframe(csv_file):
     df.columns = df.columns.str.replace("(", "")
     df.columns = df.columns.str.replace(")", "")
 
-    # Adds a prefix to the NARA dataframe columns so the source of the data is clear when the data is combined.
+    # Adds a prefix to the NARA dataframe columns that don't already start with NARA
+    # so the source of the data is clear when the data is combined.
     if "NARA" in csv_file:
-        df = df.add_prefix("NARA_")
+        df.rename(columns={"Format_Name": "NARA_Format_Name",
+                           "File_Extensions": "NARA_File_Extensions",
+                           "PRONOM_URL": "NARA_PRONOM_URL",
+                           "Description_and_Justification": "NARA_Description_and_Justification"}, inplace=True)
 
     return df
 
