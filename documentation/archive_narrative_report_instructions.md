@@ -30,8 +30,8 @@ In all visualizations, use these guidelines for a more readable result.
 - Bar Graph
   - Always include a title
   - Include x-axis and/or y-axis labels if it is not clear from other data
-  - Include data labels
-  - Widen the graph so that the text stays horizontal (rather than angling)
+  - Include data labels, unless it is by percentage
+  - Widen the graph so that the text stays horizontal (rather than angling), if possible
   - Widen the bars by decrease gap width to 75%
 
 - Pie Chart
@@ -192,14 +192,26 @@ Also update the number and percentage held by two or more groups.
 
 ### Format Risk
 
-TBD: update now that all formats have risk and there are additional summaries.
+Make the pie charts. Use the data in each of the three columns in "ARCHive_Risk_Overview" in the Risk spreadsheet.
 
-Make pie charts of the risk based on the number of files, size, and formats ("ARCHive_Risk_Overview" in the Risk spreadsheet).
-Make a bar graph of the risk from previous year(s) compared to now. Decide on which measure; do not do all three.
-Do something with if NARA recommends to transform or retain?
-Do something with which types are the most at risk?
-Summarize the formats that are high risk.
-Summarize the formats that did not match.
-Summarize the formats with increased risk.
+1. Highlight the NARA_Risk_Level column and one of the other three columns.
+2. Insert a pie chart.
+3. Update the title to Number of Files, Size (GB), or Format Identifications.
+4. Update the colors to match the amount of risk: low = green, moderate = orange, high = dark red, no match = blue.
+5. Reformat following the Formatting Guide (above). The only one with a legend should be Format Identifications.
 
-Also update the percentage of formats at each NARA risk level and compare the results to the previous analysis report.
+Update the paragraph after the pie charts about the percentage that are low risk, 
+the amount and kinds of formats that are high risk,
+and an explanation for any other findings of interest.
+
+Make the graphs. Use the data in "Department_Risk_Overview" and "Format_Type_Risk" in the Risk spreadsheet.
+
+1. Highlight the data and insert a pivot table. 
+2. Copy and paste the values of the pivot table, so it can be edited.
+3. Delete the total column and row, and move the High Risk column between Moderate and No Match to be in risk order.
+4. Highlight the edited pivot table and insert a 100% stacked column graph.
+5. Update the title to Percentage of Formats at NARA Risk Levels by Group|Type
+6. Update the colors to match the amount of risk: low = green, moderate = orange, high = dark red, no match = blue.
+7. Reformat following the Formatting Guide (above).
+
+Update the paragraphs after each graph with a summary of which groups and format types have the most risk.
