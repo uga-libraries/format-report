@@ -1,13 +1,17 @@
-"""
-Makes a list of any formats from the ARCHive group format archive_reports that are new since the last format analysis and
-therefore are not yet in standardize_formats.csv, the spreadsheet which has the format standardized name and format
-type for every format name within the UGA Libraries' digital preservation system (ARCHive).
-These new formats need to be added to standardize_formats.csv before merging and analyzing the
-ARCHive group format archive_reports.
-"""
+"""Make a list of any formats from the ARCHive group format archive_reports that are new since the last format analysis
 
-# Usage: python path/update_standardization.py report_folder
-#    - report_folder is the path to the folder with the ARCHive group format archive_reports (required)
+These new formats need to be added to standardize_formats.csv,
+the spreadsheet which has the format standardized name and format type for every format name
+within the UGA Libraries' digital preservation system (ARCHive)
+before merging and analyzing the ARCHive group format archive_reports.
+
+Parameters:
+    report_folder : the path to the folder which contains ARCHive's group file format reports
+
+Returns:
+      File new_formats.txt, saved to the report_folder, that contains every new format name
+      Prints a message to the terminal if there are new formats
+"""
 
 import csv
 import os
@@ -15,10 +19,16 @@ import sys
 
 
 def check_argument(argument_list):
+    """Check that the required argument report_folder is present and correct
+
+    Parameters:
+        argument_list : list from sys.argv, with the script arguments
+
+    Returns:
+        report_path : path to the report_path, if provided, or None
+        error : string with the error message, if any, or None
     """
-    Verifies the required argument report_folder is present and the path is valid.
-    Returns the path for report_folder and the error, if any.
-    """
+
     # Makes variables with default values to store the results of the function.
     report_path = None
     error = None
@@ -37,11 +47,15 @@ def check_argument(argument_list):
 
 
 def format_check(report_folder_path):
+    """Check if every format name from every format report is in standardize_format.csv
+
+    Parameters:
+        report_folder_path : the path to the folder which contains ARCHive's group file format reports
+
+    Returns:
+        formats_dictionary : dictionary with the format names for keys and values of "Found" or "Missing"
     """
-    Gets every format name from every format report in the report_folder,
-    matches the names to standardize_format.csv,
-    and returns a dictionary with the format name as the key and if found or missing as the value.
-    """
+
     # Makes a dictionary for storing the results.
     formats_dictionary = {}
 
@@ -70,10 +84,16 @@ def format_check(report_folder_path):
 
 
 def in_standard(format_to_check):
+    """Check if a single format name is in standardize_format.csv
+
+    Parameters:
+        format_to_check : the name of a format
+
+    Returns:
+        The string "Found" if the format name is in standardize_format.csv,
+        or the string "Missing" if it is not.
     """
-    Searches for a format name within standardize_formats.csv.
-    Returns "Found" if it is present and "Missing" if it is not.
-    """
+
     # If the format is an undetected error from FITS (a format identification tool),
     # return "Missing" so it is included in new_formats.txt and the archivist sees the error.
     if format_to_check.startswith("ERROR: cannot read"):
@@ -96,11 +116,17 @@ def in_standard(format_to_check):
 
 
 def new_formats_txt(format_matches, report_folder_path):
+    """Save format names to new_formats.txt if they are missing from standardize_formats.csv
+
+    Parameters:
+        format_matches : dictionary with the format names for keys and values of "Found" or "Missing"
+        report_folder_path : the path to the folder which contains ARCHive's group file format reports
+
+    Returns:
+        new : Boolean if there are any new formats (True) or not (False),
+        so the script can print a message if there are new formats.
     """
-    Locates formats in the format_matches dictionary that did not match
-    and saves them to a file (new_formats.txt) in the reports_folder.
-    Returns if there were any new formats or not (Boolean) so a script status message may be printed.
-    """
+
     # Makes a variable to track if there are any new formats.
     new = False
 
