@@ -1,6 +1,7 @@
 # Digital Preservation Format Report
 
 ## Overview
+
 Analyze format information from the UGA Libraries' digital preservation system (ARCHive),
 across the entire system and for individual departments, to monitor them for preservation risks.
 
@@ -15,6 +16,11 @@ The analysis is accomplished with a series of scripts:
 - update_standardization.py: identify new formats, which require new standardization rules
  
 ## Getting Started
+
+### Dependencies
+
+- numpy (https://numpy.org/) - categorize data and work with blanks in unit tests
+- pandas (https://pandas.pydata.org/) - edit and summarize CSV data
 
 ### Script Arguments
 
