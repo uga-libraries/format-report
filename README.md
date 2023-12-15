@@ -54,7 +54,13 @@ merge_format_reports.py
 update_standardization.py 
 - report_folder : the path to the folder which contains ARCHive's group file format reports and usage report (all CSVs)
 
+### Testing
 
+There are unit tests for all functions of each script, and for running each of the scripts in their entirety.
+
+Tests use files stored in the repository for input data, so these need to be updated to sync with changes
+to the NARA Digital Preservation Plan spreadsheet, or the output of merge_format_reports.py, 
+which is used as input for other scripts. 
 
 ## Workflow
  
