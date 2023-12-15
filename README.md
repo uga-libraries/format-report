@@ -64,35 +64,10 @@ which is used as input for other scripts.
 
 ## Workflow
  
-1. Download the format reports for each of the groups and the usage report (start of ARCHive - present) 
-   from the digital preservation system (ARCHive). 
-   Save the files to a single folder (report_folder).
+For the full analysis, use the [ARCHive reports workflow](documentation/archive_reports_workflow.md).
 
- 
-2. Run the update standardization script to identify any formats that are not in the standardize_formats.csv, 
-   which is used to add format types and format standardized names to the format data to allow 
-   for easier analysis of trends.
- 
-
-3. If any new formats are found, the update standardization script produces a file called new_formats.txt. 
-   Using the standardization guidelines, add the new formats to the standardize_formats.csv. 
-
-
-3. Run the merge format reports script to make two versions of CSVs that combine format information 
-   from all the group format reports and adds standardized information and NARA risk information. 
-   One CSV is organized by group and then by format. The other csv is organized by AIP and then by format.    
-
- 
-4. Review the results of matching the format identifications to the NARA risk spreadsheet. 
-   Remove extra matches, such as every version in NARA matching a singular format identification.
-   Try to match additional format identifications to NARA.
-
-
-5. Run the reports.py script to make an Excel workbook with analysis of the format data.
-
-
-6. Run the department_reports.py script to make an Excel workbook with analysis of each department's format data.
-   Can skip step 5 to only generate department reports.
+To generate a report for a specific department, use the 
+[department report workflow](documentation/department_reports_workflow.md).
 
 ## Author
 
