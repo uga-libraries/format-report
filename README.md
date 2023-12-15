@@ -94,4 +94,6 @@ which is used as input for other scripts.
 6. Run the department_reports.py script to make an Excel workbook with analysis of each department's format data.
    Can skip step 5 to only generate department reports.
 
-       
+## Author
+
+Adriane Hanson - Head of Digital Stewardship at the University of Georgia Libraries
