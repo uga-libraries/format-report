@@ -97,3 +97,14 @@ which is used as input for other scripts.
 ## Author
 
 Adriane Hanson - Head of Digital Stewardship at the University of Georgia Libraries
+
+## History
+
+The first analysis was in 2020. 
+It was repeated in 2021, but since there was not much change we adjusted the schedule to every two years. 
+In both years, risk was evaluated by manually comparing the most common standardized format names to the
+NARA Digital Preservation Plan spreadsheet and only the ARCHive reports were created.
+
+The third analysis was in 2023. The comparison to the NARA spreadsheet was partially automated, 
+allowing us to compare every format version to NARA, and the department reports were added.
+This gives us more nuanced, actionable risk data.
