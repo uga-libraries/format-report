@@ -44,6 +44,9 @@ department_reports.py
 - previous_formats_csv: the path to the "archive_formats_by_aip.csv" made by the merge_format_reports.py script 
   with data from the previous year's analysis, to use for calculating the change in risk.
 
+fix_version.py
+- csv_path : the path to one of the combined format reports made by the merge_format_reports.py script (CSV)
+
 merge_format_reports.py 
 - report_folder : the path to the folder which contains ARCHive's group file format reports and usage report (all CSVs) 
 - nara_csv : the path to NARA's Digital Preservation Plan spreadsheet (CSV)
