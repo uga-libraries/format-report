@@ -22,6 +22,14 @@ The analysis is accomplished with a series of scripts:
 - numpy (https://numpy.org/) - categorize data and work with blanks in unit tests
 - pandas (https://pandas.pydata.org/) - edit and summarize CSV data
 
+### Installation
+
+Download the latest version of NARA's Digital Preservation Plan spreadsheet (CSV version) from the 
+[U.S. National Archives Digital Preservation GitHub Repo](https://github.com/usnationalarchives/digital-preservation).
+
+From ARCHive, download every group's file format report, and the usage report (start of ARCHive - present),
+and save all of them to a single folder. This is the report_folder that is an argument for most scripts. 
+
 ### Script Arguments
 
 update_standardization.py 
