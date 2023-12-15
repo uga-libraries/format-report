@@ -1,7 +1,4 @@
-"""Calculates subtotals of collection, AIP, and file_id counts for different categories: groups, format types,
-format standardized names, format identifications, and combinations of those. File size subtotals will be added once
-that information is added to the ARCHive group format archive_reports. The results are saved to Excel workbooks
-(Frequency, Group-Overlap, and Ranges) to use for analyzing formats in ARCHive.
+"""Summarize the format data from ARCHive into four spreadsheets
 
 The script uses information from three sources, all CSVs. The usage report is downloaded from ARCHive. Both archive
 format archive_reports are made from the ARCHive group format archive_reports using the merge_format_reports script.
@@ -16,11 +13,24 @@ Definition of terms:
     * Format identification: a combination of the format name, version, and registry key (usually PRONOM).
 
 Unlike Excel, pandas does not merge difference of capitalization, e.g. MPEG Video and MPEG video, when subtotaling.
-"""
 
-# Before running this script, run update_standardization.py and merge_format_reports.py
-# Usage: python path/archive_reports.py report_folder
-# Report folder should contain the usage report and both archive format archive_reports.
+Parameters:
+    report_folder : the path to the folder which contains ARCHive's group file format reports,
+    the combined format reports made by the merge_format_reports.py script, and usage report (all CSVs)
+
+Returns:
+    ARCHive-Formats-Analysis_Frequency.xlsx : the amount of collections, AIPs, files, and/or size
+    by group, type, standardized format name, and format identification
+
+    ARCHive-Formats-Analysis_Group-Overlap.xlsx : the number of groups and list of groups
+    which have each format type, standardized format name, and format identification
+
+    ARCHive-Formats-Analysis_Ranges.xlsx : the number of formats (by format standardized name or format identification),
+    which are in each specified range of number of files or size
+
+    ARCHive-Formats-Analysis_Risk.xlsx : the number of files, GB, and format identifications at each NARA risk level
+    for ARCHive, each department, each format type, and each NARA plan type, as well the number for each NARA match type
+"""
 
 import csv
 import numpy as np
@@ -31,9 +41,17 @@ from update_standardization import check_argument
 
 
 def archive_overview(df_aip, df_group, usage):
-    """Uses the data from the usage report and both ARCHive format archive_reports to calculate statistics for each group and
-    the ARCHive total. Includes counts of TBs, collections, AIPs, file_ids, file types, format standardized names,
-    and format identifications. Returns a dataframe. """
+    """Calculate statistics for each ARCHive group using the usage report and both ARCHive format reports
+
+    Parameters:
+        df_aip : a dataframe with the information from archive_formats_by_aip.csv
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        usage : the path to the ARCHive usage report
+
+    Returns:
+        group_stats : a dataframe with row by group and columns with the Size (TB and GB) and number of
+        Collections, AIPs, File_IDs, Format Types, Format Standardized Names, and Format Identifications.
+    """
 
     # Gets the size (in TB) per group from the usage report.
     size_by_group = size_in_tb(usage)
@@ -90,8 +108,15 @@ def archive_overview(df_aip, df_group, usage):
 
 
 def file_count_ranges(category, df_group):
-    """Uses the data from the archive_formats_by_group report to calculate the number of instances of the category
-    within each range of file_ids (1-9, 10-99, 100-999, etc.). Returns a dataframe. """
+    """Calculate the number of instances of the category within each range of number of files (1-9, 10-99, etc.)
+
+    Parameters:
+        category : the column to subtotal on
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+
+    Returns:
+        result : a dataframe with rows by range and column Number of Formats (CATEGORY)
+    """
 
     # Makes a series with the number of file_ids for each instance of the category, regardless  of group.
     df_cat = df_group.groupby(df_group[category])['File_IDs'].sum()
@@ -117,10 +142,20 @@ def file_count_ranges(category, df_group):
 
 
 def format_id_frequency(totals, df_group):
-    """Uses the data from the archive_formats_by_group report to calculate the frequency for every format
-    identification (name, version, registry key), which includes the file_id count, percentage of file_ids, size in GB,
-    and percentage of size. Returns a dataframe sorted largest to smallest by file_id count since the items of most
-    interest are the most common formats. """
+    """Calculate the frequency for every format identification (name, version, registry key) by different measures
+
+    The resulting dataframe is sorted largest to smallest by file_id count
+    since the items of most interest are the most common formats.
+
+    Parameters:
+        totals : a dictionary with the total number of collections, AIPs, files, and size in ARCHive
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+
+    Returns:
+        format_ids : a dataframe with rows by format identification and
+        columns with the number and percentage of file id counts and size,
+        sorted largest to smallest by file id count
+    """
 
     # Make series for file_id counts and file_id percentages.
     format_count = df_group.groupby(df_group['Format_Identification'])['File_IDs'].sum()
@@ -143,8 +178,17 @@ def format_id_frequency(totals, df_group):
 
 
 def get_report_paths(report_folder_path):
-    """Finds the path to the three archive_reports used as script input.
-    Returns the three paths and a list of any missing files."""
+    """Get the path to the three archive_reports used as script input and check for missing files
+
+    Parameters:
+        report_folder_path : the path to the folder given as the script parameter, where the reports should be
+
+    Returns:
+        formats_by_aip_path : the path to the archive_formats_by_aip.csv, or None
+        formats_by_group_path : the path to the archive_formats_by_group.csv, or None
+        usage_path : the path to the ARCHive usage report, or None
+        missing_list : a list of missing reports, if any, or an empty list
+    """
 
     # Makes variables to store the paths, if found.
     formats_by_aip_path = None
@@ -175,8 +219,15 @@ def get_report_paths(report_folder_path):
 
 
 def group_overlap(category, df_group):
-    """Uses the data from the archive_formats_by_group report to calculate the number of groups and
-    a list of the groups which have each instance of the category, for example format type. Returns a dataframe. """
+    """Calculate the number of groups and a list of the groups which have each instance of the category
+
+    Parameters:
+        category : the column, for example Format Type, to subtotal on
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+
+    Returns:
+        groups_per_category : a dataframe with rows by instance of the category and columns Group_List and Groups.
+    """
 
     # Makes a series with a list of group names for each instance of the category.
 
@@ -204,9 +255,16 @@ def group_overlap(category, df_group):
 
 
 def groupby_risk(df_group, groupby_list):
-    """Makes a dataframe with the number of file ids, size in GB, and format identifications
-    for each instance of the column or columns included in the groupby_list.
-    Returns the dataframe."""
+    """Calculate the number of file ids, size in GB, and format identifications for the groupby_list column(s)
+
+    Parameters:
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        groupby_list : a list of the column or columns to subtotal on
+
+    Returns:
+        df : a dataframe with rows by instance of the category or categories and
+        columns File_IDs, Size_GB, and Format_Identifications
+    """
 
     # Calculates the totals.
     # File IDs and Size (GB) are sums; Format Identification is the number of unique values.
@@ -225,8 +283,18 @@ def groupby_risk(df_group, groupby_list):
 
 
 def one_category(category, totals, df_aip, df_group):
-    """Uses the data from both ARCHive format archive_reports to calculate subtotals of collection, AIP, and file_id counts
-    and size in GB per each instance of the category, for example format type. Returns a dataframe. """
+    """Calculate subtotals of collection, AIP, and file_id counts and size in GB per each instance of a category
+
+    Parameters:
+        category : the column (e.g., Format Type) to subtotal on
+        totals : a dictionary with the total number of collections, AIPs, files, and size in ARCHive
+        df_aip : a dataframe with the information from archive_formats_by_aip.csv
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+
+    Returns:
+        result : a dataframe with rows by instance of the category and
+        columns Collections, Collections Percentage, AIPs, AIPs Percentage, File_IDs, File_IDs Percentage
+    """
 
     # Creates a series for each count type (collections, AIPs, and file_ids) and size for each instance of the category.
     collections = df_aip.groupby(category)['Collection'].nunique()
@@ -267,8 +335,15 @@ def one_category(category, totals, df_aip, df_group):
 
 
 def size_ranges(category, df_group):
-    """Uses the data from the archive_formats_by_group report to calculate the number of instances of the category
-    within each range of total size (0-249 GB, 250-499 GB, etc.). Returns a dataframe. """
+    """Calculate the number of instances of the category within each range of total size (0-249 GB, 250-499 GB, etc.)
+
+    Parameters:
+        category : the column to subtotal on
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+
+    Returns:
+        result : a dataframe with rows by size range and column Total Size (CATEGORY)
+    """
 
     # Makes a series with the total size for each instance of the category, regardless of group.
     df_cat = df_group.groupby(df_group[category])['Size_GB'].sum()
@@ -295,7 +370,14 @@ def size_ranges(category, df_group):
 
 
 def size_in_tb(usage):
-    """Uses data from the usage report to calculate the size in TB each group. Returns a dataframe. """
+    """Use data from the usage report to calculate the size in TB each group
+
+    Parameters:
+        usage : the path to the ARCHive usage report
+
+    Returns:
+        sizes : a dataframe with rows by group and column Size
+    """
 
     # Group Names maps the human-friendly version of group names from the usage report to the ARCHive group code
     # which is used in both archive format archive_reports and in ARCHive metadata generally.
@@ -340,10 +422,17 @@ def size_in_tb(usage):
 
 
 def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
+    """Save counts and percentages of different categories to a spreadsheet named ARCHive-Formats-Analysis_Frequency.xlsx
+
+    Parameters:
+        df_aip : a dataframe with the information from archive_formats_by_aip.csv
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        usage : the path to the ARCHive usage report
+        output_folder : the path to a folder for saving script output, which is also the folder with the script inputs
+
+    Returns: none
     """
-    Calculates summaries based on counts and percentages of different categories
-    and saves them to a spreadsheet named ARCHive-Formats-Analysis_Frequency.xlsx.
-    """
+
     # Makes the ARCHive overview dataframe (summary statistics by group).
     overview = archive_overview(df_aip, df_group, usage)
 
@@ -373,11 +462,15 @@ def spreadsheet_frequency(df_aip, df_group, usage, output_folder):
 
 
 def spreadsheet_group_overlap(df_group, output_folder):
+    """Save groups with the same instances of different categories to a spreadsheet named ARCHive-Formats Analysis_Group_Overlap.xlsx
+
+    Parameters:
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        output_folder : the path to a folder for saving script output, which is also the folder with the script inputs
+
+    Returns: none
     """
-    Calculates the groups which contain the same instances of different categories
-    (format type, format name, format ids) and saves them to a spreadsheet named
-    ARCHive-Formats Analysis_Group_Overlap.xlsx.
-    """
+
     # Makes a dataframe with the number of groups and list of groups that have each format type.
     groups_per_type = group_overlap('Format_Type', df_group)
 
@@ -395,11 +488,15 @@ def spreadsheet_group_overlap(df_group, output_folder):
 
 
 def spreadsheet_ranges(df_group, output_folder):
+    """Save the number of formats within predetermined ranges to a spreadsheet named ARCHive-Formats Analysis_Ranges.xlsx
+
+    Parameters:
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        output_folder : the path to a folder for saving script output, which is also the folder with the script inputs
+
+    Returns: none
     """
-    Calculates the the number of instances of format types and format standardized names
-    within predetermined ranges of file id counts or size and saves them to a spreadsheet named
-    ARCHive-Formats Analysis_Ranges.xlsx.
-    """
+
     # Makes dataframes with the number of format standardized names within different ranges of file_id counts and sizes.
     format_name_ranges = file_count_ranges('Format_Standardized_Name', df_group)
     format_name_sizes = size_ranges('Format_Standardized_Name', df_group)
@@ -417,11 +514,15 @@ def spreadsheet_ranges(df_group, output_folder):
 
 
 def spreadsheet_risk(df_group, output_folder):
+    """Save different measures of the NARA risk levels to a spreadsheet named ARCHive-Formats-Analysis_Risk.xlsx
+
+    Parameters:
+        df_group : a dataframe with the information from archive_formats_by_group.csv
+        output_folder : the path to a folder for saving script output, which is also the folder with the script inputs
+
+    Returns: none
     """
-    Calculates different measures of the amount at each of the four NARA risk levels,
-    No Match, High, Moderate, and Low,
-    and saves them to a spreadsheet named ARCHive-Formats-Analysis_Risk.xlsx.
-    """
+
     # Assigns an order to the NARA risk categories, so results are in order of increasing risk.
     risk_order = ["Low Risk", "Moderate Risk", "High Risk", "No Match"]
     df_group['NARA_Risk_Level'] = pd.Categorical(df_group['NARA_Risk_Level'], risk_order, ordered=True)
