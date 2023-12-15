@@ -32,18 +32,24 @@ and save all of them to a single folder. This is the report_folder that is an ar
 
 ### Script Arguments
 
+All script arguments are required.
+
 update_standardization.py 
-- report_folder
+- report_folder : the path to the folder which contains ARCHive's group file format reports and usage report (all CSVs)
 
 merge_format_reports.py 
-- report_folder 
-- nara_csv
+- report_folder : the path to the folder which contains ARCHive's group file format reports and usage report (all CSVs) 
+- nara_csv : the path to NARA's Digital Preservation Plan spreadsheet (CSV)
 
 archive_reports.py
-- report_folder
+- report_folder : the path to the folder which contains ARCHive's group file format reports, 
+  the combined format reports made by the merge_format_reports.py script, and usage report (all CSVs)
 
 department_reports.py
-- archive_formats_by_aip_csv
+- current_formats_csv : the path to the "archive_formats_by_aip.csv" made by the merge_format_reports.py script 
+  with data for the current year's analysis.
+- previous_formats_csv: the path to the "archive_formats_by_aip.csv" made by the merge_format_reports.py script 
+  with data from the previous year's analysis, to use for calculating the change in risk.
 
 ## Workflow
  
