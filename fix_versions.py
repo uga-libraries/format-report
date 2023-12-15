@@ -1,13 +1,18 @@
-"""
+"""Correct the version in a combined format report produced by merge_format_reports.py
+
 The CSV files created by merge_format_reports.py are opened in Excel to update risk matches,
 but Excel automatically reformats version numbers to remove 0 from the end, which is an error.
+Form example, 1.0 becomes 1 and 2.10 becomes 2.1.
 
 The correct version is still part of Format_Identification.
 This script updates the version column with the version from Format_Identification.
-"""
 
-# Usage: python path/fix_versions.py csv_path
-#    path_csv is the path to either CSV created b merge_format_reports.py
+Parameters:
+    csv_path : the path to one of the combined format reports made by the merge_formats_report.py script (CSV)
+
+Returns:
+    Updated CSV file with the correct version information.
+"""
 
 import os
 import pandas as pd
@@ -15,11 +20,16 @@ import sys
 
 
 def check_argument(argument_list):
+    """Verify the requirement argument csv_path is present and correct
+
+    Parameters:
+        argument_list :
+
+    Returns:
+        path : path to the CSV to be fixed, if provided, or None
+        error : string with an error message, if any, or None
     """
-    Verifies the required argument csv_path is present and valid,
-    and the filename matches expected naming conventions.
-    Returns the path and the error, if any.
-    """
+
     # Makes variables with default values to store the results of the function.
     path = None
     error = None

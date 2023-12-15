@@ -1,20 +1,23 @@
-"""
-Converts the merged ARCHive format report organized by AIP (archive_formats_by_aip_date.csv)
-into risk archive_reports for individual departments.
+"""Convert the merged ARCHive format report (archive_formats_by_aip_date.csv) into risk reports for each department.
+
 The department archive_reports are Excel spreadsheets and are saved the same folder as the format report.
 
 Information included:
     * A list of AIPs with format identifications, risk levels, and risk change since the last analysis
-    * A summary of risk by collection
-    * A summary of risk by AIP
-    * A summary of formats by collection and AIP
+    # The percentage of formats at each risk level for the entire department
+    * The percentage of formats at each risk level for each collection
+    * The percentage of formats at each risk level for each AIP
+    * The formats, and their risk levels, for each collection
 
-Use merge_format_reports.py to produce archive_formats_by_aip_date.csv.
+Parameters:
+    current_formats_csv : the path to the "archive_formats_by_aip.csv" made by the merge_format_reports.py
+    with data for the current year's analysis
+    previous_formats_csv : the path to the "archive_formats_by_aip.csv" made by the merge_format_reports.py
+    with data for the previous year's analysis
+
+Returns:
+    One spreadsheet per ARCHive group in the current_formats_csv
 """
-
-# usage: python path/department_reports.py current_formats_csv previous_formats_csv
-# The arguments are paths to the archive_formats_by_aip_date.csv
-# from the current year and from the last previous format analysis.
 
 import datetime
 import numpy as np
@@ -25,11 +28,17 @@ import sys
 
 
 def check_arguments(argument_list):
+    """Check both required arguments are present and correct
+
+    Parameters:
+        argument_list : the list from sys.argv with the script parameters
+
+    Returns:
+        current_path : the path to archive_formats_by_aip.csv for the current year, or None
+        previous_path : the path to archive_formats_by_aip.csv for the previous year, or None
+        errors : the list of errors, if any, or an empty list
     """
-    Verifies that both required arguments are present, the paths are valid,
-    and they have the expected data based on the filenames.
-    Returns both arguments and a list of errors.
-    """
+
     # Makes variables with default values to store the results of the function.
     current_path = None
     previous_path = None
@@ -64,11 +73,15 @@ def check_arguments(argument_list):
 
 
 def csv_to_dataframe(csv_file):
+    """Read a CSV into a dataframe, reformat the data, and add additional data
+
+    Parameters:
+        csv_file : the path to one of the archive_by_formats_by_aip.csv files
+
+    Returns:
+        csv_df : a dataframe with the information from the CSV, reformatted and with additional data
     """
-    Reads the previous or current archive_formats_by_aip_csv into a dataframe,
-    including error handling for encoding errors, and cleans up the data.
-    Returns the dataframe.
-    """
+
     # Reads the CSV into a dataframe, ignoring encoding errors from special characters if necessary.
     # Reads everything as a string to make actions taken on the dataframes predictable.
     try:
@@ -115,10 +128,16 @@ def csv_to_dataframe(csv_file):
 
 
 def formats_pivot(current_df):
+    """Make a table with the formats, organized by decreasing risk, in each collection
+
+    Parameters:
+        current_df : a dataframe with the information from the archive_formats_by_aip.csv for the current year
+
+    Returns:
+        pivot : a dataframe with the pivot table values of risk and format by collection,
+        with Boolean to indicate if the format is in that collection or not
     """
-    Makes a pivot table to indicate which formats are in each Collection.
-    Returns a dataframe with the information.
-    """
+
     # Gets the name fo the NARA Risk Level column,
     # which includes the year and so is different each time the analysis is run.
     current_risk_column = current_df.columns.to_list()[6]
@@ -144,11 +163,17 @@ def formats_pivot(current_df):
 
 
 def risk_change(current_df, previous_df):
+    """Update the current analysis dataframe with risk data from the previous analysis and the change between the two
+
+    Parameters:
+        current_df : a dataframe with the information from the archive_formats_by_aip.csv for the current year
+        previous_df : a dataframe with the information from the archive_formats_by_aip.csv for the previous year
+
+    Returns:
+        current_df : a dataframe with the information from the archive_formats_by_aip.csv for the current year,
+        the previous year, and the type of change between the two
     """
-    Updates the current analysis dataframe with risk data from the previous analysis and
-    the type of change between the previous analysis and current analysis.
-    Returns the updated current dataframe.
-    """
+
     # Gets the name of the NARA Risk Level column for each dataframe,
     # which includes the year and so is different each time the analysis is run.
     previous_risk = previous_df.columns.to_list()[7]
@@ -175,10 +200,16 @@ def risk_change(current_df, previous_df):
 
 
 def risk_levels(dept_df, index_column):
+    """Calculate the percentage of formats at each risk level
+
+    Parameters:
+        dept_df : a dataframe with the information for one ARCHive group from the archive_formats_by_aip.csv
+        index_column : the name of the column (Group, Collection, or AIP) to subtotal the formats on
+
+    Returns:
+        risk : a dataframe with the percentage of formats at each risk level, ordered by highest to lowest risk
     """
-    Calculates the percentage of formats at each risk level.
-    Returns a dataframe.
-    """
+
     # Removes duplicate formats (based on name and version) from the dataframe
     # within the unit of analysis (index_column).
     # For example, with collections, a format should be counted once per collection.

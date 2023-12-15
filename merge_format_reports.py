@@ -1,22 +1,22 @@
 """Combines the ARCHive format archive_reports, which are one CSV per group, into single CSVs for analysis.
 
-One CSV (archive_formats_by_aip_YYYYMM.csv) is organized by AIP and then by format identification. 
-It includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
-format standardized name, format name, format version, registry name, registry key, and format note). 
-It is used for aggregating the number of collections and AIPs.
+Parameters:
+    report_folder : the path to the folder which contains ARCHive's group file format reports and usage report (all CSVs)
+    nara_csv : the path to NARA's Digital Preservation Plan spreadsheet (CSV)
 
-The other CSV (archive_formats_by_group_YYYYMM.csv) is organized by group and then by format identification. 
-It includes the ARCHive group, number of file_ids, and format information (format type,format standardized name,
-format name, format version, registry name, registry key, and format note) 
-It is used for aggregating the number of file_ids. 
-The numbers are inflated by files that have more than one possible format identification.
+Returns:
 
-Before running this script, run update_standardization.py
+    archive_formats_by_aip_YYYYMM.csv: organized by AIP and then by format identification.
+    It includes the ARCHive group, collection identifier, AIP identifier, and format information (format type,
+    format standardized name, format name, format version, registry name, registry key, and format note).
+    It is used for aggregating the number of collections and AIPs.
+
+    archive_formats_by_group_YYYYMM.csv: organized by group and then by format identification.
+    It includes the ARCHive group, number of file_ids, and format information (format type,format standardized name,
+    format name, format version, registry name, registry key, and format note)
+    It is used for aggregating the number of file_ids.
+    The numbers are inflated by files that have more than one possible format identification.
 """
-
-# Usage: python path/merge_format_reports.py report_folder nara_csv
-#    - report_folder contains the ARCHive group format archive_reports. Script output is saved to this folder as well.
-#    - nara_csv is the path to the NARA preservation action plans spreadsheet.
 
 import csv
 import datetime
@@ -28,11 +28,21 @@ import sys
 
 
 def add_nara_risk(format_csv_path, nara_csv_path):
+    """Add NARA risk information to one of the combined format reports
+
+    Information included:
+    - NARA Risk Level
+    - NARA Proposed Preservation Plan
+    - NARA format information (name and PUID), so that the accuracy of the match can be evaluated
+    - The technique that produced the match (NARA_Match_Type), so the effective of match types can be evaluated.
+
+    Parameters:
+        format_csv_path : the path to one of the combined format reports made earlier in the script
+        nara_csv_path : the path to NARA's Digital Preservation Plan spreadsheet
+
+    Returns: none
     """
-    Updates the format CSVs with the NARA Risk Level and Proposed Preservation Plan,
-    the NARA format information so that the accuracy of the match can be evaluated,
-    and the name of the technique that produced the match (NARA_Match_Type).
-    """
+
     # Reads the format CSV into a dataframe, ignoring encoding errors.
     df_format = csv_to_dataframe(format_csv_path)
 
@@ -48,9 +58,15 @@ def add_nara_risk(format_csv_path, nara_csv_path):
 
 
 def collection_from_aip(aip_id, group):
-    """Returns the collection id. The collection id is extracted from the AIP id based on each group's rules for
-    constructing AIP ids, all of which include the collection id. If the pattern does not match any known rules,
-    the function raises a ValueError."""
+    """Determine the collection identifier based on groups' rules for constructing AIP identifiers
+
+    Parameters:
+        aip_id : AIP identifier, which contains the collection identifier (string)
+        group : ARCHive group code, since each group has different rules for construction AIP identifiers (string)
+
+    Returns:
+        collection id : collection identifier (string), if calculated, or raises an error
+    """
 
     # Brown Media Archives and Peabody Awards Collection
     if group == "bmac":
@@ -194,10 +210,17 @@ def collection_from_aip(aip_id, group):
 
 
 def check_arguments(argument_list):
+    """Check the required arguments report_folder and nara_csv are present and correct
+
+    Parameters:
+        argument_list : list from sys.argv with the script parameters
+
+    Returns:
+        report_path : the path to the folder which contains ARCHive's group file format reports and usage report, or None
+        nara_path : the path to NARA's Digital Preservation Plan spreadsheet, or None
+        errors : the list of errors encountered, if any, or an empty list
     """
-    Verifies the required arguments report_folder and nara_csv are present and the paths are valid.
-    Returns the two paths and a list of errors, if any.
-    """
+
     # Makes variables with default values to store the results of the function.
     report_path = None
     nara_path = None
@@ -226,11 +249,19 @@ def check_arguments(argument_list):
 
 
 def csv_to_dataframe(csv_file):
-    """
-    Reads a CSV into a dataframe, renames columns if it is NARA, and returns the dataframe.
+    """Read a CSV file into a dataframe, dealing with special characters and renaming columns
+
     If special characters require the CSV to be read while ignoring encoding errors, it prints a warning.
-    This is copied from https://github.com/uga-libraries/accessioning-scripts/blob/main/format_analysis_functions.py
+    This function is based on https://github.com/uga-libraries/accessioning-scripts/blob/main/format_analysis_functions.py
+
+    Parameters:
+        csv_file : the path to a combined format report made earlier in this script
+        or NARA's Digital Preservation PLan spreadsheet
+
+    Returns:
+        df : a dataframe with the contents of the CSV
     """
+
     # Reads the CSV into a dataframe, ignoring encoding errors from special characters if necessary.
     # Reads a string to allow better comparisons between dataframes.
     try:
@@ -257,13 +288,24 @@ def csv_to_dataframe(csv_file):
 
 
 def match_nara_risk(df_format, df_nara):
-    """
-    Matches risk information from NARA to the format identification data from ARCHive
-    using different techniques, starting with the most accurate.
+    """Match format identifications to NARA's Digital Preservation Plan spreadsheet
+
+    The match techniques are applied in order of accuracy, and stop for each format when a match is found.
+
+    This function is based on https://github.com/uga-libraries/accessioning-scripts/blob/main/format_analysis_functions.py
+
     Returns a dataframe with all the format data, the NARA Risk Level and Proposed Preservation Plan,
     and the name of the technique that produced the match (NARA_Match_Type).
-    This is copied from https://github.com/uga-libraries/accessioning-scripts/blob/main/format_analysis_functions.py
-    and modified to work with ARCHive format identifications instead of FITS."""
+    This is copied from
+    and modified to work with ARCHive format identifications instead of FITS.
+
+    Parameters:
+        df_format : a dataframe with the information from one of the combined format reports made earlier in the script
+        df_nara : a dataframe with the information from NARA's Digital Preservation Plan spreadsheet
+
+    Returns:
+        df_result : a dataframe with the format information and corresponding NARA risk information, if matched
+    """
 
     # PART ONE: ADD TEMPORARY COLUMNS TO BOTH DATAFRAMES FOR BETTER MATCHING
 
@@ -392,10 +434,16 @@ def match_nara_risk(df_format, df_nara):
 
 
 def read_report(report_path):
+    """Transform the data from an ARCHive group file format report into two lists
+
+    Parameters:
+        report_path : the path to the ARCHive group file format report
+
+    Returns:
+        aip_csv_rows : a list of lists, where each list is a row for the "by_aip" CSV
+        group_csv_rows : a list of lists, where each list is a row for the "by_group" CSV
     """
-    Gets data from each ARCHive group format report and calculates additional information based on that data.
-    Returns two lists with the rows of data to save to the CSV files.
-    """
+
     # Makes lists to store the rows of data to save to the CSV files.
     aip_csv_rows = []
     group_csv_rows = []
@@ -424,10 +472,21 @@ def read_report(report_path):
 
 
 def read_row(row_data, archive_group):
+    """Transform the data for one format in an ARCHive group file format report into two lists
+
+    In addition to putting the data in the desired order, it replaces blank cells with "NO VALUE",
+    adds the format standardized name, format type, and format id,
+    and for AIPs copies the data into a list for each separate AIP.
+
+    Parameters:
+        row_data : data from one row of an ARCHive group file format report, from reading with the csv library
+        archive_group : ARCHive code for the group (string)
+
+    Returns:
+        aip_rows : a list of lists, where each list has the data for each AIP that contains the format
+        group_row : a list with data for the format
     """
-    Gets data from a row from an ARCHive format report and calculates additional information based on that data.
-    Returns two lists to be added to group_csv_rows and aip_csv_rows.
-    """
+
     # Replaces any blank cells with "NO VALUE" to make it more clear when there is no data.
     row = ["NO VALUE" if x == "" else x for x in row_data]
 
@@ -459,9 +518,15 @@ def read_row(row_data, archive_group):
 
 
 def save_to_csv(csv_path, rows):
-    """
-    Saves rows to the specified CSV.
-    If rows indicates a header, uses the header information stored in this function.
+    """Save rows to a specified CSV
+
+    If the value of rows indicates a header, it uses the header information stored in this function.
+
+    Parameters:
+        csv_path : the path to the combined format report CSV
+        rows : a list of lists with format data, or strings to indicate which header to add
+
+    Returns: none
     """
 
     # Headers for the two different CSVs created by this script.
@@ -485,12 +550,19 @@ def save_to_csv(csv_path, rows):
 
 
 def standardize_format(format_name):
-    """
-    Finds the format name within standardize_formats.csv
-    and returns the standard (simplified) format name and the format type from the CSV for that format.
+    """Find the standardized format name and format type for a format in standardize_formats.csv
+
     These values reduce the data variability so the summaries are more useful.
     If there is no match, exits the script.
+
+    Parameters:
+        format_name : the name of a format (string)
+
+    Returns:
+        format standardized name : the standardized name of a format (string)
+        format type : the type of a format (string)
     """
+
     # Checks if the format name is actually an error and if so, returns default value for name and type.
     if format_name.startswith("ERROR: cannot read"):
         return "IDENTIFICATION ERROR", "IDENTIFICATION ERROR"
