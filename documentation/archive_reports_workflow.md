@@ -112,7 +112,7 @@ In this step, make summaries of the merged format reports, and use those summari
    - Freeze the top row (column headers) if there are more rows than can be viewed on a normal computer monitor.
 
 
-4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a foldernamed "ARCHive Format Report".
+4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a folder named "ARCHive Format Report".
 
 
 5. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
