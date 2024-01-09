@@ -19,6 +19,7 @@ Data is exported from ARCHive on or around November 1, at a time that no new con
 2. From the Reports page in the ARCHive interface, download the File Formats report for every group, 
    except for Emory and Test AIP Group, and save them to the archive_reports folder. 
    It can take a long time to download, with DLG requiring multiple hours.
+   Delete the format identification in Russell that is a path error. The file also has an accurate identification.
 
 
 3. From the Reports page in the ARCHive interface, download the Usage report and save it to the archive_reports folder.
