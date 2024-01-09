@@ -59,8 +59,7 @@ Format type is based on MIME type and format name is based on PRONOM, with local
 4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 
-5. Move new_formats.txt to the Format Analysis folder in Teams for this year. 
-   It can be deleted at the end of the analysis, but is can be useful during the process to review which formats are new.
+5. Move new_formats.txt to the Format Analysis folder in Teams for this year, as a record of new formats. 
 
 ## Combine Department Data
 
