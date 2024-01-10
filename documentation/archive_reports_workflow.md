@@ -78,9 +78,7 @@ and add collections, standardized format type and name, and NARA preservation in
 2. Review and update the NARA matches in Excel, following the [Match Guidelines](archive_nara_match_guidelines.md).
 
 
-3. Run the fix_version.py script to fix the version numbers from opening the CSVs in Excel. 
-   It is necessary to use Excel features to refine the matches to NARA risk data in the previous step, 
-   but Excel automatically reformats the version to remove the 0 from the end, for example making 1.10 into 1.1.
+3. Run the fix_excel.py script to fix the version numbers and blank rows from opening the CSVs in Excel.
 
 
 4. Save a copy of both versions of both spreadsheets to the Format Analysis folder in Teams for this year,

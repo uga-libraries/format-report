@@ -28,7 +28,10 @@ Some departments have content that is more prone to risk and may want to run the
 5. Use the [Match Guidelines](archive_nara_match_guidelines.md) to refine the NARA risk data in the "by_aip" report.
 
 
-6. Get the "by_aip" report from a previous analysis and delete other departments if present.
+6. Run the fix_excel.py script to fix the version numbers and blank rows from opening the CSVs in Excel. 
+
+
+7. Get the "by_aip" report from a previous analysis and delete other departments if present.
 
 
 7. Run the department_reports.py script to make the department spreadsheet report(s).

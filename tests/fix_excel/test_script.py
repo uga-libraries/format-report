@@ -1,6 +1,6 @@
 """
-Tests the entire script fix_versions.py,
-which fixes errors in the version caused by openening the CSV in Excel.
+Tests the entire script fix_excel.py,
+which fixes errors caused by opening the CSV in Excel.
 """
 
 import numpy as np
@@ -28,7 +28,7 @@ class MyTestCase(unittest.TestCase):
         Test for running the script with the required argument.
         It will print a message and exit the script.
         """
-        script_path = os.path.join("..", "..", "fix_versions.py")
+        script_path = os.path.join("..", "..", "fix_excel.py")
 
         # Tests that the script exits due to the error.
         with self.assertRaises(subprocess.CalledProcessError):
@@ -51,7 +51,7 @@ class MyTestCase(unittest.TestCase):
         shutil.copy(csv_original, csv_test)
 
         # Runs the script
-        script_path = os.path.join("..", "..", "fix_versions.py")
+        script_path = os.path.join("..", "..", "fix_excel.py")
         subprocess.run(f"python {script_path} {csv_test}", shell=True)
 
         # Tests that the updated test CSV has the expected values.
@@ -112,7 +112,7 @@ class MyTestCase(unittest.TestCase):
         shutil.copy(csv_original, csv_test)
 
         # Runs the script
-        script_path = os.path.join("..", "..", "fix_versions.py")
+        script_path = os.path.join("..", "..", "fix_excel.py")
         subprocess.run(f"python {script_path} {csv_test}", shell=True)
 
         # Tests that the updated test CSV has the expected values.
