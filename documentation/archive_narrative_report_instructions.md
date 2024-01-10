@@ -11,7 +11,7 @@ It is supplemented by department-specific reports with more detail.
 Use Excel and the data from the ARCHive Format Analysis spreadsheets to make charts and graphs of the data. 
 Use the previous analysis' report as a template for the new report.
 
-The spreadsheets will be in the Teams folder for this year's Format Analysis, in the "ARCHive Format Reports" folder. 
+The spreadsheets will be in the Teams folder for this year's Format Analysis, in the "ARCHive Format Report" folder. 
 Save the narrative report here as well. 
 
 ## Formatting Guide
@@ -27,6 +27,12 @@ In all visualizations, use these guidelines for a more readable result.
    - Size 11
    - Black (if on white background) or white (if on a colored background)
 
+- Colors for Risk
+  - No Match is blue
+  - High Risk is dark red
+  - Moderate Risk is orange
+  - Low Risk is green
+
 - Bar Graph
   - Always include a title
   - Include x-axis and/or y-axis labels if it is not clear from other data
@@ -35,17 +41,21 @@ In all visualizations, use these guidelines for a more readable result.
   - Widen the bars by decrease gap width to 75%
 
 - Pie Chart
-   - If they fit, use Quick Layout 1 to add value and percentage data labels.
+   - If labels fit, use Quick Layout 1 to add value and percentage data labels.
    - If labels don't fit, use a legend on the left.
    - Reduce the space between the pie and the legend.
-   - If there are multiple pie charts with the same legend, only have the legend on the first one.
+   - If there are multiple pie charts with the same legend, only have the legend on the first one
+     and make them small enough to be side by side. 
+     Very small wedges will not show and that is ok, since the goal is to see trends.
    - Adjust the colors if there is not enough contrast.
    - Crop the image after pasting charts into the narrative report to remove extra white space. 
 
 - Table
-  - Header row or column is bold and fill with a light color.
+  - Header row is bold and filled with blue.
+  - Underscores are removed from the header row, if present.
   - Resize column widths to be relatively even, but it is ok to have some a little wider to limit text wrapping.
-  - Title in bold and centered over the table to explain what it is
+  - All cells are outlined.
+  - Numbers have a comma if 1,000 or more.
 
 ## Analysis
 
@@ -54,132 +64,162 @@ review the entire report for any contextual information that has changed.
 
 ### Report Summary
 
-There are no visuals in this section.
-Update the statistics and common format information within the paragraphs using the data sources listed below,
-and use the previous analysis report to evaluate the change since last time.
+This summary should have all key points from the report, in case this is all that someone reads.
 
-- Number of TB and files in ARCHive: "Group_Overview" in Frequency spreadsheet
-- Most common format types: "Format_Types" in Frequency spreadsheet
-- Most common format standardized names: "Format_Names" in Frequency spreadsheet
-- Formats at high risk: Department reports
+Update the statistics and common format information within the paragraphs using the data sources listed below,
+update the links and dates, and use the previous analysis report to evaluate the change since last time.
+
+- Number of TB and files in ARCHive: "Group_Overview" in Frequency spreadsheet.
+- Most common format types: "Format_Types" in Frequency spreadsheet.
+- Most common format standardized names: "Format_Names" in Frequency spreadsheet.
+- Formats at high risk and not matched: "ARCHive_Risk_Overview" in Risk spreadsheet and department reports.
+- Group overlap: Group Overlap spreadsheet.
 
 ### Background and Method
 
-There are no visuals in this section.
-Update the number of types and standardized names from the standardize_formats.csv
+- Update the links and dates
+- Update the number of types and standardized names from the standardize_formats.csv
+- Update any changes in the data or the method
 
 ### ARCHive Overview
+
+Update the number of groups with AIPs in ARCHive (excluding Emory and Test) 
+and note any group ingesting for the first time since the last analysis.
 
 Make the table.
 
 1. Copy the data from "Group_Overview" in the Frequency spreadsheet.
 2. Delete the Size_GB_Inflated column.
 3. Remove the underscores in the column names.
-4. Give the first row (column names) a blue background.
-5. Put outlines around all cells.
-6. Add a blank row before the total row.
-7. Resize columns to a width of 0.9" and then adjust if needed to fit.
-8. Reformat the numbers to use commas.
+4. Reformat the table following the Formatting Guide (above).
+5. Add a blank row before the total row.
 
 Make the pie charts. For all three, use data from "Group_Overview" in the Frequency spreadsheet.
+Use them and the results from the previous analysis report to update the text above them.
 
 1. Highlight the Group and AIPs columns (skipping the "total" row) and insert a pie chart.
 2. Highlight the Group and Size_TB columns (skipping the "total" row) and insert a pie chart.
 3. Highlight the Group and Files (skipping the "total" row) and insert a pie chart.
 4. Reformat the pie charts following the Formatting Guide (above).
-5. Paste the pie charts into the report.
+5. Paste the pie charts into the report. Start with a height of 2" to get them to fit next to each other.
 
-Update the statistics within the narrative portion of the text and compare to the previous analysis report.
+### Format Risk
 
-### Format Type
+Update the text about the format risk analysis if anything has changed.
 
-Use data from "Format_Types" in the Frequency spreadsheet.
+#### Risk in ARCHive
 
-1. Make a table in the report with 6 columns and 4 rows.
-2. In the first column, put "Collections", "AIPs", "Files", and "Size".
-3. In Format_Types, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
-   1. Sort the column in Format_Types largest to smallest.
-   2. Put the five most frequent types in the row for that frequency measure.
+Make the pie charts, using the data in each of the three columns in "ARCHive_Risk_Overview" in the Risk spreadsheet,
+and use them to update the text above them.
+
+1. Highlight the NARA_Risk_Level column and one of the other three columns.
+2. Insert a pie chart.
+3. Update the title to Number of Files, Size (GB), or Format Identifications.
+4. Reformat following the Formatting Guide (above).
+
+Use "ARCHive_Risk_Overview" and "Format_Type_Risk" in the Risk spreadsheet to update the text below the charts.
+
+#### Risk by Group
+
+Make the graph using the data in "Department_Risk_Overview" in the Risk spreadsheet,
+and then use it to update the text above it.
+
+1. Highlight the data and insert a pivot table with Rows = Group, Columns = NARA_Risk_Level, 
+   and Values = Sum of Format_Identifications. 
+2. Copy and paste the values of the pivot table, so it can be edited.
+3. Delete the total column and row, and move the High Risk column between Moderate and No Match to be in risk order.
+4. Highlight the edited pivot table and insert a 100% stacked column graph.
+5. Update the title to Percentage of Formats at NARA Risk Levels by Group.
+6. Reformat following the Formatting Guide (above).
+
+#### Risk by Format Type
+
+Make the "Risk by Format Type" graph using the data in "Format_Type_Risk" in the Risk spreadsheet,
+and then use it to update the text above it.
+
+1. Highlight the data and insert a pivot table with Rows = Type, Columns = NARA_Risk_Level, 
+   and Values = Sum of Format_Identifications. 
+2. Copy and paste the values of the pivot table, so it can be edited.
+3. Delete the total column and row, and move the High Risk column between Moderate and No Match to be in risk order.
+4. Highlight the edited pivot table and insert a 100% stacked column graph.
+5. Update the title to Percentage of Formats at NARA Risk Levels by Type.
+6. Reformat following the Formatting Guide (above).
+
+### Common Formats
+
+#### Format Type
+
+Make the table using the data from "Format_Types" in the Frequency spreadsheet,
+and then use it and the previous analysis report to update the text above it.
+
+1. Make a table in the report with 4 columns and 6 rows.
+2. In the first row, put "Collections", "AIPs", "Files", and "Size".
+3. For each of the four columns:
+   1. Sort the column in Format_Types for that frequency measure (e.g., Collections) largest to smallest.
+   2. Put the five most frequent types in the column for that frequency measure.
    3. Add the count in parentheses after each type in the table. For size, convert to TB if over 1,000 GB.
-   
-Also update the number and list of format types, from standardize_formats.csv,
-summarize the most common types based on all the measures,
-and compare the results to the previous analysis report.
+4. Reformat following the Formatting Guide (above).
 
-### Format Standardized Name
+#### Format Standardized Name 
 
-Use data from "Format_Names" in the Frequency spreadsheet to make the table.
+Make the table using data from "Format_Names" in the Frequency spreadsheet,
+and then use it and the previous analysis report to update the text above it.
 
-1. Make a table in the report with 6 columns and 4 rows.
-2. In the first column, put "Collections", "AIPs", "Files", and "Size".
-3. In Format_Names, for each of the frequency measures (Collections, AIPs, Files, Size_GB):
-   1. Sort the column in Format_Names largest to smallest.
-   2. Put the five most frequent names in the row for that frequency measure.
+1. Make a table in the report with 4 columns and 6 rows.
+2. In the first row, put "Collections", "AIPs", "Files", and "Size".
+3. For each of the four columns:
+   1. Sort the column in Format_Names for that frequency measure (e.g., Collections) largest to smallest.
+   2. Put the five most frequent names in the column for that frequency measure.
    3. Add the count in parentheses after each name in the table. For size, convert to TB if over 1,000 GB.
-   
-Also update the number of format standardized names, from standardize_formats.csv,
-summarize the most common names based on all the measures,
-and compare the results to the previous analysis report.
+4. Reformat following the Formatting Guide (above).
 
-Make the graphs.
+Make the Number of per Standardized Format Name graph, and then use it to update the text above it.
+To calculate the percentage, use the total number of format standardized names from the intro of this section.
 
 1. Highlight the data in "Format_Name_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
 2. Rename the title to "Number of Files per Standardized Format Name".
-3. Repeat steps 1-2 using "Format_Name_Sizes" and the title "Size per Standardized Format Name".
-4. Reformat the graphs following the Formatting Guide (above).
+3. Reformat following the Formatting Guide (above).
 
-Also update the number and percentage of formats with less than 10 files or 10 GB,
-which is the smallest range in "Format_Name_Ranges" and "Format_Size_Ranges".
+Make the Size per Standardized Format Name graph, and then use them to update the text above it.
 To calculate the percentage, use the total number of format standardized names from the intro of this section.
 
-### Format Identification by File Count
-
-Make the graph.
-
-1. Highlight the data in "Format_ID_Ranges" in the Ranges spreadsheet and insert a Clustered Column graph.
-2. Rename the title to "Number of Files per Unique Format".
+1. Highlight the data in "Format_Name_Sizes" in the Ranges spreadsheet and insert a Clustered Column graph.
+2. Rename the title to "Size per Standardized Format Name".
 3. Reformat following the Formatting Guide (above).
 
-Also update the total number of format identification in ARCHive currently, from "Group_Overview" in the Frequency spreadsheet,
-and the number from the previous analysis report.
+#### Format Identifications
 
-Make the table.
+Update the first paragraph using the data in "Group_Overview" in the Frequency spreadsheet 
+and the previous analysis report.
 
-1. Use the data in "Format_IDs" in the Frequency spreadsheet.
-2. If it isn't already, sort the column Files largest to smallest.
-3. Decide on the smallest number to include. Aim for 10 or fewer formats, and a number where there is a bigger gap between it and the next smallest 
-   compared to the gaps between the larger numbers. It was 70,000 in 2021 and 2023.
-4. Copy those Format_Identification and Files columns to the report, leaving them sorted by Files.
-5. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
+Make the table based on the size of files using the data in "Fomrat_IDs" in the Frequency spreadsheet,
+and then use it and the previous analysis report to update the text above it.
+To get the percentage, use total of the "Size (TB)" column made for this table.
 
-Also update the number and percentage of format identifications that appear fewer than 10 times,
-which is the smallest range in "Format_ID_Ranges", and compare the results to the previous analysis report.
-To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
-
-### Format Identification by Size
-
-Make the graph.
-
-1. Highlight the data in "Format_ID_Sizes" in the Ranges spreadsheet and insert a Clustered Column graph.
-2. Rename the title to "Size per Unique Format".
-3. Reformat following the Formatting Guide (above).
-
-Also update the number and percentage of format identifications that have fewer than 10 GB, which is the smallest range in "Format_ID_Sizes", 
-and the number and percentage with more than 10 TB, which combines the two largest ranges in "Format_ID_Sizes".
-To get the percentage, divide the number in that range by the sum of the total column, multiply by 100, and round to a whole number.
-
-Make the table.
-
-1. Use the data in "Format_IDs" in the Frequency spreadsheet.
-2. Sort the column Size_GB largest to smallest.
-3. Make a new column dividing Size_GB by 1000 to be Size (TB).
-4. Decide on the smallest number to include. Ain for 10 or fewer formats. The last 2 analyses used 10 TB.
-5. Copy those Format_Identification and Size (TB) columns to the report, leaving them sorted by size.
+1. Sort the column "Size_GB" largest to smallest.
+2. Make a new column "Size (TB)" by dividing "Size_GB" by 1000.
+3. Decide on the smallest number to include. Ain for 10 or fewer formats.
+5. Copy the Format_Identification and Size (TB) columns to the report, leaving them sorted by size.
 6. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
+
+Make the table based on number of files using the data in "Format_IDs" in the Frequency spreadsheet, 
+and then use it and the previous analysis report to update the text above it. 
+To get the percentage, use total of the "Files" column.
+
+1. Sort the column "Files" largest to smallest.
+2. Decide on the smallest number to include. Aim for 10 or fewer formats.
+3. Copy the Format_Identification and Files columns to the report, leaving them sorted by files.
+4. Replace the first pipe with " version " and the second with ", PUID ". Delete "NO VALUE".
+5. Reformat following the Formatting Guide (above)
 
 ### Group Overlap
 
-Make the pie charts. Use the data in each of the three tabs in the Group-Overlap spreadsheet to make a different pie chart.
+Update the link.
+
+Make the pie charts using the data in each of the three tabs in the Group-Overlap spreadsheet,
+and then use them and the data from the spreadsheet to update the text above them.
+
+For each tab in the spreadsheet:
 
 1. Make a unique list of the values in the Groups column.
 2. Use countif to calculate the number of times each Group value is present and paste as values.
@@ -188,30 +228,3 @@ Make the pie charts. Use the data in each of the three tabs in the Group-Overlap
 5. Highlight the resulting table and insert a pie chart.
 6. Reformat following the Formatting Guide (above).
 
-Also update the number and percentage held by two or more groups.
-
-### Format Risk
-
-Make the pie charts. Use the data in each of the three columns in "ARCHive_Risk_Overview" in the Risk spreadsheet.
-
-1. Highlight the NARA_Risk_Level column and one of the other three columns.
-2. Insert a pie chart.
-3. Update the title to Number of Files, Size (GB), or Format Identifications.
-4. Update the colors to match the amount of risk: low = green, moderate = orange, high = dark red, no match = blue.
-5. Reformat following the Formatting Guide (above). The only one with a legend should be Format Identifications.
-
-Update the paragraph after the pie charts about the percentage that are low risk, 
-the amount and kinds of formats that are high risk,
-and an explanation for any other findings of interest.
-
-Make the graphs. Use the data in "Department_Risk_Overview" and "Format_Type_Risk" in the Risk spreadsheet.
-
-1. Highlight the data and insert a pivot table. 
-2. Copy and paste the values of the pivot table, so it can be edited.
-3. Delete the total column and row, and move the High Risk column between Moderate and No Match to be in risk order.
-4. Highlight the edited pivot table and insert a 100% stacked column graph.
-5. Update the title to Percentage of Formats at NARA Risk Levels by Group|Type
-6. Update the colors to match the amount of risk: low = green, moderate = orange, high = dark red, no match = blue.
-7. Reformat following the Formatting Guide (above).
-
-Update the paragraphs after each graph with a summary of which groups and format types have the most risk.

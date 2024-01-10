@@ -1,11 +1,9 @@
-"""Correct the version in a combined format report produced by merge_format_reports.py
+"""Correct formatting errors from opening a combined format report (CSV) in Excel
 
 The CSV files created by merge_format_reports.py are opened in Excel to update risk matches,
-but Excel automatically reformats version numbers to remove 0 from the end, which is an error.
+but Excel automatically reformats the version numbers to remove 0 from the end, which is an error.
 Form example, 1.0 becomes 1 and 2.10 becomes 2.1.
-
-The correct version is still part of Format_Identification.
-This script updates the version column with the version from Format_Identification.
+It also adds blank rows to the end of the spreadsheet.
 
 Parameters:
     csv_path : the path to one of the combined format reports made by the merge_formats_report.py script (CSV)
@@ -23,7 +21,7 @@ def check_argument(argument_list):
     """Verify the requirement argument csv_path is present and correct
 
     Parameters:
-        argument_list :
+        argument_list : list of arguments from sys.argv
 
     Returns:
         path : path to the CSV to be fixed, if provided, or None

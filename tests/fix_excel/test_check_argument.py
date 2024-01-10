@@ -8,7 +8,7 @@ For input, tests use a list with argument values. In production, this would be t
 
 import os
 import unittest
-from fix_versions import check_argument
+from fix_excel import check_argument
 
 
 class MyTestCase(unittest.TestCase):
@@ -19,7 +19,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         test_csv = os.path.join("check_argument", "archive_formats_by_group_2023-11.csv")
-        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+        csv_path, error_msg = check_argument(["fix_excel.py", test_csv])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, test_csv, "Problem with test for correct, csv_path")
@@ -34,7 +34,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         test_csv = os.path.join("check_argument", "archive_formats_by_group_2023-11.txt")
-        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+        csv_path, error_msg = check_argument(["fix_excel.py", test_csv])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, test_csv, "Problem with test for extension error, csv_path")
@@ -48,7 +48,7 @@ class MyTestCase(unittest.TestCase):
         Test for when the required argument is missing.
         """
         # Runs the function being tested.
-        csv_path, error_msg = check_argument(["fix_versions.py"])
+        csv_path, error_msg = check_argument(["fix_excel.py"])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, None, "Problem with test for missing argument, csv_path")
@@ -64,7 +64,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         test_csv = os.path.join("check_argument", "file_formats_magil.csv")
-        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+        csv_path, error_msg = check_argument(["fix_excel.py", test_csv])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, test_csv, "Problem with test for name error, csv_path")
@@ -81,7 +81,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         test_csv = os.path.join("check_argument", "file_formats_magil.txt")
-        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+        csv_path, error_msg = check_argument(["fix_excel.py", test_csv])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, test_csv, "Problem with test for name and extension error, csv_path")
@@ -96,7 +96,7 @@ class MyTestCase(unittest.TestCase):
         """
         # Runs the function being tested.
         test_csv = os.path.join("path_error", "archive_formats_by_group_2023-11.csv")
-        csv_path, error_msg = check_argument(["fix_versions.py", test_csv])
+        csv_path, error_msg = check_argument(["fix_excel.py", test_csv])
 
         # Tests that the value of csv_path is correct.
         self.assertEqual(csv_path, test_csv, "Problem with test for path error, csv_path")

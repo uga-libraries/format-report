@@ -2,7 +2,7 @@
  
 ## Overview and Purpose
 
-The Head of Digital Stewardship analyzes the formats in ARCHive every two years 
+The Head of Digital Stewardship analyzes the formats in ARCHive every three years 
 to monitor for preservation risks based on format.
 The data is summarized across all our holdings and, starting in 2023, for each department.
 The [NARA Digital Preservation Plan spreadsheet](https://github.com/usnationalarchives/digital-preservation) 
@@ -19,6 +19,7 @@ Data is exported from ARCHive on or around November 1, at a time that no new con
 2. From the Reports page in the ARCHive interface, download the File Formats report for every group, 
    except for Emory and Test AIP Group, and save them to the archive_reports folder. 
    It can take a long time to download, with DLG requiring multiple hours.
+   Delete the format identification in Russell that is a path error. The file also has an accurate identification.
 
 
 3. From the Reports page in the ARCHive interface, download the Usage report and save it to the archive_reports folder.
@@ -33,6 +34,11 @@ Data is exported from ARCHive on or around November 1, at a time that no new con
 
 5. Download a copy of all the data to your local machine to run the scripts for the next steps.
 
+
+6. Make a new branch in the format-report repo for changes made while generating the reports.
+   This can include adding information for new formats and AIP ID structures, 
+   fixing things that new data variations break, and updating the procedure documentation.
+
 ## Format Standardization
 
 In this step, find new formats since the last analysis and add them to the standardization spreadsheet.
@@ -40,27 +46,21 @@ In this step, find new formats since the last analysis and add them to the stand
 Each format in ARCHive is assigned a format type and format name to better reveal trends.
 Format type is based on MIME type and format name is based on PRONOM, with local rules to make them more useful.
 
-1. Make a new branch in the format-report repo for changes needed to work with this data. 
-   This can include adding information for new formats and AIP ID structures, 
-   and fixing things that new data variations break.
-
-
-2. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules. 
+1. Run the update_standardization.py script to generate a report (new_formats.txt) of formats that do not have standardization rules. 
    The script has one argument, report_folder, which is the path to archive_reports on your local machine.
 
 
-3. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
+2. Copy the contents of new_formats.txt to the Format_Name column of standardize_formats.csv in this repo.
 
 
-4. Use the [guidelines for standardizing formats](standardize_formats_guidelines.md) to assign a type and name to each format 
+3. Use the [guidelines for standardizing formats](standardize_formats_guidelines.md) to assign a type and name to each format 
    and record that in the appropriate columns of standardize_formats.csv.
 
 
-5. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
+4. Open standardize_formats.csv in a spreadsheet program and sort alphabetically by Format_Name.
 
 
-6. Move new_formats.txt to the Format Analysis folder in Teams for this year. 
-   It can be deleted at the end of the analysis, but is can be useful during the process to review which formats are new.
+5. Move new_formats.txt to the Format Analysis folder in Teams for this year, as a record of new formats. 
 
 ## Combine Department Data
 
@@ -75,14 +75,10 @@ and add collections, standardized format type and name, and NARA preservation in
    - Both reports have format information and NARA preservation information.
 
 
-2. Review the NARA matches in Excel. 
-   If there were multiple possible matches to a single format, delete ones that do match as well. 
-   If there was no automatic match to NARA due to differences in spelling and abbreviations, add the match. 
-   When adding a match, in the NARA_Match_Type column use the same categories as the script but add (Manual) to the end.
+2. Review and update the NARA matches in Excel, following the [Match Guidelines](archive_nara_match_guidelines.md).
 
 
-3. Run the fix_version.py script to fix the version numbers from opening the CSVs in Excel. 
-   It removes the zero from the end of versions that look like numbers, for example 1.10 not HTML 4.0.
+3. Run the fix_excel.py script to fix the version numbers and blank rows from opening the CSVs in Excel.
 
 
 4. Save a copy of both versions of both spreadsheets to the Format Analysis folder in Teams for this year,
@@ -114,7 +110,7 @@ In this step, make summaries of the merged format reports, and use those summari
    - Freeze the top row (column headers) if there are more rows than can be viewed on a normal computer monitor.
 
 
-4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a foldernamed "ARCHive Format Report".
+4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a folder named "ARCHive Format Report".
 
 
 5. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 

@@ -7,11 +7,11 @@ It orients the department to the information in the spreadsheet and highlights a
 
 ## Data Source
 
-Use Excel and the data from the department report spreadsheet to make graphs of the data. 
+Use Excel and the data from the department report spreadsheet to make graphs of the data.
 In some cases, the data must be edited first.
 Use the example department report as a template for the new report.
 
-For the biannual ARCHive format analysis, the department spreadsheets will be in the Teams folder for this year's Format Analysis, 
+For the ARCHive format analysis, the department spreadsheets will be in the Teams folder for this year's Format Analysis, 
 in the "Department Format Reports" folder. Save the narrative reports here as well. 
 
 ## Formatting Guide
@@ -19,15 +19,18 @@ in the "Department Format Reports" folder. Save the narrative reports here as we
 In all visualizations, use these guidelines for a more readable result.
 
 - Title: bold and change font to black. Move the box closer to the image if there is too much white space.
-- All other font: size 11, black (if on white background) or white (if on pie chart)
-- Colors for levels:
+
+- All other font: size 11, black (if on white background) or white (if on pie chart).
+
+- Colors for risk levels:
    - No_Match: Blue
    - High_Risk: Dark Red
    - Moderate_Risk: Orange
    - Low_Risk: Green
+
 - Crop the image after pasting it into the narrative report to remove extra white space. 
 
-## Analysis
+## Report Sections
 
 ### Overview
 
