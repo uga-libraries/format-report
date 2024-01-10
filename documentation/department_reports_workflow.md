@@ -36,5 +36,11 @@ Some departments have content that is more prone to risk and may want to run the
    and previous_formats_csv, which is the path to the by_aip merged report from a previous year.
 
 
-8. If desired, use the [department narrative report instructions](department_narrative_report_instructions.md)
-   to summarize the data in the spreadsheet.
+8. Reformat each sheet in each report to make them easier to read.
+   In future years, consider changing what is bold and what has cell outlines as well.
+   - Expand columns to show all the data.
+   - Left justify all columns.
+   - Freeze the top row (column headers) if there are more rows than can be viewed on a normal computer monitor.
+
+9. If desired, use the [department narrative report instructions](department_narrative_report_instructions.md)
+to summarize the data in the spreadsheet.
