@@ -113,7 +113,7 @@ In this step, make summaries of the merged format reports, and use those summari
 4. Save the four spreadsheets in the Format Analysis folder in Teams for this year, in a folder named "ARCHive Format Report".
 
 
-5. Using a previous year's narrative report as a template, make the narrative report for this year. [detailed instructions TBD] 
+5. Using a previous year's narrative report as a template, make the narrative report for this year: [detailed instructions](archive_narrative_report_instructions.md). 
    Save it in the ARCHive Format Report folder.
  
 ## Create Department Reports
